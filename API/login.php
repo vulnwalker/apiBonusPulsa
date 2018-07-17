@@ -6,11 +6,11 @@
  
 	$query = "select * from admin where uid='$uid' and password='$password' ";
 	 
-	$hasil = mysql_query($query);
-	if (mysql_num_rows($hasil) > 0) {
+	$hasil = sqlQuery($query);
+	if (sqlNumRow($hasil) > 0) {
 		$response = array();
 		$response["login"] = array();
-		while ($data = mysql_fetch_array($hasil)){
+		while ($data = sqlArray($hasil)){
 			$h['uid']            = $data['uid'] ;
 			$h['nama']          = $data['nama'] ;
 			$h['group']         = $data['group'] ;

@@ -138,7 +138,7 @@ class UserAktivitasDetObj  extends DaftarObj2{
 		
 		//--- get data user
 		$aqry = "select * from admin where uid='$uid'";
-		$rowuser = mysql_fetch_array(mysql_query($aqry));
+		$rowuser = sqlArray(sqlQuery($aqry));
 		$nama= $rowuser['nama'];
 		$level= $rowuser['level'];
 		$group= $rowuser['group'];
@@ -152,13 +152,13 @@ class UserAktivitasDetObj  extends DaftarObj2{
 			$e= $arrgrp[2];			
 			$e1= $arrgrp[3];			
 			
-			$get = mysql_fetch_array(mysql_query( "select * from v_bidang where c='".$c."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_bidang where c='".$c."' " ));		
 			if($get['nmbidang']<>'') $fmSKPD = $get['nmbidang'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
 			if($get['nmopd']<>'') $fmUNIT = $get['nmopd'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
+			$get = sqlArray(sqlQuery( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
 			if($get['nmunit']<>'') $fmSUBUNIT = $get['nmunit'];
-			$get = mysql_fetch_array(mysql_query( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
+			$get = sqlArray(sqlQuery( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
 			if($get['nm_skpd']<>'') $fmSEKSI = $get['nm_skpd'];
 			
 		}
@@ -303,7 +303,7 @@ class UserAktivitasDetObj  extends DaftarObj2{
 		//-- get data user
 		$this->uid=$UserAktivitas_cb[0];
 		$aqry = "select * from admin where uid='$this->uid'";
-		$rowuser = mysql_fetch_array(mysql_query($aqry));
+		$rowuser = sqlArray(sqlQuery($aqry));
 		$nama= $rowuser['nama'];
 		$level= $rowuser['level'];
 		$group= $rowuser['group'];
@@ -318,13 +318,13 @@ class UserAktivitasDetObj  extends DaftarObj2{
 			$e= $arrgrp[2];			
 			$e1= $arrgrp[2];			
 			
-			$get = mysql_fetch_array(mysql_query( "select * from v_bidang where c='".$c."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_bidang where c='".$c."' " ));		
 			if($get['nmbidang']<>'') $fmSKPD = $get['nmbidang'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
 			if($get['nmopd']<>'') $fmUNIT = $get['nmopd'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
+			$get = sqlArray(sqlQuery( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
 			if($get['nmunit']<>'') $fmSUBUNIT = $get['nmunit'];
-			$get = mysql_fetch_array(mysql_query( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
+			$get = sqlArray(sqlQuery( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
 			if($get['nm_skpd']<>'') $fmSEKSI = $get['nm_skpd'];			
 			
 		}
@@ -473,7 +473,7 @@ class UserAktivitasObj  extends DaftarObj2{
 			" v1_admin_aktivitas ".
 			" $Kondisi  group by uid $Order $Limit ";	
 		return $aqry;
-		//return mysql_query($aqry);
+		//return sqlQuery($aqry);
 	}
 	function setSumHal_query($Kondisi, $fsum){
 		return "select $fsum from (".
@@ -542,21 +542,21 @@ class UserAktivitasObj  extends DaftarObj2{
 				if($fmST == 0){
 					//cek 
 					if( $err=='' ){
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"select count(*) as cnt from ref_pegawai where nip='$nip' "
 						));
 						if($get['cnt']>0 ) $err='NIP Sudah Ada!';
 					}
 					if($err==''){
 						$aqry = "insert into ref_pegawai (a,b,c,d,e,e1,nip,nama,jabatan)"."values('$a','$b','$c','$d','$e','$e1','$nip','$nama','$jabatan')";	$cek .= $aqry;	
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 					
 				}else{
-					$old = mysql_fetch_array(mysql_query("select * from ref_pegawai where Id='$idplh'"));
+					$old = sqlArray(sqlQuery("select * from ref_pegawai where Id='$idplh'"));
 					if( $err=='' ){
 						if($nip!=$old['nip'] ){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"select count(*) as cnt from ref_pegawai where nip='$nip' "
 							));
 							if($get['cnt']>0 ) $err='NIP Sudah Ada!';
@@ -573,7 +573,7 @@ class UserAktivitasObj  extends DaftarObj2{
 							" a='$a', b='$b', c='$c',d='$d',e='$e',e1='$e1',
 							nip='$nip',nama='$nama', jabatan='$jabatan'".
 							"where id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 				}
 				
@@ -594,7 +594,7 @@ class UserAktivitasObj  extends DaftarObj2{
 		//-- get data user
 		$uid=$UserAktivitas_cb[0];
 		$aqry = "select * from admin where uid='$uid'";
-		$rowuser = mysql_fetch_array(mysql_query($aqry));
+		$rowuser = sqlArray(sqlQuery($aqry));
 		$nama= $rowuser['nama'];
 		$level= $rowuser['level'];
 		$group= $rowuser['group'];
@@ -608,13 +608,13 @@ class UserAktivitasObj  extends DaftarObj2{
 			$e= $_REQUEST['fmSUBUNIT_old'];			
 			$e1= $_REQUEST['fmSEKSI_old'];			
 			
-			$get = mysql_fetch_array(mysql_query( "select * from v_bidang where c='".$c."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_bidang where c='".$c."' " ));		
 			if($get['nmbidang']<>'') $fmSKPD = $get['nmbidang'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
 			if($get['nmopd']<>'') $fmUNIT = $get['nmopd'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
+			$get = sqlArray(sqlQuery( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
 			if($get['nmunit']<>'') $fmSUBUNIT = $get['nmunit'];
-			$get = mysql_fetch_array(mysql_query( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
+			$get = sqlArray(sqlQuery( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
 			if($get['nm_skpd']<>'') $fmSEKSI = $get['nm_skpd'];				
 			
 		}
@@ -640,9 +640,9 @@ class UserAktivitasObj  extends DaftarObj2{
 		$kondisi = join('and',$arrKondisi);
 		if($kondisi != '')$kondisi = " where $kondisi ";
 		$aqry = "select * from admin_aktivitas $kondisi ";
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		$daftar = '';
-		while ($isi = mysql_fetch_array($qry)){
+		while ($isi = sqlArray($qry)){
 			$daftar .= "<tr><td></td><td></td>";
 		}
 		*/
@@ -760,7 +760,7 @@ class UserAktivitasObj  extends DaftarObj2{
 		//get data 
 		//$aqry = "select * from ref_ruang where c='$c' and d='$d' and e='$e' and p ='".$kode[0]."' and q='".$kode[1]."' "; $cek.=$aqry;
 		$aqry = "select * from ref_pegawai where id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$fm = $this->setForm($dt);
@@ -791,13 +791,13 @@ class UserAktivitasObj  extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."'"));
 		$seksi = $get['nm_skpd'];		
 		
 		
@@ -874,26 +874,26 @@ class UserAktivitasObj  extends DaftarObj2{
 			///*
 			$nmopdarr=array();	
 			if($fmSKPD == '00'){
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from v_bidang where c='".$c."' "
 				));		
 				if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 			}
 			if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from v_opd where c='".$c."' and d='".$d."' "
 				));		
 				if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 			}
 			if($fmSUBUNIT == '00'){
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"
 				));		
 				if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 			}
 //			$nmopd = join(' - ', $nmopdarr );
 			if($fmSEKSI == $kdSubUnit0){
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."'"
 				));		
 				if($get['nm_skpd']<>'') $nmopdarr[] = $get['nm_skpd'];

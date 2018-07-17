@@ -51,27 +51,27 @@ function Mutasi_GetListxls($cetak=0){
         //saldo awal kurang penghapusan ----------------------------------------------
         $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v_penghapusan_bi
 				where tgl_penghapusan < '$tglAwal' $Kondisi"; //echo "<br> qry awal kurang = ".$aqry;
-        $qry = mysql_query($aqry);
-        $isi = mysql_fetch_array($qry);
+        $qry = sqlQuery($aqry);
+        $isi = sqlArray($qry);
         $SaldoAwal_BrgKurang = $isi['totbarang'];
         $SaldoAwal_HrgKurang = $isi['totharga']; //echo"<br>brg=$SaldoAwal_BrgKurang hrg=$SaldoAwal_HrgKurang";
 		//saldo awal kurang pelihara,
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_penghapusan_pelihara
 				where tgl_penghapusan < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		//saldo awal kurang pengaman,
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_penghapusan_pengaman
 				where tgl_penghapusan < '$tglAwal' $Kondisi";   //echo "<br> qry awal kurang = ".$aqry;
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		
 		//saldo awal kurang pemindahtangan ---------------------------------------
 		$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_pindahtangan
 				where tgl_pemindahtanganan < '$tglAwal' $Kondisi"; //echo "<br> qry awal kurang = ".$aqry;        
-        $isi = mysql_fetch_array(mysql_query($aqry));
+        $isi = sqlArray(sqlQuery($aqry));
         $SaldoAwal_BrgKurangPindah = $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
 		$SaldoAwal_BrgKurang += $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
         $SaldoAwal_HrgKurangPindah = $isi['totharga']==NULL ? 0 : $isi['totharga'];
@@ -79,20 +79,20 @@ function Mutasi_GetListxls($cetak=0){
 		//saldo awal kurang pindah pelihara
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_pindahtangan_pelihara
 				where tgl_pemindahtanganan < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPindahPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		//saldo awal kurang pindah pengaman
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_pindahtangan_pengaman
 				where tgl_pemindahtanganan < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPindahPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		
 		//saldo awal kurang gantirugi --------------------------------------------
 		$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_gantirugi
 				where tgl_gantirugi < '$tglAwal' $Kondisi"; //echo "<br> qry awal kurang = ".$aqry;        
-        $isi = mysql_fetch_array(mysql_query($aqry));
+        $isi = sqlArray(sqlQuery($aqry));
         $SaldoAwal_BrgKurangGantirugi = $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
 		$SaldoAwal_BrgKurang += $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
         $SaldoAwal_HrgKurangGantirugi = $isi['totharga']==NULL ? 0 : $isi['totharga'];
@@ -100,13 +100,13 @@ function Mutasi_GetListxls($cetak=0){
 		//saldo awal kurang gantirugi pelihara
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_gantirugi_pelihara
 				where tgl_gantirugi < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangGantirugiPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		//saldo awal kurang gantirugi pengaman
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_gantirugi_pengaman
 				where tgl_gantirugi < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangGantirugiPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 			
@@ -114,29 +114,29 @@ function Mutasi_GetListxls($cetak=0){
         //saldo awal tambah perolehan ------------------------------------------------
         $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from buku_induk
 		where tgl_buku < '$tglAwal'   $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;
-        $qry = mysql_query($aqry);
-        $isi = mysql_fetch_array($qry);
+        $qry = sqlQuery($aqry);
+        $isi = sqlArray($qry);
         $SaldoAwal_BrgTambah = $isi['totbarang'];
         $SaldoAwal_HrgTambah = $isi['totharga']; //echo"<br>brg=$SaldoAwal_BrgTambah hrg=$SaldoAwal_HrgTambah";
         //saldo awal tambah pelihara
         $aqry = " select count(*) as totbarang, sum(biaya_pemeliharaan)as totharga from v_pemelihara
 		where tgl_pemeliharaan < '$tglAwal' and tambah_aset=1  $Kondisi ";  //echo "<br> qry awal tambah = ".$aqry;
-        $isi = mysql_fetch_array(mysql_query($aqry));
+        $isi = sqlArray(sqlQuery($aqry));
         $SaldoAwal_HrgTambah += $isi['totharga'];
         //saldo awal tambah pengaman
         $aqry = " select count(*) as totbarang, sum(biaya_pengamanan)as totharga from v_pengaman
 		where tgl_pengamanan < '$tglAwal'  and tambah_aset=1 $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;		
-        $isi = mysql_fetch_array(mysql_query($aqry));		
+        $isi = sqlArray(sqlQuery($aqry));		
         $SaldoAwal_HrgTambah += $isi['totharga'];
 		//saldo awal tambah mut pelihara
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_mutasi_pelihara
 		where tgl_buku < '$tglAwal'  and tambah_aset=1 $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;	
-        $isi = mysql_fetch_array(mysql_query($aqry));		
+        $isi = sqlArray(sqlQuery($aqry));		
         $SaldoAwal_HrgTambah += $isi['totharga'];
 		//saldo awal tambah mut pengaman
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_mutasi_pengaman
 		where tgl_buku < '$tglAwal'  and tambah_aset=1 $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;		
-        $isi = mysql_fetch_array(mysql_query($aqry));		
+        $isi = sqlArray(sqlQuery($aqry));		
         $SaldoAwal_HrgTambah += $isi['totharga'];
 		
 		
@@ -146,59 +146,59 @@ function Mutasi_GetListxls($cetak=0){
     //perubahan berkrang ------------------------------------------------
     $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v_penghapusan_bi
 		where tgl_penghapusan >= '$tglAwal' and tgl_penghapusan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgKurang = $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgKurang = $isi['totharga'] == NULL ? 0 : $isi['totharga']; //echo"<br>brg=$BrgKurang hrg=$HrgKurang";
 	//perubahan hapus pelihara
 	$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_penghapusan_pelihara
 		where tgl_penghapusan >= '$tglAwal' and tgl_penghapusan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan hapus pengamanan
 	$aqry = " select sum(biaya_pengamanan)as totharga from v2_penghapusan_pengaman
 		where tgl_penghapusan >= '$tglAwal' and tgl_penghapusan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan pindah tangan --------------------------------------
 	$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_pindahtangan
 		where tgl_pemindahtanganan >= '$tglAwal' and tgl_pemindahtanganan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgKurang += $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_pindahtangan_pelihara
 		where tgl_pemindahtanganan >= '$tglAwal' and tgl_pemindahtanganan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPindahPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pengamanan)as totharga from v2_pindahtangan_pengaman
 		where tgl_pemindahtanganan >= '$tglAwal' and tgl_pemindahtanganan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPindahPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	
 	//perubahan kurang gantirugi --------------------------------------
 	$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_gantirugi
 		where tgl_gantirugi >= '$tglAwal' and tgl_gantirugi<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgKurang += $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_gantirugi_pelihara
 		where tgl_gantirugi>= '$tglAwal' and tgl_gantirugi<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangGantirugiPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pengamanan)as totharga from v2_gantirugi_pengaman
 		where tgl_gantirugi >= '$tglAwal' and tgl_gantirugi<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangGantirugiPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	
@@ -206,29 +206,29 @@ function Mutasi_GetListxls($cetak=0){
     //perubahan bertambah ------------------------------------------------
     $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from buku_induk
 		where tgl_buku >= '$tglAwal' and tgl_buku <='$tglAkhir'  $Kondisi";  //echo"<br>qry tambah=".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgTambah = $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgTambah = $isi['totharga'] == NULL ? 0 : $isi['totharga'];
     //pelihara
     $aqry = " select count(*) as totbarang, sum(biaya_pemeliharaan)as totharga from v_pemelihara
 		where tgl_pemeliharaan >= '$tglAwal' and tgl_pemeliharaan <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry)); //echo ($aqry);
+    $isi = sqlArray(sqlQuery($aqry)); //echo ($aqry);
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
     //pengaman
     $aqry = " select count(*) as totbarang, sum(biaya_pengamanan)as totharga from v_pengaman
 		where tgl_pengamanan >= '$tglAwal' and tgl_pengamanan <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry));
+    $isi = sqlArray(sqlQuery($aqry));
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//mutasi pelihara
     $aqry = " select sum(biaya_pemeliharaan)as totharga from v2_mutasi_pelihara
 		where tgl_buku >= '$tglAwal' and tgl_buku <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry));
+    $isi = sqlArray(sqlQuery($aqry));
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];    
 	//mutasi pengaman
     $aqry = " select sum(biaya_pengamanan)as totharga from v2_mutasi_pengaman
 		where tgl_buku >= '$tglAwal' and tgl_buku <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry));
+    $isi = sqlArray(sqlQuery($aqry));
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
     //saldo akhir ----------------------------------------------
     $SaldoAkhir_Brg = $SaldoAwal_Brg + $BrgTambah - $BrgKurang ;//+ $BrgKurangPindah);
@@ -458,18 +458,18 @@ function Mutasi_GetListxls($cetak=0){
 
     //str_replace('<LimitHal>', $LimitHal, $aqry )
     //jml data
-    $qry = mysql_query($aqry);
-    $jmlData = mysql_num_rows($qry);
+    $qry = sqlQuery($aqry);
+    $jmlData = sqlNumRow($qry);
 
     $aqry .=" $OrderBy $LimitHal "; //echo"<br>qryunion=".$aqry;
-    $qry = mysql_query($aqry);
+    $qry = sqlQuery($aqry);
     $totBrgKurangHal = 0;
     $totHrgKurangHal = 0;
     $totBrgTambahHal = 0;
     $totHrgTambahHal = 0;
     $no = !empty($ctk) ? 0 : $Main->PagePerHal * (($HalDefault * 1) - 1);
     
-	while ($isi = mysql_fetch_array($qry)) {
+	while ($isi = sqlArray($qry)) {
 
         if ($cetak == 0) {
             $clRow = $no % 2 == 0 ? "row1" : "row0";

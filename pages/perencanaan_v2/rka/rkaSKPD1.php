@@ -127,12 +127,12 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 		if ($this->jenisForm == "PENYUSUNAN" || $this->jenisForm == "KOREKSI" ){
 			$idTahap = $this->idTahap;
 		}else{
-			$getIdTahapRKATerakhir = mysql_fetch_array(mysql_query("select max(id_tahap) as max from tabel_anggaran where tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and jenis_rka !='' and o1 !='0' and (rincian_perhitungan !='' or f !='00' ) and nama_modul = 'RKA-SKPD' "));
+			$getIdTahapRKATerakhir = sqlArray(sqlQuery("select max(id_tahap) as max from tabel_anggaran where tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and jenis_rka !='' and o1 !='0' and (rincian_perhitungan !='' or f !='00' ) and nama_modul = 'RKA-SKPD' "));
 		 	$idTahap = $getIdTahapRKATerakhir['max'];
 		}
 
 		
-		$getData = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from tabel_anggaran where (rincian_perhitungan !='' or f !='00' ) and id_tahap='$idTahap' and tahun ='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and jenis_rka = '1' and nama_modul ='RKA-SKPD' $kondisiSKPD $kondisiRekening"));
+		$getData = sqlArray(sqlQuery("select sum(jumlah_harga) from tabel_anggaran where (rincian_perhitungan !='' or f !='00' ) and id_tahap='$idTahap' and tahun ='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and jenis_rka = '1' and nama_modul ='RKA-SKPD' $kondisiSKPD $kondisiRekening"));
 		$Total = $getData['sum(jumlah_harga)'];
 		
 		$ContentTotalHal=''; $ContentTotal='';
@@ -149,11 +149,11 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 				</tr>" ;
 			}elseif($this->jenisForm == "KOREKSI"){
 				$urutSebelumnya = $this->nomorUrut - 1;
-				$getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$urutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+				$getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$urutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 				if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 					$urutSebelumnya = $urutSebelumnya - 1;		
 				}
-				$getDataSebelumnya = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from view_rka_1 where (rincian_perhitungan !='' or f !='00' ) and no_urut='$urutSebelumnya' and tahun ='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'  $kondisiSKPD $kondisiRekening"));
+				$getDataSebelumnya = sqlArray(sqlQuery("select sum(jumlah_harga) from view_rka_1 where (rincian_perhitungan !='' or f !='00' ) and no_urut='$urutSebelumnya' and tahun ='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'  $kondisiSKPD $kondisiRekening"));
 		    	$TotalTahapSebelumnya = $getDataSebelumnya['sum(jumlah_harga)']; 
 				$TotalBertambahBerkurang = $TotalTahapSebelumnya - $Total;
 				if($TotalBertambahBerkurang   > 0){
@@ -184,11 +184,11 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					</tr>" ;
 				}elseif($this->jenisFormTerakhir == "KOREKSI"){
 				$urutSebelumnya = $this->urutTerakhir - 1;
-				$getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$urutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+				$getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$urutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 				if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 					$urutSebelumnya = $urutSebelumnya - 1;		
 				}
-				$getDataSebelumnya = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from view_rka_1 where  (rincian_perhitungan !='' or f !='00' ) and no_urut='$urutSebelumnya' and tahun ='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'  $kondisiSKPD $kondisiRekening"));
+				$getDataSebelumnya = sqlArray(sqlQuery("select sum(jumlah_harga) from view_rka_1 where  (rincian_perhitungan !='' or f !='00' ) and no_urut='$urutSebelumnya' and tahun ='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'  $kondisiSKPD $kondisiRekening"));
 		    	$TotalTahapSebelumnya = $getDataSebelumnya['sum(jumlah_harga)']; 
 				$TotalBertambahBerkurang = $TotalTahapSebelumnya - $Total;
 				if($TotalBertambahBerkurang   > 0){
@@ -245,17 +245,17 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 	$n = $arrayKodeRekening[3];
 	$o = $arrayKodeRekening[4];
 	
-	$getJumlahBarang = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$rkaSKPD1_v2_idplh'"));
+	$getJumlahBarang = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$rkaSKPD1_v2_idplh'"));
 	$jumlahBarang = $getJumlahBarang['volume_barang'];
 	$total = $hargaSatuan * $jumlahBarang;
 	
-	/* $getIdTahapRenjaTerakhir = mysql_fetch_array(mysql_query("select max(id_tahap) as max from view_renja "));
+	/* $getIdTahapRenjaTerakhir = sqlArray(sqlQuery("select max(id_tahap) as max from view_renja "));
   	 $idTahapRenja = $getIdTahapRenjaTerakhir['max'];
-	$getPaguIndikatif = mysql_fetch_array(mysql_query("select * from view_renja where c1= '$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahapRenja' "));*/
-	$getPaguYangTelahTerpakai = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as paguYangTerpakai from view_rka_1 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'  and no_urut = '$this->nomorUrut' and id_anggaran!='$rkaSKPD1_v2_idplh' "));
+	$getPaguIndikatif = sqlArray(sqlQuery("select * from view_renja where c1= '$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahapRenja' "));*/
+	$getPaguYangTelahTerpakai = sqlArray(sqlQuery("select sum(jumlah_harga) as paguYangTerpakai from view_rka_1 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'  and no_urut = '$this->nomorUrut' and id_anggaran!='$rkaSKPD1_v2_idplh' "));
 	$sisaPaguIndikatif = $paguIndikatif - $getPaguYangTelahTerpakai['paguYangTerpakai'];
     
-	 if(mysql_num_rows(mysql_query("select * from view_rka_1 where c1='0' and f = '00' and k = '$k' and l ='$l' and m='$m' and n='$n' and o='$o'  and id_tahap='$this->idTahap' ")) > 0){
+	 if(sqlNumRow(sqlQuery("select * from view_rka_1 where c1='0' and f = '00' and k = '$k' and l ='$l' and m='$m' and n='$n' and o='$o'  and id_tahap='$this->idTahap' ")) > 0){
 				 	
 					}else{
 						$arrayRekening = array(
@@ -282,7 +282,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 											'nama_modul' => 'RKA-SKPD'
 											);
 						$queryRekening = VulnWalkerInsert('tabel_anggaran',$arrayRekening);
-						mysql_query($queryRekening);
+						sqlQuery($queryRekening);
 					}
 	 	
  	 if(empty($cmbJenisRKAForm) ){
@@ -306,7 +306,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 							
 					   );
 		$query = VulnWalkerUpdate('tabel_anggaran',$data,"id_anggaran = '$rkaSKPD1_v2_idplh'");
-		mysql_query($query);
+		sqlQuery($query);
 	 }
 	 
 		
@@ -332,7 +332,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 	}
 				
 				
-				if(mysql_num_rows(mysql_query("select * from tabel_anggaran where o1 = '$pekerjaan' and id_tahap = '$this->idTahap' and jenis_rka = '1' and nama_modul ='RKA-SKPD'")) == 0){
+				if(sqlNumRow(sqlQuery("select * from tabel_anggaran where o1 = '$pekerjaan' and id_tahap = '$this->idTahap' and jenis_rka = '1' and nama_modul ='RKA-SKPD'")) == 0){
 					$data = array(
 												 'c1' => '0',
 												 'c' => '00',
@@ -358,7 +358,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 												 'id_tahap' => $this->idTahap,
 												 'nama_modul' => 'RKA-SKPD'
 													);	
-					mysql_query(VulnWalkerInsert('tabel_anggaran',$data));		
+					sqlQuery(VulnWalkerInsert('tabel_anggaran',$data));		
 				}
 				if(strpos($anggota, ',') !== false) {
 				    $arrayRekening = explode(',',$anggota);
@@ -367,19 +367,19 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					for($i = 0 ; $i < $huge; $i++){
 						
 						$id_rekening =  $arrayRekening[$i];
-						$getRekening = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$id_rekening'"));
+						$getRekening = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$id_rekening'"));
 						/*foreach ($getRekening as $key => $value) { 
 						  $$key = $value; 
 					 	}*/
 						
 						$data = array('o1' => $pekerjaan);
 						$query = VulnWalkerUpdate('tabel_anggaran',$data," k='".$getRekening['k']."' and l='".$getRekening['l']."' and m='".$getRekening['m']."' and n='".$getRekening['n']."' and o='".$getRekening['o']."' and id_tahap = '$this->idTahap'");
-						mysql_query($query);
+						sqlQuery($query);
 						
 					}
 				}else{
 						$id_rekening =  $anggota;
-						$getRekening = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$id_rekening'"));
+						$getRekening = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$id_rekening'"));
 						foreach ($getRekening as $key => $value) { 
 						  $$key = $value; 
 					 	}
@@ -387,7 +387,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 						$data = array('o1' => $pekerjaan);
 						$query = VulnWalkerUpdate('tabel_anggaran',$data," k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$this->idTahap'");
 						$content = "2";
-						mysql_query($query);
+						sqlQuery($query);
 				}
 				
 				
@@ -401,7 +401,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 				  $$key = $value; 
 			 } 
 			
-			 $getMaxLeftUrut = mysql_fetch_array(mysql_query("select left_urut  from ref_pekerjaan where  id ='$o1'"));
+			 $getMaxLeftUrut = sqlArray(sqlQuery("select left_urut  from ref_pekerjaan where  id ='$o1'"));
 			 $left_urut = $getMaxLeftUrut['left_urut'];
 			 
 			 $data = array( 'nama_pekerjaan' => $namaPekerjaan
@@ -412,13 +412,13 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 if(empty($namaPekerjaan)){
 			 	$err = "input gagal";
 			 }else{
-				$execute = mysql_query($query);
+				$execute = sqlQuery($query);
 			 }
 			$codeAndNamePekerjaan = "select id, nama_pekerjaan from ref_pekerjaan  ";
-			$getCurrentInsert = mysql_fetch_array(mysql_query("select max(id) from ref_pekerjaan "));
+			$getCurrentInsert = sqlArray(sqlQuery("select max(id) from ref_pekerjaan "));
 			$cmbPekerjaan = cmbQuery('pekerjaan', $getCurrentInsert['max(id)'], $codeAndNamePekerjaan,"  ",'-- PEKERJAAN --');
 			
-			$getUrut = mysql_fetch_array(mysql_query("select * from temp_rka_221_v2 where o1='$o1'"));
+			$getUrut = sqlArray(sqlQuery("select * from temp_rka_221_v2 where o1='$o1'"));
 			$urut = $getUrut['urut'];
 			
 			$content = array('cmbPekerjaan' => $cmbPekerjaan, 'left_urut' => $left_urut, 'urut' => $urut, 'query' => "select left_urut , urut as urut from ref_pekerjaan where  id ='$o1'" );
@@ -473,12 +473,12 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 if(empty($namaPekerjaan)){
 			 	$err = "input gagal";
 			 }else{
-				$execute = mysql_query($query);
+				$execute = sqlQuery($query);
 			 }
 			$codeAndNamePekerjaan = "select id, nama_pekerjaan from ref_pekerjaan ";
-			$getCurrentInsert = mysql_fetch_array(mysql_query("select max(id) from ref_pekerjaan"));
+			$getCurrentInsert = sqlArray(sqlQuery("select max(id) from ref_pekerjaan"));
 			$cmbPekerjaan = cmbQuery('pekerjaan', $getCurrentInsert['max(id)'], $codeAndNamePekerjaan,"  ",'-- PEKERJAAN --');
-			$getMaxUrut = mysql_fetch_array(mysql_query("select max(urut) from temp_rka_221_v2 where user ='$username'"));
+			$getMaxUrut = sqlArray(sqlQuery("select max(urut) from temp_rka_221_v2 where user ='$username'"));
 			$urut = $getMaxUrut['max(urut)'] + 1;
 			$content = array('cmbPekerjaan' => $cmbPekerjaan, 'left_urut' => $left_urut, 'urut' => $urut );
 		break;
@@ -494,7 +494,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			}elseif(empty($cmbSKPD)){
 				$err = "Pilih SKPD";
 			}else{
-				if(mysql_num_rows(mysql_query("select * from skpd_report_rka_1 where username= '$this->username'")) == 0){
+				if(sqlNumRow(sqlQuery("select * from skpd_report_rka_1 where username= '$this->username'")) == 0){
 					$data = array(
 								  'username' => $this->username,
 								  'c1' => $cmbUrusan,
@@ -503,7 +503,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 								  
 								  );
 					$query = VulnWalkerInsert('skpd_report_rka_1',$data);
-					mysql_query($query);
+					sqlQuery($query);
 				}else{
 					$data = array(
 								  'username' => $this->username,
@@ -514,7 +514,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 								  
 								  );
 					$query = VulnWalkerUpdate('skpd_report_rka_1',$data,"username = '$this->username'");
-					mysql_query($query);
+					sqlQuery($query);
 				}
 				
 			}											
@@ -563,18 +563,18 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 		}
 		case 'clearTemp':{
 				$username =$_COOKIE['coID'];
-				mysql_query("delete from temp_rka_1_v2 where user ='$username'");	
+				sqlQuery("delete from temp_rka_1_v2 where user ='$username'");	
 				foreach ($_REQUEST as $key => $value) { 
 			 	 $$key = $value; 
 				}
-				$getIDTahapRenja = mysql_fetch_array(mysql_query("select max(id_tahap) as idTahapRenja from view_renja where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' ")); 
+				$getIDTahapRenja = sqlArray(sqlQuery("select max(id_tahap) as idTahapRenja from view_renja where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' ")); 
 				$idTahapRenja = $getIDTahapRenja['idTahapRenja'];
-				$getDetailAboutRenja = mysql_fetch_array(mysql_query("select * from view_renja where id_tahap ='$idTahapRenja' and tahun = '$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));						
+				$getDetailAboutRenja = sqlArray(sqlQuery("select * from view_renja where id_tahap ='$idTahapRenja' and tahun = '$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));						
 				$jenisFormModulRenja = $getDetailAboutRenja['jenis_form_modul'];
 				
-				$cekRelationRenjaWithSKPD = mysql_num_rows(mysql_query("select *  from view_renja where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and q !='0' and  id_tahap ='$idTahapRenja' and tahun = '$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+				$cekRelationRenjaWithSKPD = sqlNumRow(sqlQuery("select *  from view_renja where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and q !='0' and  id_tahap ='$idTahapRenja' and tahun = '$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 				if($jenisFormModulRenja == "VALIDASI"){
-				$cekRelationRenjaWithSKPD = mysql_num_rows(mysql_query("select *  from view_renja where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and q !='0' and status_validasi = '1' and id_tahap ='$idTahapRenja' and tahun = '$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+				$cekRelationRenjaWithSKPD = sqlNumRow(sqlQuery("select *  from view_renja where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and q !='0' and status_validasi = '1' and id_tahap ='$idTahapRenja' and tahun = '$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 				}
 				/*if($cekRelationRenjaWithSKPD == 0){
 					$err = "SKPD tidak memiliki pagu indikatif";
@@ -621,14 +621,14 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 				  $$key = $value; 
 			} 
 			$queryRows = "select * from tabel_anggaran where id_anggaran = '$idAwal'";
-			$getrkaSKPD1_v2nya = mysql_fetch_array(mysql_query($queryRows));
+			$getrkaSKPD1_v2nya = sqlArray(sqlQuery($queryRows));
 			foreach ($getrkaSKPD1_v2nya as $key => $value) { 
 				  $$key = $value; 
 			} 
 			$cmbUrusanForm = $c1;
 			$cmbBidangForm = $c;
 			
-			$cekUrusan =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
+			$cekUrusan =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
 					if($cekUrusan > 0 ){
 						
 					}else{
@@ -649,10 +649,10 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= "mampir";
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 					
-					$cekBidang =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekBidang =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekBidang > 0 ){
 						
 					}else{
@@ -674,7 +674,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 			
 			
@@ -695,13 +695,13 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 								"nama_modul" => $this->modul
 										
  								);			
-			$cekSKPD =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+			$cekSKPD =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekSKPD > 0 ){
-						$getID = mysql_fetch_array(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+						$getID = sqlArray(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					    $idnya = $getID['id_anggaran'];
-						mysql_query("update tabel_anggaran set jumlah = '$jumlah' where id_anggaran='$idnya'");
+						sqlQuery("update tabel_anggaran set jumlah = '$jumlah' where id_anggaran='$idnya'");
 					}else{
-						mysql_query(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
+						sqlQuery(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
 						$content .=VulnWalkerInsert("tabel_anggaran", $dataSesuai);	
 					}
 			
@@ -716,7 +716,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 				  $$key = $value; 
 			} 
 			$queryRows = "select * from tabel_anggaran where id_anggaran = '$idAwal'";
-			$getrkaSKPD1_v2nya = mysql_fetch_array(mysql_query($queryRows));
+			$getrkaSKPD1_v2nya = sqlArray(sqlQuery($queryRows));
 			foreach ($getrkaSKPD1_v2nya as $key => $value) { 
 				  $$key = $value; 
 			} 
@@ -726,7 +726,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 	$err = "Tahap Koreksi Talah Habis";
 			 }else{
 			 	if($err == ""){
-				 	if(mysql_num_rows(mysql_query("select * from view_rka_1 where  o1='$o1' and rincian_perhitungan='' and rincian_perhitungan ='' and id_tahap='$this->idTahap' ")) > 0){
+				 	if(sqlNumRow(sqlQuery("select * from view_rka_1 where  o1='$o1' and rincian_perhitungan='' and rincian_perhitungan ='' and id_tahap='$this->idTahap' ")) > 0){
 				 	
 						 }else{
 							$arrayPekerjaan = array(
@@ -755,10 +755,10 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 												 'nama_modul' => 'RKA-SKPD'
 												);
 							$queryPekerjaan = VulnWalkerInsert('tabel_anggaran',$arrayPekerjaan);
-							mysql_query($queryPekerjaan);
+							sqlQuery($queryPekerjaan);
 					}
 			 		
-				 	if(mysql_num_rows(mysql_query("select * from view_rka_1 where  rincian_perhitungan ='' and c1='0' and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap='$this->idTahap'  ")) > 0){
+				 	if(sqlNumRow(sqlQuery("select * from view_rka_1 where  rincian_perhitungan ='' and c1='0' and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap='$this->idTahap'  ")) > 0){
 				 	
 					 }else{
 						$data = array(
@@ -795,7 +795,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 									
 									);
 							$query = VulnWalkerInsert('tabel_anggaran',$data);
-							mysql_query($query);	 	
+							sqlQuery($query);	 	
 					 }
 					
 					 $dataSesuai = array("tahun" => $tahun,
@@ -831,13 +831,13 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 										 
 		 								);			
 					
-					$cekRKA =  mysql_num_rows(mysql_query("select * from view_rka_1 where c1 = '$c1' and c='$c' and d = '$d' and e='$e' and e1='$e1'  and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' and o1='$o1' and rincian_perhitungan = '$rincian_perhitungan'"));
+					$cekRKA =  sqlNumRow(sqlQuery("select * from view_rka_1 where c1 = '$c1' and c='$c' and d = '$d' and e='$e' and e1='$e1'  and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' and o1='$o1' and rincian_perhitungan = '$rincian_perhitungan'"));
 							if($cekRKA > 0 ){
-								$getID = mysql_fetch_array(mysql_query("select * from view_rka_1 where c1 = '$c1' and c='$c' and d = '$d' and e='$e' and e1='$e1'  and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1 !='0' and rincian_perhitungan !='' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+								$getID = sqlArray(sqlQuery("select * from view_rka_1 where c1 = '$c1' and c='$c' and d = '$d' and e='$e' and e1='$e1'  and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1 !='0' and rincian_perhitungan !='' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 							    $idnya = $getID['id_anggaran'];
-								mysql_query(VulnWalkerUpdate("tabel_anggaran", $dataSesuai, "id_anggaran = '$idnya'"));
+								sqlQuery(VulnWalkerUpdate("tabel_anggaran", $dataSesuai, "id_anggaran = '$idnya'"));
 							}else{
-								mysql_query(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
+								sqlQuery(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
 								$content.=VulnWalkerInsert("tabel_anggaran", $dataSesuai);
 							}
 			 }
@@ -866,7 +866,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 							'id_tahap' => $this->idTahap
 			 				);
 			 $query = VulnWalkerUpdate("tabel_anggaran",$data," id_anggaran = '$rkaSKPD1_v2_idplh'");
-			 mysql_query($query);
+			 sqlQuery($query);
 
 			$content .= $query;
 		break;
@@ -880,7 +880,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 $data = array( "catatan" => $catatan
 			 				);
 			 $query = VulnWalkerUpdate("tabel_anggaran",$data," id_anggaran = '$id'");
-			 mysql_query($query);
+			 sqlQuery($query);
 
 			$content .= $query;
 		break;
@@ -895,25 +895,25 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			
 			$username = $_COOKIE['coID'];
 
-			$get = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran ='$id[0]'"));		
+			$get = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran ='$id[0]'"));		
 			$kodeRek = $get['k'].".".$get['l'].".".$get['m'].".".$get['n'].".".$get['o'] ;
 			
-			$getAll = mysql_query("select * from view_rka_1 where concat(k,'.',l,'.',m,'.',n,'.',o) ='$kodeRek' and id_tahap='$this->idTahap' and rincian_perhitungan !=''   and c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD'  and status_validasi !='1'  order by o1, rincian_perhitungan");
-			mysql_query("delete from temp_rka_1_v2 where user='$username'");
-			mysql_query("delete from temp_rincian_volume_21 where user='$username'");
-		    mysql_query("delete from temp_alokasi_rka_1_v2 where user='$username'");
+			$getAll = sqlQuery("select * from view_rka_1 where concat(k,'.',l,'.',m,'.',n,'.',o) ='$kodeRek' and id_tahap='$this->idTahap' and rincian_perhitungan !=''   and c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD'  and status_validasi !='1'  order by o1, rincian_perhitungan");
+			sqlQuery("delete from temp_rka_1_v2 where user='$username'");
+			sqlQuery("delete from temp_rincian_volume_21 where user='$username'");
+		    sqlQuery("delete from temp_alokasi_rka_1_v2 where user='$username'");
 			$noUrutPekerjaan = 0;
 			$angkaO2 = 0;
 			$lastO1 = 0;
-			while($rows = mysql_fetch_array($getAll)){
+			while($rows = sqlArray($getAll)){
 				foreach ($rows as $key => $value) { 
 				  $$key = $value; 
 				} 
-				$getMaxID = mysql_fetch_array(mysql_query("select  max(id) as gblk from temp_rka_1_v2 where user ='$username'"));
+				$getMaxID = sqlArray(sqlQuery("select  max(id) as gblk from temp_rka_1_v2 where user ='$username'"));
 				$maxID = $getMaxID['gblk'];
 				$lastO1 = $o1;
 				
-				$getLastO1 = mysql_fetch_array(mysql_query("select o1 from temp_rka_1_v2 where id='$maxID' "));
+				$getLastO1 = sqlArray(sqlQuery("select o1 from temp_rka_1_v2 where id='$maxID' "));
 				if($getLastO1['o1'] != $lastO1){
 					$noUrutPekerjaan = $noUrutPekerjaan + 1;
 					if($o1 == '0'){
@@ -948,7 +948,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 								'id_awal' => $id_anggaran
 								);
 				$query = VulnWalkerInsert('temp_rka_1_v2',$data);
-				mysql_query($query);
+				sqlQuery($query);
 				$angkaO2 = $angkaO2 + 1;
 				
 			}
@@ -965,19 +965,19 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			
 			$username = $_COOKIE['coID'];
 
-			$get = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran ='$id[0]'"));		
+			$get = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran ='$id[0]'"));		
 			$kodeRek = $get['k'].".".$get['l'].".".$get['m'].".".$get['n'].".".$get['o'] ;
 			
-			$getAll = mysql_query("select * from view_rka_1 where concat(k,'.',l,'.',m,'.',n,'.',o) ='$kodeRek' and id_tahap='$this->idTahap' and rincian_perhitungan !=''   and c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD'  and status_validasi !='1'  order by o1, rincian_perhitungan");
-			mysql_query("delete from temp_rka_1_v2 where user='$username'");
-			mysql_query("delete from temp_rincian_volume_21 where user='$username'");
-		    mysql_query("delete from temp_alokasi_rka_1_v2 where user='$username'");
-			while($rows = mysql_fetch_array($getAll)){
+			$getAll = sqlQuery("select * from view_rka_1 where concat(k,'.',l,'.',m,'.',n,'.',o) ='$kodeRek' and id_tahap='$this->idTahap' and rincian_perhitungan !=''   and c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD'  and status_validasi !='1'  order by o1, rincian_perhitungan");
+			sqlQuery("delete from temp_rka_1_v2 where user='$username'");
+			sqlQuery("delete from temp_rincian_volume_21 where user='$username'");
+		    sqlQuery("delete from temp_alokasi_rka_1_v2 where user='$username'");
+			while($rows = sqlArray($getAll)){
 				foreach ($rows as $key => $value) { 
 				  $$key = $value; 
 				} 
-				mysql_query("delete from tabel_anggaran where id_anggaran = '$id_anggaran'");
-				//mysql_query("delete from tabel_anggaran where concat(k,'.',l,'.',m,'.',n,'.',o) ='$kodeRek' and o1 ='$o1' and c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='$cmbUnit' and e1='$cmbSubUnit' and jenis_rka='1' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'");
+				sqlQuery("delete from tabel_anggaran where id_anggaran = '$id_anggaran'");
+				//sqlQuery("delete from tabel_anggaran where concat(k,'.',l,'.',m,'.',n,'.',o) ='$kodeRek' and o1 ='$o1' and c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='$cmbUnit' and e1='$cmbSubUnit' and jenis_rka='1' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'");
 				
 			}
 			
@@ -996,14 +996,14 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 				
 				
 					$qry = "SELECT * FROM tabel_anggaran WHERE id_anggaran = '$idplh' ";$cek=$qry;
-					$aqry = mysql_query($qry);
-					$dt = mysql_fetch_array($aqry);
+					$aqry = sqlQuery($qry);
+					$dt = sqlArray($aqry);
 					$username = $_COOKIE['coID'];
 					$user_validasi = $dt['user_validasi'];
 					$user_update = $dt['user_update'];
 		
 					if ($username != $user_validasi && $dt['status_validasi'] == '1') {
-						$getNamaOrang = mysql_fetch_array(mysql_query("select * from admin where uid = '$user_validasi'"));
+						$getNamaOrang = sqlArray(sqlQuery("select * from admin where uid = '$user_validasi'"));
 						$err = "Data Sudah di Validasi, Perubahan Hanya Bisa Dilakukan oleh ".$getNamaOrang['nama']." !";
 					}else{
 						if($username == $user_update){
@@ -1029,14 +1029,14 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 				  $$key = $value; 
 			 } 
 			
-			$getData = mysql_fetch_array(mysql_query("SELECT * FROM tabel_anggaran WHERE id_anggaran = '$idAwal'"));
+			$getData = sqlArray(sqlQuery("SELECT * FROM tabel_anggaran WHERE id_anggaran = '$idAwal'"));
 			foreach ($getData as $key => $value) { 
 				  $$key = $value; 
 			}
-			$getMaxID = mysql_fetch_array(mysql_query("select max(id_anggaran) as maxID from tabel_anggaran where tahun = '$tahun'  and c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and p='$p' and q='$q' and jenis_anggaran = '$jenis_anggaran'  ")); 
+			$getMaxID = sqlArray(sqlQuery("select max(id_anggaran) as maxID from tabel_anggaran where tahun = '$tahun'  and c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and p='$p' and q='$q' and jenis_anggaran = '$jenis_anggaran'  ")); 
 			$maxID = $getMaxID['maxID'];
 			$aqry = "select * from tabel_anggaran where id_anggaran ='$maxID' ";
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			if($dt['id_tahap'] != $this->idTahap){
 				$err = "Data Belum Di Koreksi ";
 			}
@@ -1140,7 +1140,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		if($err == ''){
 			$aqry = "SELECT * FROM  tabel_anggaran WHERE id_anggaran='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -1157,9 +1157,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 
 	 
 	 if($this->jenisFormTerakhir == "VALIDASI"){
-	 	$getJumlahSKPDYangMengisiPlafon = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' and status_validasi = '1' "));
+	 	$getJumlahSKPDYangMengisiPlafon = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' and status_validasi = '1' "));
 	 }else{
-	 	$getJumlahSKPDYangMengisiPlafon = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' "));
+	 	$getJumlahSKPDYangMengisiPlafon = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' "));
 	 }
 	 
 	 
@@ -1213,41 +1213,41 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 		foreach ($dt as $key => $value) { 
 			 	 $$key = $value; 
 		 }
-		 $getNamaUrusan = mysql_fetch_array(mysql_query("select concat(c1,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='00' and d='00' and e='00' and e1 = '000'"));
+		 $getNamaUrusan = sqlArray(sqlQuery("select concat(c1,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='00' and d='00' and e='00' and e1 = '000'"));
 		 $namaUrusan = $getNamaUrusan['nama'];
 		 $urusan = "<input type ='hidden' name='c1' id='c1' value = '$c1' > <input type ='text'  value = '$namaUrusan' style='width:400px;' readonly>";
 		 
-		 $getNamaBidang = mysql_fetch_array(mysql_query("select concat(c,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='00' and e='00' and e1 = '000'"));
+		 $getNamaBidang = sqlArray(sqlQuery("select concat(c,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='00' and e='00' and e1 = '000'"));
 		 $namaBidang = $getNamaBidang['nama'];
 		 $bidang = "<input type ='hidden' name='c' id='c' value = '$c' > <input type ='text'  value = '$namaBidang' style='width:400px;' readonly>";
 		 
-		 $getNamaSKPD = mysql_fetch_array(mysql_query("select concat(d,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='$d' and e='00' and e1 = '000'"));
+		 $getNamaSKPD = sqlArray(sqlQuery("select concat(d,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='$d' and e='00' and e1 = '000'"));
 		 $namaSKPD = $getNamaSKPD['nama'];
 		 $skpd = "<input type ='hidden' name='d' id='d' value = '$d' > <input type ='text'  value = '$namaSKPD' style='width:400px;' readonly>";
 		 
-		 $getNamaUnit = mysql_fetch_array(mysql_query("select concat(e,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='$e' and e='$e' and e1 = '000'"));
+		 $getNamaUnit = sqlArray(sqlQuery("select concat(e,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='$e' and e='$e' and e1 = '000'"));
 		 $namaUnit = $getNamaUnit['nama'];
 		 $unit = "<input type ='hidden' name='e' id='e' value = '$e' > <input type ='text'  value = '$namaUnit' style='width:400px;' readonly>";
 		 
-		 $getNamaSubUnit = mysql_fetch_array(mysql_query("select concat(e1,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='$d' and e='$e' and e1 = '$e1'"));
+		 $getNamaSubUnit = sqlArray(sqlQuery("select concat(e1,'. ',nm_skpd) as nama from ref_skpd where c1='$c1'  and c='$c' and d='$d' and e='$e' and e1 = '$e1'"));
 		 $namaSubUnit = $getNamaSubUnit['nama'];
 		 $subunit = "<input type ='hidden' name='e1' id='e1' value = '$e1' > <input type ='text'  value = '$namaSubUnit' style='width:400px;' readonly>";
 		 
-		 $getProgram = mysql_fetch_array(mysql_query("select concat(p,'. ',nama) as nama from ref_program where bk='$bk' and ck='$ck' and dk = '0' and p = '$p' and q= '0'"));
+		 $getProgram = sqlArray(sqlQuery("select concat(p,'. ',nama) as nama from ref_program where bk='$bk' and ck='$ck' and dk = '0' and p = '$p' and q= '0'"));
 		 $namaProgram = $getProgram['nama'];
 		 $program = "<input type ='hidden' name='bk' id='bk' value = '$bk' > <input type ='hidden' name='ck' id='ck' value = '$ck' > <input type ='hidden' name='p' id='p' value = '$p' > <input type ='text'  value = '$namaProgram' style='width:400px;' readonly>";
 	   	 
-		 $getKegiatan = mysql_fetch_array(mysql_query("select concat(q,'. ',nama) as nama from ref_program where bk='$bk' and ck='$ck' and dk = '0' and p = '$p' and q= '$q'"));
+		 $getKegiatan = sqlArray(sqlQuery("select concat(q,'. ',nama) as nama from ref_program where bk='$bk' and ck='$ck' and dk = '0' and p = '$p' and q= '$q'"));
 		 $namaKegiatan = $getKegiatan['nama'];
 		 $kegiatan = "<input type ='hidden' name='q' id='q' value = '$q' > <input type ='text'  value = '$namaKegiatan' style='width:400px;' readonly>";
 	  	 
 		 $kodeRENJA = $c1.".".$c.".".$d.".".$e.".".$e1.".".$bk.".".$ck.".".$p.".".$q;
 		 $hargaSatuan = $satuan_rek;
 		 $kodeBarang = $f.".".$g.".".$h.".".$i.".".$j ;
-		 $getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
+		 $getNamaBarang = sqlArray(sqlQuery("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
 		 $namaBarang = $getNamaBarang['nm_barang'];	
 		 $kodeRekening = $k.".".$l.".".$m.".".$n.".".$o ;
-		 $getNamaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o='$o'"));
+		 $getNamaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o='$o'"));
 		 $namaRekening = $getNamaRekening['nm_rekening'];
 		 $arrayJenisRKA = array(
 						array("1","RKA-SKPD 1"),
@@ -1260,9 +1260,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 		 	$tergantungJenis = "disabled";
 		 }
 		 
-		 $getIdTahapRenjaTerakhir = mysql_fetch_array(mysql_query("select max(id_tahap) as max from view_renja where tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+		 $getIdTahapRenjaTerakhir = sqlArray(sqlQuery("select max(id_tahap) as max from view_renja where tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 		 $idTahapRenja = $getIdTahapRenjaTerakhir['max'];
-		 $getPaguIndikatif = mysql_fetch_array(mysql_query("select * from view_renja where c1= '$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahapRenja' "));
+		 $getPaguIndikatif = sqlArray(sqlQuery("select * from view_renja where c1= '$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahapRenja' "));
 		 $angkaPaguIndikatif = number_format($getPaguIndikatif['jumlah'] ,2,',','.');
 		 
 		 $formPaguIndikatif  = " <input type='hidden' id='paguIndifkatif' name='paguIndikatif' value='".$getPaguIndikatif['jumlah']."' ><input type='text' value='$angkaPaguIndikatif' readonly >";
@@ -1498,9 +1498,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 	 
 	 if($this->jenisForm == 'PENYUSUNAN'){
 	 			
-			 $getNamaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
+			 $getNamaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
 			 $namaRekening = $getNamaRekening['nm_rekening'];
-			 $getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
+			 $getNamaBarang = sqlArray(sqlQuery("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
 			 $namaBarang = $getNamaBarang['nm_barang'];
 			 $satuanBarang = $getNamaBarang['satuan'];
 			 
@@ -1546,21 +1546,21 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					$Koloms[] = array('align="left"',"<span style='color:red;'> Belanja xxx </span>" );
 				}else{
 					if($k == '0' && $n == '0'){
-						$getNamaPekerjaan = mysql_fetch_array(mysql_query("select * from ref_pekerjaan where id = '$o1'"));
+						$getNamaPekerjaan = sqlArray(sqlQuery("select * from ref_pekerjaan where id = '$o1'"));
 						
 						$this->publicVar += 1;
 						
 						$Koloms[] = array('align="left"',"<span style='font-weight:bold;'>$this->publicVar. ".$getNamaPekerjaan['nama_pekerjaan']."</span>" );
 					}else{
 						$jarak = '15px';
-				 		$cekAdaParent = mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$this->idTahap' and o1 = '$o1' and o1 !='0' and o1 !='' "));
+				 		$cekAdaParent = sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$this->idTahap' and o1 = '$o1' and o1 !='0' and o1 !='' "));
 						if($cekAdaParent == 0)$jarak = "0px";
 						$Koloms[] = array('align="left"',"<span style='margin-left:$jarak;font-weight:bold;'>".$namaRekening."</span>" );
 					}
 					
 				}
 				$ilustrasi = "";
-				$getSumJumlahBarang = mysql_fetch_array(mysql_query("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$this->idTahap'"));
+				$getSumJumlahBarang = sqlArray(sqlQuery("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$this->idTahap'"));
 				$Koloms[] = array('align="left"',"" );
 				$jumlahBarang = $getSumJumlahBarang['total'];
 				//$Koloms[] = array('align="right"', number_format($jumlahBarang ,0,',','.') );
@@ -1583,7 +1583,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 }
 			 
 			 $Koloms[] = array('align="left"', $satuan_rek );
-			 $getSumSatuanRek = mysql_fetch_array(mysql_query("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and id_tahap='$this->idTahap'"));
+			 $getSumSatuanRek = sqlArray(sqlQuery("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and id_tahap='$this->idTahap'"));
 			 $sumSatuanRek = $getSumSatuanRek['total'];
 			 if($c1 == '0'){
 			 	//$Koloms[] = array('align="right"', number_format($sumSatuanRek ,2,',','.') );
@@ -1594,9 +1594,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 
 			 if($c1 == '0'){
 			 if($k == '0' && $n =='0'){
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and id_tahap='$this->idTahap'"));
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and id_tahap='$this->idTahap'"));
 			 }else{
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$this->idTahap'"));	
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$this->idTahap'"));	
 			 }
 			 $Koloms[] = array('align="right"', "<span style='font-weight:bold;'>".number_format($getTotalJumalhHarga['total'] ,2,',','.')."</span>" );
 			 if($this->wajibValidasi == TRUE)$Koloms[] = array('align="center"', "");
@@ -1625,22 +1625,22 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 	 //TAHAP PENYUSUNAN
 	 }elseif($this->jenisForm=="KOREKSI"){
 	 		 $nomorBefore = $this->nomorUrut - 1;
-			 $getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+			 $getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 			 if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 					$nomorBefore = $nomorBefore - 1;		
 			 }
-			 $getLastTahap = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+			 $getLastTahap = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 			 $blackList = "";
 			 if($getLastTahap['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE){
-				$getAllChild = mysql_query("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
-				while($black = mysql_fetch_array($getAllChild)){
+				$getAllChild = sqlQuery("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
+				while($black = sqlArray($getAllChild)){
 					$blackList .= " and id_anggaran !='".$black['id_anggaran']."'";
 				}
 		     }
 			 
-			 $getNamaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
+			 $getNamaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
 			 $namaRekening = $getNamaRekening['nm_rekening'];
-			 $getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
+			 $getNamaBarang = sqlArray(sqlQuery("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
 			 $namaBarang = $getNamaBarang['nm_barang'];
 			 $satuanBarang = $getNamaBarang['satuan'];
 			 $Koloms = array();
@@ -1682,21 +1682,21 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					$Koloms[] = array('align="left"',"<span style='color:red;'> Belanja xxx </span>" );
 				}else{
 					if($k == '0' && $n == '0'){
-						$getNamaPekerjaan = mysql_fetch_array(mysql_query("select * from ref_pekerjaan where id = '$o1'"));
+						$getNamaPekerjaan = sqlArray(sqlQuery("select * from ref_pekerjaan where id = '$o1'"));
 						
 						$this->publicVar += 1;
 						
 						$Koloms[] = array('align="left"',"<span style='font-weight:bold;'>$this->publicVar. ".$getNamaPekerjaan['nama_pekerjaan']."</span>" );
 					}else{
 						$jarak = '15px';
-				 		$cekAdaParent = mysql_num_rows(mysql_query("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and o1 = '$o1' and o1 !='0' and o1 !='' "));
+				 		$cekAdaParent = sqlNumRow(sqlQuery("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and o1 = '$o1' and o1 !='0' and o1 !='' "));
 						if($cekAdaParent == 0)$jarak = "0px";
 						$Koloms[] = array('align="left"',"<span style='margin-left:$jarak;font-weight:bold;'>".$namaRekening."</span>" );
 					}
 				}
 				$ilustrasi = "";
 				//$Koloms[] = array('align="left"',"" );
-				$getSumJumlahBarang = mysql_fetch_array(mysql_query("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+				$getSumJumlahBarang = sqlArray(sqlQuery("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 				
 				$jumlahBarang = $getSumJumlahBarang['total'];
 				//$Koloms[] = array('align="right"', number_format($jumlahBarang ,0,',','.') );
@@ -1719,7 +1719,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 }
 			 
 			 $Koloms[] = array('align="left"', $satuan_rek );
-			 $getSumSatuanRek = mysql_fetch_array(mysql_query("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+			 $getSumSatuanRek = sqlArray(sqlQuery("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 			 $sumSatuanRek = $getSumSatuanRek['total'];
 			 if($c1 == '0'){
 			 	//$Koloms[] = array('align="right"', number_format($sumSatuanRek ,2,',','.') );
@@ -1730,9 +1730,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 
 			 if($c1 == '0'){
 			 if($k == '0' && $n =='0'){
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));
 			 }else{
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));	
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));	
 			 }
 			 $Koloms[] = array('align="right"', " <span style='font-weight:bold;'>".number_format($getTotalJumalhHarga['total'] ,2,',','.')." </span>" );
 
@@ -1740,7 +1740,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 	$Koloms[] = array('align="right"', number_format($jumlah_harga ,2,',','.') );
 				
 			 }
-			 $getAngkaKoreksi = mysql_fetch_array(mysql_query("select * from view_rka_1 where c1='$c1' and c='$c' and d='$d'  and e='$e' and e1='$e1'  and id_jenis_pemeliharaan='$id_jenis_pemeliharaan' and  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' and rincian_perhitungan ='$rincian_perhitungan'  and id_tahap='$this->idTahap'"));
+			 $getAngkaKoreksi = sqlArray(sqlQuery("select * from view_rka_1 where c1='$c1' and c='$c' and d='$d'  and e='$e' and e1='$e1'  and id_jenis_pemeliharaan='$id_jenis_pemeliharaan' and  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' and rincian_perhitungan ='$rincian_perhitungan'  and id_tahap='$this->idTahap'"));
 			 $koreksiVolumeBarang = number_format($getAngkaKoreksi['volume_rek'] ,0,',','.');
 			 $koreksiSatuanHarga = number_format($getAngkaKoreksi['jumlah'] ,2,',','.');
 			 $koreksiJumlahHarga = number_format($getAngkaKoreksi['volume_rek']  * $getAngkaKoreksi['jumlah'] ,2,',','.');
@@ -1783,9 +1783,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			    $Koloms[] = array('align="right"',"");
 				 if($c1 =='0'){
 				 	if($k == '0' && $n =='0'){
-					 	$getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+					 	$getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 					 }else{
-					   $getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'")); 	
+					   $getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'")); 	
 					}
 					
 				 	
@@ -1807,7 +1807,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 	 $Koloms[] = array('align="right" id="alignButton'.$id_anggaran.'" ',"");
 				 $Koloms[] = array('align="right"',"");
 				 if($k == '0' && $n =='0'){
-					$getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+					$getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 					$kurangLebihPekerjaan = $getTotalJumalhHarga['total'] - $getTotalJumalhHargaKoreksi['total'];
 					if($kurangLebihPekerjaan == 0){
 						$Koloms[] = array('align="right"','0');
@@ -1822,7 +1822,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					}
 					
 				 }else{
-				   $getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'")); 	
+				   $getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and id_tahap ='$this->idTahap' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'")); 	
 					$kurangLebihRekening = $getTotalJumalhHarga['total'] - $getTotalJumalhHargaKoreksi['total'];
 					if($kurangLebihRekening == 0){
 						$Koloms[] = array('align="right"',"<span style='font-weight:bold;'>".'0'."</span>");
@@ -1847,22 +1847,22 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 	 }else{
 	 	if($this->jenisFormTerakhir == "KOREKSI"){
 			 $nomorBefore = $this->urutTerakhir - 1;
-			 $getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+			 $getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 			 if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 					$nomorBefore = $nomorBefore - 1;		
 			 }
-			 $getLastTahap = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+			 $getLastTahap = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 			 $blackList = "";
 			 if($getLastTahap['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE){
-				$getAllChild = mysql_query("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
-				while($black = mysql_fetch_array($getAllChild)){
+				$getAllChild = sqlQuery("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
+				while($black = sqlArray($getAllChild)){
 					$blackList .= " and id_anggaran !='".$black['id_anggaran']."'";
 				}
 		     }
 			 
-			 $getNamaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
+			 $getNamaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
 			 $namaRekening = $getNamaRekening['nm_rekening'];
-			 $getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
+			 $getNamaBarang = sqlArray(sqlQuery("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
 			 $namaBarang = $getNamaBarang['nm_barang'];
 			 $satuanBarang = $getNamaBarang['satuan'];
 			 $Koloms = array();
@@ -1904,21 +1904,21 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					$Koloms[] = array('align="left"',"<span style='color:red;'> Belanja xxx </span>" );
 				}else{
 					if($k == '0' && $n == '0'){
-						$getNamaPekerjaan = mysql_fetch_array(mysql_query("select * from ref_pekerjaan where id = '$o1'"));
+						$getNamaPekerjaan = sqlArray(sqlQuery("select * from ref_pekerjaan where id = '$o1'"));
 						
 						$this->publicVar += 1;
 						
 						$Koloms[] = array('align="left"',"<span style='font-weight:bold;'>$this->publicVar. ".$getNamaPekerjaan['nama_pekerjaan']."</span>" );
 					}else{
 						$jarak = '15px';
-				 		$cekAdaParent = mysql_num_rows(mysql_query("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and o1 = '$o1' and o1 !='0' and o1 !='' "));
+				 		$cekAdaParent = sqlNumRow(sqlQuery("select * from view_rka_1 where no_urut = '$nomorBefore' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and o1 = '$o1' and o1 !='0' and o1 !='' "));
 						if($cekAdaParent == 0)$jarak = "0px";
 						$Koloms[] = array('align="left"',"<span style='margin-left:$jarak;font-weight:bold;'>".$namaRekening."</span>" );
 					}
 				}
 				$ilustrasi = "";
 				//$Koloms[] = array('align="left"',"" );
-				$getSumJumlahBarang = mysql_fetch_array(mysql_query("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+				$getSumJumlahBarang = sqlArray(sqlQuery("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 				
 				$jumlahBarang = $getSumJumlahBarang['total'];
 				//$Koloms[] = array('align="right"', number_format($jumlahBarang ,0,',','.') );
@@ -1941,7 +1941,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 }
 			 
 			 $Koloms[] = array('align="left"', $satuan_rek );
-			 $getSumSatuanRek = mysql_fetch_array(mysql_query("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+			 $getSumSatuanRek = sqlArray(sqlQuery("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 			 $sumSatuanRek = $getSumSatuanRek['total'];
 			 if($c1 == '0'){
 			 	//$Koloms[] = array('align="right"', number_format($sumSatuanRek ,2,',','.') );
@@ -1952,9 +1952,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 
 			 if($c1 == '0'){
 			 if($k == '0' && $n =='0'){
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));
 			 }else{
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));	
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and no_urut ='$nomorBefore' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' $blackList"));	
 			 }
 			 $Koloms[] = array('align="right"', " <span style='font-weight:bold;'>".number_format($getTotalJumalhHarga['total'] ,2,',','.')." </span>" );
 
@@ -1962,7 +1962,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 	$Koloms[] = array('align="right"', number_format($jumlah_harga ,2,',','.') );
 				
 			 }
-			 $getAngkaKoreksi = mysql_fetch_array(mysql_query("select * from view_rka_1 where c1='$c1' and c='$c' and d='$d'  and e='$e' and e1='$e1'  and id_jenis_pemeliharaan='$id_jenis_pemeliharaan' and  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' and rincian_perhitungan ='$rincian_perhitungan'  and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+			 $getAngkaKoreksi = sqlArray(sqlQuery("select * from view_rka_1 where c1='$c1' and c='$c' and d='$d'  and e='$e' and e1='$e1'  and id_jenis_pemeliharaan='$id_jenis_pemeliharaan' and  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' and rincian_perhitungan ='$rincian_perhitungan'  and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
 			 $koreksiVolumeBarang = number_format($getAngkaKoreksi['volume_rek'] ,0,',','.');
 			 $koreksiSatuanHarga = number_format($getAngkaKoreksi['jumlah'] ,2,',','.');
 			 $koreksiJumlahHarga = number_format($getAngkaKoreksi['volume_rek']  * $getAngkaKoreksi['jumlah'] ,2,',','.');
@@ -2005,9 +2005,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			    $Koloms[] = array('align="right"',"");
 				 if($c1 =='0'){
 				 	if($k == '0' && $n =='0'){
-					 	$getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+					 	$getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
 					 }else{
-					   $getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'")); 	
+					   $getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'")); 	
 					}
 					
 				 	
@@ -2029,7 +2029,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 	 $Koloms[] = array('align="right" id="alignButton'.$id_anggaran.'" ',"");
 				 $Koloms[] = array('align="right"',"");
 				 if($k == '0' && $n =='0'){
-					$getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+					$getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where  o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
 					$kurangLebihPekerjaan = $getTotalJumalhHarga['total'] - $getTotalJumalhHargaKoreksi['total'];
 					if($kurangLebihPekerjaan == 0){
 						$Koloms[] = array('align="right"','0');
@@ -2044,7 +2044,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					}
 					
 				 }else{
-				   $getTotalJumalhHargaKoreksi = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'")); 	
+				   $getTotalJumalhHargaKoreksi = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' and o1='$o1' $kondisiSKPD and no_urut='$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'")); 	
 					$kurangLebihRekening = $getTotalJumalhHarga['total'] - $getTotalJumalhHargaKoreksi['total'];
 					if($kurangLebihRekening == 0){
 						$Koloms[] = array('align="right"',"<span style='font-weight:bold;'>".'0'."</span>");
@@ -2066,11 +2066,11 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 }
 			 
 		}elseif($this->jenisFormTerakhir == "PENYUSUNAN"){
-			 $getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut ='$this->urutTerakhir' and tahun ='$this->tahun' and anggaran='$this->jenisAnggaran'"));			
+			 $getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut ='$this->urutTerakhir' and tahun ='$this->tahun' and anggaran='$this->jenisAnggaran'"));			
 			 $idTahap = $getIDTahap['id_tahap'];
-			 $getNamaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
+			 $getNamaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l ='$l' and m='$m' and n='$n' and o='$o'"));
 			 $namaRekening = $getNamaRekening['nm_rekening'];
-			 $getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
+			 $getNamaBarang = sqlArray(sqlQuery("select * from ref_barang where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
 			 $namaBarang = $getNamaBarang['nm_barang'];
 			 $satuanBarang = $getNamaBarang['satuan'];
 			 $Koloms = array();
@@ -2110,21 +2110,21 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 					$Koloms[] = array('align="left"',"<span style='color:red;'> Belanja xxx </span>" );
 				}else{
 					if($k == '0' && $n == '0'){
-						$getNamaPekerjaan = mysql_fetch_array(mysql_query("select * from ref_pekerjaan where id = '$o1'"));
+						$getNamaPekerjaan = sqlArray(sqlQuery("select * from ref_pekerjaan where id = '$o1'"));
 						
 						$this->publicVar += 1;
 						
 						$Koloms[] = array('align="left"',"<span style='font-weight:bold;'>$this->publicVar. ".$getNamaPekerjaan['nama_pekerjaan']."</span>" );
 					}else{
 						$jarak = '15px';
-				 		$cekAdaParent = mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and o1 = '$o1' and o1 !='0' and o1 !='' "));
+				 		$cekAdaParent = sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and o1 = '$o1' and o1 !='0' and o1 !='' "));
 						if($cekAdaParent == 0)$jarak = "0px";
 						$Koloms[] = array('align="left"',"<span style='margin-left:$jarak;font-weight:bold;'>".$namaRekening."</span>" );
 					}
 					
 				}
 				$ilustrasi = "";
-				$getSumJumlahBarang = mysql_fetch_array(mysql_query("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$idTahap'"));
+				$getSumJumlahBarang = sqlArray(sqlQuery("select sum(volume_rek) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$idTahap'"));
 				$Koloms[] = array('align="left"',"" );
 				$jumlahBarang = $getSumJumlahBarang['total'];
 				//$Koloms[] = array('align="right"', number_format($jumlahBarang ,0,',','.') );
@@ -2146,7 +2146,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 }
 			 
 			 $Koloms[] = array('align="left"', $satuan_rek );
-			 $getSumSatuanRek = mysql_fetch_array(mysql_query("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and id_tahap='$idTahap'"));
+			 $getSumSatuanRek = sqlArray(sqlQuery("select sum(jumlah) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n'  and o='$o' $kondisiSKPD and id_tahap='$idTahap'"));
 			 $sumSatuanRek = $getSumSatuanRek['total'];
 			 if($c1 == '0'){
 			 	//$Koloms[] = array('align="right"', number_format($sumSatuanRek ,2,',','.') );
@@ -2157,9 +2157,9 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 			 
 			 if($c1 == '0'){
 			 if($k == '0' && $n =='0'){
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and id_tahap='$idTahap'"));
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where o1='$o1' $kondisiSKPD $kondisiBelanja and id_tahap='$idTahap'"));
 			 }else{
-			 	$getTotalJumalhHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$idTahap'"));	
+			 	$getTotalJumalhHarga = sqlArray(sqlQuery("select sum(jumlah_harga) as total from view_rka_1 where k='$k' and l='$l' and m='$m' and n='$n' and o='$o' $kondisiSKPD and id_tahap='$idTahap'"));	
 			 }
 			 $Koloms[] = array('align="right"', "<span style='font-weight:bold;'>".number_format($getTotalJumalhHarga['total'] ,2,',','.')."</span>" );
 			 if($this->wajibValidasi == TRUE)$Koloms[] = array('align="center"', "");
@@ -2217,7 +2217,7 @@ class rkaSKPD1_v2Obj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -2324,7 +2324,7 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 	
 	
 		if(!isset($selectedC1) ){
-	   		$arrayData = mysql_fetch_array(mysql_query("select * from current_filter where username ='".$_COOKIE['coID']."'"));
+	   		$arrayData = sqlArray(sqlQuery("select * from current_filter where username ='".$_COOKIE['coID']."'"));
 			foreach ($arrayData as $key => $value) { 
 			  $$key = $value; 
 			 }
@@ -2373,9 +2373,9 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 	
 	
 	
-	$get1 = mysql_fetch_array(mysql_query("select max(id_anggaran) as max from view_rkbmd "));
+	$get1 = sqlArray(sqlQuery("select max(id_anggaran) as max from view_rkbmd "));
 	$maxID = $get1['max'];
-	$get2 = mysql_fetch_array(mysql_query("select * from view_rkbmd where id_anggaran = '$maxID' "));
+	$get2 = sqlArray(sqlQuery("select * from view_rkbmd where id_anggaran = '$maxID' "));
 	$nomorUrutSebelumnya =  $get2['no_urut'];
 
 	
@@ -2460,10 +2460,10 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 			 );
 		}
 		
-		mysql_query(VulnWalkerUpdate("current_filter",$data,"username='$this->username'"));
+		sqlQuery(VulnWalkerUpdate("current_filter",$data,"username='$this->username'"));
 		
 		if(!isset($cmbUrusan) ){
-	   		$arrayData = mysql_fetch_array(mysql_query("select * from current_filter where username ='".$_COOKIE['coID']."'"));
+	   		$arrayData = sqlArray(sqlQuery("select * from current_filter where username ='".$_COOKIE['coID']."'"));
 			foreach ($arrayData as $key => $value) { 
 			  $$key = $value; 
 			 }
@@ -2505,22 +2505,22 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		
 			$arrKondisi[] = "c1 != '0'";
 		if($this->jenisForm == 'PENYUSUNAN'){
-			$getAllParent = mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-			while($rows = mysql_fetch_array($getAllParent)){
+			$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+			while($rows = sqlArray($getAllParent)){
 				foreach ($rows as $key => $value) { 
 			 	 $$key = $value; 
 				}
-				$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+				$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 				if($cekPekerjaan == 0){
 					$arrKondisi[] = "o1 !='$o1'";
 				}else{
 					$arrKondisi[] = " id_tahap='$this->idTahap'  or id_anggaran = '$id_anggaran' ";
-					$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$this->idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-					while($row2s = mysql_fetch_array($getAllRekening)){
+					$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$this->idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+					while($row2s = sqlArray($getAllRekening)){
 						foreach ($row2s as $key => $value) { 
 					 	 $$key = $value; 
 						}
-						$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+						$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 						if($cekRekening == 0){
 							$concat = $k.".".$l.".".$m.".".$n.".".$o;
 							$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
@@ -2534,16 +2534,16 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 			}
 		
 					
-				$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonMapingRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
+				$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonMapingRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$this->idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
 				}
-				$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonHostedRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
+				$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonHostedRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$this->idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
@@ -2554,59 +2554,59 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 			
 		}elseif($this->jenisForm == 'KOREKSI'){
 			$nomorUrutSebelumnya = $this->nomorUrut - 1;
-			$getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+			$getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 			if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 				$nomorUrutSebelumnya = $nomorUrutSebelumnya - 1;		
 			}
-			$getLastTahap = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+			$getLastTahap = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 			$blackList = "";
 			if($getLastTahap['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE){
-				$getAllChild = mysql_query("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
-				while($black = mysql_fetch_array($getAllChild)){
+				$getAllChild = sqlQuery("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
+				while($black = sqlArray($getAllChild)){
 					$blackList .= " and id_anggaran !='".$black['id_anggaran']."'";
 				}
 			}
 			
-			$getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+			$getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 			$idTahap = $getIDTahap['id_tahap'];
-			$getAllParent = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-			while($rows = mysql_fetch_array($getAllParent)){
+			$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+			while($rows = sqlArray($getAllParent)){
 				foreach ($rows as $key => $value) { 
 			 	 $$key = $value; 
 				}
-				$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+				$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 				if($cekPekerjaan == 0){
 					$arrKondisi[] = "o1 !='$o1'";
 				}else{
 					$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran' ";
-					$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-					while($row2s = mysql_fetch_array($getAllRekening)){
+					$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+					while($row2s = sqlArray($getAllRekening)){
 						foreach ($row2s as $key => $value) { 
 					 	 $$key = $value; 
 						}
-						$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+						$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 						if($cekRekening == 0){
 							$concat = $k.".".$l.".".$m.".".$n.".".$o;
 							$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
 						}else{
 							$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'  ";
-							$getAllProgram = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
-							while($row3s = mysql_fetch_array($getAllProgram)){
+							$getAllProgram = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
+							while($row3s = sqlArray($getAllProgram)){
 								foreach ($row3s as $key => $value) { 
 							 	 $$key = $value; 
 								}
-								$cekProgram = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+								$cekProgram = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 								if($cekProgram == 0){
 									$concat = $bk.".".$ck.".".$p;
 									$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
 								}else{
 									$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'   ";
-									$getAllKegiatan = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
-									while($row4s = mysql_fetch_array($getAllKegiatan)){
+									$getAllKegiatan = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
+									while($row4s = sqlArray($getAllKegiatan)){
 										foreach ($row4s as $key => $value) { 
 									 	 $$key = $value; 
 										}
-										$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+										$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 										if($cekKegiatan == 0){
 											$concat = $bk.".".$ck.".".$p;
 											$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
@@ -2626,17 +2626,17 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 			}
 		
 					
-				$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonMapingRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+				$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonMapingRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
 				}
 				
-				$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonHostedRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+				$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonHostedRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
@@ -2652,59 +2652,59 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		}else{
 			if($this->jenisFormTerakhir == "KOREKSI"){
 				$nomorUrutSebelumnya = $this->urutTerakhir - 1;
-				$getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+				$getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 				if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 					$nomorUrutSebelumnya = $nomorUrutSebelumnya - 1;		
 				}
-				$getLastTahap = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+				$getLastTahap = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 				$blackList = "";
 				if($getLastTahap['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE){
-					$getAllChild = mysql_query("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
-					while($black = mysql_fetch_array($getAllChild)){
+					$getAllChild = sqlQuery("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
+					while($black = sqlArray($getAllChild)){
 						$blackList .= " and id_anggaran !='".$black['id_anggaran']."'";
 					}
 				}
 				
-				$getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+				$getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 				$idTahap = $getIDTahap['id_tahap'];
-				$getAllParent = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-				while($rows = mysql_fetch_array($getAllParent)){
+				$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+				while($rows = sqlArray($getAllParent)){
 					foreach ($rows as $key => $value) { 
 				 	 $$key = $value; 
 					}
-					$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+					$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 					if($cekPekerjaan == 0){
 						$arrKondisi[] = "o1 !='$o1'";
 					}else{
 						$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran' ";
-						$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-						while($row2s = mysql_fetch_array($getAllRekening)){
+						$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+						while($row2s = sqlArray($getAllRekening)){
 							foreach ($row2s as $key => $value) { 
 						 	 $$key = $value; 
 							}
-							$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+							$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 							if($cekRekening == 0){
 								$concat = $k.".".$l.".".$m.".".$n.".".$o;
 								$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
 							}else{
 								$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'  ";
-								$getAllProgram = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
-								while($row3s = mysql_fetch_array($getAllProgram)){
+								$getAllProgram = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
+								while($row3s = sqlArray($getAllProgram)){
 									foreach ($row3s as $key => $value) { 
 								 	 $$key = $value; 
 									}
-									$cekProgram = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+									$cekProgram = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 									if($cekProgram == 0){
 										$concat = $bk.".".$ck.".".$p;
 										$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
 									}else{
 										$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'   ";
-										$getAllKegiatan = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
-										while($row4s = mysql_fetch_array($getAllKegiatan)){
+										$getAllKegiatan = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
+										while($row4s = sqlArray($getAllKegiatan)){
 											foreach ($row4s as $key => $value) { 
 										 	 $$key = $value; 
 											}
-											$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+											$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 											if($cekKegiatan == 0){
 												$concat = $bk.".".$ck.".".$p;
 												$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
@@ -2724,17 +2724,17 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 				}
 			
 						
-					$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-					while($got = mysql_fetch_array($grabNonMapingRekening)){
-						if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+					$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+					while($got = sqlArray($grabNonMapingRekening)){
+						if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 							$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 						}
 						
 					}
 					
-					$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-					while($got = mysql_fetch_array($grabNonHostedRekening)){
-						if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+					$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+					while($got = sqlArray($grabNonHostedRekening)){
+						if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 							$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 						}
 						
@@ -2746,46 +2746,46 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 				
 				$arrKondisi[] =  "no_urut = '$nomorUrutSebelumnya' ";
 			}elseif($this->jenisFormTerakhir == "PENYUSUNAN"){
-				$getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut ='$this->urutTerakhir' and tahun ='$this->tahun' and anggaran='$this->jenisAnggaran'"));			
+				$getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut ='$this->urutTerakhir' and tahun ='$this->tahun' and anggaran='$this->jenisAnggaran'"));			
 				$idTahap = $getIDTahap['id_tahap'];
-				$getAllParent = mysql_query("select * from view_rka_1 where id_tahap ='$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-				while($rows = mysql_fetch_array($getAllParent)){
+				$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+				while($rows = sqlArray($getAllParent)){
 					foreach ($rows as $key => $value) { 
 				 	 $$key = $value; 
 					}
-					$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+					$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 					if($cekPekerjaan == 0){
 						$arrKondisi[] = "o1 !='$o1'";
 					}else{
 						$arrKondisi[] = " id_tahap='$idTahap'  or id_anggaran = '$id_anggaran' ";
-						$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-						while($row2s = mysql_fetch_array($getAllRekening)){
+						$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+						while($row2s = sqlArray($getAllRekening)){
 							foreach ($row2s as $key => $value) { 
 						 	 $$key = $value; 
 							}
-							$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+							$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 							if($cekRekening == 0){
 								$concat = $k.".".$l.".".$m.".".$n.".".$o;
 								$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
 							}else{
 								$arrKondisi[] = " id_tahap='$idTahap'  or id_anggaran = '$id_anggaran'  ";
-								$getAllProgram = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
-								while($row3s = mysql_fetch_array($getAllProgram)){
+								$getAllProgram = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
+								while($row3s = sqlArray($getAllProgram)){
 									foreach ($row3s as $key => $value) { 
 								 	 $$key = $value; 
 									}
-									$cekProgram = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+									$cekProgram = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 									if($cekProgram == 0){
 										$concat = $bk.".".$ck.".".$p;
 										$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
 									}else{
 										$arrKondisi[] = " id_tahap='$idTahap'  or id_anggaran = '$id_anggaran'   ";
-										$getAllKegiatan = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
-										while($row4s = mysql_fetch_array($getAllKegiatan)){
+										$getAllKegiatan = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
+										while($row4s = sqlArray($getAllKegiatan)){
 											foreach ($row4s as $key => $value) { 
 										 	 $$key = $value; 
 											}
-											$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+											$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 											if($cekKegiatan == 0){
 												$concat = $bk.".".$ck.".".$p;
 												$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
@@ -2805,17 +2805,17 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 				}
 		
 					
-				$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonMapingRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
+				$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonMapingRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
 				}
 				
-				$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonHostedRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
+				$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonHostedRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
@@ -2857,7 +2857,7 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		
 		
 			$qy = "DELETE FROM $this->TblName_Hapus WHERE id_anggaran='".$ids[$i]."' ";$cek.=$qy;
-			$qry = mysql_query($qy);				
+			$qry = sqlQuery($qy);				
 				
 		}
 		return array('err'=>$err,'cek'=>$cek);
@@ -2934,7 +2934,7 @@ function Laporan($xls =FALSE){
 		
 		
 		$arrKondisi = array();
-		$grabSKPD = mysql_fetch_array(mysql_query("select * from skpd_report_rka_1 where username='$this->username'"));
+		$grabSKPD = sqlArray(sqlQuery("select * from skpd_report_rka_1 where username='$this->username'"));
 		foreach ($grabSKPD as $key => $value) { 
 				  $$key = $value; 
 			}
@@ -2974,22 +2974,22 @@ function Laporan($xls =FALSE){
 			}
 		$arrKondisi[] = "c1 != '0'";
 		if($this->jenisForm == 'PENYUSUNAN'){
-			$getAllParent = mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-			while($rows = mysql_fetch_array($getAllParent)){
+			$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+			while($rows = sqlArray($getAllParent)){
 				foreach ($rows as $key => $value) { 
 			 	 $$key = $value; 
 				}
-				$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+				$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 				if($cekPekerjaan == 0){
 					$arrKondisi[] = "o1 !='$o1'";
 				}else{
 					$arrKondisi[] = " id_tahap='$this->idTahap'  or id_anggaran = '$id_anggaran' ";
-					$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$this->idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-					while($row2s = mysql_fetch_array($getAllRekening)){
+					$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$this->idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+					while($row2s = sqlArray($getAllRekening)){
 						foreach ($row2s as $key => $value) { 
 					 	 $$key = $value; 
 						}
-						$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+						$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$this->idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 						if($cekRekening == 0){
 							$concat = $k.".".$l.".".$m.".".$n.".".$o;
 							$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
@@ -3003,16 +3003,16 @@ function Laporan($xls =FALSE){
 			}
 		
 					
-				$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonMapingRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
+				$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonMapingRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$this->idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
 				}
-				$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonHostedRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
+				$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonHostedRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$this->idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!=''  $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$this->idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
@@ -3023,59 +3023,59 @@ function Laporan($xls =FALSE){
 			
 		}elseif($this->jenisForm == 'KOREKSI'){
 			$nomorUrutSebelumnya = $this->nomorUrut ;
-			$getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+			$getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 			if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 				$nomorUrutSebelumnya = $nomorUrutSebelumnya - 1;		
 			}
-			$getLastTahap = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+			$getLastTahap = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 			$blackList = "";
 			if($getLastTahap['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE){
-				$getAllChild = mysql_query("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
-				while($black = mysql_fetch_array($getAllChild)){
+				$getAllChild = sqlQuery("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
+				while($black = sqlArray($getAllChild)){
 					$blackList .= " and id_anggaran !='".$black['id_anggaran']."'";
 				}
 			}
 			
-			$getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+			$getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 			$idTahap = $getIDTahap['id_tahap'];
-			$getAllParent = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-			while($rows = mysql_fetch_array($getAllParent)){
+			$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+			while($rows = sqlArray($getAllParent)){
 				foreach ($rows as $key => $value) { 
 			 	 $$key = $value; 
 				}
-				$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+				$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 				if($cekPekerjaan == 0){
 					$arrKondisi[] = "o1 !='$o1'";
 				}else{
 					$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran' ";
-					$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-					while($row2s = mysql_fetch_array($getAllRekening)){
+					$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+					while($row2s = sqlArray($getAllRekening)){
 						foreach ($row2s as $key => $value) { 
 					 	 $$key = $value; 
 						}
-						$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+						$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 						if($cekRekening == 0){
 							$concat = $k.".".$l.".".$m.".".$n.".".$o;
 							$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
 						}else{
 							$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'  ";
-							$getAllProgram = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
-							while($row3s = mysql_fetch_array($getAllProgram)){
+							$getAllProgram = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
+							while($row3s = sqlArray($getAllProgram)){
 								foreach ($row3s as $key => $value) { 
 							 	 $$key = $value; 
 								}
-								$cekProgram = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+								$cekProgram = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 								if($cekProgram == 0){
 									$concat = $bk.".".$ck.".".$p;
 									$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
 								}else{
 									$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'   ";
-									$getAllKegiatan = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
-									while($row4s = mysql_fetch_array($getAllKegiatan)){
+									$getAllKegiatan = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
+									while($row4s = sqlArray($getAllKegiatan)){
 										foreach ($row4s as $key => $value) { 
 									 	 $$key = $value; 
 										}
-										$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+										$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 										if($cekKegiatan == 0){
 											$concat = $bk.".".$ck.".".$p;
 											$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
@@ -3095,17 +3095,17 @@ function Laporan($xls =FALSE){
 			}
 		
 					
-				$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonMapingRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+				$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonMapingRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
 				}
 				
-				$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonHostedRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+				$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonHostedRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
@@ -3121,59 +3121,59 @@ function Laporan($xls =FALSE){
 		}else{
 			if($this->jenisFormTerakhir == "KOREKSI"){
 				$nomorUrutSebelumnya = $this->urutTerakhir;
-				$getRApbd = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+				$getRApbd = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 				if($getRApbd['jenis_form_modul'] != "PENYUSUNAN" && $getRApbd['jenis_form_modul'] != "KOREKSI"){
 					$nomorUrutSebelumnya = $nomorUrutSebelumnya - 1;		
 				}
-				$getLastTahap = mysql_fetch_array(mysql_query("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
+				$getLastTahap = sqlArray(sqlQuery("select * from view_rka_1 where no_urut = '$nomorUrutSebelumnya' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran'"));
 				$blackList = "";
 				if($getLastTahap['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE){
-					$getAllChild = mysql_query("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
-					while($black = mysql_fetch_array($getAllChild)){
+					$getAllChild = sqlQuery("select * from view_rka_1 where id_tahap = '".$getLastTahap['id_tahap']."' and (rincian_perhitungan !='' or j !='000'  and status_validasi !='1' )");			
+					while($black = sqlArray($getAllChild)){
 						$blackList .= " and id_anggaran !='".$black['id_anggaran']."'";
 					}
 				}
 				
-				$getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+				$getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut = '$nomorUrutSebelumnya' and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 				$idTahap = $getIDTahap['id_tahap'];
-				$getAllParent = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-				while($rows = mysql_fetch_array($getAllParent)){
+				$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+				while($rows = sqlArray($getAllParent)){
 					foreach ($rows as $key => $value) { 
 				 	 $$key = $value; 
 					}
-					$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+					$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 					if($cekPekerjaan == 0){
 						$arrKondisi[] = "o1 !='$o1'";
 					}else{
 						$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran' ";
-						$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-						while($row2s = mysql_fetch_array($getAllRekening)){
+						$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+						while($row2s = sqlArray($getAllRekening)){
 							foreach ($row2s as $key => $value) { 
 						 	 $$key = $value; 
 							}
-							$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+							$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 							if($cekRekening == 0){
 								$concat = $k.".".$l.".".$m.".".$n.".".$o;
 								$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
 							}else{
 								$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'  ";
-								$getAllProgram = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
-								while($row3s = mysql_fetch_array($getAllProgram)){
+								$getAllProgram = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
+								while($row3s = sqlArray($getAllProgram)){
 									foreach ($row3s as $key => $value) { 
 								 	 $$key = $value; 
 									}
-									$cekProgram = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+									$cekProgram = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 									if($cekProgram == 0){
 										$concat = $bk.".".$ck.".".$p;
 										$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
 									}else{
 										$arrKondisi[] = " id_tahap = '$idTahap'  or id_anggaran = '$id_anggaran'   ";
-										$getAllKegiatan = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
-										while($row4s = mysql_fetch_array($getAllKegiatan)){
+										$getAllKegiatan = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
+										while($row4s = sqlArray($getAllKegiatan)){
 											foreach ($row4s as $key => $value) { 
 										 	 $$key = $value; 
 											}
-											$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+											$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap = '$idTahap' $kondisiRekening $kondisiSKPD  $blackList and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 											if($cekKegiatan == 0){
 												$concat = $bk.".".$ck.".".$p;
 												$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
@@ -3193,17 +3193,17 @@ function Laporan($xls =FALSE){
 				}
 			
 						
-					$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-					while($got = mysql_fetch_array($grabNonMapingRekening)){
-						if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+					$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+					while($got = sqlArray($grabNonMapingRekening)){
+						if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 							$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 						}
 						
 					}
 					
-					$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-					while($got = mysql_fetch_array($grabNonHostedRekening)){
-						if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
+					$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+					while($got = sqlArray($grabNonHostedRekening)){
+						if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD $blackList")) != 0){
 							$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 						}
 						
@@ -3215,46 +3215,46 @@ function Laporan($xls =FALSE){
 				
 				$arrKondisi[] =  "no_urut = '$nomorUrutSebelumnya' ";
 			}elseif($this->jenisFormTerakhir == "PENYUSUNAN"){
-				$getIDTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut ='$this->urutTerakhir' and tahun ='$this->tahun' and anggaran='$this->jenisAnggaran'"));			
+				$getIDTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut ='$this->urutTerakhir' and tahun ='$this->tahun' and anggaran='$this->jenisAnggaran'"));			
 				$idTahap = $getIDTahap['id_tahap'];
-				$getAllParent = mysql_query("select * from view_rka_1 where id_tahap ='$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
-				while($rows = mysql_fetch_array($getAllParent)){
+				$getAllParent = sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap'  and o1 !='0' and k='0' and n='0' and rincian_perhitungan=''  ");	
+				while($rows = sqlArray($getAllParent)){
 					foreach ($rows as $key => $value) { 
 				 	 $$key = $value; 
 					}
-					$cekPekerjaan = mysql_num_rows(mysql_query("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+					$cekPekerjaan = sqlNumRow(sqlQuery("select * from view_rka_1 where o1 = '$o1' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 					if($cekPekerjaan == 0){
 						$arrKondisi[] = "o1 !='$o1'";
 					}else{
 						$arrKondisi[] = " id_tahap='$idTahap'  or id_anggaran = '$id_anggaran' ";
-						$getAllRekening = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
-						while($row2s = mysql_fetch_array($getAllRekening)){
+						$getAllRekening = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap'  and c1 = '0' and j ='000' and rincian_perhitungan = '' and k!='0' and n !='0'  ");				
+						while($row2s = sqlArray($getAllRekening)){
 							foreach ($row2s as $key => $value) { 
 						 	 $$key = $value; 
 							}
-							$cekRekening = mysql_num_rows(mysql_query("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+							$cekRekening = sqlNumRow(sqlQuery("select * from view_rka_1 where k ='$k' and l='$l' and m='$m' and n='$n' and o='$o' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 							if($cekRekening == 0){
 								$concat = $k.".".$l.".".$m.".".$n.".".$o;
 								$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o)  !='$concat'";
 							}else{
 								$arrKondisi[] = " id_tahap='$idTahap'  or id_anggaran = '$id_anggaran'  ";
-								$getAllProgram = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
-								while($row3s = mysql_fetch_array($getAllProgram)){
+								$getAllProgram = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and p != '0' and q ='0' and j ='000' and rincian_perhitungan = ''   ");				
+								while($row3s = sqlArray($getAllProgram)){
 									foreach ($row3s as $key => $value) { 
 								 	 $$key = $value; 
 									}
-									$cekProgram = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+									$cekProgram = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 									if($cekProgram == 0){
 										$concat = $bk.".".$ck.".".$p;
 										$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
 									}else{
 										$arrKondisi[] = " id_tahap='$idTahap'  or id_anggaran = '$id_anggaran'   ";
-										$getAllKegiatan = mysql_query("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
-										while($row4s = mysql_fetch_array($getAllKegiatan)){
+										$getAllKegiatan = sqlQuery("select * from view_rka_1 where id_tahap = '$idTahap' and bk ='$bk' and ck='$ck' and p='$p' and q != '0'  and j ='000' and rincian_perhitungan = ''   ");				
+										while($row4s = sqlArray($getAllKegiatan)){
 											foreach ($row4s as $key => $value) { 
 										 	 $$key = $value; 
 											}
-											$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
+											$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rka_1 where bk ='$bk' and ck='$ck' and p='$p' and q='$q' and id_tahap ='$idTahap' $kondisiRekening $kondisiSKPD and (rincian_perhitungan !='' or rincian_perhitungan!='') "));
 											if($cekKegiatan == 0){
 												$concat = $bk.".".$ck.".".$p;
 												$arrKondisi[] = "concat(bk,'.',ck,'.',p)  !='$concat'";
@@ -3274,17 +3274,17 @@ function Laporan($xls =FALSE){
 				}
 		
 					
-				$grabNonMapingRekening= mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonMapingRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
+				$grabNonMapingRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) > 1) and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonMapingRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
 				}
 				
-				$grabNonHostedRekening= mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
-				while($got = mysql_fetch_array($grabNonHostedRekening)){
-					if(mysql_num_rows(mysql_query("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
+				$grabNonHostedRekening= sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and (LENGTH(k) = 1 and k !='0') and rincian_perhitungan=''");
+				while($got = sqlArray($grabNonHostedRekening)){
+					if(sqlNumRow(sqlQuery("select * from view_rka_1 where id_tahap ='$idTahap' and k ='".$got['k']."' and l ='".$got['l']."' and m ='".$got['m']."' and n ='".$got['n']."' and o ='".$got['o']."' and rincian_perhitungan!='' $kondisiRekening $kondisiSKPD ")) != 0){
 						$arrKondisi[] = "id_tahap = '$idTahap' or id_anggaran ='".$got['id_anggaran']."'";
 					}
 					
@@ -3312,22 +3312,22 @@ function Laporan($xls =FALSE){
 			$Kondisi = " and ".$Kondisi;
 		}*/
 		$qry ="select * from view_rka_1 where $Kondisi ";
-		$aqry = mysql_query($qry);
-		$getKuasapenggunaBarang = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'"));
+		$aqry = sqlQuery($qry);
+		$getKuasapenggunaBarang = sqlArray(sqlQuery("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'"));
 		$kuasaPenggunaBarang = $getKuasapenggunaBarang['nm_skpd'];		
 		
 		
-		$getUrusan = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='00'"));
+		$getUrusan = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='00'"));
 		$urusan = $getUrusan['nm_skpd'];
-		$getBidang = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='00'"));
+		$getBidang = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='00'"));
 		$bidang = $getBidang['nm_skpd'];
-		$getSKPD = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='00'"));
+		$getSKPD = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='00'"));
 		$skpd = $getSKPD['nm_skpd'];
-		$getSubUnit = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='$cmbUnit' and e1='$cmbSubUnit' "));
+		$getSubUnit = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='$cmbUnit' and e1='$cmbSubUnit' "));
 		$subUnit = $getSubUnit['nm_skpd'];
-		$getProgram = mysql_fetch_array(mysql_query("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='0'"));
+		$getProgram = sqlArray(sqlQuery("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='0'"));
 		$program = $getProgram['nama'];
-		$getKegiatan = mysql_fetch_array(mysql_query("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='$hublaQ'"));
+		$getKegiatan = sqlArray(sqlQuery("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='$hublaQ'"));
 		$kegiatan = $getKegiatan['nama'];
 		
 		//
@@ -3414,10 +3414,10 @@ function Laporan($xls =FALSE){
 								
 									
 		";
-		$getTotal = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from view_rka_1 where $Kondisi  "));
+		$getTotal = sqlArray(sqlQuery("select sum(jumlah_harga) from view_rka_1 where $Kondisi  "));
 		$total = number_format($getTotal['sum(jumlah_harga)'],2,',','.');
 		$no = 1;
-		while($daqry = mysql_fetch_array($aqry)){
+		while($daqry = sqlArray($aqry)){
 			foreach ($daqry as $key => $value) { 
 				  $$key = $value; 
 			} 
@@ -3429,18 +3429,18 @@ function Laporan($xls =FALSE){
 				$n = "";
 				$o = "";
 				$this->publicVar += 1;
-				$getPekerjaan = mysql_fetch_array(mysql_query("select * from ref_pekerjaan where id='$o1' "));
+				$getPekerjaan = sqlArray(sqlQuery("select * from ref_pekerjaan where id='$o1' "));
 				$uraian = "<span style='font-weight:bold;'>$this->publicVar.". $getPekerjaan['nama_pekerjaan'] . "</span>";
-				$getSumJumlahHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from view_rka_1 where  o1 ='$o1' $kondisiSKPD $kondisiFilter  "));
+				$getSumJumlahHarga = sqlArray(sqlQuery("select sum(jumlah_harga) from view_rka_1 where  o1 ='$o1' $kondisiSKPD $kondisiFilter  "));
 				$jumlah_harga = "<span style='font-weight:bold;'>".number_format($getSumJumlahHarga['sum(jumlah_harga)'],2,',','.') . "</span>";
 				
 				
 			}elseif($c1 == '0'){
-				$getNamaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o='$o'"));
+				$getNamaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o='$o'"));
 				$jarak = "0px";
 				if($o1 !='0' && $o1 !='')$jarak = "10px";
 				$uraian = "<span style='font-weight:bold;margin-left:$jarak;'>".$getNamaRekening['nm_rekening']."</b>";
-				$getSumJumlahHarga = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from view_rka_1 where  k = '$k' and l='$l' and m='$m' and n='$n' and o='$o'  $kondisiSKPD $kondisiFilter"));
+				$getSumJumlahHarga = sqlArray(sqlQuery("select sum(jumlah_harga) from view_rka_1 where  k = '$k' and l='$l' and m='$m' and n='$n' and o='$o'  $kondisiSKPD $kondisiFilter"));
 				$jumlah_harga = "<b>".number_format($getSumJumlahHarga['sum(jumlah_harga)'],2,',','.');
 			}else{
 				$k = "";
@@ -3449,7 +3449,7 @@ function Laporan($xls =FALSE){
 				$n = "";
 				$o = "";
 				if($j != '000'){
-					$getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang where f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
+					$getNamaBarang = sqlArray(sqlQuery("select * from ref_barang where f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"));
 					$uraian = "<span style='margin-left:20px;'> ". $getNamaBarang['nm_barang'] . "</span>";
 				}else{
 					$uraian = "<span style='margin-left:20px;'> ". $rincian_perhitungan . "</span>";
@@ -3486,7 +3486,7 @@ function Laporan($xls =FALSE){
 									
 								</tr>
 							 </table>";		
-		$getDataPenggunaBarang = mysql_fetch_array(mysql_query("select * from tandatanganpenggunabarang_v3 where c1= '$c1' and c='$c' and  d='$d' and kategori = 'PENGGUNA' "));
+		$getDataPenggunaBarang = sqlArray(sqlQuery("select * from tandatanganpenggunabarang_v3 where c1= '$c1' and c='$c' and  d='$d' and kategori = 'PENGGUNA' "));
 			
 		echo 			
 						"<br><div class='ukurantulisan' style ='float:right;'>
@@ -3684,7 +3684,7 @@ function formAlokasi($dt){
 						  );
 						  
 	 $username = $_COOKIE['coID'];
-	 $getAlokasi = mysql_fetch_array(mysql_query("select * from temp_alokasi_rka_v2 where user='$username'"));
+	 $getAlokasi = sqlArray(sqlQuery("select * from temp_alokasi_rka_v2 where user='$username'"));
 	 foreach ($getAlokasi as $key => $value) { 
 				  $$key = $value; 
 			}
@@ -3811,7 +3811,7 @@ function formAlokasi($dt){
 	 $this->form_height = 80;
 	 $this->form_caption = 'EDIT PEKERJAAN';
 	 
-	 $getNamaPekerjaan = mysql_fetch_array(mysql_query("select * from ref_pekerjaan where id='$dt'"));
+	 $getNamaPekerjaan = sqlArray(sqlQuery("select * from ref_pekerjaan where id='$dt'"));
 	 $namaPekerjaan = $getNamaPekerjaan['nama_pekerjaan'];
 	 	
 	 //items ----------------------
@@ -3896,9 +3896,9 @@ if($Main->wajibValidasi == TRUE){
 
 if(empty($rkaSKPD1_v2->tahun)){
     
-	$get1 = mysql_fetch_array(mysql_query("select max(id_anggaran)  from view_rka_1 "));
+	$get1 = sqlArray(sqlQuery("select max(id_anggaran)  from view_rka_1 "));
 	$maxAnggaran = $get1['max(id_anggaran)'];
-	$get2 = mysql_fetch_array(mysql_query("select * from view_rka_1 where id_anggaran = '$maxAnggaran'"));
+	$get2 = sqlArray(sqlQuery("select * from view_rka_1 where id_anggaran = '$maxAnggaran'"));
 	/*$rkaSKPD1_v2->tahun = "select max(id_anggaran) as max from view_rka_1 where nama_modul = 'rkaSKPD1_v2'";*/
 	$rkaSKPD1_v2->tahun  = $get2['tahun'];
 	$rkaSKPD1_v2->jenisAnggaran = $get2['jenis_anggaran'];
@@ -3908,7 +3908,7 @@ if(empty($rkaSKPD1_v2->tahun)){
 	
 	
 	$idtahapTerakhir = $get2['id_tahap'];
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
 	$rkaSKPD1_v2->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$arrayMasa = explode("-",$namaTahap['tanggal_mulai']);
 	$lastTanggalMulai = $arrayMasa[2]."-".$arrayMasa[1]."-".$arrayMasa[0];
@@ -3919,10 +3919,10 @@ if(empty($rkaSKPD1_v2->tahun)){
 	$arrayHasil =  VulnWalkerLASTTahap_v2();
 	$rkaSKPD1_v2->currentTahap = $arrayHasil['currentTahap'];
 }else{
-	$getCurrenttahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$rkaSKPD1_v2->idTahap'"));
+	$getCurrenttahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$rkaSKPD1_v2->idTahap'"));
 	$rkaSKPD1_v2->currentTahap = $getCurrenttahap['nama_tahap'];
 	
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$rkaSKPD1_v2->idTahap'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$rkaSKPD1_v2->idTahap'"));
 	$rkaSKPD1_v2->jenisFormTerakhir =  $namaTahap['jenis_form_modul'];
 	$rkaSKPD1_v2->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$arrayMasa = explode("-",$namaTahap['tanggal_mulai']);

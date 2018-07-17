@@ -1,7 +1,5 @@
 <?php
-
-
-class apiObj  extends DaftarObj2{
+class apiObj  extends configClass{
 	var $Prefix = 'api';
 	var $elCurrPage="HalDefault";
 	var $SHOW_CEK = TRUE;
@@ -40,9 +38,6 @@ class apiObj  extends DaftarObj2{
 
 	  switch($tipe){
 
-
-
-
 		case 'pushNotif':{
 			foreach ($_REQUEST as $key => $value) {
 				  $$key = $value;
@@ -52,16 +47,16 @@ class apiObj  extends DaftarObj2{
 			'Authorization: key = AIzaSyBVJKrKRLW5m63RloYnFNu4fQDF9hbSdJQ',
 			'Content-Type: application/json'
 			);
-			$getTokenTarget = mysql_fetch_array(mysql_query("select * from member where email ='$email'"));
+			$getTokenTarget = sqlArray(sqlQuery("select * from member where email ='$email'"));
 			$token = $getTokenTarget['firebase_id'];
 			$arrayPush = json_encode(array('title'=> $title, 'body'=>$body, 'event'=> $event));
 
 			if($event == "suspend"){
-				mysql_query("update member set status = 'suspend' where email = '$email'");
+				sqlQuery("update member set status = 'suspend' where email = '$email'");
 			}elseif($event == "penukaran") {
 					//$explodingJSON = json_decode($body);
 					// $idPenukaran = $explodingJSON['id'];
-					// mysql_query("update penukaran set status = 'DONE', tanggal_aksi = '".date('Y-m-d')."' where id = '$idPenukaran'");
+					// sqlQuery("update penukaran set status = 'DONE', tanggal_aksi = '".date('Y-m-d')."' where id = '$idPenukaran'");
 			}
 
 			$fields = array('to'=>$token, 'data'=> array("itemPush" => $arrayPush));
@@ -85,11 +80,11 @@ class apiObj  extends DaftarObj2{
 			}
 			$emil = mysql_real_escape_string($email);
 			$password = mysql_real_escape_string($password);
-			$grab = mysql_fetch_array(mysql_query("select * from member where email = '$email' and password = '$password'"));
+			$grab = sqlArray(sqlQuery("select * from member where email = '$email' and password = '$password'"));
 			foreach ($grab as $key => $value) {
 				  $$key = $value;
 			}
-			if(mysql_num_rows(mysql_query("select * from member where email = '$email' and password = '$password'")) == 0){
+			if(sqlNumRow(sqlQuery("select * from member where email = '$email' and password = '$password'")) == 0){
 				$err = "Login gagal";
 			}elseif($status == "suspend"){
 				$err = "Akun anda telah di suspend";
@@ -97,7 +92,7 @@ class apiObj  extends DaftarObj2{
 				$err = "Akun anda belum terverifikasi";
 			}else{
 
-				$getDataLogin = mysql_fetch_array(mysql_query("select * from member where email = '$email'"));
+				$getDataLogin = sqlArray(sqlQuery("select * from member where email = '$email'"));
 
 				if($getDataLogin['device_name'] !='' && $getDataLogin['imei'] !=''){
 					if($deviceName != $getDataLogin['device_name'] || $imei != $getDataLogin['imei']){
@@ -105,7 +100,7 @@ class apiObj  extends DaftarObj2{
 					}
 				}
 
-				if (mysql_num_rows(mysql_query("select * from member where device_name = '".$deviceName."' and imei ='".$_REQUEST['imei']."' and email !='$email' and device_name !='' and imei !=''")) !=0) {
+				if (sqlNumRow(sqlQuery("select * from member where device_name = '".$deviceName."' and imei ='".$_REQUEST['imei']."' and email !='$email' and device_name !='' and imei !=''")) !=0) {
 						$err = "Satu device tidak dapat di pakai oleh 2 akun !";
 				}
 
@@ -116,7 +111,7 @@ class apiObj  extends DaftarObj2{
 					'Authorization: key = AIzaSyBVJKrKRLW5m63RloYnFNu4fQDF9hbSdJQ',
 					'Content-Type: application/json'
 					);
-					$getTokenTarget = mysql_fetch_array(mysql_query("select * from member where email ='$email'"));
+					$getTokenTarget = sqlArray(sqlQuery("select * from member where email ='$email'"));
 					$tokenLast = $getTokenTarget['firebase_id'];
 					if($tokenLast == $token){
 
@@ -147,7 +142,7 @@ class apiObj  extends DaftarObj2{
 													'imei' => $_REQUEST['imei'],
 													'device_name' => $deviceName
 												);
-					mysql_query(VulnWalkerUpdate("member",$data,"email = '$email'"));
+					sqlQuery(VulnWalkerUpdate("member",$data,"email = '$email'"));
 
 				}
 
@@ -163,7 +158,7 @@ class apiObj  extends DaftarObj2{
 				$data = array(
 												"firebase_id" => $token."update",
 											);
-				mysql_query(VulnWalkerUpdate("member",$data,"email = '$email'"));
+				sqlQuery(VulnWalkerUpdate("member",$data,"email = '$email'"));
 
 
 		break;
@@ -173,9 +168,9 @@ class apiObj  extends DaftarObj2{
 			foreach ($_REQUEST as $key => $value) {
 				  $$key = $value;
 			}
-			$getReward = mysql_fetch_array(mysql_query("select * from reward_point where jenis_iklan = '$jenisIklanPOST'"));
+			$getReward = sqlArray(sqlQuery("select * from reward_point where jenis_iklan = '$jenisIklanPOST'"));
 			$angkaReward = mt_rand($getReward['minimal'],$getReward['maksimal']);
-			$getData = mysql_fetch_array(mysql_query("select * from member where email ='$email'"));
+			$getData = sqlArray(sqlQuery("select * from member where email ='$email'"));
 			$content = array("saldo" => $getData['saldo'],"hadiah" => $angkaReward);
 		break;
 		}
@@ -186,7 +181,7 @@ class apiObj  extends DaftarObj2{
 				  $$key = $value;
 			}
 			$data = array("saldo" => $saldo);
-			mysql_query(VulnWalkerUpdate("member",$data,"email = '$email'"));
+			sqlQuery(VulnWalkerUpdate("member",$data,"email = '$email'"));
 
 			$dataIklan = array(
 								"email" => $email,
@@ -195,7 +190,7 @@ class apiObj  extends DaftarObj2{
 								"jenis_iklan" => $jenis_iklan,
 								"saldo_dapat" => $saldo_dapat
 								);
-			mysql_query(VulnWalkerInsert("histori_iklan",$dataIklan));
+			sqlQuery(VulnWalkerInsert("histori_iklan",$dataIklan));
 		break;
 		}
 
@@ -211,7 +206,7 @@ class apiObj  extends DaftarObj2{
 								"jam" => date("H:i"),
 								"jenis_iklan" => $jenis_iklan,
 								);
-			mysql_query(VulnWalkerInsert("histori_request",$dataIklan));
+			sqlQuery(VulnWalkerInsert("histori_request",$dataIklan));
 		break;
 		}
 
@@ -234,9 +229,9 @@ class apiObj  extends DaftarObj2{
 					$err = "Email Tidak Valid";
 				}elseif(empty($no_telepon)){
 					$err = "Isi Nomor Telepon";
-				}elseif(mysql_num_rows(mysql_query("select * from member where email = '$email'")) != 0){
+				}elseif(sqlNumRow(sqlQuery("select * from member where email = '$email'")) != 0){
 					$err = "Email sudah terdaftar";
-				}elseif(mysql_num_rows(mysql_query("select * from member where device_name = '$deviceName' and imei = '$imei'")) != 0){
+				}elseif(sqlNumRow(sqlQuery("select * from member where device_name = '$deviceName' and imei = '$imei'")) != 0){
 					$err = "Perangkat sudah terdaftar di server kami !";
 				}else{
 
@@ -251,7 +246,7 @@ class apiObj  extends DaftarObj2{
 												"device_name" => $deviceName,
 												"imei" => $imei
 											 );
-					 $execute =	mysql_query(VulnWalkerInsert("member",$data));
+					 $execute =	sqlQuery(VulnWalkerInsert("member",$data));
 					 if($execute){
 						 $cek = "Register Berhasil";
 					 }else{
@@ -266,8 +261,8 @@ class apiObj  extends DaftarObj2{
 					  $$key = $value;
 				}
 				$arrayList = array();
-				$get = mysql_query("select * from tukar_point");
-				while ($rows = mysql_fetch_array($get)) {
+				$get = sqlQuery("select * from tukar_point");
+				while ($rows = sqlArray($get)) {
 					foreach ($rows as $key => $value) {
 						  $$key = $value;
 					}
@@ -284,8 +279,8 @@ class apiObj  extends DaftarObj2{
 					  $$key = $value;
 				}
 				$arrayList = array();
-				$get = mysql_query("select * from tukar_point where id = '$id_tukar'");
-				while ($rows = mysql_fetch_array($get)) {
+				$get = sqlQuery("select * from tukar_point where id = '$id_tukar'");
+				while ($rows = sqlArray($get)) {
 					foreach ($rows as $key => $value) {
 						  $$key = $value;
 					}
@@ -302,12 +297,12 @@ class apiObj  extends DaftarObj2{
 					  $$key = $value;
 				}
 				$arrayList = array();
-				$get = mysql_query("select * from penukaran where email = '$email'");
-				while ($rows = mysql_fetch_array($get)) {
+				$get = sqlQuery("select * from penukaran where email = '$email'");
+				while ($rows = sqlArray($get)) {
 					foreach ($rows as $key => $value) {
 						  $$key = $value;
 					}
-					$namaTukar = mysql_fetch_array(mysql_query("select * from tukar_point where id = '$id_tukar_point'"));
+					$namaTukar = sqlArray(sqlQuery("select * from tukar_point where id = '$id_tukar_point'"));
 					$arrayList[] = array("id" => $id, "nama_tukar" => $namaTukar['nama_tukar'], "tanggal" => $tanggal , "status" => $status);
 				}
 				$content = json_encode($arrayList);
@@ -320,9 +315,9 @@ class apiObj  extends DaftarObj2{
 				foreach ($_REQUEST as $key => $value) {
 					  $$key = $value;
 				}
-				$grabingAccount = mysql_fetch_array(mysql_query("select * from member where email = '$email'"));
+				$grabingAccount = sqlArray(sqlQuery("select * from member where email = '$email'"));
 				$myBalance = $grabingAccount['saldo'];
-				$grabingTukar = mysql_fetch_array(mysql_query("select * from tukar_point where id = '$id'"));
+				$grabingTukar = sqlArray(sqlQuery("select * from tukar_point where id = '$id'"));
 				$balanceForWidraw = $grabingTukar['jumlah_point'];
 				$namaPerunakaran = $grabingTukar['nama_tukar'];
 				if($myBalance < $balanceForWidraw){
@@ -336,11 +331,11 @@ class apiObj  extends DaftarObj2{
 											"status" => "PROCESSING",
 											'tanggal_aksi' => ''
 										  );
-					mysql_query(VulnWalkerInsert("penukaran",$dataPenukaran));
-					$getIdHistori = mysql_fetch_array(mysql_query("select max(id) from penukaran where email = '$email'"));
-					$getDataHistori = mysql_fetch_array(mysql_query("select * from penukaran where id = '".$getIdHistori['max(id)']."'"));
-					mysql_query("update member set saldo = saldo - $balanceForWidraw where email = '$email'");
-					$getSaldoSekarang = mysql_fetch_array(mysql_query("select * from member where email = '$email'"));
+					sqlQuery(VulnWalkerInsert("penukaran",$dataPenukaran));
+					$getIdHistori = sqlArray(sqlQuery("select max(id) from penukaran where email = '$email'"));
+					$getDataHistori = sqlArray(sqlQuery("select * from penukaran where id = '".$getIdHistori['max(id)']."'"));
+					sqlQuery("update member set saldo = saldo - $balanceForWidraw where email = '$email'");
+					$getSaldoSekarang = sqlArray(sqlQuery("select * from member where email = '$email'"));
 					$content =  array("saldo" => $getSaldoSekarang['saldo'],
 														"id_histori" => $getIdHistori['max(id)'],
 														"nama_tukar" => $namaPerunakaran,
@@ -368,25 +363,25 @@ class apiObj  extends DaftarObj2{
 					  $$key = $value;
 				}
 				$tanggal = date("Y-m-d");
-				$getDataAccount = mysql_fetch_array(mysql_query("select * from member where email ='$email'"));
-				$getSetting = mysql_fetch_array(mysql_query("select  * from fitur where fitur_name = 'ABSEN'"));
-				if(mysql_num_rows(mysql_query("select * from absen where email = '$email' and tanggal = '$tanggal'")) !=0 ){
+				$getDataAccount = sqlArray(sqlQuery("select * from member where email ='$email'"));
+				$getSetting = sqlArray(sqlQuery("select  * from fitur where fitur_name = 'ABSEN'"));
+				if(sqlNumRow(sqlQuery("select * from absen where email = '$email' and tanggal = '$tanggal'")) !=0 ){
 					$err = "Anda telah melakukan absen hari ini";
 				}elseif($getDataAccount['status'] == 'suspend'){
 					$err = "Akun anda telah di suspend !";
 				}elseif($getSetting['status'] != '1'){
 					$err = "Fitur ini tidak aktif !";
 				}else{
-					$getData = mysql_fetch_array(mysql_query("select * from member where email = '$email'"));
+					$getData = sqlArray(sqlQuery("select * from member where email = '$email'"));
 					if($getData['device_name'] =='' && $getData['imei'] == ''){
 						$dataUpdate = array('imei' => $imei, 'device_name' => $deviceName);
-						mysql_query(VulnWalkerUpdate("member",$dataUpdate,"email ='$email'"));
+						sqlQuery(VulnWalkerUpdate("member",$dataUpdate,"email ='$email'"));
 					}
 					$data = array(
 												'email' => $email,
 												'tanggal' => $tanggal
 					);
-					mysql_query(VulnWalkerInsert("absen",$data));
+					sqlQuery(VulnWalkerInsert("absen",$data));
 				}
 
 
@@ -403,10 +398,10 @@ class apiObj  extends DaftarObj2{
 
 
 				$arrayPenukaran = array();
-				$getHistoriPenukaran = mysql_query("select * from penukaran where email = '$email' order by id");
-				while($rows = mysql_fetch_array($getHistoriPenukaran)){
+				$getHistoriPenukaran = sqlQuery("select * from penukaran where email = '$email' order by id");
+				while($rows = sqlArray($getHistoriPenukaran)){
 						$idPenukaran = $rows['id'];
-						$getNamaTukar = mysql_fetch_array(mysql_query("select * from tukar_point where id = '".$rows['id_tukar_point']."'"));
+						$getNamaTukar = sqlArray(sqlQuery("select * from tukar_point where id = '".$rows['id_tukar_point']."'"));
 						$namaTukar = $getNamaTukar['nama_tukar'];
 						$tanggal = $rows['tanggal'];
 						$status = $rows['status'];
@@ -415,8 +410,8 @@ class apiObj  extends DaftarObj2{
 				}
 
 				$arrayAccount = array();
-				$getAccount = mysql_query("select * from member where email = '$email'");
-				while($rows = mysql_fetch_array($getAccount)){
+				$getAccount = sqlQuery("select * from member where email = '$email'");
+				while($rows = sqlArray($getAccount)){
 						foreach ($rows as $key => $value) {
 								$$key = $value;
 						}
@@ -440,9 +435,9 @@ class apiObj  extends DaftarObj2{
 					  $$key = $value;
 				}
 				$tanggal = date("Y-m-d");
-				$getLastOpenedAds = mysql_fetch_array(mysql_query("select max(id) from histori_request where email = '$email' and tanggal = '$tanggal' and jenis_iklan = '$jenis_iklan' "));
+				$getLastOpenedAds = sqlArray(sqlQuery("select max(id) from histori_request where email = '$email' and tanggal = '$tanggal' and jenis_iklan = '$jenis_iklan' "));
 				$idMax = $getLastOpenedAds['max(id)'];
-				$getDataMax = mysql_fetch_array(mysql_query("select * from histori_request where id = '$idMax'"));
+				$getDataMax = sqlArray(sqlQuery("select * from histori_request where id = '$idMax'"));
 				$lastJam = $getDataMax['jam'];
 				$explodingJam = explode(':',$lastJam);
 				$mixTime = ($explodingJam[0] * 60 ) + $explodingJam[1];
@@ -452,7 +447,7 @@ class apiObj  extends DaftarObj2{
 				$delay = $mixTimeNow - $mixTime;
 
 
-				$getDataUser = mysql_fetch_array(mysql_query("select * from member where email='$email'"));
+				$getDataUser = sqlArray(sqlQuery("select * from member where email='$email'"));
 				if($getDataUser['imei'] == '' || $getDataUser['device_name'] == ''){
 					$err = "Silakan melakukan absen atau lakukan update Aplikasi di playstore !";
 				}elseif($getDataUser['status'] == 'suspend'){
@@ -460,17 +455,17 @@ class apiObj  extends DaftarObj2{
 				}elseif($versiAPK != '2.4.3'){
 					$err = "Silakan lakukan update aplikasi di playstore !";
 				}else{
-					$getSettingTontonVideo = mysql_fetch_array(mysql_query("select  * from fitur where fitur_name = 'TONTON VIDEO'"));
-					$getSettingTontonVideo2 = mysql_fetch_array(mysql_query("select  * from fitur where fitur_name = 'TONTON VIDEO 2'"));
-					$getSettingTontonVideo3 = mysql_fetch_array(mysql_query("select  * from fitur where fitur_name = 'TONTON VIDEO 3'"));
-					$getSettingBonusIklan = mysql_fetch_array(mysql_query("select  * from fitur where fitur_name = 'BONUS IKLAN'"));
-					$getSettingBonusIklan2 = mysql_fetch_array(mysql_query("select  * from fitur where fitur_name = 'BONUS IKLAN 2'"));
+					$getSettingTontonVideo = sqlArray(sqlQuery("select  * from fitur where fitur_name = 'TONTON VIDEO'"));
+					$getSettingTontonVideo2 = sqlArray(sqlQuery("select  * from fitur where fitur_name = 'TONTON VIDEO 2'"));
+					$getSettingTontonVideo3 = sqlArray(sqlQuery("select  * from fitur where fitur_name = 'TONTON VIDEO 3'"));
+					$getSettingBonusIklan = sqlArray(sqlQuery("select  * from fitur where fitur_name = 'BONUS IKLAN'"));
+					$getSettingBonusIklan2 = sqlArray(sqlQuery("select  * from fitur where fitur_name = 'BONUS IKLAN 2'"));
 
-					$getDataVideo = mysql_fetch_array(mysql_query("select  * from reward_point where jenis_iklan = 'TONTON VIDEO'"));
-					$getDataVideo2 = mysql_fetch_array(mysql_query("select  * from reward_point where jenis_iklan = 'TONTON VIDEO 2'"));
-					$getDataVideo3 = mysql_fetch_array(mysql_query("select  * from reward_point where jenis_iklan = 'TONTON VIDEO 3'"));
-					$getDataBonusIklan = mysql_fetch_array(mysql_query("select  * from reward_point where jenis_iklan = 'BONUS IKLAN'"));
-					$getDataBonusIklan2 = mysql_fetch_array(mysql_query("select  * from reward_point where jenis_iklan = 'BONUS IKLAN 2'"));
+					$getDataVideo = sqlArray(sqlQuery("select  * from reward_point where jenis_iklan = 'TONTON VIDEO'"));
+					$getDataVideo2 = sqlArray(sqlQuery("select  * from reward_point where jenis_iklan = 'TONTON VIDEO 2'"));
+					$getDataVideo3 = sqlArray(sqlQuery("select  * from reward_point where jenis_iklan = 'TONTON VIDEO 3'"));
+					$getDataBonusIklan = sqlArray(sqlQuery("select  * from reward_point where jenis_iklan = 'BONUS IKLAN'"));
+					$getDataBonusIklan2 = sqlArray(sqlQuery("select  * from reward_point where jenis_iklan = 'BONUS IKLAN 2'"));
 					if($getSettingTontonVideo['status'] != "1" && $jenis_iklan == "TONTON VIDEO"){
 						$err = "VIDEO TIDAK TERSEDIA !";
 					}else{
@@ -509,19 +504,19 @@ class apiObj  extends DaftarObj2{
 						}
 					}
 
-					if($jenis_iklan == "TONTON VIDEO" && mysql_num_rows(mysql_query("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'TONTON VIDEO'"))  > $getDataVideo['limit_iklan']){
+					if($jenis_iklan == "TONTON VIDEO" && sqlNumRow(sqlQuery("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'TONTON VIDEO'"))  > $getDataVideo['limit_iklan']){
 						$err = "Iklan sudah melebihi limit pemutaran / hari";
 					}
-					if($jenis_iklan == "TONTON VIDEO 2" && mysql_num_rows(mysql_query("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'TONTON VIDEO 2'"))  > $getDataVideo2['limit_iklan']){
+					if($jenis_iklan == "TONTON VIDEO 2" && sqlNumRow(sqlQuery("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'TONTON VIDEO 2'"))  > $getDataVideo2['limit_iklan']){
 						$err = "Iklan sudah melebihi limit pemutaran / hari";
 					}
-					if($jenis_iklan == "TONTON VIDEO 3" && mysql_num_rows(mysql_query("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'TONTON VIDEO 3'"))  > $getDataVideo3['limit_iklan']){
+					if($jenis_iklan == "TONTON VIDEO 3" && sqlNumRow(sqlQuery("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'TONTON VIDEO 3'"))  > $getDataVideo3['limit_iklan']){
 						$err = "Iklan sudah melebihi limit pemutaran / hari";
 					}
-					if($jenis_iklan == "BONUS IKLAN" && mysql_num_rows(mysql_query("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'BONUS IKLAN'"))  > $getDataBonusIklan['limit_iklan']){
+					if($jenis_iklan == "BONUS IKLAN" && sqlNumRow(sqlQuery("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'BONUS IKLAN'"))  > $getDataBonusIklan['limit_iklan']){
 						$err = "Iklan sudah melebihi limit pemutaran / hari";
 					}
-					if($jenis_iklan == "BONUS IKLAN 2" && mysql_num_rows(mysql_query("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'BONUS IKLAN 2'"))  > $getDataBonusIklan2['limit_iklan']){
+					if($jenis_iklan == "BONUS IKLAN 2" && sqlNumRow(sqlQuery("select * from histori_request where tanggal = '$tanggal' and email = '$email' and jenis_iklan = 'BONUS IKLAN 2'"))  > $getDataBonusIklan2['limit_iklan']){
 						$err = "Iklan sudah melebihi limit pemutaran / hari";
 					}
 

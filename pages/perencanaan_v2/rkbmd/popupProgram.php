@@ -55,12 +55,12 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama)values('$nama')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_satuan set nama='$nama' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -122,16 +122,16 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 				$adk = $kode[2];
 				$ap  = $kode[3];
 				
-				$getDataRenja = mysql_fetch_array(mysql_query("select * from view_renja where id_anggaran = '$ID_RENJA'"));
+				$getDataRenja = sqlArray(sqlQuery("select * from view_renja where id_anggaran = '$ID_RENJA'"));
 				foreach ($getDataRenja as $key => $value) { 
 				  $$key = $value; 
 				}
 				if($jenis_form_modul == "VALIDASI"){
 					
 				}
-				$getView = mysql_query("select * from view_renja where c1 = '$c1' and c='$c'  and d = '$d' and e ='$e' and e1 ='$e1' and bk ='$abk' and ck = '$ack' and p='$ap' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
+				$getView = sqlQuery("select * from view_renja where c1 = '$c1' and c='$c'  and d = '$d' and e ='$e' and e1 ='$e1' and bk ='$abk' and ck = '$ack' and p='$ap' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
 				$arrayID = array();
-				while($rows = mysql_fetch_array($getView)){
+				while($rows = sqlArray($getView)){
 					if($rows['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE && $rows['status_validasi'] != "1"){
 						
 					}else{
@@ -146,9 +146,9 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 					
 				}
 				
-				$getSecondView = mysql_query("select * from view_renja where c1 = '$c1' and c='$c'  and d = '$d' and e ='00' and e1 ='000' and bk ='$abk' and ck = '$ack' and p='$ap' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
+				$getSecondView = sqlQuery("select * from view_renja where c1 = '$c1' and c='$c'  and d = '$d' and e ='00' and e1 ='000' and bk ='$abk' and ck = '$ack' and p='$ap' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
 				$arrayID2 = array();
-				while($rows2 = mysql_fetch_array($getSecondView)){
+				while($rows2 = sqlArray($getSecondView)){
 					if($rows2['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE && $rows2['status_validasi'] != "1"){
 						
 					}else{
@@ -184,7 +184,7 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 				$cmbKegiatan = cmbQuery('q', $selecteQ, $codeAndNameKegiatan,' ','-- KEGIATAN --');  
 				
 				
-				$getNamaProgram = mysql_fetch_array(mysql_query("select * from ref_program where bk = '$abk' and ck = '$ack' and dk = '$adk' and p = '$ap' and q = '0'"));
+				$getNamaProgram = sqlArray(sqlQuery("select * from ref_program where bk = '$abk' and ck = '$ack' and dk = '$adk' and p = '$ap' and q = '0'"));
 				$program = $getNamaProgram['nama'];
 				$content = array("bk" => $abk, "ck" => $ack, "p" => $ap, "cmbKegiatan" => $cmbKegiatan, "program" => $program, "sql" => $codeAndNameKegiatan);
 		break;
@@ -235,7 +235,7 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_satuan WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -309,7 +309,7 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -438,20 +438,20 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 		$ID_RENJA = $_POST['ID_RENJA'];
 		if($fmPILCARIvalue !='')$arrKondisi[] = " nama like '%$fmPILCARIvalue%' ";
 		
-		$getDataRenja = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$ID_RENJA'"));
+		$getDataRenja = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$ID_RENJA'"));
 		foreach ($getDataRenja as $key => $value) { 
 		  $$key = $value; 
 		}
-		$getView = mysql_query("select * from tabel_anggaran where  q ='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='$e' and e1 ='$e1' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
+		$getView = sqlQuery("select * from tabel_anggaran where  q ='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='$e' and e1 ='$e1' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
 		$arrayID = array();
-		while($rows = mysql_fetch_array($getView)){
+		while($rows = sqlArray($getView)){
 			$concat = $rows['bk'].".".$rows['ck'].".".$rows['p'];
 			$abk = $rows['bk'];
 			$ack = $rows['ck'];
 			$ap = $rows['p'];	
 			$arrayKondisiKegiatan = array();
-			$getKegiatan = mysql_query("select * from tabel_anggaran  where bk='$abk' and ck='$ack'  and p='$ap' and q !='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='$e' and e1 ='$e1' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap' ");
-			while($root = mysql_fetch_array($getKegiatan)){
+			$getKegiatan = sqlQuery("select * from tabel_anggaran  where bk='$abk' and ck='$ack'  and p='$ap' and q !='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='$e' and e1 ='$e1' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap' ");
+			while($root = sqlArray($getKegiatan)){
 				if($root['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE && $root['status_validasi'] !='1'){
 				}else{
 					$concat3 = $root['bk'].".".$root['ck'].".".$root['p'].".".$root['q'];
@@ -466,24 +466,24 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 			}elseif($_REQUEST['kategori'] == "PEMELIHARAAN"){
 					$codeAndNameKegiatan = "select q, concat(q,'. ', nama) from ref_program where bk = '$abk' and ck = '$ack' and dk = '0' and p = '$ap' and q !='0' and kategori !='1' and $kondisiKegiatan";
 			}
-			$got = mysql_query($codeAndNameKegiatan);
-			if(mysql_num_rows($got) > 0){
+			$got = sqlQuery($codeAndNameKegiatan);
+			if(sqlNumRow($got) > 0){
 				$arrayID[]  = "concat(bk,'.',ck,'.',p) = '$concat' " ;	
 			}
 			
 		}
 		
 		
-		$getSecondView = mysql_query("select * from tabel_anggaran where  p!='0' and q ='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='00' and e1 ='000' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
+		$getSecondView = sqlQuery("select * from tabel_anggaran where  p!='0' and q ='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='00' and e1 ='000' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap'");
 		$arrayID2 = array();
-		while($rows2 = mysql_fetch_array($getSecondView)){
+		while($rows2 = sqlArray($getSecondView)){
 			$concat2 = $rows2['bk'].".".$rows2['ck'].".".$rows2['p'];
 			$abk2 = $rows2['bk'];
 			$ack2 = $rows2['ck'];
 			$ap2 = $rows2['p'];	
 			$arrayKondisiKegiatan2 = array();
-			$getKegiatan2 = mysql_query("select * from tabel_anggaran  where bk='$abk2' and ck='$ack2'  and p='$ap2' and q !='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='00' and e1 ='000' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap' ");
-			while($root2 = mysql_fetch_array($getKegiatan2)){
+			$getKegiatan2 = sqlQuery("select * from tabel_anggaran  where bk='$abk2' and ck='$ack2'  and p='$ap2' and q !='0' and c1 = '$c1' and c= '$c' and d = '$d' and e ='00' and e1 ='000' and tahun = '$tahun' and jenis_anggaran = '$jenis_anggaran' and id_tahap = '$id_tahap' ");
+			while($root2 = sqlArray($getKegiatan2)){
 				if($root2['jenis_form_modul'] == "PENYUSUNAN" && $this->wajibValidasi == TRUE && $root2['status_validasi'] !='1'){
 				}else{
 					$concat32 = $root2['bk'].".".$root2['ck'].".".$root2['p'].".".$root2['q'];
@@ -498,8 +498,8 @@ class popupProgramRKBMD_v2Obj  extends DaftarObj2{
 			}elseif($_REQUEST['kategori'] == "PEMELIHARAAN"){
 					$codeAndNameKegiatan2 = "select q, concat(q,'. ', nama) from ref_program where bk = '$abk2' and ck = '$ack2' and dk = '0' and p = '$ap2' and q !='0' and kategori !='1' and $kondisiKegiatan2";
 			}
-			$got2 = mysql_query($codeAndNameKegiatan2);
-			if(mysql_num_rows($got2) > 0){
+			$got2 = sqlQuery($codeAndNameKegiatan2);
+			if(sqlNumRow($got2) > 0){
 				$arrayID2[]  = "concat(bk,'.',ck,'.',p) = '$concat2' " ;	
 			}
 			

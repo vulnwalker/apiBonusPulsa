@@ -54,14 +54,14 @@ class MasterSpecObj  extends DaftarObj2{
 	 $e = $_REQUEST['e'];	 
 	 $kode_spec = $_REQUEST['kode_spec'];
 	 $nama_spec = strtoupper($_REQUEST['nama_spec']);
-	 $j=mysql_fetch_array(mysql_query("select * from ref_spec_persediaan where nama_spec = '".$nama_spec."'"));	 	 
+	 $j=sqlArray(sqlQuery("select * from ref_spec_persediaan where nama_spec = '".$nama_spec."'"));	 	 
 	 if($j['nama_spec']!='') $err="Nama Spesifikasi sudah ada";	 	 
 	 
 			if($fmST == 0){ //input ref_obat
 				if($err==''){ 
 				$aqry1 = "INSERT into ref_spec_persediaan (j,nama_spec)
 						 "."values('$kode_spec','$nama_spec')";	$cek .= $aqry1;	
-				$qry = mysql_query($aqry1);
+				$qry = sqlQuery($aqry1);
 				$content->no=3;							
 				$content->kode_spec=mysql_insert_id();
 				$content->spec=$nama_spec;							
@@ -79,7 +79,7 @@ class MasterSpecObj  extends DaftarObj2{
 							$aqry2 = "UPDATE ref_spec_persediaan
 				        	 set "." nama_spec = '$nama_spec'".
 							 "WHERE j='".$idplh."'";	$cek .= $aqry2;
-							$qry = mysql_query($aqry2);
+							$qry = sqlQuery($aqry2);
 
 					}
 			}else{
@@ -92,7 +92,7 @@ class MasterSpecObj  extends DaftarObj2{
 						 $j=$kode_barang[4];
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga)
 						"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);
+						$qry = sqlQuery($aqry1);
 						 
 				}
 			} //end else
@@ -202,7 +202,7 @@ class MasterSpecObj  extends DaftarObj2{
 		$j=$kode[4]; 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_spec_persediaan where j='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);

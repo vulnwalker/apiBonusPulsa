@@ -112,8 +112,8 @@ class DaftarImportObj extends DaftarObj2{
 		$fsum = join(',',$fsum_);
 				
 		$aqry = $this->setSumHal_query($Kondisi, $fsum); $cek .= $aqry;
-		$qry = mysql_query($aqry); 
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry); 
+		if ($isi= sqlArray($qry)){			
 			$jmlData = 1;//$isi['cnt'];			
 			
 			foreach($this->FieldSum as &$value){
@@ -487,11 +487,11 @@ class DaftarImportObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 		
 		

@@ -58,9 +58,9 @@ class detailVolumeRka221Obj  extends DaftarObj2{
 					  $$key = $value; 
 					}	
 			$data = array('jumlah' => $VALUE);
-			mysql_query(VulnWalkerUpdate("temp_detail_volume_rka_2_2_1",$data,"id = '$ID'"));
+			sqlQuery(VulnWalkerUpdate("temp_detail_volume_rka_2_2_1",$data,"id = '$ID'"));
 			
-			$grabTotalJumlah = mysql_fetch_array(mysql_query("select sum(jumlah) from  temp_detail_volume_rka_2_2_1 where username = '$this->username'"));
+			$grabTotalJumlah = sqlArray(sqlQuery("select sum(jumlah) from  temp_detail_volume_rka_2_2_1 where username = '$this->username'"));
 			$content = array('total' => $grabTotalJumlah['sum(jumlah)']);
 			
 			break;
@@ -73,7 +73,7 @@ class detailVolumeRka221Obj  extends DaftarObj2{
 			$username = $_COOKIE['coID'];
 			$status = "";
 			
-			$get = mysql_fetch_array(mysql_query("select * from temp_template where username = '$username'"));
+			$get = sqlArray(sqlQuery("select * from temp_template where username = '$username'"));
 			
 			if($get['username'] == $username){
 				$status = "644"; 
@@ -85,7 +85,7 @@ class detailVolumeRka221Obj  extends DaftarObj2{
 			
 			}else{
 				$aqry = "insert into temp_template (username,nama_template,tanggal,nomor_distribusi,c1,c,d)  values('$username','$nama_template','$tanggal','$nomor_distribusi','$cmbUrusanForm','$cmbBidangForm','$cmbSKPDForm')";	$cek .= $aqry;	
-				$execute = mysql_query($aqry);	
+				$execute = sqlQuery($aqry);	
 				if($execute){
 					$status = "ADDED";
 				}else{
@@ -95,18 +95,18 @@ class detailVolumeRka221Obj  extends DaftarObj2{
 				
 				$maxID = "";
 		
-				$get = mysql_fetch_array(mysql_query("select max(id) as aaa from temp_template where username = '$username' "));
+				$get = sqlArray(sqlQuery("select max(id) as aaa from temp_template where username = '$username' "));
 				$maxID = $get['aaa'];
 				
 				
-				$query = mysql_query("select * from ref_skpd where c1='$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e !='00' and e1 !='000'");
-				while($row = mysql_fetch_array($query)){
+				$query = sqlQuery("select * from ref_skpd where c1='$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e !='00' and e1 !='000'");
+				while($row = sqlArray($query)){
 					$e = $row['e'];
 					$e1= $row['e1'];
 					$nama_sub_unit = $row['nm_skpd'];	
 		
 					$aqry = "INSERT into temp_detail_volume_rka_2_2_1 (c1,c,d,e,e1,nama_sub_unit,ref_id_template,username) values ('$cmbUrusanForm','$cmbBidangForm','$cmbSKPDForm','$e','$e1','$nama_sub_unit','$maxID','$username')";
-					mysql_query($aqry);	
+					sqlQuery($aqry);	
 					
 							
 				}
@@ -145,8 +145,8 @@ class detailVolumeRka221Obj  extends DaftarObj2{
 		$username = $_COOKIE['coID'];
 		$arrayID = array();
 		$query = "select id from temp_detail_volume_rka_2_2_1 where c1='$c1' and c='$c' and d='$d' and e='$e' and username = '$username' ";
-		$execute = mysql_query($query);
-		while($row = mysql_fetch_array($execute)){
+		$execute = sqlQuery($query);
+		while($row = sqlArray($execute)){
 				array_push($arrayID,array('id' => $row['id']));
 		}
 			$content = json_encode($arrayID) ;		
@@ -222,7 +222,7 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 				  $$key = $value; 
 			}
 	 $Koloms = array();
-	 $getSubUnit = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' "));
+	 $getSubUnit = sqlArray(sqlQuery("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' "));
 	 $Koloms[] = array('align="center"', $no.'.' );
 	 $Koloms[] = array('align="left"',$getSubUnit['nm_skpd']); 
 	 $Koloms[] = array('align="center"',"<input type='text' name='$idnya' id='$idnya'  align='center' style='text-align: right;  width:50px' value='".$isi['jumlah']."'onkeypress='return event.charCode >= 48 && event.charCode <= 57' onkeyup=$this->Prefix.setValCurrentTextbox(this); >"); 
@@ -258,7 +258,7 @@ $baris = $_REQUEST['baris'];
 	$fmDESC1 = cekPOST('fmDESC1');
 	$baris = $_REQUEST['baris'];
 	
-	$getTotalInput = mysql_fetch_array(mysql_query("select sum(jumlah) from $this->TblName where username = '$this->username'"));
+	$getTotalInput = sqlArray(sqlQuery("select sum(jumlah) from $this->TblName where username = '$this->username'"));
 	$totalInput = $getTotalInput['sum(jumlah)'];
 	
 			

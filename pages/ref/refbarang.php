@@ -37,10 +37,10 @@ if (!empty($Kondisi))
 // if(!empty($fmSEKSI)) $arrkond[] = " e='$fmSEKSI' ";
 
 $aqry="select * from ref_barang where $Kondisi  order by f,g,h,i,j";
-$Qry = mysql_query($aqry);
+$Qry = sqlQuery($aqry);
 $ListDATA = "";
 $no=0;
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$KODEBARANG = "{$isi['f']}.{$isi['g']}.{$isi['h']}.{$isi['i']}.{$isi['j']}";

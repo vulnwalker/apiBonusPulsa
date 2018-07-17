@@ -91,8 +91,8 @@ class ManagementModulSystemObj  extends DaftarObj2{
 	
 	
 
-						$qry = mysql_query($aqry);
-						$qry2 = mysql_query($aqry2);
+						$qry = sqlQuery($aqry);
+						$qry2 = sqlQuery($aqry2);
 				}
 							
 			return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -117,8 +117,8 @@ class ManagementModulSystemObj  extends DaftarObj2{
 	$tgl_update = explode("-",$tgl_update);
 	$tgl_update2 = $tgl_update[2].'-'.$tgl_update[1].'-'.$tgl_update[0];
 	 
-	 $oldy=mysql_fetch_array(
-	 	mysql_query(
+	 $oldy=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system_modul where no_urut='$nourut'"
 		));
 		
@@ -139,12 +139,12 @@ class ManagementModulSystemObj  extends DaftarObj2{
 			if($err==''){
 				
 					$aqry = "INSERT into system_modul (Id_system,no_urut,nm_modul,status_modul,tgl_update,uid) values('$id_system','$nourut','$nm_modul','$status','$tgl_update2','$username')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE system_modul SET Id_system='$id_system', no_urut='$nourut', nm_system='$nm_system', nm_modul='$nm_modul',status_modul='$status'  where Id_modul='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else
 					
@@ -222,14 +222,14 @@ class ManagementModulSystemObj  extends DaftarObj2{
 		$idplh1 = explode(" ",$ids[$i]);
 		
 	
-$hpssys=mysql_fetch_array(mysql_query("select COUNT(*) as cnt,system_modul.Id_modul, system_menu.Id_modul from system_modul
+$hpssys=sqlArray(sqlQuery("select COUNT(*) as cnt,system_modul.Id_modul, system_menu.Id_modul from system_modul
 left join system_menu on system_menu.Id_modul=system_modul.Id_modul where system_menu.Id_modul='".$ids[$i]."'"));
 	
 	if($hpssys['cnt'] > 0 )$err ="Data tidak bisa di Hapus karena sudah ada di data MENU SYSTEM  !!";
 		if($err=='' ){
 					
 					$qy = "DELETE FROM system_modul WHERE Id_modul='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					
 			}else{
 				break;
@@ -309,7 +309,7 @@ left join system_menu on system_menu.Id_modul=system_modul.Id_modul where system
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system_modul WHERE Id_modul='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setFormEditdata($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -343,13 +343,13 @@ left join system_menu on system_menu.Id_modul=system_modul.Id_modul where system
 		
 		$queryKF="SELECT max(no_urut)as nourut FROM system_modul" ;
 	//	$cek.="SELECT max(no_urut)as nourut FROM system";
-		$get=mysql_fetch_array(mysql_query($queryKF));
+		$get=sqlArray(sqlQuery($queryKF));
 		$no_urut=$get['nourut'] + 1;
 					
 		$queryc1="SELECT Id_system, concat(Id_system, '. ', nm_system) as vnama FROM system where status_system=1";
-		$query1=mysql_fetch_array(mysql_query("SELECT * FROM system"));
-		$querykode=mysql_fetch_array(mysql_query("SELECT kode FROM system where Id_system='".$dt['Id_system']."'"));
-		$querynm=mysql_fetch_array(mysql_query("SELECT nm_system FROM system where Id_system='".$dt['Id_system']."'"));
+		$query1=sqlArray(sqlQuery("SELECT * FROM system"));
+		$querykode=sqlArray(sqlQuery("SELECT kode FROM system where Id_system='".$dt['Id_system']."'"));
+		$querynm=sqlArray(sqlQuery("SELECT nm_system FROM system where Id_system='".$dt['Id_system']."'"));
 		
 		$dataaktif=1;
        //items ----------------------
@@ -444,13 +444,13 @@ left join system_menu on system_menu.Id_modul=system_modul.Id_modul where system
 		
 		/*$queryKF="SELECT max(no_urut)as nourut FROM system_modul" ;
 	//	$cek.="SELECT max(no_urut)as nourut FROM system";
-		$get=mysql_fetch_array(mysql_query($queryKF));
+		$get=sqlArray(sqlQuery($queryKF));
 		$no_urut=$get['nourut'] + 1;*/
 					
 		$queryc1="SELECT Id_system, concat(Id_system, '. ', nm_system) as vnama FROM system where status_system=1";
-		$query1=mysql_fetch_array(mysql_query("SELECT * FROM system"));
-		$querykode=mysql_fetch_array(mysql_query("SELECT kode FROM system where Id_system='".$dt['Id_system']."'"));
-		$querynm=mysql_fetch_array(mysql_query("SELECT nm_system FROM system where Id_system='".$dt['Id_system']."'"));
+		$query1=sqlArray(sqlQuery("SELECT * FROM system"));
+		$querykode=sqlArray(sqlQuery("SELECT kode FROM system where Id_system='".$dt['Id_system']."'"));
+		$querynm=sqlArray(sqlQuery("SELECT nm_system FROM system where Id_system='".$dt['Id_system']."'"));
 		
 		$dataaktif=1;
        //items ----------------------
@@ -548,9 +548,9 @@ left join system_menu on system_menu.Id_modul=system_modul.Id_modul where system
 	 	$status='TIDAK AKTIF';
 	 }
 	 
-	 $datsys=mysql_fetch_array(mysql_query("select Id_system from system_modul"));
+	 $datsys=sqlArray(sqlQuery("select Id_system from system_modul"));
 	 
-	 $datmod=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$isi['Id_system']."'"));
+	 $datmod=sqlArray(sqlQuery("select nm_system from system where Id_system='".$isi['Id_system']."'"));
 	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
 	  if ($Mode == 1) $Koloms[] = array(" align='center' ", $TampilCheckBox);

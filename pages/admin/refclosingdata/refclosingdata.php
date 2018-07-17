@@ -81,7 +81,7 @@ class refclosingdataObj  extends DaftarObj2{
 	 $ket= $_REQUEST['ket'];
 	 $tgl_update= $_REQUEST['tgl_update']; 	 
 	 //query cek c,d sudah ada
-	 $c_d=mysql_fetch_array(mysql_query("select * from t_closing where c='$c' AND d='$d'"));	 
+	 $c_d=sqlArray(sqlQuery("select * from t_closing where c='$c' AND d='$d'"));	 
 	  
 	// if( $err=='' && $bk =='' ) $err= 'Urusan Belum Di Isi !!';
 	 //if( $err=='' && $ck =='' ) $err= 'Bidang Belum Di Isi !!';
@@ -100,7 +100,7 @@ class refclosingdataObj  extends DaftarObj2{
 							tgl_update = '$tgl_update'".
 							"WHERE c='".$c."' AND d='".$d."' AND e='".$e."' AND e1='".$e1."'";	$cek .= $aqry;
 						}
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}elseif($fmST == 1){				
 				if($err==''){
@@ -111,7 +111,7 @@ class refclosingdataObj  extends DaftarObj2{
 							set "." 
 							tgl_update = '$tgl_update'".
 							"WHERE c='".$c."' AND d='".$d."' AND e='".$e."' AND e1='".$e1."'";	$cek .= $aqry;
-					}					$qry = mysql_query($aqry);
+					}					$qry = sqlQuery($aqry);
 				}
 			}else{
 				if($err==''){
@@ -154,9 +154,9 @@ class refclosingdataObj  extends DaftarObj2{
 			$fmBidang = $_REQUEST['fmBidang'];
 
 				$query = "SELECT d,nm_skpd FROM ref_skpd WHERE c='$fmBidang' AND d!='00' AND e='00' AND e1='000'"; $cek .= $query2;
-				$hasil = mysql_query($query);
+				$hasil = sqlQuery($query);
 				$fmskpd = "<option value=''>-- PILIH SKPD--</option>";
-				while ($dt = mysql_fetch_array($hasil))
+				while ($dt = sqlArray($hasil))
 				{
 					$fmskpd.="<option value='".$dt['d']."'>".$dt['nm_skpd']."</option>";
 				}
@@ -169,9 +169,9 @@ class refclosingdataObj  extends DaftarObj2{
 			$urusan = $_REQUEST['urusan'];
 
 				$query = "SELECT ck,nm_urusan FROM ref_urusan WHERE bk='".$urusan."' AND ck!='0' AND dk='0'"; $cek .= $query;
-				$hasil = mysql_query($query);
+				$hasil = sqlQuery($query);
 				$div_bidang = "<option value=''>-- PILIH Bidang--</option>";
-				while ($dt = mysql_fetch_array($hasil))
+				while ($dt = sqlArray($hasil))
 				{
 					$div_bidang.="<option value='".$dt['ck']."'>".$dt['nm_urusan']."</option>";
 				}
@@ -185,9 +185,9 @@ class refclosingdataObj  extends DaftarObj2{
 			$bidang = $_REQUEST['bidang'];
 
 				$query = "SELECT dk,nm_urusan FROM ref_urusan WHERE bk='".$urusan."' AND ck='$bidang' AND dk!='0'"; $cek .= $query;
-				$hasil = mysql_query($query);
+				$hasil = sqlQuery($query);
 				$div_dinas = "<option value=''>-- PILIH Dinas--</option>";
-				while ($dt = mysql_fetch_array($hasil))
+				while ($dt = sqlArray($hasil))
 				{
 					$div_dinas.="<option value='".$dt['dk']."'>".$dt['nm_urusan']."</option>";
 				}
@@ -338,10 +338,10 @@ class refclosingdataObj  extends DaftarObj2{
 		$this->form_fmST = 1;						
 		//get data 
 		$aqry = "SELECT * FROM  v1_refclosingdata WHERE c='".$kode[0]."' AND d='".$kode[1]."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		//query skpd
-		$c=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=00 and e=00 and e1=00"));
-		$d=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=00 and e1=00"));
+		$c=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=00 and e=00 and e1=00"));
+		$d=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=00 and e1=00"));
 		$dt['bidang']=$c['nm_skpd'];
 		$dt['skpd']=$d['nm_skpd'];
 
@@ -394,7 +394,7 @@ class refclosingdataObj  extends DaftarObj2{
 		$queryKB = "SELECT f,nama_barang FROM ref_barang_persediaan where f !=0 and g=0";
 		
 		//query nm_barang
-		$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$dt['kode_barang']."'"));
+		$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$dt['kode_barang']."'"));
 		
 		$dt['persen1'] = $dt['persen1'] == '' ?0: $dt['persen1'];
 		$dt['persen2'] = $dt['persen2'] == '' ?0: $dt['persen2'];
@@ -415,7 +415,7 @@ class refclosingdataObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		//$kode1=genNumber($dt['c'],2);
 		//$kode2=genNumber($dt['d'],2);
 		//$kode3=genNumber($dt['e'],2);
@@ -428,10 +428,10 @@ class refclosingdataObj  extends DaftarObj2{
 						array('1.',"Sudah"),
 						array('2.','Belum'),
 		);
-		 $get = mysql_fetch_array(mysql_query("select c, nm_skpd from ref_skpd where c =".$dt['c']." and d=00 and e=00 and e1=000"));				
-	 $get1 = mysql_fetch_array(mysql_query("select d, nm_skpd from ref_skpd where c =".$dt['c']." and d=".$dt['d']." and e=00 and e1=000"));
-	 $get2 = mysql_fetch_array(mysql_query("select e, nm_skpd from ref_skpd where c =".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e1=000"));
-	 $get3 = mysql_fetch_array(mysql_query("select e1, nm_skpd from ref_skpd where c =".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e1=".$dt['e1'].""));
+		 $get = sqlArray(sqlQuery("select c, nm_skpd from ref_skpd where c =".$dt['c']." and d=00 and e=00 and e1=000"));				
+	 $get1 = sqlArray(sqlQuery("select d, nm_skpd from ref_skpd where c =".$dt['c']." and d=".$dt['d']." and e=00 and e1=000"));
+	 $get2 = sqlArray(sqlQuery("select e, nm_skpd from ref_skpd where c =".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e1=000"));
+	 $get3 = sqlArray(sqlQuery("select e1, nm_skpd from ref_skpd where c =".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e1=".$dt['e1'].""));
        //items ----------------------
 		 $this->form_fields = array(
 			/*'kode' => array( 

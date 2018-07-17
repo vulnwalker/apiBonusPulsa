@@ -44,7 +44,7 @@ $Kondisi = $Main->SUB_UNIT ?
 
 //------- get data ----------
 $sqry = 'select * from view_buku_induk2 where '.$Kondisi ; //$cek .= '<br> qry='. $sqry;
-$isi= mysql_fetch_array(mysql_query($sqry)); 
+$isi= sqlArray(sqlQuery($sqry)); 
 
 $cidBI = $isi['id'];
 $noReg = $isi['noreg'];
@@ -54,9 +54,9 @@ $kodelokasi = $Main->SUB_UNIT ?
 	$isi['a1'].'.'.$isi['a'].'.'.$isi['b'].'.'.$isi['c'].'.'.$isi['d'].'.'.$isi['thn_perolehan'][2].$isi['thn_perolehan'][3].'.'.$isi['e'].'.'.$isi['e1']:
 	$isi['a1'].'.'.$isi['a'].'.'.$isi['b'].'.'.$isi['c'].'.'.$isi['d'].'.'.$isi['thn_perolehan'][2].$isi['thn_perolehan'][3].'.'.$isi['e'];
 $kdKelBarang = $isi['f'].$isi['g']."00";
-$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-//$gambar= mysql_fetch_array(mysql_query("select gambar from buku_induk where '.$Kondisi'"));
+$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+//$gambar= sqlArray(sqlQuery("select gambar from buku_induk where '.$Kondisi'"));
 //$sImg = $isi['gambar'] == ''? '': '<img src ="gambar/'.$isi['gambar'].'" width="200" height="150" >';
 //$sImg = $isi['gambar'] == ''? '': '<img src ="view_img.php?fname='.$isi['gambar'].'&sw=200&sh=150" width="200" height="150" >';
 $idbigbr = $isi['idawal'] == '' || $isi['idawal'] ==0 ?$isi['id']:$isi['idawal'];//echo "idbigbr=$idbigbr<br>";
@@ -141,9 +141,9 @@ $unit = $isi['nmunit'];
 switch ($isi['f']){	
 	case '01':{//kibA
 		
-		$det= mysql_fetch_array( mysql_query('select * from kib_a where '.$Kondisi));				
-		$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
-		$nmkec = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
+		$det= sqlArray( sqlQuery('select * from kib_a where '.$Kondisi));				
+		$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
+		$nmkec = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
 
 		$alamat_kota= $nmkota['nm_wilayah']<>''?$nmkota['nm_wilayah']:$det['kota'];
 		$alamat_kec= $nmkec['nm_wilayah']<>''?$nmkec['nm_wilayah']:$det['alamat_kec'];
@@ -221,7 +221,7 @@ switch ($isi['f']){
 			
 		}
 	case '02':{//kibB
-		$det= mysql_fetch_array( mysql_query('select * from kib_b where '.$Kondisi));
+		$det= sqlArray( sqlQuery('select * from kib_b where '.$Kondisi));
 		$detBarang .=
 			'	<table>
 				<tr><td width="100">Merk/Type</td><td>:</td><td> '.$det['merk'].' </td></tr>
@@ -244,9 +244,9 @@ switch ($isi['f']){
 		//$cek .= '<br> det = '.$detBarang;	
 		break; }
 	case '03':{//kibC		
-		$det= mysql_fetch_array( mysql_query('select * from kib_c where '.$Kondisi));
-		$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
-		$nmkec = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
+		$det= sqlArray( sqlQuery('select * from kib_c where '.$Kondisi));
+		$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
+		$nmkec = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
 
 		$alamat_kota= $nmkota['nm_wilayah']<>''?$nmkota['nm_wilayah']:$det['kota'];
 		$alamat_kec= $nmkec['nm_wilayah']<>''?$nmkec['nm_wilayah']:$det['alamat_kec'];
@@ -298,9 +298,9 @@ switch ($isi['f']){
 			';//*/
 		break; }
 	case '04':{//kibD
-		$det= mysql_fetch_array( mysql_query('select * from kib_d where '.$Kondisi));
-		$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
-		$nmkec = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
+		$det= sqlArray( sqlQuery('select * from kib_d where '.$Kondisi));
+		$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
+		$nmkec = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
 
 		$alamat_kota= $nmkota['nm_wilayah']<>''?$nmkota['nm_wilayah']:$det['kota'];
 		$alamat_kec= $nmkec['nm_wilayah']<>''?$nmkec['nm_wilayah']:$det['alamat_kec'];
@@ -358,8 +358,8 @@ switch ($isi['f']){
 			';
 		break; }
 	case '05':{ //E
-		$det= mysql_fetch_array( mysql_query('select * from kib_e where '.$Kondisi));
-		$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$det['alamat_a']."' and b='".$det['alamat_b']."' "));
+		$det= sqlArray( sqlQuery('select * from kib_e where '.$Kondisi));
+		$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$det['alamat_a']."' and b='".$det['alamat_b']."' "));
 		
 		
 		$detBarang .=
@@ -393,9 +393,9 @@ switch ($isi['f']){
 	
 		break;}
 	case '06':{ //F
-		$det= mysql_fetch_array( mysql_query('select * from kib_f where '.$Kondisi));
-		$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
-		$nmkec = mysql_fetch_array(mysql_query("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
+		$det= sqlArray( sqlQuery('select * from kib_f where '.$Kondisi));
+		$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='0' and kd_kota='".$det['alamat_b']."' "));
+		$nmkec = sqlArray(sqlQuery("select nm_wilayah from ref_kotakec where kd_kec ='".$det['alamat_c']."' and kd_kota='".$det['alamat_b']."'  and kd_kec<>0 "));
 
 		$alamat_kota= $nmkota['nm_wilayah']<>''?$nmkota['nm_wilayah']:$det['kota'];
 		$alamat_kec= $nmkec['nm_wilayah']<>''?$nmkec['nm_wilayah']:$det['alamat_kec'];
@@ -463,7 +463,7 @@ switch ($isi['f']){
 //----------------- TAB DETAIL ---------------------------
 //> pemanfaatan --------------------------------------------------
 $sdetqry = "select * from pemanfaatan where id_bukuinduk='$cidBI'" ;// $cek .= '<br> qry manfaat='. $sdetqry;
-$detqry = mysql_query($sdetqry);
+$detqry = sqlQuery($sdetqry);
 $detail_pemanfaatan_datalist = '
 		<tr valign="top" >			
 			<td>&nbsp</td>
@@ -476,12 +476,12 @@ $detail_pemanfaatan_datalist = '
 			<td>&nbsp</td>			
 		</tr>
 		';
-$jmldatadet = mysql_num_rows($detqry);
+$jmldatadet = sqlNumRow($detqry);
 if ($jmldatadet > 0 ){
 	$detail_pemanfaatan_datalist = '';	
 
 	$no= 1;
-	while ($dat = mysql_fetch_array($detqry) ){
+	while ($dat = sqlArray($detqry) ){
 		$detail_pemanfaatan_datalist .= '
 			<tr valign="top" >			
 			<td class="GarisDaftar" >'.$no.'</td>
@@ -518,7 +518,7 @@ $detail_pemanfaatan = "
 //> pemeliharaan ------------------------------------------------------
 $sdetqry = "select * from v_pemelihara where id_bukuinduk='$cidBI'" ; //$cek .= '<br> qry pemeliharaan='. $sdetqry;
 //$sdetqry = 'select * from pemeliharaan where ';
-$detqry = mysql_query($sdetqry);
+$detqry = sqlQuery($sdetqry);
 $detail_pemeliharaan_datalist = '
 		<tr valign="top" >			
 			<td>&nbsp</td>
@@ -528,11 +528,11 @@ $detail_pemeliharaan_datalist = '
 			<td>&nbsp</td>					
 		</tr>
 		';
-$jmldatadet = mysql_num_rows($detqry);
+$jmldatadet = sqlNumRow($detqry);
 if ($jmldatadet > 0 ){
 	$detail_pemeliharaan_datalist = '';	
 	$no= 1;
-	while ($dat = mysql_fetch_array($detqry) ){
+	while ($dat = sqlArray($detqry) ){
 		$detail_pemeliharaan_datalist .= '
 		<tr valign="top" >			
 			<td class="GarisDaftar">'.$no.'</td>
@@ -564,7 +564,7 @@ $detail_pemeliharaan =
 
 //> pengamanan ------------------------------------------------
 $sdetqry = "select * from pengamanan where id_bukuinduk='$cidBI'" ;// $cek .= '<br> qry manfaat='. $sdetqry;
-$detqry = mysql_query($sdetqry);
+$detqry = sqlQuery($sdetqry);
 
 $detail_pengamanan_datalist = '
 		<tr valign="top" >			
@@ -575,11 +575,11 @@ $detail_pengamanan_datalist = '
 			<td>&nbsp</td>					
 		</tr>
 		';
-$jmldatadet = mysql_num_rows($detqry);
+$jmldatadet = sqlNumRow($detqry);
 if ($jmldatadet > 0 ){
 $detail_pengamanan_datalist = '';
 $no= 1;
-while ($dat = mysql_fetch_array($detqry) ){
+while ($dat = sqlArray($detqry) ){
 	$detail_pengamanan_datalist .= '
 		<tr valign="top" >			
 			<td class="GarisDaftar" >'.$no.'</td>
@@ -609,7 +609,7 @@ $detail_pengamanan ="
 	";	
 //> penilaian
 $sdetqry = 'select * from penilaian where '.$Kondisi ; $cek .= '<br> qry nilai='. $sdetqry;
-$detqry = mysql_query($sdetqry);
+$detqry = sqlQuery($sdetqry);
 $detail_penilaian_datalist = '
 		<tr valign="top" >			
 			<td>&nbsp</td>
@@ -618,11 +618,11 @@ $detail_penilaian_datalist = '
 			<td>&nbsp</td>							
 		</tr>
 		';
-$jmldatadet = mysql_num_rows($detqry);
+$jmldatadet = sqlNumRow($detqry);
 if ($jmldatadet > 0 ){
 $detail_penilaian_datalist = '';
 $no= 1;
-while ($dat = mysql_fetch_array($detqry) ){
+while ($dat = sqlArray($detqry) ){
 	$detail_penilaian_datalist .= '
 		<tr valign="top" >			
 			<td>'.$no.'</td>
@@ -650,8 +650,8 @@ $detail_penilaian = "
 	";
 //>penghapusan
 $sdetqry = 'select * from penghapusan where '.$Kondisi ;// $cek .= '<br> qry manfaat='. $sdetqry;
-$detqry = mysql_query($sdetqry);
-$dat = mysql_fetch_array($detqry);
+$detqry = sqlQuery($sdetqry);
+$dat = sqlArray($detqry);
 $simgrusak = $dat['gambar'] == ''? '': '<img src ="gambar/'.$dat['gambar'].'" width="150" height="150" >';
 
 $detail_penghapusan = "
@@ -695,7 +695,7 @@ $detail_penghapusan = "
 	";	
 //> penilaian
 $sdetqry = 'select * from pemindahtanganan where '.$Kondisi ;// $cek .= '<br> qry manfaat='. $sdetqry;
-$detqry = mysql_query($sdetqry);
+$detqry = sqlQuery($sdetqry);
 $detail_mutasi_datalist = '
 		<tr valign="top" >			
 			<td>&nbsp</td>
@@ -705,11 +705,11 @@ $detail_mutasi_datalist = '
 			<td>&nbsp</td>							
 		</tr>
 		';
-$jmldatadet = mysql_num_rows($detqry);
+$jmldatadet = sqlNumRow($detqry);
 if ($jmldatadet > 0 ){
 $detail_mutasi_datalist = '';
 $no= 1;
-while ($dat = mysql_fetch_array($detqry) ){
+while ($dat = sqlArray($detqry) ){
 	$detail->mutasi_datalist .= '
 		<tr valign="top" >			
 			<td>'.$no.'</td>

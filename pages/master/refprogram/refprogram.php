@@ -94,7 +94,7 @@ class refprogramObj  extends DaftarObj2{
 					 "kategori" => $kategori
 					 );
 	  $query = VulnWalkerInsert("ref_program",$data);
-	  mysql_query($query);
+	  sqlQuery($query);
 	  $content = array("query" => $query);
 	   
 	  	
@@ -159,7 +159,7 @@ class refprogramObj  extends DaftarObj2{
 			
 		
 			//query ambil data ref_program
-			$get = mysql_fetch_array( mysql_query("select * from ref_program where bk='$bk' and ck='$ck' and dk='$dk' and p='$p' and q=0"));
+			$get = sqlArray( sqlQuery("select * from ref_program where bk='$bk' and ck='$ck' and dk='$dk' and p='$p' and q=0"));
 			if($Main->VERSI_NAME=='PANDEGLANG'){
 				$kode_program=$get['bk'].'.'.$get['ck'].'.'.$get['p'];
 			}else{
@@ -167,7 +167,7 @@ class refprogramObj  extends DaftarObj2{
 			}
 			$nm_program = $get['nama'];
 			
-			$get = mysql_fetch_array( mysql_query("select * from ref_program where bk='$bk' and ck='$ck' and dk='$dk' and p='$p' and q='$q'"));
+			$get = sqlArray( sqlQuery("select * from ref_program where bk='$bk' and ck='$ck' and dk='$dk' and p='$p' and q='$q'"));
 			if($Main->VERSI_NAME=='PANDEGLANG'){
 				$kode_kegiatan=$get['bk'].'.'.$get['ck'].'.'.$get['p'].'.'.$get['q'];
 			}else{
@@ -199,7 +199,7 @@ class refprogramObj  extends DaftarObj2{
 						$fmDINAS = "0";
 						$fmBIDANG = "0";
 			 	$getlastProgram = "select max(p) as lastProgram from ref_program where bk = '$fmURUSAN' and ck = '0' and dk ='0' and q = '00'  ";
-				$geMaxProgram = mysql_fetch_array(mysql_query($getlastProgram));
+				$geMaxProgram = sqlArray(sqlQuery($getlastProgram));
 				$id = $geMaxProgram['lastProgram'] + 1;
 				$data = array("bk" => $fmURUSAN,
 							  "ck" => '0',
@@ -213,7 +213,7 @@ class refprogramObj  extends DaftarObj2{
 					$fmDINAS = "0";
 				}			 
 			 	$getlastProgram = "select max(p) as lastProgram from ref_program where bk = '$fmURUSAN' and ck = '$fmBIDANG' and dk ='$fmDINAS' and q = '00'  ";
-				$geMaxProgram = mysql_fetch_array(mysql_query($getlastProgram));
+				$geMaxProgram = sqlArray(sqlQuery($getlastProgram));
 				$id = $geMaxProgram['lastProgram'] + 1;
 				$data = array("bk" => $fmURUSAN,
 							  "ck" => $fmBIDANG,
@@ -224,7 +224,7 @@ class refprogramObj  extends DaftarObj2{
 								 );
 			 }
 			 $query = VulnWalkerInsert("ref_program", $data);
-			 	mysql_query($query);
+			 	sqlQuery($query);
 			$codeAndNameProgram = "select p, concat(p, '. ', nama) as vnama from ref_program where bk = '$fmURUSAN' and ck = '$fmBIDANG' and dk ='$fmDINAS' and q='00'";
 			$cmbProgram  = cmbQuery('cmbProgram', $selectedProgram, $codeAndNameProgram,''.$cmbRo.'onChange=\''.$this->Prefix.'.comboForm()\'','-- Pilih Program --');
 		
@@ -241,7 +241,7 @@ class refprogramObj  extends DaftarObj2{
 			 }
 			 if($fmURUSAN == 0){
 			 	$getLastKegiatan  = "select max(q) as lastKegiatan from ref_program  where bk = '$fmURUSAN' and ck ='0' and dk='0' and p='$p'";
-			    $getMaxKegiatan = mysql_fetch_array(mysql_query($getLastKegiatan));
+			    $getMaxKegiatan = sqlArray(sqlQuery($getLastKegiatan));
 				$id = $getMaxKegiatan['lastKegiatan'] + 1;
 			
  			 }else{
@@ -249,7 +249,7 @@ class refprogramObj  extends DaftarObj2{
 						$fmDINAS = "0";
 					}
 			 	$getLastKegiatan  = "select max(q) as lastKegiatan from ref_program  where bk = '$fmURUSAN' and ck ='$fmBIDANG' and dk='$fmDINAS' and p='$p'";
-			    $getMaxKegiatan = mysql_fetch_array(mysql_query($getLastKegiatan));
+			    $getMaxKegiatan = sqlArray(sqlQuery($getLastKegiatan));
 				$id = $getMaxKegiatan['lastKegiatan'] + 1;
 			 }
 
@@ -271,7 +271,7 @@ class refprogramObj  extends DaftarObj2{
 			 $data = array("nama" => $nama,
 			 			   "kategori" => $kategori);
 			 $query = VulnWalkerUpdate("ref_program",$data," concat(bk,' ',ck,' ',dk,' ',p,' ',q) = '$refprogram_cb[0]' ");
-			 mysql_query($query);
+			 sqlQuery($query);
 			 $content = $query;
 			 
 		break;
@@ -347,7 +347,7 @@ class refprogramObj  extends DaftarObj2{
 		
 		
 		$quricoy="select count(*) as cnt from ref_program where bk='$bk' and ck='$ck' and dk<>'00' and p<>'00' and q<>'00'";
-		$dt3 = mysql_fetch_array(mysql_query($quricoy));
+		$dt3 = sqlArray(sqlQuery($quricoy));
 		$korong = $dt3 ['cnt'];
 		
 		if($korong>0){
@@ -357,7 +357,7 @@ class refprogramObj  extends DaftarObj2{
 		}
 		
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where bk='$bk' and ck='$ck' and dk='$dk' and p='$p' and q='$q' ")
 				) >0 )
 				
@@ -405,7 +405,7 @@ class refprogramObj  extends DaftarObj2{
 		 
 		//query ambil data ref_program
 		$aqry = "select * from ref_program where concat(bk,' ',ck,' ',dk,' ',p,' ',q)='$this->form_idplh'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$fm = $this->formEdit($dt);
 		
@@ -429,11 +429,11 @@ class refprogramObj  extends DaftarObj2{
 	  	foreach ($dt as $key => $value) { 
 			  $$key = $value; 
 		} 
-		$get1=mysql_fetch_array(mysql_query("select * from ref_urusan where bk='".$dt['bk']."' and ck='0' "));
+		$get1=sqlArray(sqlQuery("select * from ref_urusan where bk='".$dt['bk']."' and ck='0' "));
 		$urusan = $get1['nm_urusan'];
-		$get2=mysql_fetch_array(mysql_query("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='0' "));
+		$get2=sqlArray(sqlQuery("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='0' "));
 		$bidang = $get2['nm_urusan'];
-		$get3=mysql_fetch_array(mysql_query("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' "));
+		$get3=sqlArray(sqlQuery("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' "));
 		$dinas = $get3['dk']==0?'-':$get3['nm_urusan'];
 		
 		$codeAndNameProgram = "select p, concat(p, '. ', nama) as vnama from ref_program where bk = '$bk' and ck = '$ck' and dk ='$dk' and q='00'";
@@ -526,18 +526,18 @@ class refprogramObj  extends DaftarObj2{
 		$ROD = "readonly";
 		$ROP = "readonly";
 		$ROK = "readonly";
-		$get1=mysql_fetch_array(mysql_query("select * from ref_urusan where bk='".$dt['bk']."' and ck='0' "));
+		$get1=sqlArray(sqlQuery("select * from ref_urusan where bk='".$dt['bk']."' and ck='0' "));
 		$urusan = $get1['nm_urusan'];
-		$get2=mysql_fetch_array(mysql_query("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='0' "));
+		$get2=sqlArray(sqlQuery("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='0' "));
 		$bidang = $get2['ck']==0?'-':$get2['nm_urusan'];
-		$get3=mysql_fetch_array(mysql_query("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' "));
+		$get3=sqlArray(sqlQuery("select * from ref_urusan where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' "));
 		$dinas = $get3['dk']==0?'-':$get3['nm_urusan'];
-		$get4=mysql_fetch_array(mysql_query("select * from ref_program where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' and p='".$dt['p']."' and q='00'"));
+		$get4=sqlArray(sqlQuery("select * from ref_program where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' and p='".$dt['p']."' and q='00'"));
 		$program = $get4['nama'];
 		if($q == '0'){
 			
 		}else{
-			$get5=mysql_fetch_array(mysql_query("select * from ref_program where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' and p='".$dt['p']."' and  q='".$dt['q']."'"));
+			$get5=sqlArray(sqlQuery("select * from ref_program where bk='".$dt['bk']."' and ck='".$dt['ck']."' and dk='".$dt['dk']."' and p='".$dt['p']."' and  q='".$dt['q']."'"));
 			$kegiatan = $get5['nama'];
 		}
 		

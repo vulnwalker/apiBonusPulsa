@@ -65,18 +65,18 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(jml_biaya) as total  from rkpb where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(jml_biaya) as total  from rkpb where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
 else
 {$jmlTotalHarga=0;}
 
-$jmlTotalBiayaPemeliharaanAll = mysql_query("select sum(biaya_pemeliharaan) as total  from view_bi_pemeliharaan where $KondisiTotal ");
+$jmlTotalBiayaPemeliharaanAll = sqlQuery("select sum(biaya_pemeliharaan) as total  from view_bi_pemeliharaan where $KondisiTotal ");
 
-if($jmlTotalBiayaPemeliharaanAll = mysql_fetch_array($jmlTotalBiayaPemeliharaanAll))
+if($jmlTotalBiayaPemeliharaanAll = sqlArray($jmlTotalBiayaPemeliharaanAll))
 {
 	$jmlTotalBiayaPemeliharaanAll = $jmlTotalBiayaPemeliharaanAll[0];
 }
@@ -84,17 +84,17 @@ else
 {$jmlTotalBiayaPemeliharaanAll=0;}
 // copy untuk kondisi jumlah total sampai sini
 
-$Qry = mysql_query("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang on concat(rkpb.f,rkpb.g,rkpb.h,rkpb.i,rkpb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg ");
-$jmlDataRKPB = mysql_num_rows($Qry);
+$Qry = sqlQuery("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang on concat(rkpb.f,rkpb.g,rkpb.h,rkpb.i,rkpb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg ");
+$jmlDataRKPB = sqlNumRow($Qry);
 
-$Qry = mysql_query("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang on concat(rkpb.f,rkpb.g,rkpb.h,rkpb.i,rkpb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg $LimitHalRKPB");
+$Qry = sqlQuery("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang on concat(rkpb.f,rkpb.g,rkpb.h,rkpb.i,rkpb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg $LimitHalRKPB");
 $no=$Main->PagePerHal * (($HalRKPB*1) - 1);
 $cb=0;
 $jmlTampilRKPB = 0;
 $jmlTotalHargaDisplay = 0;
 $jmlTotalBiayaPemeliharaan = 0;
 $ListBarangRKPB = "";
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilRKPB++;
 	$no++;
@@ -102,9 +102,9 @@ while ($isi = mysql_fetch_array($Qry))
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdBarang1 = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-	$TotalBiayaPemeliharaan = mysql_fetch_array(mysql_query("select sum(biaya_pemeliharaan) as biaya from pemeliharaan where concat(f,g,h,i,j,noreg)='$kdBarang1' "));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$TotalBiayaPemeliharaan = sqlArray(sqlQuery("select sum(biaya_pemeliharaan) as biaya from pemeliharaan where concat(f,g,h,i,j,noreg)='$kdBarang1' "));
 	$jmlTotalBiayaPemeliharaan += $TotalBiayaPemeliharaan[0];
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangRKPB .= "

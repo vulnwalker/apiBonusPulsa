@@ -62,7 +62,7 @@ class ManagementStrukturMenu2Obj  extends DaftarObj2{
 		case 'getdata':{
 				$Id = $_REQUEST['id'];
 					
-				$get = mysql_fetch_array( mysql_query("SELECT `system_modul`.`Id_system`, `system_modul`.`nm_modul`,`system_modul`.`Id_modul`, `system`.`nm_system`, `system_menu`.`title`,`system_menu`.`alamat_url`FROM `system` RIGHT JOIN `system_modul` ON `system_modul`.`Id_system` = `system`.`Id_system` RIGHT JOIN `system_menu` ON `system_menu`.`Id_modul` = `system_modul`.`Id_modul` where system_menu.Id_menu='$Id'"));
+				$get = sqlArray( sqlQuery("SELECT `system_modul`.`Id_system`, `system_modul`.`nm_modul`,`system_modul`.`Id_modul`, `system`.`nm_system`, `system_menu`.`title`,`system_menu`.`alamat_url`FROM `system` RIGHT JOIN `system_modul` ON `system_modul`.`Id_system` = `system`.`Id_system` RIGHT JOIN `system_menu` ON `system_menu`.`Id_modul` = `system_modul`.`Id_modul` where system_menu.Id_menu='$Id'"));
 			
 				$content = array('id_menu' =>$Id,'id_modul' => $get['Id_modul'],'id_system' => $get['Id_system'], 'nm_system' => $get['nm_system'], 'nm_modul' => $get['nm_modul'], 'url' => $get['alamat_url'],'title' => $get['title']);
 					
@@ -146,8 +146,8 @@ class ManagementStrukturMenu2Obj  extends DaftarObj2{
 	 
 	 
 	 $Id_menu=$isi['Id_menu'];
-	  $datsys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$isi['Id_system']."'"));
-	  $datmenu=mysql_fetch_array(mysql_query("select nm_modul from system_modul where Id_modul='".$isi['Id_modul']."'"));
+	  $datsys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$isi['Id_system']."'"));
+	  $datmenu=sqlArray(sqlQuery("select nm_modul from system_modul where Id_modul='".$isi['Id_modul']."'"));
 	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
 	 

@@ -9,28 +9,28 @@ $cidBI = $_REQUEST["cidBI"];
 if( count($cidBI) > 0){
 	//pastikan hapus dulu ygsebelumnya
 	$aqry = "delete from barcode_data_print where uid='$UID'";  $cek .= $aqry;	
-	$qry = mysql_query($aqry);	
+	$qry = sqlQuery($aqry);	
 	
 	$cek .=' count cidbi='.count($cidBI);
 	for($i = 0; $i<count($cidBI); $i++)	{		
 		//insert
 		$aqry = "insert into barcode_data_print (uid,idbi) values ('$UID', '{$cidBI[$i]}');";  $cek .= $aqry;	
-		$qry = mysql_query($aqry);	
+		$qry = sqlQuery($aqry);	
 		if($qry == FALSE) break;
 		
 		
 		$aqry2 = "select * from view_buku_induk2 where id='{$cidBI[$i]}'"; // $cek .= $aqry;	
-		$qry2 = mysql_query($aqry2);
-		while ($row = mysql_fetch_array($qry2)){		
-			$get = mysql_fetch_array(mysql_query(
+		$qry2 = sqlQuery($aqry2);
+		while ($row = sqlArray($qry2)){		
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$row['c']."'  and d='00' and e='00'"
 			));
 			$nmbidang_barcode = $get['nm_barcode'];
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$row['c']."'  and d='".$row['d']."' and e='00'"
 			));
 			$nmopd_barcode = $get['nm_barcode'];
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$row['c']."'  and d='".$row['d']."' and e='".$row['e']."'"
 			));
 			$nmunit_barcode = $get['nm_barcode'];			
@@ -85,7 +85,7 @@ $domtree->save($fname);
 //update status			
 if ($qry){ 
 	$aqry = "replace into barcode_status_print (uid,status,qty) values('$UID',1,1);"; $cek .=$aqry;
-	$qry = mysql_query($aqry);
+	$qry = sqlQuery($aqry);
 }
 
 $pageArr = array(

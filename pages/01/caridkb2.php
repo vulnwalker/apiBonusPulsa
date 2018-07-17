@@ -103,16 +103,16 @@ switch($fmBIDANG){
 //$sqry = "select * from ref_barang ".$Kondisi." order by f,g,h,i,j limit 0,200 ";
 $sqry = "select * from v1_dkb ".$Kondisi." order by f,g,h,i,j limit 0,200 "; $cek .= $sqry;
 $cek .= '<br> sqry='.$sqry;
-$Qry = mysql_query($sqry);
-$numRow = mysql_num_rows($Qry);
+$Qry = sqlQuery($sqry);
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
-	$nmF = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and (j='00' or j='000')"));
-	$nmG = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and (j='00' or j='000')"));
-	$nmH = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and (j='00' or j='000')"));
-	$nmI = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and (j='00' or j='000')"));
+	$nmF = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and (j='00' or j='000')"));
+	$nmG = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and (j='00' or j='000')"));
+	$nmH = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and (j='00' or j='000')"));
+	$nmI = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and (j='00' or j='000')"));
 	$no++;
 	$Isi1 = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 	$Isi2 = $isi['nm_barang'];
@@ -120,7 +120,7 @@ while($isi=mysql_fetch_array($Qry))
 	$isilokasi=''; $lokasi = ''; $almt=''; $kel=''; $kec=''; $kota='';	
 	//if ($isi['f']=='01' || $isi['f']=='03' || $isi['f']=='04' || $isi['f']=='06' ){
 	if ($fmBIDANG=='01' || $fmBIDANG=='03' || $fmBIDANG=='04' || $fmBIDANG=='06' ){
-		$alm = mysql_fetch_array(mysql_query(
+		$alm = sqlArray(sqlQuery(
 			"select * from $tblkib where idbi='".$isi['id']."' "
 		));
 		

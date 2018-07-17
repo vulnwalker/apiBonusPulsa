@@ -29,7 +29,7 @@ if (isset($_FILES['myFile'])) {
 		//insert -------------				
 		$sqry = " insert into gambar (idbi, nmfile, nmfile_asli, ket, stat, uid, tgl_update) 
 				value('$idBI', '$nmNewFile', '$nmFileAsli','$fmKET','0', '$uid', now())" ;	 
-		$Ins = mysql_query($sqry);
+		$Ins = sqlQuery($sqry);
 	}else{
 		echo 'Proses Upload Gagal!';
 	}

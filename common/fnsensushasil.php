@@ -506,20 +506,20 @@ class SensusHasilObj extends DaftarObj2{
 			//$aqrymanfaat = "select count(*) as cnt  from v1_pemanfaatan_bi where tgl_pemanfaatan<='$tglSaldoAwal' and id_bukuinduk in (select id from buku_induk where 1=1 $KondisiSKPD and status_barang=2 ) "; $cek .= $aqrymanfaat;
 		}
 		//$cekbi = $aqry.' ';
-		$bi = mysql_fetch_array(mysql_query( $aqry	));
-		$hps = mysql_fetch_array(mysql_query( $aqryhps	));
-		$pindah = mysql_fetch_array(mysql_query( $aqrypindah ));
-		$gr = mysql_fetch_array(mysql_query( $aqrygr ));
-		$manfaat = mysql_fetch_array(mysql_query( $aqrymanfaat ));
+		$bi = sqlArray(sqlQuery( $aqry	));
+		$hps = sqlArray(sqlQuery( $aqryhps	));
+		$pindah = sqlArray(sqlQuery( $aqrypindah ));
+		$gr = sqlArray(sqlQuery( $aqrygr ));
+		$manfaat = sqlArray(sqlQuery( $aqrymanfaat ));
 		$jmlbi = $bi['cnt'] - $hps['cnt'] - $pindah['cnt'] - $gr['cnt'];// - $manfaat['cnt'];
 		if($jnsrekap==1){
 			$aqry = "select sum(biaya_pemeliharaan)as cnt from v_pemelihara ".
 				" where tgl_pemeliharaan<='$tglSaldoAwal' $KondisiSKPD $KondisiBrg and tambah_aset=1 ";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $jmlbi += $plh['cnt'] ;			
 			$aqry = "select sum(biaya_pengamanan)as cnt from v_pengaman ".
 				" where tgl_pengamanan<='$tglSaldoAwal' $KondisiSKPD $KondisiBrg and tambah_aset=1 ";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $jmlbi += $aman['cnt'];
 			
 			
@@ -538,7 +538,7 @@ class SensusHasilObj extends DaftarObj2{
 				"and ada=2 and f is not null and tahun_sensus='$thnsensus'";				
 		}		
 		$cektidakada = $aqry;
-		$tidakada = mysql_fetch_array(mysql_query( $aqry	));
+		$tidakada = sqlArray(sqlQuery( $aqry	));
 		$jmltidakada = $tidakada['cnt'];
 		if($jnsrekap==1){
 			$aqry = "select sum(ifnull(biaya_pemeliharaan,0))as cnt from v_pemelihara ".
@@ -548,7 +548,7 @@ class SensusHasilObj extends DaftarObj2{
 				" and (sesi='' or sesi is null) and (error ='' or error is null) ".
 				" and ada=2 and tahun_sensus='$thnsensus'".
 				")";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $jmltidakada += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<='$tglSaldoAwal' and tambah_aset=1 and id_bukuinduk in (".
@@ -557,7 +557,7 @@ class SensusHasilObj extends DaftarObj2{
 				" and (sesi='' or sesi is null) and (error ='' or error is null) ".
 				" and ada=2 and tahun_sensus='$thnsensus'".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $jmltidakada += $aman['cnt'];
 		}	
 		$vjmltidakada = number_format($jmltidakada, $des, ',', '.');		
@@ -574,20 +574,20 @@ class SensusHasilObj extends DaftarObj2{
 				" and ada=1 and tahun_sensus='$thnsensus'"; //$cek .= $aqry;	
 		}
 		$cekada = $aqry;
-		$ada = mysql_fetch_array(mysql_query( $aqry	));		
+		$ada = sqlArray(sqlQuery( $aqry	));		
 		$jmlada = $ada['cnt'];		
 		if($jnsrekap==1){
 			$aqry = "select sum(ifnull(biaya_pemeliharaan,0))as cnt from v_pemelihara ".
 				" where tgl_pemeliharaan<='$tglSaldoAwal' and  tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and tahun_sensus='$thnsensus'".
 				")";			
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $jmlada += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<='$tglSaldoAwal' and tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and tahun_sensus='$thnsensus'".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $jmlada += $aman['cnt'];
 		}
 		$vjmlada = number_format($jmlada, $des, ',', '.');		
@@ -607,20 +607,20 @@ class SensusHasilObj extends DaftarObj2{
 				" and ada=1  and kondisi=1 and tahun_sensus='$thnsensus'"; 
 		}	
 		$cekbaik = $aqry;	
-		$baik = mysql_fetch_array(mysql_query( $aqry	));
+		$baik = sqlArray(sqlQuery( $aqry	));
 		$jmlbaik = $baik['cnt'];
 		if($jnsrekap==1){
 			$aqry = "select sum(ifnull(biaya_pemeliharaan,0))as cnt from v_pemelihara ".
 				" where tgl_pemeliharaan<='$tglSaldoAwal' and tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and kondisi=1 and tahun_sensus='$thnsensus'".
 				")";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $jmlbaik += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<='$tglSaldoAwal' and tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and kondisi=1 and tahun_sensus='$thnsensus'".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $jmlbaik += $aman['cnt'];
 		}
 		$vjmlbaik = number_format($jmlbaik, $des, ',', '.');
@@ -631,20 +631,20 @@ class SensusHasilObj extends DaftarObj2{
 			$aqry = " select count(*) as cnt from view2_sensus ". $Kondisi.	" and (sesi='' or sesi is null) and (error='' or error is null) and ada=1  and kondisi=2 and tahun_sensus='$thnsensus'"; //$cek .= $aqry;	
 		}
 		$cekkb = $aqry;
-		$kurangbaik = mysql_fetch_array(mysql_query( $aqry	));
+		$kurangbaik = sqlArray(sqlQuery( $aqry	));
 		$jmlkurangbaik = $kurangbaik['cnt'];
 		if($jnsrekap==1){
 			$aqry = "select sum(ifnull(biaya_pemeliharaan,0))as cnt from v_pemelihara ".
 				" where tgl_pemeliharaan<='$tglSaldoAwal' and  tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and kondisi=2 and tahun_sensus='$thnsensus' ".
 				")";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $jmlkurangbaik += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<='$tglSaldoAwal' and tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and kondisi=2 and tahun_sensus='$thnsensus'".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $jmlkurangbaik += $aman['cnt'];
 		}
 		$vjmlkurangbaik = number_format($jmlkurangbaik, $des, ',', '.');		
@@ -655,20 +655,20 @@ class SensusHasilObj extends DaftarObj2{
 			$aqry = " select count(*) as cnt from view2_sensus ". $Kondisi.	" and (sesi='' or sesi is null) and (error='' or error is null) and ada=1  and kondisi=3 and tahun_sensus='$thnsensus'"; //$cek .= $aqry;
 		}		
 		$cekrb = $aqry;
-		$rusakberat = mysql_fetch_array(mysql_query( $aqry	));
+		$rusakberat = sqlArray(sqlQuery( $aqry	));
 		$jmlrusakberat = $rusakberat['cnt'];
 		if($jnsrekap==1){
 			$aqry = "select sum(ifnull(biaya_pemeliharaan,0))as cnt from v_pemelihara ".
 				" where  tgl_pemeliharaan<='$tglSaldoAwal' and   tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and kondisi=3 and tahun_sensus='$thnsensus'".
 				")";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $jmlrusakberat += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<='$tglSaldoAwal' and tambah_aset=1 and id_bukuinduk in (".
 				" select idbi as id_bukuinduk from view2_sensus ". $Kondisi." and (sesi='' or sesi is null) and (error='' or error is null) and ada=1 and kondisi=3 and tahun_sensus='$thnsensus'".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $jmlrusakberat += $aman['cnt'];
 		}
 		$vjmlrusakberat = number_format($jmlrusakberat, $des, ',', '.');		
@@ -679,7 +679,7 @@ class SensusHasilObj extends DaftarObj2{
 			$aqry = " select sum(jml_barang) as cnt from barang_tidak_tercatat ". $Kondisi." and tahun_sensus='$thnsensus'";	
 		}
 		$cektt = $aqry;
-		$tidaktercatat = mysql_fetch_array(mysql_query( $aqry	));
+		$tidaktercatat = sqlArray(sqlQuery( $aqry	));
 		$jmltidaktercatat = $tidaktercatat['cnt'];		
 		$vjmltidaktercatat = number_format($jmltidaktercatat, $des, ',', '.');		
 		//jml telah cek ---------------------------------------
@@ -736,7 +736,7 @@ class SensusHasilObj extends DaftarObj2{
 					$aqry = "select count(*) as cnt from view2_sensus where 1=1 ". $KondisiSKPD." and f='01' and (sesi='' or sesi is null) and (error='' or error is null) and status_penguasaan=$i";
 				}
 				//$cek .=' qrket='.$aqry;
-				$get = mysql_fetch_array(mysql_query($aqry));					
+				$get = sqlArray(sqlQuery($aqry));					
 				switch($i){
 					case 1: $digunakanA = $get['cnt']; break;
 					case 2: $dimanfaatkanA = $get['cnt']; break;
@@ -753,7 +753,7 @@ class SensusHasilObj extends DaftarObj2{
 					$aqry = "select count(*) as cnt from view2_sensus where 1=1 ". $KondisiSKPD." and f='03' and (sesi='' or sesi is null) and (error='' or error is null) and status_penguasaan=$i";
 				}
 				//$cek .=' qrket='.$aqry;
-				$get = mysql_fetch_array(mysql_query($aqry));					
+				$get = sqlArray(sqlQuery($aqry));					
 				switch($i){
 					case 1: $digunakanC = $get['cnt']; break;
 					case 2: $dimanfaatkanC = $get['cnt']; break;
@@ -770,7 +770,7 @@ class SensusHasilObj extends DaftarObj2{
 					$aqry = "select count(*) as cnt from view2_sensus where 1=1 ". $KondisiSKPD." and f='04' and (sesi='' or sesi is null) and (error='' or error is null) and status_penguasaan=$i";
 				}
 				//$cek .=' qrket='.$aqry;
-				$get = mysql_fetch_array(mysql_query($aqry));					
+				$get = sqlArray(sqlQuery($aqry));					
 				switch($i){
 					case 1: $digunakanD = $get['cnt']; break;
 					case 2: $dimanfaatkanD = $get['cnt']; break;

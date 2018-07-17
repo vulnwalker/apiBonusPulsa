@@ -13,19 +13,11 @@ $Pg = isset($HTTP_GET_VARS["Pg"]) ? $HTTP_GET_VARS["Pg"] : "";
     switch ($Pg) {
 
 
-		case 'aksi':{
-  			include('pages/perencanaan/daftarobj.php');
-
-  					include("pages/aksi/aksi.php"); //break;
-  					$aksi->selector();
-
-  			break;
-		}
 
     case 'api':{
-  			include('pages/perencanaan/daftarobj.php');
-
-  					include("pages/api/api.php"); //break;
+  			    include('common/daftarobj.php');
+            include('common/configClass.php');
+  					include("pages/api/api.php");
   					$api->selector();
 
   			break;

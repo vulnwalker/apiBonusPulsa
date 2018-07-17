@@ -362,8 +362,8 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 		$ptgs= $_REQUEST['ptgs'];
 		$ptgs2= $_REQUEST['ptgs_tahui'];
 		$tgl_ind=TglInd($tgl);
-		$qry1=mysql_fetch_array(mysql_query("SELECT nama FROM ref_petugas WHERE Id='$ptgs' and jns='1'"));
-		$qry2=mysql_fetch_array(mysql_query("SELECT nama FROM ref_petugas WHERE Id='$ptgs2' and jns='1'"));
+		$qry1=sqlArray(sqlQuery("SELECT nama FROM ref_petugas WHERE Id='$ptgs' and jns='1'"));
+		$qry2=sqlArray(sqlQuery("SELECT nama FROM ref_petugas WHERE Id='$ptgs2' and jns='1'"));
 		$totalhari=cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);*/ 
 	if($xls){
 			header("Content-type: application/msexcel");
@@ -632,7 +632,7 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 		$dt['tahun']=date('Y');
 		$query="INSERT into penggunaan_ketetapan (UID,tgl_update,sttemp)
 							"."values('$uid',now(),1)"; $cek.=$query;
-		$result=mysql_query($query);					
+		$result=sqlQuery($query);					
 		$this->form_idplh =mysql_insert_id();
 		$dt['ipk'] = $this->form_idplh;
 		$this->form_fmST = 0;
@@ -651,7 +651,7 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 		$dt['d'] = $_REQUEST[$this->Prefix.'SkpdfmUNIT'];
 		$dt['e'] = $_REQUEST[$this->Prefix.'SkpdfmSUBUNIT'];
 		$aqry = "select * from penggunaan_ketetapan where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['ipk'] = $this->form_idplh;
 		$this->form_fmST = 0;
 		$fm = $this->setForm($dt);
@@ -678,8 +678,8 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 		$fsum = join(',',$fsum_);
 				
 		$aqry = $this->setSumHal_query($Kondisi, $fsum); $cek .= $aqry;
-		$qry = mysql_query($aqry); 
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry); 
+		if ($isi= sqlArray($qry)){			
 			$jmlData = 1;//$isi['cnt'];			
 			
 			foreach($this->FieldSum as &$value){
@@ -766,11 +766,11 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 			
 		$this->form_fields = array(	
@@ -861,12 +861,12 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 			$aqry = "UPDATE penggunaan_ketetapan
 	        		 set "." stbatal = '1'".
 			 		 "WHERE Id='".$idplh."'";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry==TRUE) {
 				$aqry2 = "UPDATE penggunaan
 		        		 set "." ref_idketetapan = NULL ".
 				 		 "WHERE ref_idketetapan='".$idplh."'";	$cek .= $aqry2;	
-				$qry2 = mysql_query($aqry2);			
+				$qry2 = sqlQuery($aqry2);			
 			}else{
 				$err="Gagal Batal Penggunaan";	
 			}
@@ -889,7 +889,7 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 	 $tahun_anggaran = $_REQUEST['tahun'];	 
 	 $keterangan = $_REQUEST['ket'];	 	 	 
 	 //query mendapatkan jml barang & perolehan
-     $jml=mysql_fetch_array(mysql_query("select sum(jml_barang) as jml_barang, sum(harga_perolehan) as harga_perolehan from v1_penggunaan where ref_idketetapan='".$idplh."'"));		
+     $jml=sqlArray(sqlQuery("select sum(jml_barang) as jml_barang, sum(harga_perolehan) as harga_perolehan from v1_penggunaan where ref_idketetapan='".$idplh."'"));		
 	 //cek validasi
 	 if( $err=='' && $tgl_pembukuan =='' ) $err= 'Tanggal Pembukuan belum diisi !!';
 	 if( $err=='' && $no_sk =='' ) $err= 'No SK belum diisi !!';
@@ -911,16 +911,16 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 							 ket = '$keterangan',
 							 sttemp='0'".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 
 					$aqry2 = "UPDATE penggunaan
 			        		 set "." sttemp_ketetapan = '0'".
 					 		 "WHERE ref_idketetapan='".$idplh."'";	$cek .= $aqry2;
-					$qry2 = mysql_query($aqry2);	
+					$qry2 = sqlQuery($aqry2);	
 
 					if($qry2==TRUE) {
 						$aqry3 = "Delete from penggunaan_ketetapan where sttemp=1";	$cek .= $aqry2;	
-						$qry3 = mysql_query($aqry3);	
+						$qry3 = sqlQuery($aqry3);	
 					}else{
 						$err="Gagal menyimpan Penggunaan";	
 					}
@@ -938,12 +938,12 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 							 tgl_update = now(),
 							 ket = '$keterangan'".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 
 					$aqry2 = "UPDATE penggunaan
 			        		 set "." sttemp_ketetapan = '0'".
 					 		 "WHERE ref_idketetapan='".$idplh."'";	$cek .= $aqry2;
-					$qry2 = mysql_query($aqry2);	
+					$qry2 = sqlQuery($aqry2);	
 
 					if($qry==FALSE) {
 						$err="Gagal Edit Penggunaan Ketetapanb";							
@@ -961,7 +961,7 @@ class PenggunaanKetetapanObj extends DaftarObj2{
 						 $j=$kode_barang[4];
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga)
 						"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);
+						$qry = sqlQuery($aqry1);
 						 
 				}
 			} //end else

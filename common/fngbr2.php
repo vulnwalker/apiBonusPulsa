@@ -9,12 +9,12 @@ class GambarObj extends DaftarObj2{
 			case 'getdata':{
 				$idbi = $_REQUEST['idbi'];
 				
-				$bi = mysql_fetch_array(mysql_query("select * from buku_induk where idall='$idbi' limit 0,1" ));
+				$bi = sqlArray(sqlQuery("select * from buku_induk where idall='$idbi' limit 0,1" ));
 				$id = $bi['idawal'];
 				$aqry = "select * from gambar where idbi ='".$id."'";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				$rows=array();
-				while ($isi = mysql_fetch_assoc($qry)){
+				while ($isi = sqlArray($qry)){
 					$rows[] = $isi;
 				}
 				$cek .=  "select * from buku_induk where idall='$idbi' limit 0,1";

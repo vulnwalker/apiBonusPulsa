@@ -65,9 +65,9 @@ function getSKPD($prefix='',$kol1_width=100, $pilihstr='Semua') {
    //skpd ------------------------------------
     //$cekskpd = 'kon='.$KondisiSKPD;
     $aqry = "select * from ref_skpd where d='00' $KondisiSKPD order by c;";   $cek .= $aqry; 
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['c']}. {$isi['nm_skpd']}</option>\n";
     }    
@@ -79,9 +79,9 @@ function getSKPD($prefix='',$kol1_width=100, $pilihstr='Semua') {
 		
 	//unit -------------------------------------
 	$aqry = "select * from ref_skpd where c='$fmSKPD' and e = '00' $KondisiUNIT order by d;";$cek .= $aqry;
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['d']}. {$isi['nm_skpd']}</option>\n";
     }
@@ -93,9 +93,9 @@ function getSKPD($prefix='',$kol1_width=100, $pilihstr='Semua') {
 		
 	//sub unit ----------------------------------	
 	$aqry = "select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT'  $KondisiSUBUNIT and e1='$kdSubUnit0' order by e"; $cek .= $aqry;
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['e']}. {$isi['nm_skpd']}</option>\n";
     }
@@ -107,9 +107,9 @@ function getSKPD($prefix='',$kol1_width=100, $pilihstr='Semua') {
 	//seksi ----------------------------------
 	
 		$aqry = "select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT'  and e='$fmSUBUNIT' $KondisiSEKSI order by nm_skpd"; $cek .= $aqry;
-	    $Qry = mysql_query($aqry);
+	    $Qry = sqlQuery($aqry);
 	    $Ops = "";
-	    while ($isi = mysql_fetch_array($Qry)) {
+	    while ($isi = sqlArray($Qry)) {
 	        $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
 	        $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['e1']}. {$isi['nm_skpd']}</option>\n";
 	    }

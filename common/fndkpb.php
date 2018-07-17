@@ -105,25 +105,25 @@ class DkpbObj extends DaftarObj2{
 		$fmSEKSI = isset($HTTP_COOKIE_VARS['cofmSEKSI'])? $HTTP_COOKIE_VARS['cofmSEKSI']: cekPOST($this->Prefix.'SkpdfmSEKSI');					
 		$nmopdarr=array();		
 		if($fmSKPD == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_bidang where c='".$isi['c']."' "
 			));		
 			if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 		}
 		if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' "
 			));		
 			if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 		}
 		if($fmSUBUNIT == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_unit where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."'"
 			));		
 			if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 		}
 		if($fmSEKSI == '00' || $fmSEKSI == '000'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select nm_skpd as nmseksi from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 			));		
 			if($get['nmseksi']<>'') $nmopdarr[] = $get['nmseksi'];
@@ -336,22 +336,22 @@ class DkpbObj extends DaftarObj2{
 		$this->form_fmST = 1;
 		$form_name = $this->Prefix.'_form';
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];	
 		$fmTAHUN = $dt['thn_anggaran']==''?  $_COOKIE['coThnAnggaran'] : $dt['thn_anggaran'] ; //def tahun = 2012
 		$kode_barang = $dt['f']==''? '' : $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'] ;	
 		$kode_account = $dt['k']==''? '' : $dt['k'].'.'.$dt['l'].'.'.$dt['m'].'.'.$dt['n'].'.'.$dt['o'].'.'.$dt['kf'];		
 		//-- ambil data rkb
-		$rkpb = mysql_fetch_array(mysql_query(
+		$rkpb = sqlArray(sqlQuery(
 			"select * from rkpb where id='".$dt['idrkpb']."'"
 		));
 		$vjmlharga2 = //$this->form_fmST==1?
@@ -537,13 +537,13 @@ class DkpbObj extends DaftarObj2{
 	function Hapus_Validasi($id){
 		$err ='';
 		//$KeyValue = explode(' ',$id);
-		$old = mysql_fetch_array( mysql_query(
+		$old = sqlArray( sqlQuery(
 			"select * from $this->TblName where id='$id' "		
 		));
 		$aqry = "select count(*) as cnt from pengadaan_pemeliharaan where tahun='".$old['tahun']."' ".
 			" and c='".$old['c']."' and d='".$old['d']."' and e='".$old['e']."'  and e1='".$old['e1']."'".
 			" and f='".$old['f']."' and g='".$old['g']."' and h='".$old['h']."' and i='".$old['i']."' and j='".$old['j']."' ";
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			$aqry
 		));
 		if($err=='' && $get['cnt']>0 ) $err = 'Data Tidak Bisa Dihapus, Sudah ada di Pengadaan!';
@@ -570,7 +570,7 @@ class DkpbObj extends DaftarObj2{
 		//$harga = str_replace(".","",$_REQUEST['harga']);		
 		$jml_harga = str_replace(".","",$jml_barang*$kuantitas*$harga);
 		//-- get old 
-		$old = mysql_fetch_array( mysql_query(
+		$old = sqlArray( sqlQuery(
 			"select * from $this->TblName where id='$id' "		
 		));
 			
@@ -588,7 +588,7 @@ class DkpbObj extends DaftarObj2{
 				" and c='".$old['c']."' and d='".$old['d']."' and e='".$old['e']."'  and e1='".$old['e1']."'".
 				" and f='".$old['f']."' and g='".$old['g']."' and h='".$old['h']."' and i='".$old['i']."' and j='".$old['j']."' "; 
 			$cek .= $aqry;		
-			$pengadaan = mysql_fetch_array(mysql_query( $aqry	));
+			$pengadaan = sqlArray(sqlQuery( $aqry	));
 			if( $pengadaan['cnt'] > 0 ) $err='Gagal Simpan! Data Sudah Ada di Pengadaan!';				
 		}
 		//-- cek jml kebutuhan < jml rencana
@@ -597,7 +597,7 @@ class DkpbObj extends DaftarObj2{
 				" and c='".$old['c']."' and d='".$old['d']."' and e='".$old['e']."'  and e1='".$old['e1']."'".
 				" and f='".$old['f']."' and g='".$old['g']."' and h='".$old['h']."' and i='".$old['i']."' and j='".$old['j']."' "; 
 			$cek .= $aqry;		
-			$rkb = mysql_fetch_array(mysql_query($aqry));
+			$rkb = sqlArray(sqlQuery($aqry));
 			//if( $jml_barang > $rkb['jml_barang']) $err = "Jumlah Barang Kebutuhan Tidak Lebih Besar Dari Rencana!";
 		}
 		
@@ -611,7 +611,7 @@ class DkpbObj extends DaftarObj2{
 				", jns_pelihara='$jns_pelihara', kapitalisasi='$kapitalisasi', uraian='$uraian', ket='$ket'  ".
 				", uid='$UID', tgl_update=now() where id='$id' "	;$cek .=$aqry;
 				
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					

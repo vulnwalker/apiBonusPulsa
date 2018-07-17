@@ -64,40 +64,40 @@ class backupObj  extends DaftarObj2{
 		//$fmST = $_REQUEST[$this->Prefix.'_fmST'];
 		// $idplh = $_REQUEST[$this->Prefix.'_idplh'];
 		$tanggalhariini=date('Y/m/d');
-		$sql=mysql_query("select * from setting WHERE Id='last_ins_backup'");
-		$nilaidata=mysql_fetch_array($sql); //$nilaidata=mysql_fetch_row($sql); 				
+		$sql=sqlQuery("select * from setting WHERE Id='last_ins_backup'");
+		$nilaidata=sqlArray($sql); //$nilaidata=mysql_fetch_row($sql); 				
 		$nilaitanggal=$nilaidata['nilai']; $cek .= ' tgl last_ins_backup='.$nilaitanggal;
 		$tanggalsekarang=strtotime(date('Y/m/d'));
 		$tanggalbackup=strtotime($nilaitanggal);
 		if ($tanggalbackup<$tanggalsekarang){
 			$sql1="Update setting set nilai='$tanggalhariini' WHERE Id='last_ins_backup'"; $cek.=$sql1;
-			mysql_query($sql1);
+			sqlQuery($sql1);
 			
 			//cek apkaah file tidak ada di direktori ------------------------------------------------
 			$query1="select nmfile, jns from $this->TblName WHERE stat='0'";
-		 	$hasil1=mysql_query($query1);
-		 	while ($row=mysql_fetch_array($hasil1)){
+		 	$hasil1=sqlQuery($query1);
+		 	while ($row=sqlArray($hasil1)){
 		 		$cekrow=$row['jns'];
 				if ($cekrow==1){								
 				  	if( file_exists("$ceklist1".$row['nmfile']) ){
 					
 				  	}else{
 						$aqry1="UPDATE $this->TblName set stat='1' where nmfile='".$row['nmfile']."'";
-						$qry=mysql_query($aqry1);
+						$qry=sqlQuery($aqry1);
 				  	}
 				}elseif($cekrow==2){								
 				  	if(file_exists("$ceklist2".$row['nmfile']) ){
 					
 				  	}else{
 						$aqry1="UPDATE $this->TblName set stat='1' where nmfile='".$row['nmfile']."'";
-						$qry=mysql_query($aqry1);
+						$qry=sqlQuery($aqry1);
 				  	}
 				}elseif($cekrow==3){								
 				  	if(file_exists("$ceklist3".$row['nmfile']) ){
 					
 				  	}else{
 						$aqry1="UPDATE $this->TblName set stat='1' where nmfile='".$row['nmfile']."'";
-						$qry=mysql_query($aqry1);
+						$qry=sqlQuery($aqry1);
 				  	}
 				}else{								
 				}
@@ -110,11 +110,11 @@ class backupObj  extends DaftarObj2{
 				 $filemtime[$i]=date('Y/m/d h:i:s', filemtime($list1[$i]));
 				 //cek file tidak ada
 				 $query1 = "SELECT Id AS Id FROM $this->TblName WHERE nmfile='$basename[$i]' and jns='1'"; $cek .= $query1;
-			 	$hasil1 = mysql_query($query1);
-			 	$data1  = mysql_fetch_array($hasil1);
+			 	$hasil1 = sqlQuery($query1);
+			 	$data1  = sqlArray($hasil1);
 				if ($data1 ==''){ //file tidak ada
 				 	$aqry1 = "INSERT into $this->TblName (nmfile,size,tgl,tgl_update,jns) values('$basename[$i]','$filesize[$i]','$filemtime[$i]',now(),'1')"; $cek .= $aqry1;	
-				 	$qry = mysql_query($aqry1);
+				 	$qry = sqlQuery($aqry1);
 				 	if($qry==FALSE) $err="Gagal simpan data".mysql_error();
 				}
 			}									 									 				
@@ -124,11 +124,11 @@ class backupObj  extends DaftarObj2{
 				$filemtime[$i]=date('Y/m/d h:i:s', filemtime($list2[$i]));
 				 //cek file tidak ada
 				$query1 = "SELECT Id AS Id FROM $this->TblName WHERE nmfile='$basename[$i]' and jns='2'"; $cek .= $query1;
-				$hasil1 = mysql_query($query1);
-				$data1  = mysql_fetch_array($hasil1);
+				$hasil1 = sqlQuery($query1);
+				$data1  = sqlArray($hasil1);
 				if ($data1 ==''){
 					$aqry1 = "INSERT into $this->TblName (nmfile,size,tgl,tgl_update,jns) values('$basename[$i]','$filesize[$i]','$filemtime[$i]',now(),'2')"; $cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					if($qry==FALSE) $err="Gagal simpan data".mysql_error();
 				}	
 			}								 
@@ -138,11 +138,11 @@ class backupObj  extends DaftarObj2{
 				$filemtime[$i]=date('Y/m/d h:i:s', filemtime($list3[$i]));
 				//cek file tidak ada
 				$query1 = "SELECT Id AS Id FROM $this->TblName WHERE nmfile='$basename[$i]' and jns='3'"; $cek .= $query1;
-				$hasil1 = mysql_query($query1);
-				$data1  = mysql_fetch_array($hasil1);
+				$hasil1 = sqlQuery($query1);
+				$data1  = sqlArray($hasil1);
 				if ($data1 ==''){
 					$aqry1 = "INSERT into $this->TblName (nmfile,size,tgl,tgl_update,jns) values('$basename[$i]','$filesize[$i]','$filemtime[$i]',now(),'3')"; $cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					if($qry==FALSE) $err="Gagal simpan data".mysql_error();	
 				}
 			}
@@ -161,7 +161,7 @@ class backupObj  extends DaftarObj2{
 		
 		/*for($i=0;$i<sizeof($this->KeyFields);$i++){
 		    $aqry1= "select * from $this->TblName_Hapus where ".$this->KeyFields[$i]."=".$KeyValue[$i]; $cek.=$aqry1;
-			$qry1 = mysql_query($aqry1);
+			$qry1 = sqlQuery($aqry1);
 			$hasil=mysql_fetch_row($qry1);
 			$jns=$hasil[4];
 			$tanggalbackup=$hasil[3];
@@ -181,8 +181,8 @@ class backupObj  extends DaftarObj2{
 		if ($Kondisi !=''){
 			$Kondisi = ' Where '.$Kondisi;
 			$aqry1= "select * from $this->TblName_Hapus $Kondisi "; //$errmsg .= ' qry='. $aqry1;
-			$qry1 = mysql_query($aqry1);
-			$hasil=mysql_fetch_array($qry1);
+			$qry1 = sqlQuery($aqry1);
+			$hasil=sqlArray($qry1);
 			$jns=$hasil['jns'];
 			$tanggalbackup=$hasil['tgl']; //$errmsg .=' tgl'.$tanggalbackup;
 			$tambah = mktime(0,0,0,date("m")-2,date("d"),date("Y"));
@@ -207,7 +207,7 @@ class backupObj  extends DaftarObj2{
 	//Unlink data
 		for($i=0;$i<sizeof($this->KeyFields);$i++){
 	    $aqry1= "select * from $this->TblName_Hapus where ".$this->KeyFields[$i]."=".$KeyValue[$i]; $cek.=$aqry1;
-		$qry1 = mysql_query($aqry1);
+		$qry1 = sqlQuery($aqry1);
 		$hasil=mysql_fetch_row($qry1);
 		$nmfile=$hasil[1];
 			unlink('$ceklist2'.$nmfile);
@@ -222,14 +222,14 @@ class backupObj  extends DaftarObj2{
 			$Kondisi = ' Where '.$Kondisi;
 			
 			//hapus file 
-			$old = mysql_fetch_array(mysql_query("select * from $this->TblName_Hapus $Kondisi"));
+			$old = sqlArray(sqlQuery("select * from $this->TblName_Hapus $Kondisi"));
 			$path = $Main->BACKUP_DIR.'daily/';
 			$unlink =  unlink($path.$old['nmfile']);
 			if ($unlink==FALSE) $err= 'Gagal Hapus File!';			
 			if($err==''){
 				//set stat=1
 				$aqry= "UPDATE $this->TblName_Hapus set stat = '1', uid='$uid', tgl_update='$tanggalsekarang' $Kondisi"; $cek.=$aqry;
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 			}
 		}
 						

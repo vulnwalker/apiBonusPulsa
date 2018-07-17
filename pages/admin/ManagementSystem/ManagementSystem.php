@@ -74,22 +74,22 @@ class ManagementSystemObj  extends DaftarObj2{
 	//	$aq = "SELECT * FROM gambar_upload WHERE sys_id = '$idplh' AND stat = '2'";$cek .=$aq;
 		
 		$aq = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='1'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/system/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='1'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		
 		$upd = "UPDATE gambar_upload SET stat = '0' ,stat2 = '0' , tgl_create = NOW() WHERE jns_upload='1' and id_upload = '$idplh'";$cek .= ' ||'. $upd;
 		
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		
-		$temp1=mysql_fetch_array(mysql_query("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='1'"));
+		$temp1=sqlArray(sqlQuery("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='1'"));
 		
 		$upd3 = "UPDATE system SET nm_fileimages ='".$temp1['Id']."'  WHERE Id_system = '$idplh'";
-		$qryupd3 = mysql_query($upd3);	
+		$qryupd3 = sqlQuery($upd3);	
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
     }	
 	
@@ -120,17 +120,17 @@ class ManagementSystemObj  extends DaftarObj2{
 	   
 	 
 	  
-	  $oldy=mysql_fetch_array(
-	 	mysql_query(
+	  $oldy=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system where no_urut='$nourut'"
 		));
-		$oldy2=mysql_fetch_array(
-	 	mysql_query(
+		$oldy2=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system where kode='$kode'"
 		));
 		
-		$oldy3=mysql_fetch_array(
-	 	mysql_query(
+		$oldy3=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system where kode='$idplh'"
 		));
 		
@@ -151,13 +151,13 @@ class ManagementSystemObj  extends DaftarObj2{
 	 		if($err=='' && $oldy2['cnt']>0) $err="Kode System '$kode' Sudah Ada";
 				if($err==''){
 					$aqry = "INSERT into system (no_urut,kode,nm_system,kel_user_system,status_system,tgl_update,uid,expired_date) values('$nourut','$kode','$nm_system','$kel_user','$status','$tgl_update2','$uid','$expired_date2')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{
 						if($err==''){
 						if($err=='' && $oldy3['cnt']>0) $err="Kode System '$kode' Sudah Ada";
 						$aqry = "UPDATE system set no_urut='$nourut',kode='$kode',nm_system='$nm_system',kel_user_system='$kel_user',status_system='$status',tgl_update='$tgl_update2',expired_date='$expired_date2' where Id_system='".$idplh."'";	$cek .= $aqry;
-								$qry = mysql_query($aqry) or die(mysql_error());
+								$qry = sqlQuery($aqry) or die(mysql_error());
 						}
 			} //end else
 					
@@ -263,10 +263,10 @@ class ManagementSystemObj  extends DaftarObj2{
 		$idplh1 = explode(" ",$ids[$i]);
 		
 	
-$hpssys=mysql_fetch_array(mysql_query("select COUNT(*) as cnt,system.Id_system, system_modul.Id_system from system
+$hpssys=sqlArray(sqlQuery("select COUNT(*) as cnt,system.Id_system, system_modul.Id_system from system
 left join system_modul on system_modul.Id_system=system.Id_system where system_modul.Id_system='".$ids[$i]."'"));
 
-$hpsmnu=mysql_fetch_array(mysql_query("select COUNT(*) as cnt,system.Id_system, system_menu.Id_system from system
+$hpsmnu=sqlArray(sqlQuery("select COUNT(*) as cnt,system.Id_system, system_menu.Id_system from system
 left join system_menu on system_menu.Id_system=system.Id_system where system_menu.Id_system='".$ids[$i]."'"));
 	
 	
@@ -277,15 +277,15 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 		if($err=='' ){
 					
 					$aq1 = "SELECT * FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='1'";$cek .=$aq;
-					$qry1 = mysql_query($aq1);
-					while($del2 = mysql_fetch_array($qry1)){
+					$qry1 = sqlQuery($aq1);
+					while($del2 = sqlArray($qry1)){
 					unlink("Media/system/".$del2['nmfile']);
 						}
 					$hapus1 = "DELETE FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='1'"; $cek .= ' || '.$hapus;
-					$hps1 = mysql_query($hapus1);
+					$hps1 = sqlQuery($hapus1);
 					
 					$qy = "DELETE FROM system WHERE Id_system='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					
 			}else{
 				break;
@@ -343,14 +343,14 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system WHERE Id_system='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$file = "SELECT * FROM gambar_upload WHERE id_upload='$this->form_idplh'LIMIT 0,1";$cek=$qry;
-		$aqfile = mysql_query($file);
-		$qryfile = mysql_fetch_array($aqfile);
+		$aqfile = sqlQuery($file);
+		$qryfile = sqlArray($aqfile);
 		
-		if(mysql_num_rows($aqfile) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile);
+		if(sqlNumRow($aqfile) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile);
 			$dt['idfile'] = $qryfile['Id'];
 			$dt['nmfile'] = $qryfile['nmfile'];
 			$dt['nmfile_asli'] = $qryfile['nmfile_asli'];
@@ -371,7 +371,7 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system WHERE Id_system='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setFormEditdata($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -397,10 +397,10 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 	    //ambil data trefditeruskan
 		$queryKF="SELECT max(no_urut)as nourut FROM system" ;
 	//	$cek.="SELECT max(no_urut)as nourut FROM system";
-		$get=mysql_fetch_array(mysql_query($queryKF));
+		$get=sqlArray(sqlQuery($queryKF));
 		$no_urut=$get['nourut'] + 1;
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		$datauser=1;
 		$dataaktif=1;
 	$tgl_dokumen_bast = date('d-m-Y');		
@@ -486,10 +486,10 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		//$tgl_dokumen_bast=$dt['expired_date'];
 		$tgl_dokumen_bast=TglInd($dt['expired_date']);
-		$nmupload=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`nmfile_asli` FROM `gambar_upload` LEFT JOIN `system` ON `system`.`Id_system` = `gambar_upload`.`id_upload` where Id_system='".$dt['Id_system']."' and jns_upload='1'"));
+		$nmupload=sqlArray(sqlQuery("SELECT `gambar_upload`.`nmfile_asli` FROM `gambar_upload` LEFT JOIN `system` ON `system`.`Id_system` = `gambar_upload`.`id_upload` where Id_system='".$dt['Id_system']."' and jns_upload='1'"));
 		
 	//$tgl_dokumen_bast = date('d-m-Y');		
 	 //items ----------------------
@@ -754,7 +754,7 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 	 	$status='TIDAK AKTIF';
 	 }
 	
-	$img=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`direktori`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system` RIGHT JOIN `gambar_upload` ON `system`.`Id_system` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and Id_system='".$isi['Id_system']."' and `gambar_upload`.`jns_upload` ='1'"));
+	$img=sqlArray(sqlQuery("SELECT `gambar_upload`.`direktori`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system` RIGHT JOIN `gambar_upload` ON `system`.`Id_system` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and Id_system='".$isi['Id_system']."' and `gambar_upload`.`jns_upload` ='1'"));
 	
 	 if($img != ''){
 	 	$file = "<a download='".$img['nmfile_asli']."' href='Media/system/".$img['nmfile']."' title='".$img['nmfile_asli']."'><img width='23px' height='23px' src='images/administrator/images/download_f2.png' /> </a>";
@@ -762,7 +762,7 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 	 	$file='';
 	 }
 	 
-	//$direk=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system` RIGHT JOIN `gambar_upload` ON `system`.`Id_system` = `gambar_upload`.`sys_id` WHERE `gambar_upload`.`stat` = 0 and Id_system='".$isi['Id_system']."'"));
+	//$direk=sqlArray(sqlQuery("SELECT `gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system` RIGHT JOIN `gambar_upload` ON `system`.`Id_system` = `gambar_upload`.`sys_id` WHERE `gambar_upload`.`stat` = 0 and Id_system='".$isi['Id_system']."'"));
 		
  	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
@@ -906,15 +906,15 @@ left join system_menu on system_menu.Id_system=system.Id_system where system_men
 	 $idplh = $_REQUEST[$this->Prefix.'_idplh'];
 	  
 	 	$aq = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='1'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/system/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='1'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd = "UPDATE gambar_upload SET stat = '0' WHERE id_upload = '$idplh' AND stat2 = '0' and jns_upload='1'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		
 	
 					

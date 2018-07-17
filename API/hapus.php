@@ -5,9 +5,9 @@
  	$err="";
 	
  	$query = "select * FROM gambar WHERE Id='$Id' ";	 
-	$hasil = mysql_query($query);
-	$hapus = mysql_fetch_array($hasil);
-	if (mysql_num_rows($hasil) > 0) {
+	$hasil = sqlQuery($query);
+	$hapus = sqlArray($hasil);
+	if (sqlNumRow($hasil) > 0) {
 		$response = array();
 			
 			
@@ -18,7 +18,7 @@
 			}					
 			if($err==""){
 				$query1 = "DELETE FROM gambar WHERE Id='$Id' ";	 
-				$hasil1 = mysql_query($query1);
+				$hasil1 = sqlQuery($query1);
 					
 				if($hasil1==FALSE){
 					$response["success"] = "0";

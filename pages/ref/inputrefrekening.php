@@ -40,7 +40,7 @@ if($Act == "Simpan")
 		else
 		{
 			$CekKon = $ArIDREKENING[0].$ArIDREKENING[1].$ArIDREKENING[2].$ArIDREKENING[3].$ArIDREKENING[4];
-			$Cek = mysql_num_rows(mysql_query("select * from ref_rekening where concat(f,g,h,i,j)='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from ref_rekening where concat(f,g,h,i,j)='$CekKon' "));
 			if($Cek && $BARU=="1")
 			{
 				$Info = "<script>alert('Kode $fmKODEREKENING sudah ada, data tidak disimpan');</script>";
@@ -50,11 +50,11 @@ if($Act == "Simpan")
 				//SIMPAN DATA
 				if($BARU=="1")
 				{
-					$Simpan = mysql_query("insert into ref_rekening (k,l,m,n,o,nm_rekening)values('{$ArIDREKENING[0]}','{$ArIDREKENING[1]}','{$ArIDREKENING[2]}','{$ArIDREKENING[3]}','{$ArIDREKENING[4]}','$fmNAMAREKENING')");
+					$Simpan = sqlQuery("insert into ref_rekening (k,l,m,n,o,nm_rekening)values('{$ArIDREKENING[0]}','{$ArIDREKENING[1]}','{$ArIDREKENING[2]}','{$ArIDREKENING[3]}','{$ArIDREKENING[4]}','$fmNAMAREKENING')");
 				}
 				if($BARU=="0")
 				{
-					$Simpan = mysql_query("update ref_rekening set nm_rekening='$fmNAMAREKENING' where concat(k,l,m,n,o)='$CekKon' limit 1");
+					$Simpan = sqlQuery("update ref_rekening set nm_rekening='$fmNAMAREKENING' where concat(k,l,m,n,o)='$CekKon' limit 1");
 				}
 				if($Simpan)
 				{
@@ -75,7 +75,7 @@ if($Act == "Hapus")
 {
 	$fmID = $cidREK[0];
 	$Kondisi = "concat(k,'.',l,'.',m,'.',n,'.',o)='$fmID'";
-	$Hapus = mysql_query("delete from ref_rekening where $Kondisi");
+	$Hapus = sqlQuery("delete from ref_rekening where $Kondisi");
 	if($Hapus)
 	{
 		$Info = "<script>alert('Data sudah dihapus');</script>";
@@ -94,8 +94,8 @@ if($Act == "Edit")
 	{
 		$fmID = $cidREK[0];
 		$Kondisi = "concat(k,'.',l,'.',m,'.',n,'.',o)='$fmID'";
-		$Qry = mysql_query("select * from ref_rekening where $Kondisi limit 1");
-		while($isi=mysql_fetch_array($Qry))
+		$Qry = sqlQuery("select * from ref_rekening where $Kondisi limit 1");
+		while($isi=sqlArray($Qry))
 		{
 			$fmKODEREKENING = $isi['k'].".".$isi['l'].".".$isi['m'].".".$isi['n'].".".$isi['o'];
 			$fmNAMAREKENING = $isi['nm_rekening'];
@@ -148,15 +148,15 @@ $ListKelompok = cmbQuery1("fmBAGIAN",$fmBAGIAN,"select l,nm_rekening from ref_re
 $ListSubKelompok = cmbQuery1("fmKELOMPOK",$fmKELOMPOK,"select m,nm_rekening from ref_rekening where k='$fmAKUN' and l ='$fmBAGIAN' and m != '0' and n='00' and o='00'","onChange=\"adminForm.submit()\"",'Pilih','');
 $ListSubSubKelompok = cmbQuery1("fmOBJEK",$fmOBJEK,"select n,nm_rekening from ref_rekening where k='$fmAKUN' and l ='$fmBAGIAN' and m = '$fmKELOMPOK' and n!='00' and o='00'","onChange=\"adminForm.submit()\"",'Pilih','');
 
-$Qry = mysql_query("select * from ref_rekening where $Kondisi order by k,l,m,n,o");
-$jmlDataREK = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from ref_rekening where $Kondisi order by k,l,m,n,o $LimitHalREK ");
+$Qry = sqlQuery("select * from ref_rekening where $Kondisi order by k,l,m,n,o");
+$jmlDataREK = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from ref_rekening where $Kondisi order by k,l,m,n,o $LimitHalREK ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalREK*1) - 1);
 $cb=0;
 $jmlTampilREK = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilREK++;

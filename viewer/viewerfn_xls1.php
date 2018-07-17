@@ -19,20 +19,20 @@ function getList_RekapByBrg_xls($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT, $n
 	$ListData = "";
 	//$no=0;
 	$cb=0;
-	$QryRefBarang = mysql_query("select ref.f,ref.g,ref.nm_barang from ref_barang as ref 
+	$QryRefBarang = sqlQuery("select ref.f,ref.g,ref.nm_barang from ref_barang as ref 
 						where h='00' order by ref.f,ref.g");
-	$jmlData = mysql_num_rows($QryRefBarang);
+	$jmlData = sqlNumRow($QryRefBarang);
 	$TotalHarga = 0;
 	$totalBrg =0;
 	$no=$noawal;
-	while($isi=mysql_fetch_array($QryRefBarang)){
+	while($isi=sqlArray($QryRefBarang)){
 	
 		$Kondisi1 = "concat(f, g)= '{$isi['f']}{$isi['g']}'";	
 		$sqry = "select sum(jml_barang) as jml_barang,sum(jml_harga) as jml_harga from buku_induk  
 				where $Kondisi1 $Kondisi group by f,g order by f,g";
 		$cek .= '<br> qry FG ='.$sqry;
-		$QryBarang = mysql_query($sqry);
-		$isi1 = mysql_fetch_array($QryBarang);
+		$QryBarang = sqlQuery($sqry);
+		$isi1 = sqlArray($QryBarang);
 		$no++;
 		$clRow = $no % 2 == 0 ?"row1":"row0";
 		$kdBidang = $isi['g'] == "00"?"":$isi['g'];
@@ -40,7 +40,7 @@ function getList_RekapByBrg_xls($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT, $n
 	
 		$sqry2="select sum(jml_barang) as jml_barang, sum(jml_harga) as jml_harga from buku_induk  
 				where f='{$isi['f']}' $Kondisi group by f order by f";
-		$QryBarangAtas = mysql_fetch_array(	mysql_query( $sqry2	));
+		$QryBarangAtas = sqlArray(	sqlQuery( $sqry2	));
 		$cek .= '<br> qry F ='.$sqry2;
 		$jmlBarangAtas = $isi['g'] == "00" ? $QryBarangAtas['jml_barang']:$isi1['jml_barang'];		
 		$jmlBarangAtas = empty($jmlBarangAtas) ? "0" : "".$jmlBarangAtas."";
@@ -106,10 +106,10 @@ function getList_RekapByOPD_xls($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak,
 
 	//$cek = ' <br> SPg = '.$SPg;
 	$sqry = ' select * from '.$tblName; //$cek .= ' sqry= '.$sqry.' '.$LimitHal.'<br>';
-	$qry = mysql_query( $sqry );
-	$jmlData= mysql_num_rows( $qry );
+	$qry = sqlQuery( $sqry );
+	$jmlData= sqlNumRow( $qry );
 
-	$qry = mysql_query($sqry.' '.$LimitHal);
+	$qry = sqlQuery($sqry.' '.$LimitHal);
 	$ListData ='';
 	$no=$noawal;//$Main->PagePerHal * (($HalDefault*1) - 1);
 	//$rekap->totPerHal= array('bi'=>0, 'kiba'=>0, 'kibb'=>0, 'kibc'=>0, 'kibd'=>0, 'kibe'=>0, 'kibf'=>0);
@@ -176,7 +176,7 @@ function getList_RekapByOPD_xls($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak,
 	}
 
 //create list -------------------------------------
-	while ($row=mysql_fetch_array($qry)){
+	while ($row=sqlArray($qry)){
 		$clRow = $no % 2 == 0 ?"row1":"row0";//get css row
 		if ($isCetak){ 	$clRow=''; }
 			
@@ -736,17 +736,17 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '03':{
 			$sqry = "select * from view_buku_induk2 where $Kondisi order by $Urutkan a,b,c,d,e,f,g,h,i,j,noreg";			
 			//echo "qry=$sqry $LimitHal<br> ";
-			$qry = mysql_query($sqry);
-			$jmlData= mysql_num_rows($qry);
-			$qry = mysql_query($sqry.' '.$LimitHal);
+			$qry = sqlQuery($sqry);
+			$jmlData= sqlNumRow($qry);
+			$qry = sqlQuery($sqry.' '.$LimitHal);
 			$no= empty($all)? $Main->PagePerHal * (($HalDefault*1) - 1) : 0; //$cari->cek .=' no='.$no; 
 			$cb=0;
 			$cari->listdata = '';
-			while($isi=mysql_fetch_array($qry)){
+			while($isi=sqlArray($qry)){
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				//$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				//$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 				$no++;
 	
 				$jmlTotalHargaDisplay += $isi['jml_harga'];
@@ -778,16 +778,16 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				}	
 				if($isi['f']=="01"){//KIB A			
 					//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'
-					$QryKIB_A = mysql_query("select * from kib_a  $KondisiKIB limit 0,1");
-					while($isiKIB_A = mysql_fetch_array($QryKIB_A))	{
+					$QryKIB_A = sqlQuery("select * from kib_a  $KondisiKIB limit 0,1");
+					while($isiKIB_A = sqlArray($QryKIB_A))	{
 						$ISI6 = "{$isiKIB_A['sertifikat_no']}";		//$ISI10 = "{$isiKIB_A['luas']}";
 						$ISI15 = "{$isiKIB_B['ket']}";
 					}
 				}
 				if($isi['f']=="02"){//KIB B;			
 					//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'";
-					$QryKIB_B = mysql_query("select * from kib_b  $KondisiKIB limit 0,1");
-					while($isiKIB_B = mysql_fetch_array($QryKIB_B))	{
+					$QryKIB_B = sqlQuery("select * from kib_b  $KondisiKIB limit 0,1");
+					while($isiKIB_B = sqlArray($QryKIB_B))	{
 						$ISI5 = "{$isiKIB_B['merk']}";
 						$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
 						$ISI7 = "{$isiKIB_B['bahan']}";
@@ -796,30 +796,30 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 					}
 				}
 				if($isi['f']=="03"){//KIB C;
-					$QryKIB_C = mysql_query("select * from kib_c  $KondisiKIB limit 0,1");
-					while($isiKIB_C = mysql_fetch_array($QryKIB_C))	{
+					$QryKIB_C = sqlQuery("select * from kib_c  $KondisiKIB limit 0,1");
+					while($isiKIB_C = sqlArray($QryKIB_C))	{
 						$ISI6 = "{$isiKIB_C['dokumen_no']}";
 						$ISI10 = $Main->Bangunan[$isiKIB_C['kondisi_bangunan']-1][1];
 						$ISI15 = "{$isiKIB_C['ket']}";
 					}
 				}
 				if($isi['f']=="04"){//KIB D;
-					$QryKIB_D = mysql_query("select * from kib_d  $KondisiKIB limit 0,1");
-					while($isiKIB_D = mysql_fetch_array($QryKIB_D))	{
+					$QryKIB_D = sqlQuery("select * from kib_d  $KondisiKIB limit 0,1");
+					while($isiKIB_D = sqlArray($QryKIB_D))	{
 						$ISI6 = "{$isiKIB_D['dokumen_no']}";
 						$ISI15 = "{$isiKIB_D['ket']}";
 					}
 				}
 				if($isi['f']=="05"){//KIB E;		
-					$QryKIB_E = mysql_query("select * from kib_e  $KondisiKIB limit 0,1");
-					while($isiKIB_E = mysql_fetch_array($QryKIB_E))	{
+					$QryKIB_E = sqlQuery("select * from kib_e  $KondisiKIB limit 0,1");
+					while($isiKIB_E = sqlArray($QryKIB_E))	{
 						$ISI7 = "{$isiKIB_E['seni_bahan']}";
 						$ISI15 = "{$isiKIB_E['ket']}";
 					}
 				}
 				if($isi['f']=="06"){//KIB F;		
-					$QryKIB_F = mysql_query("select * from kib_f  $KondisiKIB limit 0,1");
-					while($isiKIB_F = mysql_fetch_array($QryKIB_F))	{
+					$QryKIB_F = sqlQuery("select * from kib_f  $KondisiKIB limit 0,1");
+					while($isiKIB_F = sqlArray($QryKIB_F))	{
 						$ISI6 = "{$isiKIB_F['dokumen_no']}";
 						$ISI10 = $Main->Bangunan[$isiKIB_F['bangunan']-1][1];
 						$ISI15 = "{$isiKIB_F['ket']}";
@@ -865,8 +865,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from buku_induk where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from buku_induk where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -891,17 +891,17 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '04':{
 			$sqry = "select * from view_kib_a2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			//echo "qry=$sqry $LimitHalKIB_A<br> ";
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_A = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_A = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_A;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_A);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_A);
 			$no= empty($all)? $Main->PagePerHal * (($HalKIB_A*1) - 1): 0;
 			$cb=0;
 			$jmlTampilKIB_A = 0;
 			$JmlTotalHargaListKIB_A = 0;
 			$ListBarangKIB_A = "";
 			$cari->listdata = '';
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_A++;
 				$JmlTotalHargaListKIB_A += $isi['jml_harga'];
 				$no++;
@@ -909,9 +909,9 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 	
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				//$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				//$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				$tampilKec =  empty($isi['alamat_kec'])? "": "<br>Kec. {$isi['alamat_kec']}";
 				$tampilKel =  empty($isi['alamat_kel'])? "": "<br>Kel. {$isi['alamat_kel']}";	
 				$tampilAlamat = 
@@ -950,8 +950,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 
 
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_a2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_a2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -978,24 +978,24 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '05':{
 			$sqry = "select * from view_kib_b2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_B;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_B = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_B = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_B;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_B);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_B);
 			$no=$Main->PagePerHal * (($HalKIB_B*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_B = 0;
 			$JmlTotalHargaListKIB_B = 0;
 			$ListBarangKIB_B = "";
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_B++;
 				$JmlTotalHargaListKIB_B += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				//$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 				//<A target=_self class='abarang' HREF=\"javascript:getdat2('".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg']."')\" title='Klik untuk lihat detail {$nmBarang['nm_barang']}'>
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
@@ -1025,8 +1025,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_b2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_b2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -1051,25 +1051,25 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '06':{
 			$sqry = "select * from view_kib_c2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";//echo "sqry=$sqry<br>";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_C;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_C = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_C = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_C;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_C);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_C);
 			$no=$Main->PagePerHal * (($HalKIB_C*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_C = 0;
 			$JmlTotalHargaListKIB_C = 0;
 			$ListBarangKIB_C = "";
-			while ($isi = mysql_fetch_array($Qry)) {
+			while ($isi = sqlArray($Qry)) {
 				$jmlTampilKIB_C++;
 				$JmlTotalHargaListKIB_C += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";	
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				//$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				//$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				$tampilKec =  empty($isi['alamat_kec'])? "": "<br>Kec. {$isi['alamat_kec']}";
 				$tampilKel =  empty($isi['alamat_kel'])? "": "<br>Kel. {$isi['alamat_kel']}";	
 				$tampilAlamat = 
@@ -1108,8 +1108,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_c2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_c2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -1134,25 +1134,25 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '07':{
 			$sqry = "select * from view_kib_d2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_D;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_D = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_D = sqlNumRow($Qry);
 			$jmlData =  $jmlDataKIB_D;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_D);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_D);
 			$no=$Main->PagePerHal * (($HalKIB_D*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_D = 0;
 			$JmlTotalHargaListKIB_D = 0;
 			$ListBarangKIB_D = "";
-			while ($isi = mysql_fetch_array($Qry)) {
+			while ($isi = sqlArray($Qry)) {
 				$jmlTampilKIB_D++;
 				$JmlTotalHargaListKIB_D += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				//$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				//$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
 					<tr class='$clRow' id='".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']."' >
@@ -1185,8 +1185,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_d2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_d2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -1211,24 +1211,24 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '08':{
 			$sqry = "select * from view_kib_e2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			//echo "qry= $sqry $LimitHalKIB_E<br>";
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_E = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_E = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_E;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_E);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_E);
 			$no=$Main->PagePerHal * (($HalKIB_E*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_E = 0;
 			$JmlTotalHargaListKIB_B = 0;
 			$ListBarangKIB_E = "";
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_E++;
 				$JmlTotalHargaListKIB_E += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";	
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				//$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 				//<A target=_self class='abarang' HREF=\"javascript:getdat2('".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg']."')\" title='Klik untuk lihat detail {$nmBarang['nm_barang']}'>
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
@@ -1259,8 +1259,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_e2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_e2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -1285,25 +1285,25 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 		case '09':{
 			$sqry = "select * from view_kib_f2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_F;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_F = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_F = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_F;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_F);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_F);
 			$no=$Main->PagePerHal * (($HalKIB_F*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_F = 0;
 			$JmlTotalHargaListKIB_F = 0;
 			$ListBarangKIB_F = "";
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_F++;
 				$JmlTotalHargaListKIB_F += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				//$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				//<A target=_self class='abarang' HREF=\"javascript:getdat2('".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg']."')\" title='Klik untuk lihat detail {$nmBarang['nm_barang']}'>
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
@@ -1335,8 +1335,8 @@ function Viewer_Cari_GetList_XLS($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_f2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_f2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2058,17 +2058,17 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '03':{
 			$sqry = "select * from view_buku_induk2 where $Kondisi order by $Urutkan a,b,c,d,e,f,g,h,i,j,noreg";			
 			//echo "qry=$sqry $LimitHal<br> ";
-			$qry = mysql_query($sqry);
-			$jmlData= mysql_num_rows($qry);
-			$qry = mysql_query($sqry.' '.$LimitHal);
+			$qry = sqlQuery($sqry);
+			$jmlData= sqlNumRow($qry);
+			$qry = sqlQuery($sqry.' '.$LimitHal);
 			$no= empty($all)? $Main->PagePerHal * (($HalDefault*1) - 1) : 0; //$cari->cek .=' no='.$no; 
 			$cb=0;
 			
-			while($isi=mysql_fetch_array($qry)){
+			while($isi=sqlArray($qry)){
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				//$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				//$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 				$no++;
 	
 				$jmlTotalHargaDisplay += $isi['jml_harga'];
@@ -2100,16 +2100,16 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				}	
 				if($isi['f']=="01"){//KIB A			
 					//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'
-					$QryKIB_A = mysql_query("select * from kib_a  $KondisiKIB limit 0,1");
-					while($isiKIB_A = mysql_fetch_array($QryKIB_A))	{
+					$QryKIB_A = sqlQuery("select * from kib_a  $KondisiKIB limit 0,1");
+					while($isiKIB_A = sqlArray($QryKIB_A))	{
 						$ISI6 = "{$isiKIB_A['sertifikat_no']}";		//$ISI10 = "{$isiKIB_A['luas']}";
 						$ISI15 = "{$isiKIB_B['ket']}";
 					}
 				}
 				if($isi['f']=="02"){//KIB B;			
 					//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'";
-					$QryKIB_B = mysql_query("select * from kib_b  $KondisiKIB limit 0,1");
-					while($isiKIB_B = mysql_fetch_array($QryKIB_B))	{
+					$QryKIB_B = sqlQuery("select * from kib_b  $KondisiKIB limit 0,1");
+					while($isiKIB_B = sqlArray($QryKIB_B))	{
 						$ISI5 = "{$isiKIB_B['merk']}";
 						$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
 						$ISI7 = "{$isiKIB_B['bahan']}";
@@ -2118,30 +2118,30 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 					}
 				}
 				if($isi['f']=="03"){//KIB C;
-					$QryKIB_C = mysql_query("select * from kib_c  $KondisiKIB limit 0,1");
-					while($isiKIB_C = mysql_fetch_array($QryKIB_C))	{
+					$QryKIB_C = sqlQuery("select * from kib_c  $KondisiKIB limit 0,1");
+					while($isiKIB_C = sqlArray($QryKIB_C))	{
 						$ISI6 = "{$isiKIB_C['dokumen_no']}";
 						$ISI10 = $Main->Bangunan[$isiKIB_C['kondisi_bangunan']-1][1];
 						$ISI15 = "{$isiKIB_C['ket']}";
 					}
 				}
 				if($isi['f']=="04"){//KIB D;
-					$QryKIB_D = mysql_query("select * from kib_d  $KondisiKIB limit 0,1");
-					while($isiKIB_D = mysql_fetch_array($QryKIB_D))	{
+					$QryKIB_D = sqlQuery("select * from kib_d  $KondisiKIB limit 0,1");
+					while($isiKIB_D = sqlArray($QryKIB_D))	{
 						$ISI6 = "{$isiKIB_D['dokumen_no']}";
 						$ISI15 = "{$isiKIB_D['ket']}";
 					}
 				}
 				if($isi['f']=="05"){//KIB E;		
-					$QryKIB_E = mysql_query("select * from kib_e  $KondisiKIB limit 0,1");
-					while($isiKIB_E = mysql_fetch_array($QryKIB_E))	{
+					$QryKIB_E = sqlQuery("select * from kib_e  $KondisiKIB limit 0,1");
+					while($isiKIB_E = sqlArray($QryKIB_E))	{
 						$ISI7 = "{$isiKIB_E['seni_bahan']}";
 						$ISI15 = "{$isiKIB_E['ket']}";
 					}
 				}
 				if($isi['f']=="06"){//KIB F;		
-					$QryKIB_F = mysql_query("select * from kib_f  $KondisiKIB limit 0,1");
-					while($isiKIB_F = mysql_fetch_array($QryKIB_F))	{
+					$QryKIB_F = sqlQuery("select * from kib_f  $KondisiKIB limit 0,1");
+					while($isiKIB_F = sqlArray($QryKIB_F))	{
 						$ISI6 = "{$isiKIB_F['dokumen_no']}";
 						$ISI10 = $Main->Bangunan[$isiKIB_F['bangunan']-1][1];
 						$ISI15 = "{$isiKIB_F['ket']}";
@@ -2194,8 +2194,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				}
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from buku_induk where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from buku_induk where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2221,17 +2221,17 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '04':{
 			$sqry = "select * from view_kib_a2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			//echo "qry=$sqry $LimitHalKIB_A<br> ";
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_A = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_A = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_A;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_A);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_A);
 			$no= empty($all)? $Main->PagePerHal * (($HalKIB_A*1) - 1): 0;
 			$cb=0;
 			$jmlTampilKIB_A = 0;
 			$JmlTotalHargaListKIB_A = 0;
 			$ListBarangKIB_A = "";
 
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_A++;
 				$JmlTotalHargaListKIB_A += $isi['jml_harga'];
 				$no++;
@@ -2239,9 +2239,9 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 	
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				//$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				//$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				$tampilKec =  empty($isi['alamat_kec'])? "": "<br>Kec. {$isi['alamat_kec']}";
 				$tampilKel =  empty($isi['alamat_kel'])? "": "<br>Kel. {$isi['alamat_kel']}";	
 				$tampilAlamat = 
@@ -2288,8 +2288,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 
 
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_a2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_a2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2316,24 +2316,24 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '05':{
 			$sqry = "select * from view_kib_b2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_B;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_B = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_B = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_B;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_B);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_B);
 			$no=$Main->PagePerHal * (($HalKIB_B*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_B = 0;
 			$JmlTotalHargaListKIB_B = 0;
 			$ListBarangKIB_B = "";
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_B++;
 				$JmlTotalHargaListKIB_B += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				//$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 				//<A target=_self class='abarang' HREF=\"javascript:getdat2('".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg']."')\" title='Klik untuk lihat detail {$nmBarang['nm_barang']}'>
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
@@ -2371,8 +2371,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_b2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_b2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2397,25 +2397,25 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '06':{
 			$sqry = "select * from view_kib_c2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";//echo "sqry=$sqry<br>";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_C;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_C = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_C = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_C;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_C);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_C);
 			$no=$Main->PagePerHal * (($HalKIB_C*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_C = 0;
 			$JmlTotalHargaListKIB_C = 0;
 			$ListBarangKIB_C = "";
-			while ($isi = mysql_fetch_array($Qry)) {
+			while ($isi = sqlArray($Qry)) {
 				$jmlTampilKIB_C++;
 				$JmlTotalHargaListKIB_C += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";	
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				//$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				//$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				$tampilKec =  empty($isi['alamat_kec'])? "": "<br>Kec. {$isi['alamat_kec']}";
 				$tampilKel =  empty($isi['alamat_kel'])? "": "<br>Kel. {$isi['alamat_kel']}";	
 				$tampilAlamat = 
@@ -2462,8 +2462,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_c2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_c2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2488,25 +2488,25 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '07':{
 			$sqry = "select * from view_kib_d2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_D;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_D = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_D = sqlNumRow($Qry);
 			$jmlData =  $jmlDataKIB_D;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_D);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_D);
 			$no=$Main->PagePerHal * (($HalKIB_D*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_D = 0;
 			$JmlTotalHargaListKIB_D = 0;
 			$ListBarangKIB_D = "";
-			while ($isi = mysql_fetch_array($Qry)) {
+			while ($isi = sqlArray($Qry)) {
 				$jmlTampilKIB_D++;
 				$JmlTotalHargaListKIB_D += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				$kdKelBarang = $isi['f'].$isi['g']."00";
-				//$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				//$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
 					<tr class='$clRow' id='".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']."' >
@@ -2539,8 +2539,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				$cb++;
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_d2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_d2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2565,24 +2565,24 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '08':{
 			$sqry = "select * from view_kib_e2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			//echo "qry= $sqry $LimitHalKIB_E<br>";
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_E = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_E = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_E;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_E);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_E);
 			$no=$Main->PagePerHal * (($HalKIB_E*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_E = 0;
 			$JmlTotalHargaListKIB_B = 0;
 			$ListBarangKIB_E = "";
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_E++;
 				$JmlTotalHargaListKIB_E += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";	
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				//$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 				//<A target=_self class='abarang' HREF=\"javascript:getdat2('".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg']."')\" title='Klik untuk lihat detail {$nmBarang['nm_barang']}'>
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
@@ -2621,8 +2621,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_e2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_e2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;
@@ -2647,25 +2647,25 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 		case '09':{
 			$sqry = "select * from view_kib_f2 where $Kondisi order by $Urutkan a1,a,b,c,d,e,f,g,h,i,j,noreg ";
 			$cari->cek .= '<br> qry='.$sqry.' '.$LimitHalKIB_F;
-			$Qry = mysql_query($sqry);
-			$jmlDataKIB_F = mysql_num_rows($Qry);
+			$Qry = sqlQuery($sqry);
+			$jmlDataKIB_F = sqlNumRow($Qry);
 			$jmlData = $jmlDataKIB_F;
-			$Qry = mysql_query($sqry."  ".$LimitHalKIB_F);
+			$Qry = sqlQuery($sqry."  ".$LimitHalKIB_F);
 			$no=$Main->PagePerHal * (($HalKIB_F*1) - 1);
 			$cb=0;
 			$jmlTampilKIB_F = 0;
 			$JmlTotalHargaListKIB_F = 0;
 			$ListBarangKIB_F = "";
-			while ($isi = mysql_fetch_array($Qry)){
+			while ($isi = sqlArray($Qry)){
 				$jmlTampilKIB_F++;
 				$JmlTotalHargaListKIB_F += $isi['jml_harga'];
 				$no++;
 				$clRow = $no % 2 == 0 ?"row1":"row0";
 				$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 				//$kdKelBarang = $isi['f'].$isi['g']."00";
-				$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-				//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-				$nmkota = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
+				$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+				//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+				$nmkota = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where a ='".$isi['alamat_a']."' and b='".$isi['alamat_b']."' "));
 				//<A target=_self class='abarang' HREF=\"javascript:getdat2('".$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'] .$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg']."')\" title='Klik untuk lihat detail {$nmBarang['nm_barang']}'>
 				$tampilHarga = !empty($cbxDlmRibu)? number_format($isi['jml_harga']/1000, 2, ',', '.') : number_format($isi['jml_harga'], 2, ',', '.');		
 				$cari->listdata .= "	
@@ -2705,8 +2705,8 @@ function Viewer_Cari_GetList_XLS2($cetak = FALSE){
 				
 			}
 			//-------- cari total harga ---------/
-			$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from view_kib_f2 where $Kondisi ");
-			if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga)){
+			$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from view_kib_f2 where $Kondisi ");
+			if($jmlTotalHarga = sqlArray($jmlTotalHarga)){
 				$jmlTotalHarga = $jmlTotalHarga[0];
 			}else{
 				$jmlTotalHarga=0;

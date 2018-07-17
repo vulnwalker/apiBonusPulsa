@@ -44,9 +44,9 @@ function selKabKota_txt($selectedValue,$txtValue,$id_propinsi,$idmd='1',$prefix=
  
 	//Kota ----------------------------------	
 	$aqry = "select * from ref_kotakec where kd_kota<>'' $KondisiKota and kd_kec='0'  order by nm_wilayah"; $cek .= $aqry;
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmxKotaKab == $isi['kd_kota'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['kd_kota']}'>{$isi['nm_wilayah']}</option>\n";
     }
@@ -94,9 +94,9 @@ function selKecamatan_txt($selectedValue,$txtValue, $id_propinsi,$id_kotakab='0'
 	$Ops = "";
 	if ($fmxKotaKab<>'0'){
 		$aqry = "select * from ref_kotakec where kd_kota='$fmxKotaKab' $KondisiKecamatan order by nm_wilayah"; $cek .= $aqry;
-	    $Qry = mysql_query($aqry);
+	    $Qry = sqlQuery($aqry);
 
-	    while ($isi = mysql_fetch_array($Qry)) {
+	    while ($isi = sqlArray($Qry)) {
 	        $sel = $fmxKecamatan == $isi['kd_kec'] ? "selected" : "";
 	        $Ops .= "<option $sel value='{$isi['kd_kec']}'>{$isi['nm_wilayah']}</option>\n";
 	    }
@@ -155,7 +155,7 @@ function selKabKota_gps($selectedValue,$txtValue,$id_propinsi,$idmd='1',$prefix=
  
 	//Kota ----------------------------------	
 	$aqry = "select * from ref_kotakec where kd_kota<>'' $KondisiKota and kd_kec='0'  order by nm_wilayah"; $cek .= $aqry;
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
 //	$fmxkotakoorgps="";
 //	$fmxkotakoorbid="";	
@@ -165,7 +165,7 @@ function selKabKota_gps($selectedValue,$txtValue,$id_propinsi,$idmd='1',$prefix=
 
 	$fmxkotazoom="<input type='hidden' value='' name='".$prefix."fmxkotazoom' id='".$prefix."fmxkotazoom' >";
 				
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
 //        $sel = $fmxKotaKab == $isi['kd_kota'] ? "selected" : "";
 		if ($fmxKotaKab == $isi['kd_kota']){
 			$sel="selected";
@@ -240,9 +240,9 @@ function selKecamatan_gps($selectedValue,$txtValue, $id_propinsi,$id_kotakab='0'
 
 	if ($fmxKotaKab<>'0'){
 		$aqry = "select * from ref_kotakec where kd_kota='$fmxKotaKab' $KondisiKecamatan order by nm_wilayah"; $cek .= $aqry;
-	    $Qry = mysql_query($aqry);
+	    $Qry = sqlQuery($aqry);
 
-	    while ($isi = mysql_fetch_array($Qry)) {
+	    while ($isi = sqlArray($Qry)) {
 //	        $sel = $fmxKecamatan == $isi['kd_kec'] ? "selected" : "";
 		if ($fmxKecamatan == $isi['kd_kec']){
 			$sel="selected";

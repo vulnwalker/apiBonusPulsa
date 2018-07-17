@@ -67,7 +67,7 @@ class HrgSatPilihObj  extends DaftarObj2{
 		$this->form_idplh =$cbid[0];
 		
 		$aqry = "select * from ref_std_harga where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$this->form_fmST = 1;
 		$fm = $this->setForm($dt);
@@ -187,12 +187,12 @@ class HrgSatPilihObj  extends DaftarObj2{
 				if($err==''){ 
 					$aqry = "INSERT INTO ref_std_harga (f,g,h,i,j,nm_barang,harga,ket,tahun,merk)
 							VALUES ('$f','$g','$h','$i','$j','$nm_barang','$harga','$ket','$tahun','$merk')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					
 				}	
 			}elseif($fmST == 1){
 			
-			$old = mysql_fetch_array(mysql_query("select * from t_kip where Id='".$idplh."' "));
+			$old = sqlArray(sqlQuery("select * from t_kip where Id='".$idplh."' "));
 			$old_idbi=$old['idbi'];
 									
 				if($err==''){
@@ -203,7 +203,7 @@ class HrgSatPilihObj  extends DaftarObj2{
 							 tahun = '$tahun',
 							 merk = '$merk'".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry2;	
-					$qry2 = mysql_query($aqry2);
+					$qry2 = sqlQuery($aqry2);
 					
 				}
 			} //end else
@@ -247,7 +247,7 @@ class HrgSatPilihObj  extends DaftarObj2{
 			case 'getdata':{
 				$id = $_REQUEST['id'];
 				$aqry = "select * from ref_pegawai where id='$id' "; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('nip'=>$get['nip'],'nama'=>$get['nama'],'jabatan'=>$get['jabatan']);
 				break;

@@ -53,14 +53,14 @@ class MasterTypeObj  extends DaftarObj2{
 	 $e = $_REQUEST['e'];
 	 $kode_type = $_REQUEST['kode_type'];
 	 $nama_type = strtoupper($_REQUEST['nama_type']);
-	 $i=mysql_fetch_array(mysql_query("select * from ref_type_persediaan where nama_type = '".$nama_type."'"));	 	 
+	 $i=sqlArray(sqlQuery("select * from ref_type_persediaan where nama_type = '".$nama_type."'"));	 	 
 	 if($i['nama_type']!='') $err="Nama Type sudah ada";
 	 	 
 			if($fmST == 0){ //input ref_type_persediaan
 				if($err==''){ 
 					$aqry1 = "INSERT into ref_type_persediaan (i,nama_type)
 					"."values('$kode_type','$nama_type')";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					$content->no=2;							
 					$content->kode_type=mysql_insert_id();
 					$content->type=$nama_type;							
@@ -70,7 +70,7 @@ class MasterTypeObj  extends DaftarObj2{
 					$aqry2 = "UPDATE ref_type_persediaan
 		        	 set "." nama_type = '$nama_type'".
 					 "WHERE i='".$idplh."'";	$cek .= $aqry2;
-					$qry = mysql_query($aqry2);
+					$qry = sqlQuery($aqry2);
 					}
 			}else{
 			if($err==''){ 
@@ -172,7 +172,7 @@ class MasterTypeObj  extends DaftarObj2{
 		//get data 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select v1_kunjungan.*, concat(c,d) as cd from v1_kunjungan where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['readonly']='';
 		$fm = $this->setForm($dt);
 		
@@ -197,7 +197,7 @@ class MasterTypeObj  extends DaftarObj2{
 		$j=$kode[4]; 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_type_persediaan where i='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);

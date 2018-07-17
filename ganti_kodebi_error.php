@@ -6,10 +6,10 @@ echo 'Ganti  Kode BI e=00 dan e1=00 jadi e=01 dan e1=01 <br>';
 $sqry = "select * from buku_induk 
  where e='00' or e1='00'  
  order by a1,a,b,c,d,e,e1,f,g,h,i,j,thn_perolehan,noreg";
-$qry=mysql_query($sqry);
+$qry=sqlQuery($sqry);
 $no = 0;
 echo $sqry."<br>";
-while ($isi = mysql_fetch_array($qry)){
+while ($isi = sqlArray($qry)){
 $no++;
 echo "<b>$no</b><br>";
 $cekdata=cek_kib($isi);
@@ -91,8 +91,8 @@ $updkib="update $tablename set ".
 		"e1='".$newisi['e1']."' ".$xnoreg.
 		" where ".$kondisikib;
 			
-// $qry1=mysql_query($updbi);
-// $qry2=mysql_query($updkib);
+// $qry1=sqlQuery($updbi);
+// $qry2=sqlQuery($updkib);
 
 echo $updbi."<br>";
 echo $updkib."<br>";
@@ -132,12 +132,12 @@ function cek_bi_kib_new ($isi){
 
 	$sql="select * from buku_induk where $kondisi ";
 	
-	$jmlData= mysql_num_rows(mysql_query($sql));
+	$jmlData= sqlNumRow(sqlQuery($sql));
 /*
 	if ($jmlData>0) 
 	{
 		$sql1="select max(noreg) as maxnoreg from buku_induk where $kondisix ";
-		$qry = mysql_fetch_array(mysql_query($sql1));
+		$qry = sqlArray(sqlQuery($sql1));
 		$x=$qry['maxnoreg']+1;
 		echo $qry['maxnoreg']." - $x -- ".$sql1."<br>";
 	}
@@ -163,7 +163,7 @@ function   	update_bi_kib_newnoreg($isi,$newisi){
 
 
 		$sql1="select max(noreg) as maxnoreg from buku_induk where $kondisix ";
-		$qry = mysql_fetch_array(mysql_query($sql1));
+		$qry = sqlArray(sqlQuery($sql1));
 		$x=$qry['maxnoreg']+1;
 		$xnew=$x+10000;
 		$xxnew=substr($xnew, -4);
@@ -212,7 +212,7 @@ function cek_kib($isi){
 		$jml=0;
 		$idbi=0;
 
-	$qry = mysql_fetch_array(mysql_query($xqry));
+	$qry = sqlArray(sqlQuery($xqry));
 	if ($qry['id']!=''){
 		if ($isi['id']==$qry['idbi']){
 		$jml=1;

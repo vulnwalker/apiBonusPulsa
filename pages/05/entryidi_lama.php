@@ -206,8 +206,8 @@ $penggunabi  = cekPOST('penggunabi');
 //Proses EDIT ----------------------------------------------------------------------------
 if($Act=="Edit"){			
 	$sqry = "select * from buku_induk where id='$fmIDLama'"; //$cek .= '<br> qry edit= '.$sqry;
-	$Qry = mysql_query($sqry);
-	$isi = mysql_fetch_array($Qry);
+	$Qry = sqlQuery($sqry);
+	$isi = sqlArray($Qry);
 	//echo "status = ".$isi['status_barang'];
 	if ($isi['status_barang'] != 3){
 		

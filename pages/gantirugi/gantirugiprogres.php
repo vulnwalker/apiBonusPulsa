@@ -158,15 +158,15 @@ class gantirugiprogresObj  extends DaftarObj2{
 		$cek =$cbid[0];			
 		$this->form_idplh = $cbid[0];
 		$KeyValue = explode(' ',$cbid);
-		//$cekdata=mysql_fetch_array(mysql_query("select * from v_gantirugi_bayar where ref_idgantirugi='".$this->form_idplh."'"));
-		$cekdata=mysql_fetch_array(mysql_query("select * from v_gantirugi where id='".$this->form_idplh."'"));
+		//$cekdata=sqlArray(sqlQuery("select * from v_gantirugi_bayar where ref_idgantirugi='".$this->form_idplh."'"));
+		$cekdata=sqlArray(sqlQuery("select * from v_gantirugi where id='".$this->form_idplh."'"));
 		if($cekdata['sisa']!=0 ){
 			$err="Tidak bisa dihapus, Pembayaran belum Lunas!";
 		}
 		$cek.='sisa='.$cekdata['sisa'];
 		if($err==''){
 		$aqry= "Update gantirugi set stat='2', uid='$uid', tgl_update='$tgl' where id='".$this->form_idplh."'"; $cek.=$aqry;
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		if ($qry==FALSE){
 			$err = 'Gagal Hapus Data '.mysql_error();
 		}
@@ -260,8 +260,8 @@ class gantirugiprogresObj  extends DaftarObj2{
 		$this->form_idplh = $cbid[0];
 		$this->form_fmST = 2;
 		$aqry = "select * from ".$this->TblName." where id='".$this->form_idplh."'"; $cek.=$aqry;
-		$qry=mysql_query($aqry);
-		$dt=mysql_fetch_array($qry);
+		$qry=sqlQuery($aqry);
+		$dt=sqlArray($qry);
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -273,8 +273,8 @@ class gantirugiprogresObj  extends DaftarObj2{
 		$this->form_idplh = $cbid[0];
 		$this->form_fmST = 1;
 		$aqry = "select * from ".$this->TblName." where id='".$this->form_idplh."'"; $cek.=$aqry;
-		$qry=mysql_query($aqry);
-		$dt=mysql_fetch_array($qry);
+		$qry=sqlQuery($aqry);
+		$dt=sqlArray($qry);
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -449,10 +449,10 @@ class gantirugiprogresObj  extends DaftarObj2{
 	function setKolomData($no, $isi, $Mode, $CheckBox){
 	 global $Ref;
 	 global $Main;
-	  	$dt1=mysql_fetch_array(mysql_query("select * from kib_b where idbi='".$isi['id_bukuinduk']."'"));
-	  $dtbi=mysql_fetch_array(mysql_query("select * from buku_induk where id='".$isi['id_bukuinduk']."'"));
-	  $dtTGR=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$isi['id']."'"));
-	  $dt2=mysql_fetch_array(mysql_query("select * from ref_barang where f='".$dtTGR['f']."' 
+	  	$dt1=sqlArray(sqlQuery("select * from kib_b where idbi='".$isi['id_bukuinduk']."'"));
+	  $dtbi=sqlArray(sqlQuery("select * from buku_induk where id='".$isi['id_bukuinduk']."'"));
+	  $dtTGR=sqlArray(sqlQuery("select * from gantirugi where id='".$isi['id']."'"));
+	  $dt2=sqlArray(sqlQuery("select * from ref_barang where f='".$dtTGR['f']."' 
 		        and g='".$dtTGR['g']."' and h='".$dtTGR['h']."' and i='".$dtTGR['i']."' and j='".$dtTGR['j']."'"));
 	  $harga_perolehan = number_format($isi['harga_perolehan'], 2, ',' , '.');
 	  $harga_ketetapan = number_format($isi['harga_sk'], 2, ',' , '.');

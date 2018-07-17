@@ -404,7 +404,7 @@ class SensusTidakTercatatObj extends DaftarObj2{
 				
 		$tampilCheckbox = $cetak ? "":"<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>"; //<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>
 		
-		$brg = mysql_fetch_array(mysql_query(
+		$brg = sqlArray(sqlQuery(
 			"select * from ref_barang where concat(f,g,h,i,j)='".$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j']."'"
 		));
 		$vnmbarang = $brg['nm_barang'];
@@ -469,7 +469,7 @@ class SensusTidakTercatatObj extends DaftarObj2{
 		
 		$vthnperolehan = $isi['thn_perolehan'];
 		$vkondisi = $Main->KondisiBarang[$isi['kondisi']-1][1];
-		$pgw = mysql_fetch_array(mysql_query("select * from ref_pegawai where id='".$isi['ref_idpemegang2']."'"));
+		$pgw = sqlArray(sqlQuery("select * from ref_pegawai where id='".$isi['ref_idpemegang2']."'"));
 		$vPenanggungJawab = $pgw['nip'].'<br>'.$pgw['nama'];
 		$vjml_barang = number_format( $isi['jml_barang'],0, ',', '.');
 		$vjml_harga = number_format( $isi['jml_harga'],2, ',', '.');
@@ -479,9 +479,9 @@ class SensusTidakTercatatObj extends DaftarObj2{
 		$vthnsensus = $isi['tahun_sensus'];
 	 	$vpetugas = $isi['petugas'];
 		
-		$rng = mysql_fetch_array(mysql_query("select * from ref_ruang where id='".$isi['ref_idruang']."'"));
+		$rng = sqlArray(sqlQuery("select * from ref_ruang where id='".$isi['ref_idruang']."'"));
 		$vRuang = $rng['nm_ruang'];
-		$gdg = mysql_fetch_array(mysql_query("select * from ref_ruang where concat(c,d,e,p,q)='".$rng['c'].$rng['d'].$rng['e'].$rng['p']."0000'"));
+		$gdg = sqlArray(sqlQuery("select * from ref_ruang where concat(c,d,e,p,q)='".$rng['c'].$rng['d'].$rng['e'].$rng['p']."0000'"));
 		$vGedung = $gdg['nm_ruang'];
 		
 		$Koloms[] = array('align=right', $no.'.' );
@@ -851,7 +851,7 @@ class SensusTidakTercatatObj extends DaftarObj2{
 		//get data 
 		//$aqry = "select * from ref_ruang where c='$c' and d='$d' and e='$e' and p ='".$kode[0]."' and q='".$kode[1]."' "; $cek.=$aqry;
 		$aqry = "select * from barang_tidak_tercatat where id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$fm = $this->setForm($dt);
@@ -882,13 +882,13 @@ class SensusTidakTercatatObj extends DaftarObj2{
 		}
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
 
-		$get = mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get = sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."'  "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."'  "));
 		$subunit = $get['nm_skpd'];				
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];				
 		$fmIDBARANG = $dt['f']==''? '':  $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'] ;//'01.01.01.02.01';
 		$bersertifikat = $dt['bersertifikat'];
@@ -908,10 +908,10 @@ class SensusTidakTercatatObj extends DaftarObj2{
 			case '05': $fmkibevisible = "style='display:block'"; break;
 		}
 		//ambil pegawai Pengurus Barang
-		$read = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpemegang2']."'"));
-		$select = mysql_fetch_array(mysql_query("SELECT* FROM ref_ruang WHERE id = '".$dt['ref_idruang']."'"));
-		$gdg = mysql_fetch_array(
-			   mysql_query("SELECT* FROM ref_ruang 
+		$read = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpemegang2']."'"));
+		$select = sqlArray(sqlQuery("SELECT* FROM ref_ruang WHERE id = '".$dt['ref_idruang']."'"));
+		$gdg = sqlArray(
+			   sqlQuery("SELECT* FROM ref_ruang 
 							WHERE c = '".$select['c']."' 
 							And d = '".$select['d']."'
 							And e ='".$select['e']."'
@@ -1359,9 +1359,9 @@ class SensusTidakTercatatObj extends DaftarObj2{
 	 $a1=$Main->DEF_KEPEMILIKAN;
 	 $a=$Main->DEF_PROPINSI;
 	 $b=$Main->DEF_WILAYAH;
-    $KEPEMILIKAN = mysql_fetch_array(mysql_query("select nm_pemilik from ref_pemilik where a1='$fmKEPEMILIKAN'"));
+    $KEPEMILIKAN = sqlArray(sqlQuery("select nm_pemilik from ref_pemilik where a1='$fmKEPEMILIKAN'"));
     $KEPEMILIKAN = $KEPEMILIKAN[0];
-    /* $WILAYAH = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where b='$fmWIL' "));
+    /* $WILAYAH = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where b='$fmWIL' "));
       $WILAYAH = $WILAYAH[0]; 
 	if ($Main->DEF_WILAYAH =='00'){
 		$WILAYAH =  '-' ;
@@ -1371,13 +1371,13 @@ class SensusTidakTercatatObj extends DaftarObj2{
 //    $xls = ($xls==TRUE) ? '1':$xls;
 	$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
 	*/	
-    $SKPD = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where d='00' and c='$fmSKPD' "));
+    $SKPD = sqlArray(sqlQuery("select nm_skpd from ref_skpd where d='00' and c='$fmSKPD' "));
     $SKPD = $SKPD[0];
-    $UNIT = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d <> '00' and e = '00' and d='$fmUNIT' "));
+    $UNIT = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d <> '00' and e = '00' and d='$fmUNIT' "));
     $UNIT = $UNIT[0];
-    $SUBUNIT = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e='$fmSUBUNIT' and e1='000'"));
+    $SUBUNIT = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e='$fmSUBUNIT' and e1='000'"));
     $SUBUNIT = $SUBUNIT[0];
-	$SEKSI = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1='$fmSEKSI' and e1<>'00' and e1<>'000' "));
+	$SEKSI = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1='$fmSEKSI' and e1<>'00' and e1<>'000' "));
     $SEKSI = $SEKSI[0];
 	if ($xls!='1'){
 		
@@ -1426,20 +1426,20 @@ class SensusTidakTercatatObj extends DaftarObj2{
 		================================================================
 		  Untuk Data Bidang, OPD,Biro,No usulan,Tgl Usulan
 		
-		//$get =mysql_fetch_array(mysql_query("SELECT* FROM barang_tidak_tercatat WHERE Id ='".$this->form_idplh ."' "));
+		//$get =sqlArray(sqlQuery("SELECT* FROM barang_tidak_tercatat WHERE Id ='".$this->form_idplh ."' "));
 		//$nmopdarr=array();
 		//============================= ambil Bidang ============================================			
-		$bidang = mysql_fetch_array(mysql_query("SELECT * from v_bidang where c='".$c."' "));	
+		$bidang = sqlArray(sqlQuery("SELECT * from v_bidang where c='".$c."' "));	
 		//	if($read['nmbidang']<>'') $nmopdarr[] = $read['nmbidang'];
 		//=======================================================================================
 		
 		//============================== ambil OPD =================================================================
-		$opd = mysql_fetch_array(mysql_query("select * from v_opd where c='".$c."' and d='".$d."' "));	
+		$opd = sqlArray(sqlQuery("select * from v_opd where c='".$c."' and d='".$d."' "));	
 		//	if($read['nmbidang']<>'') $nmopdarr[] = $opd['nmopd'];
 		//==========================================================================================================
 		
 		//================== ambil Biro /UPTD / B ============================================================================================
-		$unit = mysql_fetch_array(mysql_query("select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."' "));		
+		$unit = sqlArray(sqlQuery("select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."' "));		
 		//	if($getAll['nmunit']<>'') $nmopdarr[] = $getAll['nmunit'];		
 		//	   $nmopd = join(' <br/> ', $nmopdarr );
 		//====================================================================================================================================
@@ -1566,17 +1566,17 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
     $JABATANSKPD = "";
     $TITIMANGSA = "Bandung, " . JuyTgl1(date("Y-m-d"));
     if (c == '04') {
-        $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd1 = '1' ");
+        $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd1 = '1' ");
     } else {
-        $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '00' and ttd1 = '1' ");
+        $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '00' and ttd1 = '1' ");
     }
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD1 = $isi['nik'];
         $NAMASKPD1 = $isi['nm_pejabat'];
         $JABATANSKPD1 = $isi['jabatan'];
     }
-    $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
-    while ($isi = mysql_fetch_array($Qry)) {
+    $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD2 = $isi['nik'];
         $NAMASKPD2 = $isi['nm_pejabat'];
         $JABATANSKPD2 = $isi['jabatan'];

@@ -585,7 +585,7 @@ class Ref_LRAObj extends DaftarObj2{
 		$this->form_idplh =$cbid[0];
 		
 		$aqry = "select * from ref_lra where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$this->form_fmST = 1;
 		$fm = $this->setForm($dt);
@@ -627,18 +627,18 @@ class Ref_LRAObj extends DaftarObj2{
 		//items ----------------------
 		$tahun=  $_COOKIE['coThnAnggaran'];
 		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='$c' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='$c' and d='00' "));
 		$skpd = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='$c' and d='$d' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='$c' and d='$d' and e='00' "));
 		$unit = $get['nm_skpd'];
 		if($e != 00){
-			$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='$c' and d='$d' and e='$e' and e1='00'"));
+			$get=sqlArray(sqlQuery("select * from ref_skpd where c='$c' and d='$d' and e='$e' and e1='00'"));
 			$subunit = $get['nm_skpd'];	
 		}else{
 			$subunit = '-';
 		}
 		if($e1 != 000){
-			$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='$c' and d='$d' and e='$e' and e1='$e1' "));
+			$get=sqlArray(sqlQuery("select * from ref_skpd where c='$c' and d='$d' and e='$e' and e1='$e1' "));
 			$seksi = $get['nm_skpd'];
 		}else{
 			$seksi = '-';
@@ -794,7 +794,7 @@ class Ref_LRAObj extends DaftarObj2{
 			if($err==''){ 
 				$aqry = "INSERT INTO ref_lra (c,d,f,g,h,i,j,tahun,triwulan1,triwulan2,triwulan3,triwulan4) VALUES ('$c','$d','$f','$g','$h','$i','$j','$tahun','$tri1','$tri2','$tri3','$tri4')";	
 				$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				
 			}	
 		}elseif($fmST == 1){//update ref_LRA
@@ -813,7 +813,7 @@ class Ref_LRAObj extends DaftarObj2{
 						 triwulan3 = '$tri3',"."
 						 triwulan4 = '$tri4'".
 				 		 "WHERE Id='".$idplh."'";	$cek .= $aqry2;	
-				$qry2 = mysql_query($aqry2);
+				$qry2 = sqlQuery($aqry2);
 				
 			}
 		} //end else
@@ -827,9 +827,9 @@ class Ref_LRAObj extends DaftarObj2{
 		$fmSKPDBidang = cekPOST('fmSKPDBidang');
 	 $aqry="select * from ref_skpd where c!='00' and d='00'  GROUP by c";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDBidang='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['c'] ==  $value ? "selected" : "";
 				if ($nmSKPDBidang=='' ) $nmSKPDBidang =  $value == $Hasil['c'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[c]}'>{$Hasil['c']}. {$Hasil[nm_skpd]}";
@@ -849,9 +849,9 @@ class Ref_LRAObj extends DaftarObj2{
 		setcookie('cofmUNIT',$fmSKPDskpd);
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d!='00' and e='00' GROUP by d";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDskpd='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['d'] ==  $value ? "selected" : "";
 				if ($nmSKPDskpd=='' ) $nmSKPDskpd =  $value == $Hasil['d'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[d]}'>{$Hasil[d]}. {$Hasil[nm_skpd]}";

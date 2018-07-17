@@ -111,14 +111,14 @@ class PanitiaPemeriksaObj  extends DaftarObj2{
 				if($err==''){
 					$aqry = "insert into panitia_pemeriksa (jabatan,nama,nip,dinas,tgl_update,ref_idusulan,uid)"."values('$jabatan','$nama','$nip','$dinas',now(),'$idUsul','$uid')";	
 					$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 					
 			}else{
-				$old = mysql_fetch_array(mysql_query("select * from penghapusan_usul where Id='$idplh'"));
+				$old = sqlArray(sqlQuery("select * from penghapusan_usul where Id='$idplh'"));
 					if( $err=='' ){
 						if($no_usulan!=$old['no_usulan'] ){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"select count(*) as cnt from penghapusan_usul where no_usulan='$no_usulan' "
 							));
 							if($get['cnt']>0 ) $err='No Usulan Sudah Ada!';
@@ -141,7 +141,7 @@ class PanitiaPemeriksaObj  extends DaftarObj2{
 										 tgl_update=now()".							
 								 "where Id='".$Id."' ";	
 								 $cek .= $sql; 
-						$query = mysql_query($sql);
+						$query = sqlQuery($sql);
 					}
 		 }
 				
@@ -171,11 +171,11 @@ class PanitiaPemeriksaObj  extends DaftarObj2{
 			$valuearr[]= "('$idusul','".$ids[$i]."','$sesi', '$uid', now())";
 			//cek id buku induk sudah ada!
 			$aqry = "select count(*) as cnt from penghapusan_usul_det where Id='$idusul' and sesi='$sesi' and id_bukuinduk='".$ids[$i]."' "; $cek.= $aqry;
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				$aqry
 			));
 			if($get['cnt']>0){
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select concat(a1,'.',a,'.',b,'.',c,'.',d,'.',substring(thn_perolehan,3,2),'.', e,'.', e1,'.',f,'.',g,'.',h,'.',i,'.',j,'.',noreg) as barcode from buku_induk where Id='".$ids[$i]."' "
 				));				
 				$err = 'Barang dengan kode '.$bi['barcode'].' sudah ada!';
@@ -188,14 +188,14 @@ class PanitiaPemeriksaObj  extends DaftarObj2{
 		if($err==''){
 			$aqry= "replace into penghapusan_usul_det (Id,id_bukuinduk,sesi, uid, tgl_update) values ".$valuestr; $cek .= $aqry;
 			//$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi; $cek.=$aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if ($qry==FALSE){
 				$err = 'Gagal Simpan Data';
 			}
 			
 			//delete waktu dan sesi lebih dari 3 hari
 			$aqry = "delete  from penghapusan_usul_det where Id=0 and (sesi IS not null and sesi <>'') and tgl_update  < DATE_SUB(CURDATE(), INTERVAL 2 DAY) ;"; $cek .= $aqry;
-			$del = mysql_query($aqry);										
+			$del = sqlQuery($aqry);										
 					
 		}
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -295,7 +295,7 @@ class PanitiaPemeriksaObj  extends DaftarObj2{
 			case 'getdata':{
 				$id = $_REQUEST['id'];
 				$aqry = "select * from ref_pegawai where id='$id' "; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('nip'=>$get['nip'],'nama'=>$get['nama'],'jabatan'=>$get['jabatan']);
 				break;
@@ -365,7 +365,7 @@ class PanitiaPemeriksaObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from panitia_pemeriksa where Id ='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$fm = $this->setForm($dt);

@@ -9,9 +9,9 @@ $Cari = cekPOST("Cari",$Cari2);
 $objID = cekGET("objID","");
 $objNM = cekGET("objNM","");
 
-$Qry = mysql_query("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$Cari'");
+$Qry = sqlQuery("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$Cari'");
 $nm_barang = "";
-if(!mysql_num_rows($Qry))
+if(!sqlNumRow($Qry))
 {
 	if(!empty($Cari))
 	{
@@ -25,7 +25,7 @@ if(!mysql_num_rows($Qry))
 }
 else
 {
-	$isi = mysql_fetch_array($Qry);
+	$isi = sqlArray($Qry);
 	$nm_barang = $isi['nm_barang'];
 }
 echo "

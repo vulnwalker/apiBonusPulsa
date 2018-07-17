@@ -60,32 +60,32 @@ if (!(($fmBIDANG == '' ||$fmBIDANG =='00') && ($fmKELOMPOK == '' ||$fmKELOMPOK =
 
 $sqry = "select * from ref_barang ".$Kondisi." order by f,g,h,i,j limit 0,200 "; //echo"$sqry";
 $cek .= '<br> sqry='.$sqry;
-$Qry = mysql_query($sqry);
+$Qry = sqlQuery($sqry);
 
 //$kondskpd = " and c='$c' and d='$d' and e='$e' and e1='$e1'  ";
-$numRow = mysql_num_rows($Qry);
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
-	//$nmF = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and (j='00' or j='000')"));
-	//$nmG = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and (j='00' or j='000')"));
-	//$nmH = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and (j='00' or j='000')"));
-	//$nmI = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and (j='00' or j='000')"));
+	//$nmF = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and (j='00' or j='000')"));
+	//$nmG = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and (j='00' or j='000')"));
+	//$nmH = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and (j='00' or j='000')"));
+	//$nmI = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and (j='00' or j='000')"));
 	$no++;
 	$Isi1 = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 	$Isi2 = $isi['nm_barang'];
 	
 	/** ditutup heula berat tampil na
 	//cari jumlah barang
-	$jum=mysql_fetch_array(mysql_query("select sum(jml_barang) as jml_barang from buku_induk 
+	$jum=sqlArray(sqlQuery("select sum(jml_barang) as jml_barang from buku_induk 
 										where f='{$isi[f]}' and g='{$isi[g]}' 
 										and h='{$isi[h]}' and i='{$isi[i]}'
 										and j='{$isi[j]}' $kondskpd  "));
 	$Isi3 = $jum['jml_barang']==''?'0':$jum['jml_barang'];
 	**/
 	
-	$tmax = mysql_fetch_array(mysql_query("select max(thn_akun) as thn_akun from ref_jurnal where thn_akun <= '".$HTTP_COOKIE_VARS['coThnAnggaran']."'"));
+	$tmax = sqlArray(sqlQuery("select max(thn_akun) as thn_akun from ref_jurnal where thn_akun <= '".$HTTP_COOKIE_VARS['coThnAnggaran']."'"));
 	$kueri="select * from ref_jurnal 
 			where thn_akun = '".$tmax['thn_akun']."' 
 			and ka='{$isi[m1]}' and kb='{$isi[m2]}' 
@@ -93,8 +93,8 @@ while($isi=mysql_fetch_array($Qry))
 			and ke='{$isi[m5]}' and kf='{$isi[m6]}'"; //echo "$kueri";
 	$isi4 = '';
 	$isi5 = '';
-	$qry2 = mysql_query($kueri);
-	while ($row=mysql_fetch_array($qry2)){
+	$qry2 = sqlQuery($kueri);
+	while ($row=sqlArray($qry2)){
 		$Isi4 = $row['ka'].".".$row['kb'].".".$row['kc'].".".$row['kd'].".".$row['ke'].".".$row['kf'];
 		$Isi5 = $row['nm_account'];	
 	}

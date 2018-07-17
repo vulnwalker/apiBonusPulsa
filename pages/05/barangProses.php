@@ -35,12 +35,12 @@ $labelbarang = "";
 
 if( !(($Act =='')&&($Baru=='')) ) {
 
-$old = mysql_fetch_array(mysql_query("select * from buku_induk where id='$fmID'"));
+$old = sqlArray(sqlQuery("select * from buku_induk where id='$fmID'"));
 if((sudahClosing($tgl_buku,$fmSKPD,$fmUNIT)) || ($old['id']<>$old['idawal']) || ($old['status_aset']=='2' || $old['staset']=='7')){
 	$readonly="readonly";
 }	
 //get jml transaksi
-		$trans = mysql_fetch_array(mysql_query(
+		$trans = sqlArray(sqlQuery(
 			"select count(*) as cnt from t_transaksi where idbi='$fmIDLama' "
 		));
 		$jmltrans = $trans['cnt'];

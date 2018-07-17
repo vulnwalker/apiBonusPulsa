@@ -66,10 +66,10 @@ class MasterHargaObj  extends DaftarObj2{
 	 $autocompleate2 = $_REQUEST['autocomplete2'];
  	 $autocompleate3 = $_REQUEST['autocomplete3'];
  	 $autocompleate4 = $_REQUEST['autocomplete4'];
- 	 $h=mysql_fetch_array(mysql_query("select * from ref_merk_persediaan where h =".$merk.""));
-	 $i=mysql_fetch_array(mysql_query("select * from ref_type_persediaan where i =".$type.""));
-	 $j=mysql_fetch_array(mysql_query("select * from ref_spec_persediaan where j =".$spec.""));
-	 $s=mysql_fetch_array(mysql_query("select * from ref_satuan_persediaan where Id =".$satuan.""));
+ 	 $h=sqlArray(sqlQuery("select * from ref_merk_persediaan where h =".$merk.""));
+	 $i=sqlArray(sqlQuery("select * from ref_type_persediaan where i =".$type.""));
+	 $j=sqlArray(sqlQuery("select * from ref_spec_persediaan where j =".$spec.""));
+	 $s=sqlArray(sqlQuery("select * from ref_satuan_persediaan where Id =".$satuan.""));
 
 			if($fmST == 0){ //input ref_hargabarang_persediaan
 				if( $err=='' && $golongan =='' ) $err= 'Golongan belum diisi';
@@ -87,7 +87,7 @@ class MasterHargaObj  extends DaftarObj2{
 				if($err==''){ 	 	  
 					$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga,satuan)
 					"."values('$golongan','$sub_golongan','$merk','$type','$spec','$tahun_anggaran','$harga','$satuan')";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					if($qry==FALSE) $err="Gagal simpan Data barang";		
 				}
 			}elseif($fmST == 1){ //edit ref_hargabarang_persediaan					
@@ -110,7 +110,7 @@ class MasterHargaObj  extends DaftarObj2{
 					 satuan = '$satuan',
 					 harga = '$harga'".
 					"WHERE concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."' and satuan=$id_satuan and tahun_anggaran=$tahun_anggaran_awal";	$cek .= $aqry2;
-					$qry = mysql_query($aqry2);
+					$qry = sqlQuery($aqry2);
 					if($qry==FALSE) $err="Gagal Edit Data barang";
 				}
 			}else{
@@ -118,12 +118,12 @@ class MasterHargaObj  extends DaftarObj2{
 					$tahun_anggaran_asal=$_REQUEST['tahun_anggaran_asal'];	
 					$tahun_anggaran_tujuan=$_REQUEST['tahun_anggaran_tujuan'];	
 					$query="select * from ref_hargabarang_persediaan where tahun_anggaran=$tahun_anggaran_asal";
-					$qry=mysql_query($query);
-					while($row=mysql_fetch_array($qry))
+					$qry=sqlQuery($query);
+					while($row=sqlArray($qry))
 					{
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga,satuan)
 						"."values('".$row['f']."','".$row['g']."','".$row['h']."','".$row['i']."','".$row['j']."','$tahun_anggaran_tujuan','".$row['harga']."','".$row['satuan']."')";	$cek .= $aqry1;	
-						$qry1 = mysql_query($aqry1);
+						$qry1 = sqlQuery($aqry1);
 					}	
 	 						 
 				}
@@ -189,9 +189,9 @@ class MasterHargaObj  extends DaftarObj2{
 			$golongan = $_REQUEST['golongan'];
 			
 				$query2 = "SELECT * FROM ref_barang_persediaan WHERE f = '".$golongan."' and g!=0"; $cek .= $query2;
-				$hasil2 = mysql_query($query2);
+				$hasil2 = sqlQuery($query2);
 				$golongan = "<option value=''>--Pilih--</option>";
-				while ($dt = mysql_fetch_array($hasil2))
+				while ($dt = sqlArray($hasil2))
 				{
 					$golongan.="<option value='".$dt['g']."'>".$dt['nama_barang']."</option>";
 				}
@@ -272,8 +272,8 @@ class MasterHargaObj  extends DaftarObj2{
 		$sql = "SELECT * from ref_merk_persediaan
 				WHERE
 				 nama_merk like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 				$a_json_row["id"] = $row['h'];
 				$a_json_row["value"] = $row['nama_merk'];//.' '.$row['uraian'];
 				$a_json_row["label"] =  $row['nama_merk'];
@@ -293,8 +293,8 @@ class MasterHargaObj  extends DaftarObj2{
 		$sql = "SELECT * from ref_type_persediaan
 				WHERE
 				 nama_type like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 				$a_json_row["id"] = $row['i'];
 				$a_json_row["value"] = $row['nama_type'];//.' '.$row['uraian'];
 				$a_json_row["label"] =  $row['nama_type'];
@@ -314,8 +314,8 @@ class MasterHargaObj  extends DaftarObj2{
 		$sql = "SELECT * from ref_spec_persediaan
 				WHERE
 				 nama_spec like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 				$a_json_row["id"] = $row['j'];
 				$a_json_row["value"] = $row['nama_spec'];//.' '.$row['uraian'];
 				$a_json_row["label"] =  $row['nama_spec'];
@@ -335,8 +335,8 @@ class MasterHargaObj  extends DaftarObj2{
 		$sql = "SELECT * from ref_satuan_persediaan
 				WHERE
 				 nama_satuan like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 				$a_json_row["id"] = $row['Id'];
 				$a_json_row["value"] = $row['nama_satuan'];//.' '.$row['uraian'];
 				$a_json_row["label"] =  $row['nama_satuan'];
@@ -425,7 +425,7 @@ class MasterHargaObj  extends DaftarObj2{
 				`ref_hargabarang_persediaan`.`j`) = '".$f.$g.$h.$i.$j."' AND
 				`ref_hargabarang_persediaan`.`tahun_anggaran` = $tahun_anggaran AND
 				`ref_hargabarang_persediaan`.`satuan` = $satuan"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g;//.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);
@@ -637,11 +637,11 @@ class MasterHargaObj  extends DaftarObj2{
 	 global $Ref;
 	 global $Main; 
 
-	 $kb=mysql_fetch_array(mysql_query("select * from ref_barang_persediaan where f =".$isi['f']." and g=".$isi['g']."")); //query ref_barang_persediaan
-	 $km=mysql_fetch_array(mysql_query("select * from ref_merk_persediaan where h=".$isi['h']."")); //query ref_merk_persediaan
-	 $kt=mysql_fetch_array(mysql_query("select * from ref_type_persediaan where i=".$isi['i'].""));	 //query ref_type_persediaan
-	 $ks=mysql_fetch_array(mysql_query("select * from ref_spec_persediaan where j=".$isi['j']."")); //query ref_spec_persediaan
-	 $satuan=mysql_fetch_array(mysql_query("select * from ref_satuan_persediaan where Id =".$isi['satuan']."")); //query ref_satuan_persediaan	 	 	 
+	 $kb=sqlArray(sqlQuery("select * from ref_barang_persediaan where f =".$isi['f']." and g=".$isi['g']."")); //query ref_barang_persediaan
+	 $km=sqlArray(sqlQuery("select * from ref_merk_persediaan where h=".$isi['h']."")); //query ref_merk_persediaan
+	 $kt=sqlArray(sqlQuery("select * from ref_type_persediaan where i=".$isi['i'].""));	 //query ref_type_persediaan
+	 $ks=sqlArray(sqlQuery("select * from ref_spec_persediaan where j=".$isi['j']."")); //query ref_spec_persediaan
+	 $satuan=sqlArray(sqlQuery("select * from ref_satuan_persediaan where Id =".$isi['satuan']."")); //query ref_satuan_persediaan	 	 	 
 	 $kode_barang=$kb['f'].'.'.$kb['g'].'.'.$km['h'].'.'.$kt['i'].'.'.$ks['j'];
 	 $Koloms = array();
 	 $Koloms[] = array('align="center" width="20"', $no.'.' );

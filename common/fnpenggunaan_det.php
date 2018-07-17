@@ -93,17 +93,17 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
     $JABATANSKPD = "";
     $TITIMANGSA = "Bandung, " . JuyTgl1(date("Y-m-d"));
     if (c == '04') {
-        $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd1 = '1' ");
+        $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd1 = '1' ");
     } else {
-        $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '00' and ttd1 = '1' ");
+        $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '00' and ttd1 = '1' ");
     }
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD1 = $isi['nik'];
         $NAMASKPD1 = $isi['nm_pejabat'];
         $JABATANSKPD1 = $isi['jabatan'];
     }
-    $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
-    while ($isi = mysql_fetch_array($Qry)) {
+    $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD2 = $isi['nik'];
         $NAMASKPD2 = $isi['nm_pejabat'];
         $JABATANSKPD2 = $isi['jabatan'];
@@ -502,14 +502,14 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 		//$tampilCheckbox = $cetak ? "":"<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>"; //<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>
 		
 		//tampil di kolom ---------------------------------------
-	 	$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$isi['ref_idbi']."'")) ;
-		$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$bi['f'].$bi['g'].$bi['h'].$bi['i'].$bi['j']."'")) ;
+	 	$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$isi['ref_idbi']."'")) ;
+		$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$bi['f'].$bi['g'].$bi['h'].$bi['i'].$bi['j']."'")) ;
 		$kode_barang=$bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j'];
 		//--------------------------------Mendapatkan Isi Merk, alamat, no sertifikat-------------------------//
 		switch($bi['f']){
 			case '01' : { //KIB A
-				$kib=mysql_fetch_array(mysql_query("select * from kib_a where idbi=".$bi['idawal'].""));	
-				$aw=mysql_fetch_array(mysql_query("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
+				$kib=sqlArray(sqlQuery("select * from kib_a where idbi=".$bi['idawal'].""));	
+				$aw=sqlArray(sqlQuery("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
 				$alamat="";
 				$alamat.=ifempty($kib['alamat'],'-');
 				$alamat.=$kib['alamat_kel']!=''?'<br>Kel. '.$kib['alamat_kel']:'';
@@ -523,7 +523,7 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 				break;
 			}
 			case '02' : { //KIB B
-				$kib=mysql_fetch_array(mysql_query("select * from kib_b where idbi=".$bi['idawal'].""));	
+				$kib=sqlArray(sqlQuery("select * from kib_b where idbi=".$bi['idawal'].""));	
 				$merk=ifempty($kib['merk'],'-');
 				if(!empty($kib['sertifikat_no']) && !empty($kib['no_rangka']) && !empty($kib['no_mesin'])){
 					$no_sertifikat=ifempty($kib['sertifikat_no'],'-').' / '.ifempty($bi['no_rangka'],'-').' / '.ifempty($bi['no_mesin'],'-');				
@@ -534,9 +534,9 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 				break;
 			}
 			case '03' : { //KIB C
-				$kib=mysql_fetch_array(mysql_query("select * from kib_c where idbi=".$bi['idawal'].""));	
+				$kib=sqlArray(sqlQuery("select * from kib_c where idbi=".$bi['idawal'].""));	
 				$merk="";
-				$aw=mysql_fetch_array(mysql_query("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
+				$aw=sqlArray(sqlQuery("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
 				$alamat="";
 				$alamat.=ifempty($kib['alamat'],'-');
 				$alamat.=$kib['alamat_kel']!=''?'<br>Kel. '.$kib['alamat_kel']:'';
@@ -549,9 +549,9 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 				break;
 			}
 			case '04' : { //KIB D
-				$kib=mysql_fetch_array(mysql_query("select * from kib_d where idbi=".$bi['idawal'].""));	
+				$kib=sqlArray(sqlQuery("select * from kib_d where idbi=".$bi['idawal'].""));	
 				$merk="";
-				$aw=mysql_fetch_array(mysql_query("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
+				$aw=sqlArray(sqlQuery("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
 				$alamat="";
 				$alamat.=ifempty($kib['alamat'],'-');
 				$alamat.=$kib['alamat_kel']!=''?'<br>Kel. '.$kib['alamat_kel']:'';
@@ -563,9 +563,9 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 				break;
 			}
 			case '05' : { //KIB E
-				$kib=mysql_fetch_array(mysql_query("select * from kib_e where idbi=".$bi['idawal'].""));	
+				$kib=sqlArray(sqlQuery("select * from kib_e where idbi=".$bi['idawal'].""));	
 				$merk="";
-				$aw=mysql_fetch_array(mysql_query("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
+				$aw=sqlArray(sqlQuery("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
 				$alamat="";
 				$alamat.=ifempty($kib['alamat'],'-');
 				$alamat.=$kib['alamat_kel']!=''?'<br>Kel. '.$kib['alamat_kel']:'';
@@ -578,9 +578,9 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 				break;
 			}
 			case '06' : { //KIB F
-				$kib=mysql_fetch_array(mysql_query("select * from kib_f where idbi=".$bi['idawal'].""));	
+				$kib=sqlArray(sqlQuery("select * from kib_f where idbi=".$bi['idawal'].""));	
 				$merk="";
-				$aw=mysql_fetch_array(mysql_query("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
+				$aw=sqlArray(sqlQuery("select * from ref_wilayah where a='".$kib['alamat_a']."' and b='".$kib['alamat_b']."'"));
 				$alamat="";
 				$alamat.=ifempty($kib['alamat'],'-');
 				$alamat.=$kib['alamat_kel']!=''?'<br>Kel. '.$kib['alamat_kel']:'';
@@ -633,8 +633,8 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 		$ptgs= $_REQUEST['ptgs'];
 		$ptgs2= $_REQUEST['ptgs_tahui'];
 		$tgl_ind=TglInd($tgl);
-		$qry1=mysql_fetch_array(mysql_query("SELECT nama FROM ref_petugas WHERE Id='$ptgs' and jns='1'"));
-		$qry2=mysql_fetch_array(mysql_query("SELECT nama FROM ref_petugas WHERE Id='$ptgs2' and jns='1'"));
+		$qry1=sqlArray(sqlQuery("SELECT nama FROM ref_petugas WHERE Id='$ptgs' and jns='1'"));
+		$qry2=sqlArray(sqlQuery("SELECT nama FROM ref_petugas WHERE Id='$ptgs2' and jns='1'"));
 		$totalhari=cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); 
 	if($xls){
 			header("Content-type: application/msexcel");
@@ -908,11 +908,11 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 		
 		
@@ -998,11 +998,11 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 		
 		

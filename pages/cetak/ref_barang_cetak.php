@@ -26,13 +26,13 @@ $head='';
 }
 
 
-$Qry = mysql_query("select * from ref_barang  order by f,g,h,i,j ");
+$Qry = sqlQuery("select * from ref_barang  order by f,g,h,i,j ");
 $ListData = "";
 $no=0;
 $cb=0;
 $jmlTampilBRG = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilBRG++;

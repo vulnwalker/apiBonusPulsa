@@ -91,24 +91,24 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 			for($j=0;$j<5;$j++){
 	//urutan kode skpd 	
 		if($j==0){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_kapitalisasi where f!='00' and g ='00' and h ='00' and i ='00' and j ='000' Order By f DESC limit 1"));
+			$ck=sqlArray(sqlQuery("Select * from ref_kapitalisasi where f!='00' and g ='00' and h ='00' and i ='00' and j ='000' Order By f DESC limit 1"));
 			if($kode1=='00') {$err= 'Format Kode salah';}
 			elseif($kode1>sprintf("%02s",$ck['f']+1)){ $err= 'Format Kode berurutan';}
 				
 		}elseif($j==1){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_kapitalisasi where f='".$kode1."' and g !='00' and h ='00' and i ='00' and j ='000' Order By g DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_kapitalisasi where f='".$kode1."' and g !='00' and h ='00' and i ='00' and j ='000' Order By g DESC limit 1"));	
 			if ($kode2>sprintf("%02s",$ck['g']+1)) {$err= 'Format Kode bidang Harus berurutan';}		
 			
 		}elseif($j==2){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_kapitalisasi where f='".$kode1."' and g ='".$kode2."' and h !='00' and i ='00' and j ='000' Order By h DESC limit 1"));			
+			$ck=sqlArray(sqlQuery("Select * from ref_kapitalisasi where f='".$kode1."' and g ='".$kode2."' and h !='00' and i ='00' and j ='000' Order By h DESC limit 1"));			
 			if ($kode3>sprintf("%02s",$ck['h']+1)) {$err= 'Format Kode kelompok Harus berurutan';}		
 				
 		}elseif($j==3){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_kapitalisasi where f='".$kode1."' and g ='".$kode2."' and h ='".$kode3."' and i!='00' and j='000' Order By i DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_kapitalisasi where f='".$kode1."' and g ='".$kode2."' and h ='".$kode3."' and i!='00' and j='000' Order By i DESC limit 1"));	
 			if ($kode4>sprintf("%02s",$ck['i']+1)) {$err= 'Format Kode sub kelompok Harus berurutan';}
 		
 		}elseif($j==4){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_kapitalisasi where f='".$kode1."' and g ='".$kode2."' and h ='".$kode3."' and i ='".$kode4."' and j!='000' Order By j DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_kapitalisasi where f='".$kode1."' and g ='".$kode2."' and h ='".$kode3."' and i ='".$kode4."' and j!='000' Order By j DESC limit 1"));	
 			if ($kode5>sprintf("%02s",$ck['j']+1)) {$err= 'Format Kode Sub sub kelompok Harus berurutan';}
 				
 				
@@ -118,16 +118,16 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 			
 			
 			if($fmST == 0){
-			$ck1=mysql_fetch_array(mysql_query("Select * from ref_kapitalisasi where f='$kode1' and g ='$kode2' and h ='$kode3' and i='$kode4' and j='$kode5'"));
+			$ck1=sqlArray(sqlQuery("Select * from ref_kapitalisasi where f='$kode1' and g ='$kode2' and h ='$kode3' and i='$kode4' and j='$kode5'"));
 			if ($ck1>=1)$err= 'Gagal Simpan kode barang sudah ada di tahun yang sama'.mysql_error();
 				if($err==''){
 					$aqry = "INSERT into ref_kapitalisasi (f,g,h,i,j,nm_barang,min_kapital,tahun) values('$kode1','$kode2','$kode3','$kode4','$kode5','$nama_barang','$min_kapital','$tahun')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_kapitalisasi SET min_kapital='$min_kapital', tahun='$tahun' WHERE f='$kode1' and g='$kode2' and h='$kode3' and i='$kode4' and j='$kode5'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 			
 					}
 			
@@ -239,7 +239,7 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 			$dt['kode_barang']=$fmBIDANG.'.'.$fmKELOMPOK.'.'.$fmSUBKELOMPOK.'.'.$fmSUBSUBKELOMPOK.'.'.'000';
 		}	
 		
-		$ck=mysql_fetch_array(mysql_query("select * from Ref_skpd2 where concat(f,'.',g,'.',h,'.',i,'.',j)='".$dt['kode_barang']."' order by persen1 desc limit 0,1"));
+		$ck=sqlArray(sqlQuery("select * from Ref_skpd2 where concat(f,'.',g,'.',h,'.',i,'.',j)='".$dt['kode_barang']."' order by persen1 desc limit 0,1"));
 		if($ck['Id'] != ''){
 			$dt['persen1'] = $ck['persen2'];
 			$dt['readonly'] = 'readonly';
@@ -289,7 +289,7 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 		$this->form_fmST = 1;
 		//query ambil data ref_tambah_manfaat
 		$aqry = "select * from Ref_skpd2 where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'];
 		$dt['readonly'] = '';
 		$fm = $this->setForm($dt);
@@ -308,7 +308,7 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_kapitalisasi WHERE f='$f' and g='$g' and h='$h' and i='$i' and j='$j' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -336,7 +336,7 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 		$queryKB = "SELECT f,nama_barang FROM ref_barang_persediaan where f !=0 and g=0";
 		
 		//query nm_barang
-		$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$dt['kode_barang']."'"));
+		$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$dt['kode_barang']."'"));
 		
 		$dt['persen1'] = $dt['persen1'] == '' ?0: $dt['persen1'];
 		$dt['persen2'] = $dt['persen2'] == '' ?0: $dt['persen2'];
@@ -357,7 +357,7 @@ class ref_kapitalisasiObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		$kode1=genNumber($dt['f'],2);
 		$kode2=genNumber($dt['g'],2);
 		$kode3=genNumber($dt['h'],2);

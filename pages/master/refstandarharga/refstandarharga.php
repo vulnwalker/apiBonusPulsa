@@ -92,7 +92,7 @@ class refstandarhargaObj  extends DaftarObj2{
 							  'tgl_update'=>$tgl_update[2]."-".$tgl_update[1]."-".$tgl_update[0],
 							  'user'=>$user
 							  );
-				 mysql_query(VulnWalkerInsert("ref_std_harga",$data));
+				 sqlQuery(VulnWalkerInsert("ref_std_harga",$data));
 				 $cek .=VulnWalkerInsert("ref_std_harga",$data);
 			
 			}else{						
@@ -102,7 +102,7 @@ class refstandarhargaObj  extends DaftarObj2{
 								  'tgl_update'=>$tgl_update[2]."-".$tgl_update[1]."-".$tgl_update[0],
 								  'user'=>$user
 								  );
-					 mysql_query(VulnWalkerUpdate("ref_std_harga",$data,"concat(f,'.',g,'.',h,'.',i,'.',j) = '$kodeBarang'"));
+					 sqlQuery(VulnWalkerUpdate("ref_std_harga",$data,"concat(f,'.',g,'.',h,'.',i,'.',j) = '$kodeBarang'"));
 					 $cek .=VulnWalkerInsert("ref_std_harga",$data);
 			
 			  }
@@ -209,7 +209,7 @@ class refstandarhargaObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_std_harga WHERE  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -229,7 +229,7 @@ class refstandarhargaObj  extends DaftarObj2{
 	  }else{
 		$this->form_caption = 'Edit';	
 		$kodeBarang =$dt['f'].".".$dt['g'].".".$dt['h'].".".$dt['i'].".".$dt['j'];
-		$getNamaBarang =  mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$kodeBarang' "));
+		$getNamaBarang =  sqlArray(sqlQuery("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$kodeBarang' "));
 		$namaBarang = $getNamaBarang['nm_barang'];
 		$satuan = $getNamaBarang['satuan'];	
 		$spesifikasi = $dt['spesifikasi'];
@@ -241,7 +241,7 @@ class refstandarhargaObj  extends DaftarObj2{
 		$now = date("d-m-Y");
 		$user = $_COOKIE['coID'];
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
        //items ----------------------
 		 $this->form_fields = array(
@@ -347,7 +347,7 @@ class refstandarhargaObj  extends DaftarObj2{
 	 $i=$isi['i'];
 	 $j=$isi['j'];
 	 $kodeBarang = $f."-".$g."-".$h."-".$i."-".$j;
-	 $arrayGetNamabarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,'-',g,'-',h,'-',i,'-',j) = '$kodeBarang' "));
+	 $arrayGetNamabarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,'-',g,'-',h,'-',i,'-',j) = '$kodeBarang' "));
 	 $Koloms[] = array('align="left"',$arrayGetNamabarang['nm_barang']);
 	 $Koloms[] = array('align="left"',$arrayGetNamabarang['satuan']);
 	 $Koloms[] = array('align="left"',$isi['spesifikasi']);

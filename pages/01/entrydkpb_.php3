@@ -35,7 +35,7 @@ if($Act=="Simpan")
 			//Simpan Baru
 			$Qry = "insert into rkb (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,merk_barang,jml_barang,harga,satuan,jml_harga,ket,tahun)
 			values ('{$Main->Provinsi[0]}','$fmWIL','$fmSKPD','$fmUNIT','$fmSUBUNIT','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','{$ArRekening[0]}','{$ArRekening[1]}','{$ArRekening[2]}','{$ArRekening[3]}','{$ArRekening[4]}','$fmMEREK','$fmJUMLAH','$fmHARGASATUAN','$fmSATUAN','$JmlHARGA','$fmKET','$fmTAHUNANGGARAN')";
-			$Simpan = mysql_query($Qry);
+			$Simpan = sqlQuery($Qry);
 		}
 		if($Baru=="0")
 		{
@@ -44,7 +44,7 @@ if($Act=="Simpan")
 			update rkb set 
 				k = '{$ArRekening[0]}',l = '{$ArRekening[1]}',m = '{$ArRekening[2]}',n = '{$ArRekening[3]}',o = '{$ArRekening[4]}',	merk_barang='$fmMEREK',jml_barang='$fmJUMLAH',harga='$fmHARGASATUAN',satuan='$fmSATUAN',jml_harga='$JmlHARGA',ket='$fmKET'
 			where $Kriteria ";
-			$Simpan = mysql_query($Qry);
+			$Simpan = sqlQuery($Qry);
 		}
 		if($Simpan)
 		{
@@ -67,9 +67,9 @@ if($Act=="Simpan")
 
 
 
-$Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+$Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmWIL == $isi['b'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
@@ -77,9 +77,9 @@ while($isi=mysql_fetch_array($Qry))
 $ListKab = "<select name='fmWIL'  onChange=\"adminForm.submit()\"><option value=''>--- Pilih Kabupaten/Kota ---</option>$Ops</select>";
 
 //SKPD
-$Qry = mysql_query("select * from ref_skpd where d='00' order by nm_skpd");
+$Qry = sqlQuery("select * from ref_skpd where d='00' order by nm_skpd");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmSKPD == $isi['c'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
@@ -87,9 +87,9 @@ while($isi=mysql_fetch_array($Qry))
 $ListSKPD = "<select name='fmSKPD' onChange=\"adminForm.submit()\"><option value=''>--- Pilih SKPD ---</option>$Ops</select>";
 
 //UNIT
-$Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' order by nm_skpd");
+$Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' order by nm_skpd");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmUNIT == $isi['d'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
@@ -98,9 +98,9 @@ $ListUNIT = "<select name='fmUNIT' onChange=\"adminForm.submit()\"><option value
 
 
 //Sub UNIT
-$Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' order by nm_skpd");
+$Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' order by nm_skpd");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmSUBUNIT == $isi['e'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";

@@ -143,8 +143,8 @@ class UserProfilObj  extends DaftarObj2{
 		
 		//--- get data user
 		$aqry = "select * from admin where uid ='$uid' ";
-		$qry = mysql_query($aqry);
-		while($isi=mysql_fetch_array($qry)){
+		$qry = sqlQuery($aqry);
+		while($isi=sqlArray($qry)){
 			$nama = $isi['nama'];
 			$level = $isi['level'];
 			$group = $isi['group'];
@@ -161,13 +161,13 @@ class UserProfilObj  extends DaftarObj2{
 			$e= $arrgrp[2];			
 			$e1= $arrgrp[3];			
 			
-			$get = mysql_fetch_array(mysql_query( "select * from v_bidang where c='".$c."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_bidang where c='".$c."' " ));		
 			if($get['nmbidang']<>'') $fmSKPD = $get['nmbidang'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
+			$get = sqlArray(sqlQuery( "select * from v_opd where c='".$c."' and d='".$d."' " ));		
 			if($get['nmopd']<>'') $fmUNIT = $get['nmopd'];
-			$get = mysql_fetch_array(mysql_query( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
+			$get = sqlArray(sqlQuery( "select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"	));		
 			if($get['nmunit']<>'') $fmSUBUNIT = $get['nmunit'];			
-			$get = mysql_fetch_array(mysql_query( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
+			$get = sqlArray(sqlQuery( "select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' " 	));		
 			if($get['nm_skpd']<>'') $fmSEKSI = $get['nm_skpd'];				
 			
 			
@@ -393,8 +393,8 @@ class UserProfilObj  extends DaftarObj2{
 			  from admin
 			  WHERE uid = '".$HTTP_COOKIE_VARS['coID']."'
 				";
-	 $rs = mysql_query($qy);
-	 while($row = mysql_fetch_array($rs))
+	 $rs = sqlQuery($qy);
+	 while($row = sqlArray($rs))
 	 {
 	 	$pass = $row['password'];
 	 }
@@ -408,7 +408,7 @@ class UserProfilObj  extends DaftarObj2{
 			  set nama = '".$nama."'
 			  WHERE uid = '".$HTTP_COOKIE_VARS['coID']."'
 			  "; $cek .= $query;
-	$result = mysql_query($query);
+	$result = sqlQuery($query);
 	//$cek .=$query;
 	$content= $nama; 
 	}
@@ -435,8 +435,8 @@ function update_pass()
 			  from admin
 			  WHERE uid = '".$HTTP_COOKIE_VARS['coID']."'
 				";
-	 $rst = mysql_query($qry);
-	 while($row = mysql_fetch_array($rst)){
+	 $rst = sqlQuery($qry);
+	 while($row = sqlArray($rst)){
 	 	$pass = $row['password'];
 	 }
 	 //cek password Lama dengan Pass di DB
@@ -451,7 +451,7 @@ function update_pass()
 			  set password = md5('".$passBaru."')
 			  WHERE uid = '".$HTTP_COOKIE_VARS['coID']."'
 			  ";
-	$result = mysql_query($query);
+	$result = sqlQuery($query);
 	$cek .=$query;
 	$content= $passBaru; 
 	}
@@ -470,7 +470,7 @@ function update_pass()
 				set photo = '".$fname."'
 			  		WHERE uid = '".$HTTP_COOKIE_VARS['coID']."'
 			  	";
-			$result = mysql_query($query);
+			$result = sqlQuery($query);
 			$cek .=$query;
 			$content= $passBaru; 
 		}

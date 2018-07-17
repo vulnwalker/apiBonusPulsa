@@ -89,10 +89,10 @@ class popupJadwalObj  extends DaftarObj2{
 			}elseif(empty($jenis_anggaran)){
 				$err = "Pilih jenis anggaran";
 			}else{
-				mysql_query("delete from ref_tahap_anggaran where tahun = '$tahun' and anggaran = '$jenis_anggaran'");
-				$getData = mysql_query("select * from ref_jadwal where status_aktif = 'AKTIF' order by id ");
+				sqlQuery("delete from ref_tahap_anggaran where tahun = '$tahun' and anggaran = '$jenis_anggaran'");
+				$getData = sqlQuery("select * from ref_jadwal where status_aktif = 'AKTIF' order by id ");
 				$nomorUrut = 1 ;
-				while($rows = mysql_fetch_array($getData)){
+				while($rows = sqlArray($getData)){
 					foreach ($rows as $key => $value) { 
 		 		 		$$key = $value; 
 	 				}
@@ -112,7 +112,7 @@ class popupJadwalObj  extends DaftarObj2{
 					$query = VulnWalkerInsert('ref_tahap_anggaran',$data);
 					$content .= $query;
 					$nomorUrut = $nomorUrut + 1;
-					mysql_query($query);			  
+					sqlQuery($query);			  
 				}
 			}
 			
@@ -147,21 +147,21 @@ class popupJadwalObj  extends DaftarObj2{
 			}elseif(empty($statusAktif)){
 				$err = "Pilih status aktif";
 			}else{
-				mysql_query($query);
+				sqlQuery($query);
 			}
 		break;
 	   }
 	   	case 'newRow':{
-			$getMaxNoUrut = mysql_fetch_array(mysql_query("select max(no_urut) from ref_jadwal"));
+			$getMaxNoUrut = sqlArray(sqlQuery("select max(no_urut) from ref_jadwal"));
 			$no_urut = $getMaxNoUrut['max(no_urut)'];
-			mysql_query("insert into ref_jadwal (nama_tahap) values ('')");
+			sqlQuery("insert into ref_jadwal (nama_tahap) values ('')");
 		break;
 	   }
 	   	case 'cekDataAda':{
 			foreach ($_REQUEST as $key => $value) { 
 		 		 		$$key = $value; 
 	 				}
-			if(mysql_num_rows(mysql_query("select * from ref_tahap_anggaran where tahun ='$tahun' and anggaran ='$jenis_anggaran'")) > 0){
+			if(sqlNumRow(sqlQuery("select * from ref_tahap_anggaran where tahun ='$tahun' and anggaran ='$jenis_anggaran'")) > 0){
 				$status = 'ya';
 			}else{
 				$status = 'tidak';
@@ -174,7 +174,7 @@ class popupJadwalObj  extends DaftarObj2{
 	   case 'modulChanged':{
 		 	$id = $_REQUEST['id'];
 			$namaModul = $_REQUEST['namaModul'];
-			$getModul = mysql_fetch_array(mysql_query("select * from ref_modul where id_modul ='$namaModul'"));
+			$getModul = sqlArray(sqlQuery("select * from ref_modul where id_modul ='$namaModul'"));
 			if($getModul['nama_modul'] == 'RKBMD'){
 					$arrayJenisForm = array(array('PENYUSUNAN' , 'PENYUSUNAN'),
 					  	    				array('VALIDASI' , 'VALIDASI'),
@@ -192,12 +192,12 @@ class popupJadwalObj  extends DaftarObj2{
 	   }
 	   	case 'remove':{
 			$id =  $_REQUEST['id'];
-			mysql_query("delete from ref_jadwal where id='$id'");
+			sqlQuery("delete from ref_jadwal where id='$id'");
 		break;
 	   }
 	    	case 'cancel':{
 			$id =  $_REQUEST['id'];
-			mysql_query("delete from ref_jadwal where nama_tahap =''");
+			sqlQuery("delete from ref_jadwal where nama_tahap =''");
 		break;
 	   }
 	   
@@ -205,7 +205,7 @@ class popupJadwalObj  extends DaftarObj2{
 			foreach ($_REQUEST as $key => $value) { 
 		 		 		$$key = $value; 
 	 				}
-			$getIdModul = mysql_fetch_array(mysql_query("select * from  ref_modul where nama_modul ='$namaModul'"));
+			$getIdModul = sqlArray(sqlQuery("select * from  ref_modul where nama_modul ='$namaModul'"));
 			
 			$codeAndNameModul = "select id_modul, nama_modul from ref_modul";
 			$cmbModul = cmbQuery('namaModul'.$id, $getIdModul['id_modul'], $codeAndNameModul," onchange=$this->Prefix.modulChanged('$id'); ",'-- MODUL --');
@@ -345,7 +345,7 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	 $Koloms[] = array('align="center"', $no.'.' );
 	 if(!empty($nama_tahap)){
 	 	 $Koloms[] = array('align="left"',"<span id='spanNamaTahap$id'>". $nama_tahap ."</span>" );
-	 	$getNamaModul = mysql_fetch_array(mysql_query("select * from ref_modul where id_modul  = '$id_modul'"));
+	 	$getNamaModul = sqlArray(sqlQuery("select * from ref_modul where id_modul  = '$id_modul'"));
 		 $nama_modul = $getNamaModul['nama_modul'];
 	 	$Koloms[] = array('align="left"',"<span id='spanNamaModul$id'>". $nama_modul ."</span>" );
 		 $Koloms[] = array('align="left"',"<span id='spanJenisFormModul$id'>". $jenis_form_modul ."</span>" );
@@ -357,7 +357,7 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 			 <img id='delete$id' src='images/administrator/images/invalid.png' width='20px' heigh='20px' style='cursor : pointer;' onclick=$this->Prefix.remove('$id');>";
 			 $Koloms[] = array('align="center"',"<span id='action$id'>".$aksi."</span>" );
 	 }else{
-	 	$getIdModul = mysql_fetch_array(mysql_query("select * from  ref_modul where nama_modul ='$namaModul'"));
+	 	$getIdModul = sqlArray(sqlQuery("select * from  ref_modul where nama_modul ='$namaModul'"));
 			
 			$codeAndNameModul = "select id_modul, nama_modul from ref_modul";
 			$cmbModul = cmbQuery('namaModul'.$id, $getIdModul['id_modul'], $codeAndNameModul," onchange=$this->Prefix.modulChanged('$id'); ",'-- MODUL --');

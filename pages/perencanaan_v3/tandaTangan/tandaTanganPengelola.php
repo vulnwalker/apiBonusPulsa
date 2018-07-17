@@ -109,7 +109,7 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 								  'nip' => $nip
 								 
 								);
-					mysql_query(VulnWalkerInsert($this->TblName,$data));
+					sqlQuery(VulnWalkerInsert($this->TblName,$data));
 					$cek = VulnWalkerInsert($this->TblName,$data);
 				}
 			}else{						
@@ -120,7 +120,7 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 								  'nip' => $nip
 								 
 								);
-					mysql_query(VulnWalkerUpdate($this->TblName,$data, "id = '$idplh'"));
+					sqlQuery(VulnWalkerUpdate($this->TblName,$data, "id = '$idplh'"));
 			
 					}
 			
@@ -165,7 +165,7 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 			$idpangkat = $_REQUEST['pangkatakhir'];
 			
 			$query = "select concat(gol,'/',ruang)as nama FROM ref_pangkat WHERE nama='$idpangkat'" ;
-			$get=mysql_fetch_array(mysql_query($query));$cek.=$query;
+			$get=sqlArray(sqlQuery($query));$cek.=$query;
 			$content=$get['nama'];											
 			break;
 		}
@@ -242,7 +242,7 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  $this->TblName WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -275,7 +275,7 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 			);
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		$kode1=genNumber($dt['c'],2);
 		$kode2=genNumber($dt['d'],2);
 		$kode3=genNumber($dt['e'],2);
@@ -296,32 +296,32 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 		$e1 = $dt['e1'];
 		
 		$qry4 = "SELECT * FROM ref_skpd WHERE c1='$c1' AND c='00' AND d='00' AND e='00' AND e1='000'";//$cek.=$qry;
-		$aqry4 = mysql_query($qry4);
-		$queryc1 = mysql_fetch_array($aqry4);
+		$aqry4 = sqlQuery($qry4);
+		$queryc1 = sqlArray($aqry4);
 		
 		$qry = "SELECT * FROM ref_skpd WHERE c1='$c1' AND c='$c' AND d='00' AND e='00' AND e1='000'";//$cek.=$qry;
-		$aqry = mysql_query($qry);
-		$queryc = mysql_fetch_array($aqry);
+		$aqry = sqlQuery($qry);
+		$queryc = sqlArray($aqry);
 	//	$cek.=$data;
 		
 		$qry1 = "SELECT * FROM ref_skpd WHERE c1='$c1' AND c='$c' AND d='$d' AND e='00' AND e1='000'";//$cek.=$qry1;
-		$aqry1 = mysql_query($qry1);
-		$queryd = mysql_fetch_array($aqry1);
+		$aqry1 = sqlQuery($qry1);
+		$queryd = sqlArray($aqry1);
 		
 		$qry2 = "SELECT * FROM ref_skpd WHERE c1='$c1' AND c='$c' AND d='$d' AND e='$e' AND e1='000'";//$cek.=$qry2;
-		$aqry2 = mysql_query($qry2);
-		$querye = mysql_fetch_array($aqry2);
+		$aqry2 = sqlQuery($qry2);
+		$querye = sqlArray($aqry2);
 		
 		$qry3 = "SELECT * FROM ref_skpd WHERE c1='$c1' AND c='$c' AND d='$d' AND e='$e' AND e1='$e1'";$cek.=$qry3;
-		$aqry3 = mysql_query($qry3);
-		$querye1 = mysql_fetch_array($aqry3);
+		$aqry3 = sqlQuery($qry3);
+		$querye1 = sqlArray($aqry3);
 		
 		
 		
 	
 		$queryPangkat="select nama,concat(nama,' (',gol,'/',ruang,')')as nama from ref_pangkat order by gol,ruang";
 		$queryPangkat2="select pangkat,concat(pangkat,' (',gol,'/',ruang,')')as nama from tandaTanganPengelolaBarang_v3 where pangkat='".$dt['pangkat']."' and gol='".$dt['gol']."' and ruang='".$dt['ruang']."'";
-	//	$queryPangkat2=mysql_fetch_array(mysql_query("select pangkat,concat(pangkat,' (',gol,'/',ruang,')')as nama from tandaTanganPengelolaBarang_v3 where pangkat='".$dt['pangkat']."' and gol='".$dt['gol']."' and ruang='".$dt['ruang']."'"));
+	//	$queryPangkat2=sqlArray(sqlQuery("select pangkat,concat(pangkat,' (',gol,'/',ruang,')')as nama from tandaTanganPengelolaBarang_v3 where pangkat='".$dt['pangkat']."' and gol='".$dt['gol']."' and ruang='".$dt['ruang']."'"));
 		$cek.="select pangkat,concat(pangkat,' (',gol,'/',ruang,')')as nama from tandaTanganPengelolaBarang_v3 where pangkat='".$dt['pangkat']."' and gol='".$dt['gol']."' and ruang='".$dt['ruang']."'";
        //items ----------------------
 		 
@@ -405,7 +405,7 @@ class tandaTanganPengelolaBarang_v3Obj  extends DaftarObj2{
 	$e1=$isi['e1'];
 	
 	
-	 $skpd=mysql_fetch_array(mysql_query(" select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d='$d'  "));
+	 $skpd=sqlArray(sqlQuery(" select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d='$d'  "));
 	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
 	 if ($Mode == 1) $Koloms[] = array(" align='center' ", $TampilCheckBox);

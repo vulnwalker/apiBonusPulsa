@@ -60,7 +60,7 @@ class ManagementSystem2Obj  extends DaftarObj2{
 		
 		case 'getdata':{
 				$Id = $_REQUEST['id'];
-				$get = mysql_fetch_array( mysql_query("select * from system where Id_system='$Id'"));
+				$get = sqlArray( sqlQuery("select * from system where Id_system='$Id'"));
 				
 				$content = array('id' => $get['Id_system'], 'kode' => $get['kode'], 'nm_system' => $get['nm_system']);
 							

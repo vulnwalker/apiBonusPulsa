@@ -387,7 +387,7 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 
 		//kdBarang & $nmBarang
 		$kdBarang = $isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
-		$brg=mysql_fetch_array(mysql_query("SELECT `nm_barang` FROM `ref_barang` WHERE concat(f,g,h,i,j) = '".$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j']."'"));
+		$brg=sqlArray(sqlQuery("SELECT `nm_barang` FROM `ref_barang` WHERE concat(f,g,h,i,j) = '".$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j']."'"));
 		$nmBarang = $brg['nm_barang'];
 		
 		switch($isi['jns_aset']){
@@ -455,11 +455,11 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 				$ids = $_REQUEST['cidBI'];//735477
 		
 				//if($err=='' && $ids[0] == '') $err = 'Barang belum dipilih!';
-				$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$ids[0]."'")) ;
+				$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$ids[0]."'")) ;
 				$kdbrg = $bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j'];
 				$kd_barang = str_replace('.','',$kdbrg);
 				$jml_harga = number_format($bi['jml_harga'], 2, ',', '.');
-				$br = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j) = '$kd_barang'"));
+				$br = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j) = '$kd_barang'"));
 				$content = array('idbi'=>$bi['id'],
 								 'idbi_awal'=>$bi['idawal'],
 								 'a1'=>$bi['a1'],
@@ -534,10 +534,10 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 		$dt['e'] = $_REQUEST[$this->Prefix.'SkpdfmSUBUNIT'];
 		$dt['e1'] = $_REQUEST[$this->Prefix.'SkpdfmSEKSI'];*/
 		$aqry = "select * from t_rekon_koreksi where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kd_barang'] = $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'];
 		
-		$brg=mysql_fetch_array(mysql_query("SELECT `nm_barang` FROM `ref_barang` WHERE concat(f,g,h,i,j) = '".$dt['f'].$dt['g'].$dt['h'].$dt['i'].$dt['j']."'"));
+		$brg=sqlArray(sqlQuery("SELECT `nm_barang` FROM `ref_barang` WHERE concat(f,g,h,i,j) = '".$dt['f'].$dt['g'].$dt['h'].$dt['i'].$dt['j']."'"));
 		$dt['nm_barang'] = $brg['nm_barang'];
 		
 		$this->form_fmST = 1;
@@ -673,13 +673,13 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 		}
 		
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];
 		
 		$arrJnsAset = array(
@@ -887,10 +887,10 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 		$ids = $_REQUEST['cidBI'];//735477
 		
 		//if($err=='' && $ids[0] == '') $err = 'Barang belum dipilih!';
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$ids[0]."'")) ;
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$ids[0]."'")) ;
 		$kdbrg = $bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j'];
 		$kd_barang = str_replace('.','',$kdbrg);
-		$br = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j) = '$kd_barang'"));
+		$br = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j) = '$kd_barang'"));
 		$content = array('id_bukuinduk'=>$bi['id'],
 						 'kd_barang'=>$kdbrg,
 						 'nm_barang'=>$br['nm_barang'],
@@ -958,12 +958,12 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 				if($err==''){ 
 					$aqry = "INSERT INTO t_rekon_koreksi (tahun,uraian,idbi,a1,a,b,c,d,e,e1,f,g,h,i,j,noreg,thn_perolehan,hrg_perolehan,hrg_wajar,tgl_update,uid,idawal,debet,kredit,jns_nilai,jns_aset,jns_koreksi)
 							VALUES ('$thn_anggaran','$uraian','$idbi','$a1','$a','$b','$c','$d','$e','$e1','$f','$g','$h','$i','$j','$noreg','$thn_perolehan','$harga','$hrg_wajar',now(),'$uid','$idbi_awal','$debet','$kredit','$jns_nilai','$jns_aset','')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					
 				}	
 			}elseif($fmST == 1){
 			
-			/*$old = mysql_fetch_array(mysql_query("select * from t_kip where Id='".$idplh."' "));
+			/*$old = sqlArray(sqlQuery("select * from t_kip where Id='".$idplh."' "));
 			$old_idbi=$old['idbi'];*/
 									
 				if($err==''){
@@ -995,7 +995,7 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 							 uid = '$uid',
 							 tgl_update = now()".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry2;	
-					$qry2 = mysql_query($aqry2);
+					$qry2 = sqlQuery($aqry2);
 					
 				}
 			} //end else
@@ -1013,15 +1013,15 @@ Direklas ke Aset Ekstra Kompatibel / Nilai dibawah Rp. 250 ribu
 	 $idplh = $cbid[0];
 	 
 	 $kueri = "select * from t_kip where id='$idplh'"; $cek .= $kueri;
-	 $idcek = mysql_fetch_array(mysql_query($kueri));
+	 $idcek = sqlArray(sqlQuery($kueri));
 	 
 	 $query = "select * from t_kip where idbi='".$idcek['idbi']."' order by tgl desc, id desc limit 0,1"; $cek .= $query;
-	 $ck=mysql_fetch_array(mysql_query($query));
+	 $ck=sqlArray(sqlQuery($query));
 	 if($ck['Id']!=$idplh) $err="Hanya data terakhir yang bisa dihapus!";
 
 		if($err==''){ 
 			$aqry = "DELETE FROM t_kip WHERE Id='".$idplh."'";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			//if($qry==FALSE) $err="Gagal Batal Penggunaan";
 		}
 			

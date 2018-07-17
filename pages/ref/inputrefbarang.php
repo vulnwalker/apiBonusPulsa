@@ -45,7 +45,7 @@ if($Act == "Simpan")
 		else
 		{
 			$CekKon = $ArIDBARANG[0].$ArIDBARANG[1].$ArIDBARANG[2].$ArIDBARANG[3].$ArIDBARANG[4];
-			$Cek = mysql_num_rows(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$CekKon' "));
 			if($Cek && $BARU=="1")
 			{
 				$Info = "<script>alert('Kode $fmKODEBARANG sudah ada, data tidak disimpan');</script>";
@@ -55,11 +55,11 @@ if($Act == "Simpan")
 				//SIMPAN DATA
 				if($BARU=="1")
 				{
-					$Simpan = mysql_query("insert into ref_barang (f,g,h,i,j,nm_barang)values('{$ArIDBARANG[0]}','{$ArIDBARANG[1]}','{$ArIDBARANG[2]}','{$ArIDBARANG[3]}','{$ArIDBARANG[4]}','$fmNAMABARANG')");
+					$Simpan = sqlQuery("insert into ref_barang (f,g,h,i,j,nm_barang)values('{$ArIDBARANG[0]}','{$ArIDBARANG[1]}','{$ArIDBARANG[2]}','{$ArIDBARANG[3]}','{$ArIDBARANG[4]}','$fmNAMABARANG')");
 				}
 				if($BARU=="0")
 				{
-					$Simpan = mysql_query("update ref_barang set nm_barang='$fmNAMABARANG' where concat(f,g,h,i,j)='$CekKon' limit 1");
+					$Simpan = sqlQuery("update ref_barang set nm_barang='$fmNAMABARANG' where concat(f,g,h,i,j)='$CekKon' limit 1");
 				}
 				if($Simpan)
 				{
@@ -80,7 +80,7 @@ if($Act == "Hapus")
 {
 	$fmID = $cidBRG[0];
 	$Kondisi = "concat(f,'.',g,'.',h,'.',i,'.',j)='$fmID'";
-	$Hapus = mysql_query("delete from ref_barang where $Kondisi");
+	$Hapus = sqlQuery("delete from ref_barang where $Kondisi");
 	if($Hapus)
 	{
 		$Info = "<script>alert('Data sudah dihapus');</script>";
@@ -99,8 +99,8 @@ if($Act == "Edit")
 	{
 		$fmID = $cidBRG[0];
 		$Kondisi = "concat(f,'.',g,'.',h,'.',i,'.',j)='$fmID'";
-		$Qry = mysql_query("select * from ref_barang where $Kondisi limit 1");
-		while($isi=mysql_fetch_array($Qry))
+		$Qry = sqlQuery("select * from ref_barang where $Kondisi limit 1");
+		while($isi=sqlArray($Qry))
 		{
 			$fmKODEBARANG = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 			$fmNAMABARANG = $isi['nm_barang'];
@@ -180,15 +180,15 @@ $ListKelompok = cmbQuery1("fmKELOMPOK",$fmKELOMPOK,"select g,nm_barang from ref_
 $ListSubKelompok = cmbQuery1("fmSUBKELOMPOK",$fmSUBKELOMPOK,"select h,nm_barang from ref_barang where f='$fmBIDANG' and g ='$fmKELOMPOK' and h != '00' and i='00' and j='$kdSubsubkel0'","onChange=\"adminForm.submit()\"",'Pilih','');
 $ListSubSubKelompok = cmbQuery1("fmSUBSUBKELOMPOK",$fmSUBSUBKELOMPOK,"select i,nm_barang from ref_barang where f='$fmBIDANG' and g ='$fmKELOMPOK' and h = '$fmSUBKELOMPOK' and i!='00' and j='$kdSubsubkel0'","onChange=\"adminForm.submit()\"",'Pilih','');
 
-$Qry = mysql_query("select * from ref_barang where $Kondisi order by f,g,h,i,j");
-$jmlDataBRG = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from ref_barang where $Kondisi order by f,g,h,i,j $LimitHalBRG ");
+$Qry = sqlQuery("select * from ref_barang where $Kondisi order by f,g,h,i,j");
+$jmlDataBRG = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from ref_barang where $Kondisi order by f,g,h,i,j $LimitHalBRG ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalBRG*1) - 1);
 $cb=0;
 $jmlTampilBRG = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilBRG++;

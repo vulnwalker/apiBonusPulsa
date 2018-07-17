@@ -4,10 +4,10 @@ include 'config.php';
 echo "/*<br>";
 echo "CEK KIB A<br>";
 $sqry = "select * from v_cek_kiba_dbl where jml>1 ";
-$qry = mysql_query($sqry);
+$qry = sqlQuery($sqry);
 echo "*/<br>";
 $cnt =0;
-while ($isi = mysql_fetch_array($qry)){
+while ($isi = sqlArray($qry)){
 $cnt++;
 $cntx=0;
 	$kondisi=" and a1='".$isi['a1']."' ".
@@ -33,9 +33,9 @@ $cntx=0;
 	echo "*/<br>";
 	
 	$xqry = "select * from kib_a where a1<>'' $kondisi ";
-	$delqry=mysql_query($xqry);
+	$delqry=sqlQuery($xqry);
 	$old_bi=0;
-	while ($delisi = mysql_fetch_array($delqry)){
+	while ($delisi = sqlArray($delqry)){
 	$cntx++;
  	$kodebrgdel=$cntx.".  ".$delisi['id']."-". $delisi['a1'].".".$delisi['a'].".".$delisi['b'].".".$delisi['c'].".".
 	$delisi['d'].".".$delisi['e'].".".	$delisi['e1'].".".	$delisi['f'].".".$delisi['g'].".".$delisi['h'].".".$delisi['i'].

@@ -117,30 +117,30 @@ class DppbObj extends DaftarObj2{
 		$fmSEKSI = isset($HTTP_COOKIE_VARS['cofmSEKSI'])? $HTTP_COOKIE_VARS['cofmSEKSI']: cekPOST($this->Prefix.'SkpdfmSEKSI');	
 		$nmopdarr=array();		
 		if($fmSKPD == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_bidang where c='".$isi['c']."' "
 			));		
 			if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 		}
 		if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' "
 			));		
 			if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 		}
 		if($fmSUBUNIT == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_unit where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."'"
 			));		
 			if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 		}
 		if($fmSEKSI == '00' || $fmSEKSI == '000'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select nm_skpd as nmseksi from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 			));		
 			if($get['nmseksi']<>'') $nmopdarr[] = $get['nmseksi'];
 		}		
-		/*$barang = mysql_fetch_array(mysql_query(
+		/*$barang = sqlArray(sqlQuery(
 			"select * from ref_barang where concat(f,g,h,i,j)='".$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j']."' "
 		));
 		*/
@@ -228,7 +228,7 @@ class DppbObj extends DaftarObj2{
 		  $fmDESC3 = cekPOST('fmDESC3');
 		  
 		//thn terakhir
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select max(tahun) as maxthn from $this->TblName "
 		));
 		//$fmFiltThnAnggaran = $get['maxthn'];
@@ -324,7 +324,7 @@ class DppbObj extends DaftarObj2{
 			$arrKondisi[] = "tahun='$fmFiltThnAnggaran'";
 		}else{
 			//thn terakhir
-		//$get = mysql_fetch_array(mysql_query(
+		//$get = sqlArray(sqlQuery(
 		//	"select max(tahun) as maxthn from $this->TblName "
 		//));
 		//$fmFiltThnAnggaran = $get['maxthn'];
@@ -382,8 +382,8 @@ class DppbObj extends DaftarObj2{
 	
 	function getJmlDKPB($tahun, $c, $d, $e,$e1, $f,$g,$h,$i,$j){
 		$aqry = "select * from dkpb where tahun='$tahun' and c='$c' and d='$d' and e='$e' and e1='$e1' and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' ";
-		$qry =  mysql_query($aqry);
-		$get =  mysql_fetch_array($qry);
+		$qry =  sqlQuery($aqry);
+		$get =  sqlArray($qry);
 		$hsl=0;
 		if ($qry) $hsl = $get['jml_barang'];
 		return $hsl;
@@ -394,8 +394,8 @@ class DppbObj extends DaftarObj2{
 				"tahun='$tahun'".
 				" and c='$c' and d='$d' and e='$e'  and e1='$e1' ".
 				" and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' $idstr "; $cek.=$aqry;
-		$qry = mysql_query(	$aqry);
-		$get = mysql_fetch_array( $qry);	
+		$qry = sqlQuery(	$aqry);
+		$get = sqlArray( $qry);	
 		$hsl = 0;
 		if($qry) $hsl = $get['tot'];
 		//if($hsl=='')$hsl = 0;
@@ -440,7 +440,7 @@ class DppbObj extends DaftarObj2{
 		*/
 		
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$dt['jmldkb'] = $this->getJmlDKPB($dt['tahun'], $dt['c'], $dt['d'], $dt['e'],$dt['e1'], $dt['f'], $dt['g'], $dt['h'], $dt['i'], $dt['j']);
 		$dt['jmlada'] = $this->getPengadaanSebelumnya($dt['tahun'], $dt['c'], $dt['d'], $dt['e'],$dt['e1'], $dt['f'], $dt['g'], $dt['h'], $dt['i'], $dt['j'], $this->form_idplh);
@@ -449,11 +449,11 @@ class DppbObj extends DaftarObj2{
 		//print_r($cbid);
 		
 		//-- get data pegawai
-		$pgw = mysql_fetch_array(mysql_query("select * from ref_pegawai where nip ='".$dt['nip_pembuat_komitmen']."'"));
+		$pgw = sqlArray(sqlQuery("select * from ref_pegawai where nip ='".$dt['nip_pembuat_komitmen']."'"));
 		$dt['nip_pembuat_komitmen'] = $pgw['nip'];
 		$dt['nama_pembuat_komitmen'] = $pgw['nama'];
 		$dt['jbt_pembuat_komitmen'] = $pgw['jabatan'];
-		$pgw = mysql_fetch_array(mysql_query("select * from ref_pegawai where nip ='".$dt['nip_pejabat_pengadaan']."'"));
+		$pgw = sqlArray(sqlQuery("select * from ref_pegawai where nip ='".$dt['nip_pejabat_pengadaan']."'"));
 		$dt['nip_pejabat_pengadaan'] = $pgw['nip'];
 		$dt['nama_pejabat_pengadaan'] = $pgw['nama'];
 		$dt['jbt_pejabat_pengadaan'] = $pgw['jabatan'];
@@ -487,16 +487,16 @@ class DppbObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];	
-		$dkb = mysql_fetch_array(mysql_query("select * from dkb where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' and f='".$dt['f']."' and g='".$dt['g']."' and h='".$dt['h']."' and i='".$dt['i']."' and j='".$dt['j']."' and tahun='".$dt['tahun']."' "));
+		$dkb = sqlArray(sqlQuery("select * from dkb where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' and f='".$dt['f']."' and g='".$dt['g']."' and h='".$dt['h']."' and i='".$dt['i']."' and j='".$dt['j']."' and tahun='".$dt['tahun']."' "));
 
 				
 		$menu =
@@ -761,7 +761,7 @@ class DppbObj extends DaftarObj2{
 		*/
 		
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//echo sizeof($cbid).' '.$cbid[0] ;
 		//print_r($cbid);
@@ -793,13 +793,13 @@ class DppbObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];			
 		$menu =
 			"<table width='100%' class='menudottedline'>
@@ -983,15 +983,15 @@ class DppbObj extends DaftarObj2{
 		$this->form_fmST = 1;
 		$form_name = $this->Prefix.'_form';
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];				
 		//form -----------------------------
 		//$title = 'DKB';
@@ -1147,7 +1147,7 @@ class DppbObj extends DaftarObj2{
 		$ket = $_REQUEST['fmKET'];	
 		$UID = $HTTP_COOKIE_VARS['coID'];
 		
-		$rkb=mysql_fetch_array(mysql_query(
+		$rkb=sqlArray(sqlQuery(
 			"select * from $this->TblName where id='$idrkb' "
 		));
 		
@@ -1174,10 +1174,10 @@ class DppbObj extends DaftarObj2{
 				"('$merk_barang','$jml_barang','$harga','$satuan','$jml_harga','$ket',".
 				"'$a','$b','$c','$d','$e','$e1','$f','$g','$h','$i','$j','$k','$l','$m','$n','$o','$tahun','$idrkb','$UID',now())"; $cek .= $aqry;
 			
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry){
 				$aqry = "update rkb set stat = 1 where id ='$idrkb'"; $cek .= $aqry;
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 			}else{
 				$err = "Gagal Simpan DKB!";
 			}
@@ -1242,7 +1242,7 @@ class DppbObj extends DaftarObj2{
 		if($err=='' && $satuan == '')$err = "Satuan belum diisi!";
 				
 		//-- get jumlah daftar kebutuhan pemeliharaan
-		$get = mysql_fetch_array( mysql_query(
+		$get = sqlArray( sqlQuery(
 			"select count(*)as cnt, sum(jml_barang) as tot from dkpb where ".
 			"tahun='$tahun'".
 			" and f='$f' and g='$g' and h='$h' and i='$i' and j='$j'"
@@ -1266,7 +1266,7 @@ class DppbObj extends DaftarObj2{
 				$aqry = "select sum(jml_barang) as tot from pengadaan_pemeliharaan where ".
 					"tahun='$tahun'".
 					" and f='$f' and g='$g' and h='$h' and i='$i' and j='$j'";
-				$get = mysql_fetch_array( mysql_query(
+				$get = sqlArray( sqlQuery(
 					$aqry
 				));	
 				$jmlada = $get['tot'];			
@@ -1278,7 +1278,7 @@ class DppbObj extends DaftarObj2{
 			}
 			
 		}else{
-			$old = mysql_fetch_array( mysql_query(
+			$old = sqlArray( sqlQuery(
 				"select * from rkb where id='$id' "
 			));
 			
@@ -1289,7 +1289,7 @@ class DppbObj extends DaftarObj2{
 				$aqry = "select sum(jml_barang) as tot from pengadaan_pemeliharaan where ".
 					"tahun='$tahun'".
 					" and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and id<>'$id'"; $cek.=$aqry;
-				$get = mysql_fetch_array( mysql_query(
+				$get = sqlArray( sqlQuery(
 					$aqry
 				));	
 				$jmlada = $get['tot'];
@@ -1356,7 +1356,7 @@ class DppbObj extends DaftarObj2{
 				
 			}
 			$cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry==FALSE) $err= 'Gagal Simpan Data!';
 		}		
 		
@@ -1366,7 +1366,7 @@ class DppbObj extends DaftarObj2{
 	function Hapus_Validasi($id){
 		$err ='';
 		//$KeyValue = explode(' ',$id);
-		$old = mysql_fetch_array(mysql_query(
+		$old = sqlArray(sqlQuery(
 			"select * from $this->TblName where id ='$id' "
 		));
 		if($err=='' && $old['stat']=='1') $err = 'Data Tidak Bisa Dihapus, RKB sudah DKB!';
@@ -1382,13 +1382,13 @@ class DppbObj extends DaftarObj2{
 			(status_barang<>3 and status_barang<>4 and status_barang<>5) 
 			and c='".$c."' and d='$d' and e='$e' and e1='$e1' 
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' and thn_perolehan<'$tahun'"; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->jmlbi = $isi['cnt'];
 		
 		$aqry = "select jml_barang from rkb_standar where 						
 			c='".$c."' and d='$d' and e='$e' and e1='$e1' 
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' "; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));		
+		$isi = sqlArray(sqlQuery($aqry));		
 		
 		$content->jmlstandar = $isi['jml_barang'];
 		//return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
@@ -1420,13 +1420,13 @@ class DppbObj extends DaftarObj2{
 			(status_barang<>3 and status_barang<>4 and status_barang<>5) 
 			and c='".$c."' and d='$d' and e='$e' 
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' and thn_perolehan<'$tahun'"; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->jmlbi = $isi['cnt'];
 		
 		$aqry = "select jml_barang from rkb_standar where 						
 			c='".$c."' and d='$d' and e='$e' 
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' "; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));		
+		$isi = sqlArray(sqlQuery($aqry));		
 		$content->jmlstandar = $isi['jml_barang'];
 		*/
 		
@@ -1442,7 +1442,7 @@ class DppbObj extends DaftarObj2{
 		$cbid = $_POST[$this->Prefix.'_cb'];
 		$id = $cbid[0];		
 		$aqry = "select * from $this->TblName where id='$id' ";
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->stat = $isi['stat'];
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
 	}	

@@ -530,7 +530,7 @@ class SensusProgresObj extends DaftarObj2{
 		$cekqrysensus .= $aqry1;
 		
 		$cek .= $aqry1;
-		$get = mysql_fetch_array( mysql_query($aqry1) );
+		$get = sqlArray( sqlQuery($aqry1) );
 		$cntsensus = $get['cnt'];
 		
 		if($jnsrekap==1){
@@ -540,7 +540,7 @@ class SensusProgresObj extends DaftarObj2{
 				" (sesi='' or sesi is null) and (error='' or error is null)  ".
 				" tahun_sensus = '$thnsensus' ".
 				")";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $cntsensus += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<'$tglthnsensus' and tambah_aset=1 $KondisiSKPD and f<>'06' and id_bukuinduk in (".
@@ -548,7 +548,7 @@ class SensusProgresObj extends DaftarObj2{
 				" (sesi='' or sesi is null) and (error='' or error is null)".
 				" tahun_sensus = '$thnsensus' ".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $cntsensus += $aman['cnt'];
 		}
 		
@@ -585,10 +585,10 @@ class SensusProgresObj extends DaftarObj2{
 				
 		}
 		$cek .= $aqry;
-		$get = mysql_fetch_array( mysql_query($aqry) );
-		$gethps = mysql_fetch_array( mysql_query($aqryhps) );
-		$getpindah = mysql_fetch_array( mysql_query($aqrypindah) );
-		$getgr = mysql_fetch_array( mysql_query($aqrygr) );
+		$get = sqlArray( sqlQuery($aqry) );
+		$gethps = sqlArray( sqlQuery($aqryhps) );
+		$getpindah = sqlArray( sqlQuery($aqrypindah) );
+		$getgr = sqlArray( sqlQuery($aqrygr) );
 		
 		$cntbi = $get['cnt'] - $gethps['cnt']-$getpindah['cnt']-$getgr['cnt'];
 		$cekbi = $get['cnt'].' - '.$gethps['cnt'].' - '.$getpindah['cnt'].' - '.$getgr['cnt'];
@@ -596,12 +596,12 @@ class SensusProgresObj extends DaftarObj2{
 			$aqry = "select sum(ifnull(biaya_pemeliharaan,0))as cnt from v_pemelihara ".
 				" where tgl_pemeliharaan<'$tglthnsensus' and tambah_aset=1 $KondisiSKPD and f<>'06' ".
 				"";
-			$plh = mysql_fetch_array(mysql_query($aqry));
+			$plh = sqlArray(sqlQuery($aqry));
 			if($plh['cnt']>0) $cntbi += $plh['cnt'] ;			
 			$aqry = "select sum(ifnull(biaya_pengamanan,0))as cnt from v_pengaman ".
 				" where tgl_pengamanan<'$tglthnsensus' and tambah_aset=1 $KondisiSKPD and f<>'06' ".
 				")";
-			$aman = mysql_fetch_array(mysql_query($aqry));
+			$aman = sqlArray(sqlQuery($aqry));
 			if($aman['cnt']>0) $cntbi += $aman['cnt'];
 		}
 		
@@ -684,7 +684,7 @@ class SensusProgresObj extends DaftarObj2{
 					"and bb.f<>'06' and bb.f is not null and aa.ada>0 ".
 					"";	
 			}
-			$get = mysql_fetch_array( mysql_query($aqry1) );
+			$get = sqlArray( sqlQuery($aqry1) );
 			$cntsensus = $get['cnt'];
 			if($jnsrekap==1){
 				$aqry = "select sum(biaya_pemeliharaan)as cnt from v_pemelihara ".
@@ -693,7 +693,7 @@ class SensusProgresObj extends DaftarObj2{
 					" (sesi='' or sesi is null) and (error='' or error is null)  ".
 					" tahun_sensus = '$thnsensus' ".
 					")";
-				$plh = mysql_fetch_array(mysql_query($aqry));
+				$plh = sqlArray(sqlQuery($aqry));
 				if($plh['cnt']>0) $cntsensus += $plh['cnt'] ;			
 				$aqry = "select sum(biaya_pengamanan)as cnt from v_pengaman ".
 					" where tgl_pengamanan<'$tglthnsensus' and tambah_aset=1 $KondisiSKPD and f<>'06' and id_bukuinduk in (".
@@ -701,7 +701,7 @@ class SensusProgresObj extends DaftarObj2{
 					" (sesi='' or sesi is null) and (error='' or error is null)".
 					" tahun_sensus = '$thnsensus' ".
 					")";
-				$aman = mysql_fetch_array(mysql_query($aqry));
+				$aman = sqlArray(sqlQuery($aqry));
 				if($aman['cnt']>0) $cntsensus += $aman['cnt'];
 			}
 			//BI ---------------------------------------------------------------
@@ -723,10 +723,10 @@ class SensusProgresObj extends DaftarObj2{
 				$aqrygr = "select count(*) as cnt from v1_gantirugi where tgl_gantirugi<'$tglthnsensus' $KondisiSKPD and f<>'06'  ";					
 			}
 			$cek .= $aqry;
-			$get = mysql_fetch_array( mysql_query($aqry) );
-			$gethps = mysql_fetch_array( mysql_query($aqryhps) );
-			$getpindah = mysql_fetch_array( mysql_query($aqrypindah) );
-			$getgr = mysql_fetch_array( mysql_query($aqrygr) );
+			$get = sqlArray( sqlQuery($aqry) );
+			$gethps = sqlArray( sqlQuery($aqryhps) );
+			$getpindah = sqlArray( sqlQuery($aqrypindah) );
+			$getgr = sqlArray( sqlQuery($aqrygr) );
 			
 			$cntbi = $get['cnt'] - $gethps['cnt']-$getpindah['cnt']-$getgr['cnt'];
 			
@@ -734,12 +734,12 @@ class SensusProgresObj extends DaftarObj2{
 				$aqry = "select sum(biaya_pemeliharaan)as cnt from v_pemelihara ".
 					" where tgl_pemeliharaan<'$tglthnsensus' and tambah_aset=1 $KondisiSKPD and f<>'06' ".
 					"";
-				$plh = mysql_fetch_array(mysql_query($aqry));
+				$plh = sqlArray(sqlQuery($aqry));
 				if($plh['cnt']>0) $cntbi += $plh['cnt'] ;			
 				$aqry = "select sum(biaya_pengamanan)as cnt from v_pengaman ".
 					" where tgl_pengamanan<'$tglthnsensus' and tambah_aset=1 $KondisiSKPD and f<>'06' ".
 					"";
-				$aman = mysql_fetch_array(mysql_query($aqry));
+				$aman = sqlArray(sqlQuery($aqry));
 				if($aman['cnt']>0) $cntbi += $aman['cnt'];
 			}
 			$cekbi = //' '.$aqry. 

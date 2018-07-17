@@ -173,30 +173,30 @@ class PengeluaranObj extends DaftarObj2{
 		$fmSEKSI = isset($HTTP_COOKIE_VARS['cofmSEKSI'])? $HTTP_COOKIE_VARS['cofmSEKSI']: cekPOST($this->Prefix.'SkpdfmSEKSI');				
 		$nmopdarr=array();		
 		if($fmSKPD == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_bidang where c='".$isi['c']."' "
 			));		
 			if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 		}
 		if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' "
 			));		
 			if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 		}
 		if($fmSUBUNIT == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_unit where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."'"
 			));		
 			if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 		}
 		if($fmSEKSI == '00' || $fmSEKSI == '000'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select nm_skpd as nmseksi from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 			));		
 			if($get['nmseksi']<>'') $nmopdarr[] = $get['nmseksi'];
 		}			
-		/*$barang = mysql_fetch_array(mysql_query(
+		/*$barang = sqlArray(sqlQuery(
 			"select * from ref_barang where concat(f,g,h,i,j)='".$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j']."' "
 		));
 		*/
@@ -267,7 +267,7 @@ class PengeluaranObj extends DaftarObj2{
 		  $fmDESC2 = cekPOST('fmDESC2');
 		
 		//thn terakhir
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select max(tahun) as maxthn from $this->TblName "
 		));
 		//$fmFiltThnAnggaran = $get['maxthn'];
@@ -366,7 +366,7 @@ class PengeluaranObj extends DaftarObj2{
 			$arrKondisi[] = "tahun='$fmFiltThnAnggaran'";
 		}else{
 			//thn terakhir
-		//$get = mysql_fetch_array(mysql_query(
+		//$get = sqlArray(sqlQuery(
 		//	"select max(tahun) as maxthn from $this->TblName "
 		//));
 		//$fmFiltThnAnggaran = $get['maxthn'];
@@ -458,11 +458,11 @@ class PengeluaranObj extends DaftarObj2{
 		
 		//ambil penerimaan --------------------------------------
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh';"; $cek .= $aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//ambil data pengadaan ---------------------------------
 		$aqry = "select * from penerimaan where id='".$dt['id_penerimaan']."' ; "; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			$aqry
 		));
 		/*$dt['nama_perusahaan_dpb'] = $get['nama_perusahaan'];
@@ -473,7 +473,7 @@ class PengeluaranObj extends DaftarObj2{
 		
 		//ambil penerimaan sebelumnya ----------------------------
 		$aqry = "select sum(jml_barang) as tot from $this->TblName where id_penerimaan='".$dt['id_penerimaan']."' and id<>'".$this->form_idplh."' "; $cek .= $aqry;
-		$get =  mysql_fetch_array( mysql_query(
+		$get =  sqlArray( sqlQuery(
 			$aqry
 		));
 		
@@ -512,15 +512,15 @@ class PengeluaranObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];//." <input tipe='hidden' id='".$this->Prefix."SkpdfmSKPD' name='".$this->Prefix."SkpdfmSKPD' value='".$dt['c']."'>";
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];//."<input tipe='hidden' id='".$this->Prefix."SkpdfmUNIT' name='".$this->Prefix."SkpdfmUNIT' value='".$dt['d']."'>";
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];
-		$dkb = mysql_fetch_array(mysql_query("select * from dkb where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' and f='".$dt['f']."' and g='".$dt['g']."' and h='".$dt['h']."' and i='".$dt['i']."' and j='".$dt['j']."' and tahun='".$dt['tahun']."' "));
+		$dkb = sqlArray(sqlQuery("select * from dkb where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' and f='".$dt['f']."' and g='".$dt['g']."' and h='".$dt['h']."' and i='".$dt['i']."' and j='".$dt['j']."' and tahun='".$dt['tahun']."' "));
 		
 		$menu =
 			"<table width='100%' class='menudottedline'>
@@ -783,11 +783,11 @@ class PengeluaranObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 		
 		$menu =
@@ -962,7 +962,7 @@ class PengeluaranObj extends DaftarObj2{
 		if($err=='' && $satuan == '')$err = "Satuan belum diisi!";
 		
 		//-- get jumlah daftar pengadaan
-		$get = mysql_fetch_array( mysql_query(
+		$get = sqlArray( sqlQuery(
 			"select count(*)as cnt, sum(jml_barang) as tot from penerimaan where id='$id_penerimaan'"
 		));	
 		$jmldpb = $get['tot']; 
@@ -973,7 +973,7 @@ class PengeluaranObj extends DaftarObj2{
 			$err = "Penerimaan Barang $fmIDBARANG untuk Tahun Anggaran $tahun Tidak Ada!";
 		
 		//-- get penerimaan sblumnya utk idpengadaan, selain ini
-		$get =  mysql_fetch_array( mysql_query(
+		$get =  sqlArray( sqlQuery(
 			"select sum(jml_barang) as tot from $this->TblName where id_penerimaan='".$id_penerimaan."' and id<>'$id' "
 		));
 		$jmlada = $get['tot'];
@@ -1088,20 +1088,20 @@ class PengeluaranObj extends DaftarObj2{
 			if($err=='' && $tahun == '')$err = "Tahun belum diisi!";
 			
 			//cek rkb u brg ini sudah ada
-			$get = mysql_fetch_array( mysql_query(
+			$get = sqlArray( sqlQuery(
 				"select count(*) as cnt from rkb where c='$c' and d='$d' and e='$e'  and e1='$e1' ".
 				"and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and tahun='$tahun'"				
 			));
 			if($err=='' && $get['cnt']>1) $err="RKB dengan kode barang ini sudah ada!";
 			
 			//get jml bi
-			$get = mysql_fetch_array( mysql_query(
+			$get = sqlArray( sqlQuery(
 				"select count(*) as cnt from buku_induk where c='$c' and d='$d' and e='$e'  and e1='$e1' ".
 				"and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and thn_perolehan<='$tahun'"				
 			));
 			$jmlbi = $get['cnt'];
 			//get jml standar
-			$get = mysql_fetch_array( mysql_query(
+			$get = sqlArray( sqlQuery(
 				"select jml_barang from rkb_standar where c='$c' and d='$d' and e='$e'  and e1='$e1' ".
 				"and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' "				
 			));
@@ -1110,7 +1110,7 @@ class PengeluaranObj extends DaftarObj2{
 			//if($err=='' && $jml_standar < $jmlbi+$jml_barang ) $err = "Jumlah RKB dan Jumlah BI tidak lebih besar dari Jumlah Standar!";
 			
 		}else{
-			$old = mysql_fetch_array( mysql_query(
+			$old = sqlArray( sqlQuery(
 				"select * from rkb where id='$id' "
 			));
 			
@@ -1122,7 +1122,7 @@ class PengeluaranObj extends DaftarObj2{
 				$aqry = "select count(*) as cnt from rkb where  ".
 					" c='$c' and d='$d' and e='$e'  and e1='$e1' ".
 					"and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and tahun='$tahun'"	; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query(
+				$get = sqlArray( sqlQuery(
 					$aqry	
 				));
 				if($err=='' && $get['cnt']>0) $err="RKB dengan kode barang ini sudah ada!";					
@@ -1174,7 +1174,7 @@ class PengeluaranObj extends DaftarObj2{
 				
 			}
 			$cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}		
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
@@ -1183,7 +1183,7 @@ class PengeluaranObj extends DaftarObj2{
 	function Hapus_Validasi($id){
 		$err ='';
 		//$KeyValue = explode(' ',$id);
-		$old = mysql_fetch_array(mysql_query(
+		$old = sqlArray(sqlQuery(
 			"select * from $this->TblName where id ='$id' "
 		));
 		if($err=='' && $old['stat']=='1') $err = 'Data Tidak Bisa Dihapus, RKB sudah DKB!';
@@ -1199,13 +1199,13 @@ class PengeluaranObj extends DaftarObj2{
 			(status_barang<>3 and status_barang<>4 and status_barang<>5) 
 			and c='".$c."' and d='$d' and e='$e'  and e1='$e1'
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' and thn_perolehan<'$tahun'"; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->jmlbi = $isi['cnt'];
 		
 		$aqry = "select jml_barang from rkb_standar where 						
 			c='".$c."' and d='$d' and e='$e'  and e1='$e1'
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' "; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));		
+		$isi = sqlArray(sqlQuery($aqry));		
 		
 		$content->jmlstandar = $isi['jml_barang'];
 		//return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
@@ -1237,13 +1237,13 @@ class PengeluaranObj extends DaftarObj2{
 			(status_barang<>3 and status_barang<>4 and status_barang<>5) 
 			and c='".$c."' and d='$d' and e='$e' 
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' and thn_perolehan<'$tahun'"; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->jmlbi = $isi['cnt'];
 		
 		$aqry = "select jml_barang from rkb_standar where 						
 			c='".$c."' and d='$d' and e='$e' 
 			and f='".$f."' and g='$g' and h='$h' and i='$i' and j='$j' "; $cek .=$aqry;
-		$isi = mysql_fetch_array(mysql_query($aqry));		
+		$isi = sqlArray(sqlQuery($aqry));		
 		$content->jmlstandar = $isi['jml_barang'];
 		*/
 		
@@ -1259,26 +1259,26 @@ class PengeluaranObj extends DaftarObj2{
 		$cbid = $_POST[$this->Prefix.'_cb'];
 		$id = $cbid[0];		
 		$aqry = "select * from $this->TblName where id='$id' ";
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->stat = $isi['stat'];
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
 	}	
 	
 	function getJmlPenerimaan($idpenerimaan){
 		$aqry = "select * from penerimaan where id='$idpenerimaan'";
-		$get =  mysql_fetch_array(mysql_query($aqry));
+		$get =  sqlArray(sqlQuery($aqry));
 		return $get['jml_barang'];
 	}
 	function getPenerimaan($idpenerimaan){
 		$aqry = "select * from penerimaan where id='$idpenerimaan'";
-		$get =  mysql_fetch_array(mysql_query($aqry));
+		$get =  sqlArray(sqlQuery($aqry));
 		return $get;
 	}
 	function getPengeluaranSebelumnya($idpenerimaan){
 		$idstr = $id==''? '' : " and id<>'$id' ";
 		$aqry = "select sum(jml_barang) as tot from pengeluaran where ".
 				" id_penerimaan='$idpenerimaan' "; $cek.=$aqry;
-		$get = mysql_fetch_array( mysql_query(
+		$get = sqlArray( sqlQuery(
 			$aqry
 		));	
 		return $get['tot'];

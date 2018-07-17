@@ -5,26 +5,26 @@ $uid = $_GET['id'];
 $qty = $_GET['qty'];
 if ($status==0) {
 	$aqry = "update barcode_status_print set status=0, qty=0 where uid='$uid'";
-	$qry= mysql_query($aqry);
+	$qry= sqlQuery($aqry);
 	if ($uid !='admin'){
 		$aqry = "delete from barcode_data_print where uid='$uid'";
-		$qry= mysql_query($aqry);	
+		$qry= sqlQuery($aqry);	
 	}
 	
 	
 }else {
 	$aqry = "update barcode_status_print set status='$status', qty='$qty' where uid='$uid'";
-	$qry= mysql_query($aqry);
+	$qry= sqlQuery($aqry);
 }
 */
 
 $aqry = "update barcode_status_print set status=0, qty=0 where uid='$uid'";
-$qry= mysql_query($aqry);
+$qry= sqlQuery($aqry);
 /*
 
 if ($uid !='admin'){
 	$aqry = "delete from barcode_data_print where uid='$uid'";
-	$qry= mysql_query($aqry);	
+	$qry= sqlQuery($aqry);	
 }
 */
 

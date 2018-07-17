@@ -21,8 +21,8 @@ class KoreksiCls {
 	function FormEntry($isi){
 		$aqry = "select * from t_koreksi where id = '".$_GET['idplh']."'";
 		//echo $aqry;	
-		$qry = mysql_query($aqry);
-		$isi = mysql_fetch_array($qry);
+		$qry = sqlQuery($aqry);
+		$isi = sqlArray($qry);
 		//echo "fmJENISPENGAMANAN=$fmJENISPENGAMANAN";
 		$space = formEntryBase2('','','',""," style='width:5'",'','valign="middle" height="0"');
 		return "
@@ -126,9 +126,9 @@ class KoreksiCls {
 	function GetData($id){
 		$aqry = "select * from t_koreksi where id = '$id'";
 		//jns_trans,,idbi_awal,staset,staset_baru,tgl_update,harga,harga_baru,asal_usul,asal_usul_baru,
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		//if (
-		$isi = mysql_fetch_array($qry);
+		$isi = sqlArray($qry);
 		
 		return $isi;
 	}
@@ -170,7 +170,7 @@ class KoreksiCls {
 		if ($fmst==1){
 			$idbi = $_GET['idbi']; //hanya fmst =baru	
 		}else{
-			$old = mysql_fetch_array(mysql_query("select * from t_koreksi where id='$idplh'"));
+			$old = sqlArray(sqlQuery("select * from t_koreksi where id='$idplh'"));
 			$idbi = $old['idbi'];
 		}
 		
@@ -182,7 +182,7 @@ class KoreksiCls {
 		if ($errmsg =='' && compareTanggal($tgl, date('Y-m-d'))==2  ) $errmsg = 'Tanggal Koreksi tidak lebih besar dari Hari ini!';				
 			
 		if ($errmsg ==''){
-			$bi =  mysql_fetch_array( mysql_query (				
+			$bi =  sqlArray( sqlQuery (				
 				" select staset,tgl_buku from buku_induk where id ='$idbi'"
 			));
 			if ($errmsg =='' && compareTanggal($tgl, $bi['tgl_buku'])==0  ) $errmsg = 'Tanggal Koreksi tidak lebih kecil dari Tanggal Buku!';			
@@ -191,13 +191,13 @@ class KoreksiCls {
 		
 		
 		//cek status		
-		$bi = mysql_fetch_array( mysql_query (	" select * from buku_induk where id='$idbi' " ));
+		$bi = sqlArray( sqlQuery (	" select * from buku_induk where id='$idbi' " ));
 		if($errmsg=='' &&$fmst==1 && $bi['status_barang'] != 1 ) $errmsg= "Hanya Barang Inventaris yang bisa Koreksi!";
 		
 		//cek tanggal -------------		
-		/*$plh = mysql_fetch_array(mysql_query(  "select max(tgl_pemeliharaan) as maxtgl from pemeliharaan where id_bukuinduk ='$idbi'" ));
-		$aman = mysql_fetch_array(mysql_query(  "select max(tgl_pengamanan) as maxtgl from pengamanan where id_bukuinduk ='$idbi'" ));
-		$hps = mysql_fetch_array(mysql_query(  "select max(tgl_penghapusan) as maxtgl from penghapusan_sebagian where id_bukuinduk ='$idbi'" ));
+		/*$plh = sqlArray(sqlQuery(  "select max(tgl_pemeliharaan) as maxtgl from pemeliharaan where id_bukuinduk ='$idbi'" ));
+		$aman = sqlArray(sqlQuery(  "select max(tgl_pengamanan) as maxtgl from pengamanan where id_bukuinduk ='$idbi'" ));
+		$hps = sqlArray(sqlQuery(  "select max(tgl_penghapusan) as maxtgl from penghapusan_sebagian where id_bukuinduk ='$idbi'" ));
 		if ($errmsg=='' && compareTanggal($plh['maxtgl'] , $fmTANGGALPEMANFAATAN )==2  ) $errmsg = 'Tanggal Pemanfaatan tidak lebih kecil dari Tanggal Pemeliharaan!';
 		if ($errmsg=='' && compareTanggal($aman['maxtgl'] , $fmTANGGALPEMANFAATAN )==2  ) $errmsg = 'Tanggal Pemanfaatan tidak lebih kecil dari Tanggal Pengamanan!';
 		if ($errmsg=='' && compareTanggal($hps['maxtgl'] , $fmTANGGALPEMANFAATAN )==2  ) $errmsg = 'Tanggal Pemanfaatan tidak lebih kecil dari Tanggal Penghapusan Sebagian!';
@@ -206,28 +206,28 @@ class KoreksiCls {
 		if($errmsg == ''){	
 			//cari harga asal -------------------------------------------
 			$harga= 0;
-			//$get = mysql_fetch_array(mysql_query("select harga as tot from buku_induk where id = '$idbi_awal' "));
+			//$get = sqlArray(sqlQuery("select harga as tot from buku_induk where id = '$idbi_awal' "));
 			//$harga += $get['tot'];
-			//$get = mysql_fetch_array(mysql_query("select sum(harga_baru - harga) as tot from t_koreksi where idbi_awal = '$idbi_awal' and tgl<='$tgl' and id<>'$idplh' "));
+			//$get = sqlArray(sqlQuery("select sum(harga_baru - harga) as tot from t_koreksi where idbi_awal = '$idbi_awal' and tgl<='$tgl' and id<>'$idplh' "));
 			//$harga += $get['tot'];
-			/*$get = mysql_fetch_array(mysql_query("select sum(biaya_pemeliharaan) as tot from pemeliharaan where idbi_awal = '$idbi_awal' and tambah_aset=1 and tgl_pemeliharaan<='$tgl' "));			
+			/*$get = sqlArray(sqlQuery("select sum(biaya_pemeliharaan) as tot from pemeliharaan where idbi_awal = '$idbi_awal' and tambah_aset=1 and tgl_pemeliharaan<='$tgl' "));			
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(biaya_pengamanan) as tot from pengamanan where idbi_awal = '$idbi_awal' and tambah_aset=1 and tgl_pengamanan<='$tgl' "));			
+			$get = sqlArray(sqlQuery("select sum(biaya_pengamanan) as tot from pengamanan where idbi_awal = '$idbi_awal' and tambah_aset=1 and tgl_pengamanan<='$tgl' "));			
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(harga_hapus) as tot from penghapusan_sebagian where idbi_awal = '$idbi_awal'  and tgl_penghapusan<='$tgl' "));			
+			$get = sqlArray(sqlQuery("select sum(harga_hapus) as tot from penghapusan_sebagian where idbi_awal = '$idbi_awal'  and tgl_penghapusan<='$tgl' "));			
 			$harga -= $get['tot'];
 			*/
-			$get = mysql_fetch_array(mysql_query("select harga as tot from buku_induk where id = '".$bi['idawal']."' "));
+			$get = sqlArray(sqlQuery("select harga as tot from buku_induk where id = '".$bi['idawal']."' "));
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(biaya_pemeliharaan) as tot from pemeliharaan where idbi_awal = '".$bi['idawal']."' and tgl_pemeliharaan<='$tgl' and tambah_aset = 1  "));
+			$get = sqlArray(sqlQuery("select sum(biaya_pemeliharaan) as tot from pemeliharaan where idbi_awal = '".$bi['idawal']."' and tgl_pemeliharaan<='$tgl' and tambah_aset = 1  "));
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(biaya_pemanfaatan) as tot from pemanfaatan where idbi_awal = '".$bi['idawal']."' and tgl_pemanfaatan<='$tgl' and tambah_aset = 1  "));
+			$get = sqlArray(sqlQuery("select sum(biaya_pemanfaatan) as tot from pemanfaatan where idbi_awal = '".$bi['idawal']."' and tgl_pemanfaatan<='$tgl' and tambah_aset = 1  "));
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(harga_hapus) as tot from penghapusan_sebagian where idbi_awal = '".$bi['idawal']."' and tgl_penghapusan<='$tgl'  "));
+			$get = sqlArray(sqlQuery("select sum(harga_hapus) as tot from penghapusan_sebagian where idbi_awal = '".$bi['idawal']."' and tgl_penghapusan<='$tgl'  "));
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(nilai_barang - nilai_barang_asal) as tot from penilaian where idbi_awal = '".$bi['idawal']."' and tgl_penilaian<='$tgl'  "));
+			$get = sqlArray(sqlQuery("select sum(nilai_barang - nilai_barang_asal) as tot from penilaian where idbi_awal = '".$bi['idawal']."' and tgl_penilaian<='$tgl'  "));
 			$harga += $get['tot'];
-			$get = mysql_fetch_array(mysql_query("select sum(harga_baru - harga) as tot from t_koreksi where idbi_awal = '".$bi['idawal']."' and tgl<='$tgl' and id<>'$idplh' "));
+			$get = sqlArray(sqlQuery("select sum(harga_baru - harga) as tot from t_koreksi where idbi_awal = '".$bi['idawal']."' and tgl<='$tgl' and id<>'$idplh' "));
 			$harga += $get['tot'];
 			
 			//simpan ----------------------------------------------------
@@ -243,7 +243,7 @@ class KoreksiCls {
 					'$uid', now(), '$harga', '$harga_baru','$fmKET','$tgl_perolehan')";
 				//echo "aqry=$aqry<r>";			
 								
-				$sukses = mysql_query($aqry);	
+				$sukses = sqlQuery($aqry);	
 				if($Main->MODUL_JURNAL){
 					$newid = mysql_insert_id();
 					//jurnalPemanfaatan($newid,$UID,1);				
@@ -252,11 +252,11 @@ class KoreksiCls {
 			}else{//smpan edit				
 				if($errmsg ==''){
 					//ambil id buku induk
-					$old = mysql_fetch_array(mysql_query(
+					$old = sqlArray(sqlQuery(
 						"select staset, idbi_awal, idbi from t_koreksi where id='$idplh'"
 					));		
 					//cek status barangnya
-					$penatausaha = mysql_fetch_array(mysql_query(
+					$penatausaha = sqlArray(sqlQuery(
 						"select idawal,staset,status_barang from buku_induk where id='{$old['idbi']}'"
 					));
 					if ($errmsg =='' && $penatausaha['status_barang']==3 ) $errmsg = "Gagal Edit. Barang sudah dihapuskan!";
@@ -264,9 +264,9 @@ class KoreksiCls {
 					if ($errmsg =='' && $penatausaha['status_barang']==5 ) $errmsg = 'Gagal Edit. Barang sudah diganti rugi!';
 					//if ($errmsg =='' && $penatausaha['staset']!=$old['staset'] ) $errmsg = 'Gagal Edit. Status Aset Barang sudah berubah!';
 					
-					$oldmax = mysql_fetch_array(mysql_query("select max(tgl) as maxtgl, max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$penatausaha['idawal']."' and id<> $idplh"));
+					$oldmax = sqlArray(sqlQuery("select max(tgl) as maxtgl, max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$penatausaha['idawal']."' and id<> $idplh"));
 					if($errmsg=='' && $oldmax['cnt']>0 && $idplh<$oldmax['maxid']  ) $errmsg = 'Hanya data koreksi terakhir yang bisa di edit!';			
-					$oldmax = mysql_fetch_array(mysql_query("select max(tgl) as maxtgl, max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$penatausaha['idawal']."' and id< $idplh"));
+					$oldmax = sqlArray(sqlQuery("select max(tgl) as maxtgl, max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$penatausaha['idawal']."' and id< $idplh"));
 					if($errmsg=='' && $oldmax['cnt']>0 && compareTanggal($tgl, $oldmax['maxtgl'])==0   ) $errmsg = 'Tanggal koreksi tidak lebih kecil dari koreksi sebelumnya!';			
 					//compareTanggal($tgl_buku, date('Y-m-d'))==2 
 					
@@ -274,7 +274,7 @@ class KoreksiCls {
 				}
 				
 				if($errmsg == '') {
-					$get = mysql_fetch_array(mysql_query("select harga as tot from t_koreksi where id='$idplh' "));
+					$get = sqlArray(sqlQuery("select harga as tot from t_koreksi where id='$idplh' "));
 					$harga = $get['tot'];
 					
 					$aqry = "
@@ -287,7 +287,7 @@ class KoreksiCls {
 						tgl_perolehan = '$tgl_perolehan',
 						uid = '$UID'			
 						where id = '$idplh'";	//echo "aqry=$aqry<r>";
-					$sukses = mysql_query($aqry);
+					$sukses = sqlQuery($aqry);
 					//if($sukses && $Main->MODUL_JURNAL)	jurnalPemanfaatan($idplh,$UID,2);				
 					
 				}				
@@ -316,11 +316,11 @@ class KoreksiCls {
 			//$id= $cidPLH[$i]; //$str.=$id.'-';
 			if($errmsg ==''){
 				//ambil id buku induk
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select tgl, staset, idbi_awal, idbi from t_koreksi where id='{$cidKRS[$i]}'"
 				));		
 				//cek status barangnya
-				$penatausaha = mysql_fetch_array(mysql_query(
+				$penatausaha = sqlArray(sqlQuery(
 					"select idawal,staset, status_barang from buku_induk where id='{$old['idbi']}'"
 				));
 				if ($errmsg =='' && $penatausaha['status_barang']==3 ) $errmsg = "Gagal Hapus. Barang sudah dihapuskan!";
@@ -328,23 +328,23 @@ class KoreksiCls {
 				if ($errmsg =='' && $penatausaha['status_barang']==5 ) $errmsg = 'Gagal Hapus. Barang sudah ganti rugi!';
 				if ($errmsg =='' && $penatausaha['staset']!=$old['staset'] ) $errmsg = 'Gagal Hapus. Status Aset Barang sudah berubah!';
 				
-				/*$oldmax = mysql_fetch_array(mysql_query(
+				/*$oldmax = sqlArray(sqlQuery(
 					"select max(tgl)as maxtgl from t_koreksi where idbi_awal='{$old['idbi_awal']}'"
 				));	
 				if($errmsg=='' && compareTanggal($old['tgl'], $oldmax['maxtgl'])==0  ) $errmsg = 'Gagal Hapus. Hanya koreksi terakhir yang bisa dihapus!';			
 				*/
-				$oldmax = mysql_fetch_array(mysql_query("select max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$old['idbi_awal']."' "));
+				$oldmax = sqlArray(sqlQuery("select max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$old['idbi_awal']."' "));
 				if($errmsg=='' && $oldmax['cnt']>1 && $cidKRS[$i]<$oldmax['maxid']  ) $errmsg = 'Hanya data koreksi terakhir yang bisa di hapus!';
-				//$oldmax = mysql_fetch_array(mysql_query("select max(tgl) as maxtgl, max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$penatausaha['idawal']."' and id<> $idplh"));
+				//$oldmax = sqlArray(sqlQuery("select max(tgl) as maxtgl, max(id) as maxid, count(*) as cnt from t_koreksi where idbi_awal='".$penatausaha['idawal']."' and id<> $idplh"));
 				//if($errmsg=='' && $oldmax['cnt']>0 && $idplh<$oldmax['maxid']  ) $errmsg = 'Hanya data koreksi terakhir yang bisa di edit!';			
 						
 				//if($errmsg=='' ) $errmsg = 'sukses';
 			}
 			
 			if($errmsg == '') {
-				//$old = mysql_fetch_array(mysql_query("select * from  pemanfaatan where id='{$cidKRS[$i]}' "));
+				//$old = sqlArray(sqlQuery("select * from  pemanfaatan where id='{$cidKRS[$i]}' "));
 				$aqry = "delete from t_koreksi where id='{$cidKRS[$i]}' limit 1"; //$errmsg = $aqry;			
-				$Del = mysql_query($aqry);
+				$Del = sqlQuery($aqry);
 				if ($Del){
 					//if ($Main->MODUL_JURNAL) jurnalPemanfaatan($cidKRS[$i],$UID,3); 
 				}else{
@@ -428,8 +428,8 @@ class KoreksiCls {
 		$this->jmlTampilKoreksi2= 0;
 		$cb = 0;
 		$aqry="select * from t_koreksi $Kondisi $Order $Limit "; //echo " $aqry<br>";		
-		$Qry = mysql_query($aqry);		
-		while ($isi = mysql_fetch_array($Qry)){		
+		$Qry = sqlQuery($aqry);		
+		while ($isi = sqlArray($Qry)){		
 			
 			$this->jmlTampilKoreksi2++;
 			$no++;
@@ -437,8 +437,8 @@ class KoreksiCls {
 			$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 			$kdKelBarang = $isi['f'].$isi['g']."00";
 			$nmBarang = $isi['nm_barang'];
-			//mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-			//$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+			//sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+			//$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 			$clRow = $no % 2 == 0 ?"row1":"row0";
 			
 			//ambil kolom alamat
@@ -529,7 +529,7 @@ class KoreksiCls {
 				</tr>";			
 			//total semua ---------------------------
 			$aqry = "select count(*) as cnt, sum(biaya_pemanfaatan) as total  from v_pemanfaat $Kondisi";  //echo " $aqry<br>";
-			$IsiTot = mysql_fetch_array (mysql_query($aqry));
+			$IsiTot = sqlArray (sqlQuery($aqry));
 			$jmlTotalHarga =  $IsiTot['total'];
 			$totalAll = "	
 				<tr class='row0'>

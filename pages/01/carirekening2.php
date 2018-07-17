@@ -56,12 +56,12 @@ if (!(($akun == '' ||$akun =='00') && ($kelompok == '' ||$kelompok =='00')
 
 }
 
-//$Qry = mysql_query("select * from ref_rekening where nm_rekening like '%$Cari1%' and o <> '00' limit 100");
-$Qry = mysql_query("select * from ref_rekening where nm_rekening like '%$Cari1%' $Kondisi ");
-$numRow = mysql_num_rows($Qry);
+//$Qry = sqlQuery("select * from ref_rekening where nm_rekening like '%$Cari1%' and o <> '00' limit 100");
+$Qry = sqlQuery("select * from ref_rekening where nm_rekening like '%$Cari1%' $Kondisi ");
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$no++;
 	$Isi1 = $isi['k'].".".$isi['l'].".".$isi['m'].".".$isi['n'].".".$isi['o'];

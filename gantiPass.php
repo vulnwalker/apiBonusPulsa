@@ -64,7 +64,7 @@ if($Act == "Simpan"){
 	
 	if ($errmsg =='') { 
 		//$sqry = 'select * from admin where uid="'.$User.'"'; $cek .= '<br> sqry='.$sqry;
-		//$row = mysql_fetch_array(mysql_query($sqry));	 $cek .= '<br> md5pass='.md5($passold).' pass= '.$row['password'];
+		//$row = sqlArray(sqlQuery($sqry));	 $cek .= '<br> md5pass='.md5($passold).' pass= '.$row['password'];
 		//if ($row['password'] != md5($passold) ){			
 		
 		if (login_cekPasword($User, $passold )==FALSE){
@@ -87,7 +87,7 @@ if($Act == "Simpan"){
 			  password="'.md5($pass).'",
 			  nama ="'.$namel.'"
 			where uid="'.$olduid.'" limit 1';$cek .='<br> sqrysimpan='.$sqry;
-		$row = mysql_query($sqry);*/
+		$row = sqlQuery($sqry);*/
 		//setcookie("coID");
 		//setcookie("coID", "", time()-3600);
 		//setcookie("coID",$uid);//login_setUserCo($uid;

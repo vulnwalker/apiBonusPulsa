@@ -58,18 +58,18 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(jml_biaya) as total  from dkpb where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(jml_biaya) as total  from dkpb where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
 else
 {$jmlTotalHarga=0;}
 
-$jmlTotalBiayaPemeliharaanAll = mysql_query("select sum(biaya_pemeliharaan) as total  from view_bi_pemeliharaan where $KondisiTotal ");
+$jmlTotalBiayaPemeliharaanAll = sqlQuery("select sum(biaya_pemeliharaan) as total  from view_bi_pemeliharaan where $KondisiTotal ");
 
-if($jmlTotalBiayaPemeliharaanAll = mysql_fetch_array($jmlTotalBiayaPemeliharaanAll))
+if($jmlTotalBiayaPemeliharaanAll = sqlArray($jmlTotalBiayaPemeliharaanAll))
 {
 	$jmlTotalBiayaPemeliharaanAll = $jmlTotalBiayaPemeliharaanAll[0];
 }
@@ -78,16 +78,16 @@ else
 // copy untuk kondisi jumlah total sampai sini
 
 
-$Qry = mysql_query("select dkpb.*,ref_barang.nm_barang from dkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
-$jmlDataDKPB = mysql_num_rows($Qry);
-$Qry = mysql_query("select dkpb.*,ref_barang.nm_barang from dkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDKPB");
+$Qry = sqlQuery("select dkpb.*,ref_barang.nm_barang from dkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
+$jmlDataDKPB = sqlNumRow($Qry);
+$Qry = sqlQuery("select dkpb.*,ref_barang.nm_barang from dkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDKPB");
 $no=$Main->PagePerHal * (($HalDKPB*1) - 1);
 $cb=0;
 $jmlTampilDKPB = 0;
 $jmlTotalHargaDisplay = 0;
 $jmlTotalBiayaPemeliharaan = 0;
 $ListBarangDKPB = "";
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilDKPB++;
 	$no++;
@@ -95,9 +95,9 @@ while ($isi = mysql_fetch_array($Qry))
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdBarang1 = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-	$TotalBiayaPemeliharaan = mysql_fetch_array(mysql_query("select sum(biaya_pemeliharaan) as biaya from pemeliharaan where concat(f,g,h,i,j,noreg)='$kdBarang1' "));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$TotalBiayaPemeliharaan = sqlArray(sqlQuery("select sum(biaya_pemeliharaan) as biaya from pemeliharaan where concat(f,g,h,i,j,noreg)='$kdBarang1' "));
 	$jmlTotalBiayaPemeliharaan += $TotalBiayaPemeliharaan[0];	
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangDKPB .= "

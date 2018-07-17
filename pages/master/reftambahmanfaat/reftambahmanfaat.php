@@ -91,7 +91,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
  	 if($err=='' && $masa_manfaat =='' ) $err= 'Masa Manfaat belum diisi';
  
  	 /*---------------------------------------------------------------------------*/
-	$cek_dt = mysql_fetch_array(mysql_query("select count(*) as cnt from v1_ref_tambah_manfaat  where f='$f' and g='$g' and 	h='$h' and i='$i' and j='$j'"));	
+	$cek_dt = sqlArray(sqlQuery("select count(*) as cnt from v1_ref_tambah_manfaat  where f='$f' and g='$g' and 	h='$h' and i='$i' and j='$j'"));	
 	if($cek_dt['cnt']>0){
 		$err= 'Barang sudah ada !';
 	}
@@ -102,7 +102,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
 						$aqry1 = "INSERT into ref_tambah_manfaat (f,g,h,i,j,persen1,persen2,masa_manfaat)
 								 "."values('$f','$g','$h','$i','$j','$persen1','$persen2','$masa_manfaat')";	
 						$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);						
+						$qry = sqlQuery($aqry1);						
 													
 				}
 			}elseif($fmST == 1){						
@@ -115,7 +115,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
 								  masa_manfaat='$masa_manfaat'".
 					 			 "WHERE Id='$idplh'";	
 						$cek .= $aqry2;
-						$qry = mysql_query($aqry2);
+						$qry = sqlQuery($aqry2);
 						
 				}
 			}else{
@@ -174,18 +174,18 @@ class RefTambahManfaatObj  extends DaftarObj2{
 		$j=$kode_barang[4];
 		
 		//query ambil data ref_program
-		$get = mysql_fetch_array( mysql_query("select * from ref_barang where f=$f and g=$g and h=$h and i=$i and j=$j"));
+		$get = sqlArray( sqlQuery("select * from ref_barang where f=$f and g=$g and h=$h and i=$i and j=$j"));
 		$kode_barang=$get['f'].'.'.$get['g'].'.'.$get['h'].'.'.$get['i'].'.'.$get['j'];
 		
 		$fmThnAnggaran=  $_COOKIE['coThnAnggaran'];
 			$kueri1="select max(thn_akun) as thn_akun from ref_jurnal where thn_akun <= '$fmThnAnggaran'";
-			$tmax = mysql_fetch_array(mysql_query($kueri1));
+			$tmax = sqlArray(sqlQuery($kueri1));
 			$kueri="select * from ref_jurnal 
 					where thn_akun = '".$tmax['thn_akun']."' 
 					and ka='".$get['m1']."' and kb='".$get['m2']."' 
 					and kc='".$get['m3']."' and kd='".$get['m4']."'
 					and ke='".$get['m5']."' and kf='".$get['m6']."'"; //echo "$kueri";
-			$row=mysql_fetch_array(mysql_query($kueri));
+			$row=sqlArray(sqlQuery($kueri));
 						
 			$kode_account =$row['ka'].".".$row['kb'].".".$row['kc'].".".$row['kd'].".".$row['ke'].".".$row['kf'];
 						
@@ -296,7 +296,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
 			$dt['kode_barang']=$fmBIDANG.'.'.$fmKELOMPOK.'.'.$fmSUBKELOMPOK.'.'.$fmSUBSUBKELOMPOK.'.'.'000';
 		}	
 		
-		$ck=mysql_fetch_array(mysql_query("select * from ref_tambah_manfaat where concat(f,'.',g,'.',h,'.',i,'.',j)='".$dt['kode_barang']."' order by persen1 desc limit 0,1"));
+		$ck=sqlArray(sqlQuery("select * from ref_tambah_manfaat where concat(f,'.',g,'.',h,'.',i,'.',j)='".$dt['kode_barang']."' order by persen1 desc limit 0,1"));
 		if($ck['Id'] != ''){
 			$dt['persen1'] = $ck['persen2'];
 			$dt['readonly'] = 'readonly';
@@ -322,7 +322,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
 		$this->form_fmST = 1;
 		//query ambil data ref_tambah_manfaat
 		$aqry = "select * from ref_tambah_manfaat where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'];
 		$dt['readonly'] = '';
 		$fm = $this->setForm($dt);
@@ -352,7 +352,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
 		$queryKB = "SELECT f,nama_barang FROM ref_barang_persediaan where f !=0 and g=0";
 		
 		//query nm_barang
-		$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$dt['kode_barang']."'"));
+		$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$dt['kode_barang']."'"));
 		
 		$dt['persen1'] = $dt['persen1'] == '' ?0: $dt['persen1'];
 		$dt['persen2'] = $dt['persen2'] == '' ?0: $dt['persen2'];
@@ -420,7 +420,7 @@ class RefTambahManfaatObj  extends DaftarObj2{
 	 
 	 $kode_barang=$isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
 	 
-	 $brg = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$kode_barang'"));
+	 $brg = sqlArray(sqlQuery("select nm_barang from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$kode_barang'"));
 	 
 	 $Koloms = array();
 	 $Koloms[] = array('align="center" width="20"', $no.'.' );

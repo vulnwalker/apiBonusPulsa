@@ -94,16 +94,16 @@ if (!(($fmBIDANG == '' ||$fmBIDANG =='00') && ($fmKELOMPOK == '' ||$fmKELOMPOK =
 
 $sqry = "select * from ref_barang ".$Kondisi." order by f,g,h,i,j limit 0,200 ";
 $cek .= '<br> sqry='.$sqry;
-$Qry = mysql_query($sqry);
-$numRow = mysql_num_rows($Qry);
+$Qry = sqlQuery($sqry);
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
-	$nmF = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and j='00'"));
-	$nmG = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and j='00'"));
-	$nmH = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and j='00'"));
-	$nmI = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and j='00'"));
+	$nmF = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and j='00'"));
+	$nmG = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and j='00'"));
+	$nmH = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and j='00'"));
+	$nmI = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and j='00'"));
 	$no++;
 	$Isi1 = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 	$Isi2 = $isi['nm_barang'];

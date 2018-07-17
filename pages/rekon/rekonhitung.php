@@ -241,13 +241,13 @@ table.cetak input {
 			
 			where aa.kint='01' and aa.ka='01' and aa.g='00' and aa.f<>'00'"; //echo $qry;
 			
-		$get_qry = mysql_query($qry);
+		$get_qry = sqlQuery($qry);
 		//$no=1;
 		$saldowal = 0;$saldoawal_lain = 0 ;
 		$debet1 = 0; $kredit1 = 0;
 		$totalSem1 = 0;
 		
-		while($row = mysql_fetch_array($get_qry)){
+		while($row = sqlArray($get_qry)){
 			$no++;
 			$kol1 = $row['saldoawal'];
 			$kol2 = $row['saldoawal_lain'];

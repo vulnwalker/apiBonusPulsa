@@ -341,7 +341,7 @@ class SensusHasil2Obj extends DaftarObj2{
 		
 		
 		
-		$hsl = mysql_fetch_array( mysql_query($aqry) );
+		$hsl = sqlArray( sqlQuery($aqry) );
 		
 		
 		
@@ -428,7 +428,7 @@ class SensusHasil2Obj extends DaftarObj2{
 				"on cc.idbi = bb.idbi ".
 				"where cc.tahun_sensus=$fmFiltThnBuku and (cc.sesi='' or cc.sesi is null) and (cc.error ='' or cc.error is null) ; ";
 			$cek .= $aqry ;	
-			$hsl = mysql_fetch_array( mysql_query($aqry) );
+			$hsl = sqlArray( sqlQuery($aqry) );
 		}
 		else{
 			//$kondSKPD = join(' and ',$arrKondisi[]);
@@ -456,7 +456,7 @@ class SensusHasil2Obj extends DaftarObj2{
 				"on cc.idbi = bb.idbi ".
 				"where cc.tahun_sensus=$fmFiltThnBuku and (cc.sesi='' or cc.sesi is null) and (cc.error ='' or cc.error is null) ; ";
 			$cek .= $aqry ;
-			$hsl = mysql_fetch_array( mysql_query($aqry) );
+			$hsl = sqlArray( sqlQuery($aqry) );
 			
 			//aset lainnya
 			$aqry = "select ".//cc.idbi, cc.ada 
@@ -481,7 +481,7 @@ class SensusHasil2Obj extends DaftarObj2{
 				"on cc.idbi = bb.idbi ".
 				"where cc.tahun_sensus=$fmFiltThnBuku and (cc.sesi='' or cc.sesi is null) and (cc.error ='' or cc.error is null) ; ";
 			$cek .= $aqry ;
-			$hsl2 = mysql_fetch_array( mysql_query($aqry) );
+			$hsl2 = sqlArray( sqlQuery($aqry) );
 			//aset tetap + lainnya
 			$hsl['cnt1'] = $hsl['cnt1'] + $hsl2['cnt1'];
 			$hsl['cnt2'] = $hsl['cnt2'] + $hsl2['cnt2'];
@@ -517,7 +517,7 @@ class SensusHasil2Obj extends DaftarObj2{
 					"on cc.idbi = bb.idbi ".
 					"where cc.tahun_sensus=$fmFiltThnBuku and (cc.sesi='' or cc.sesi is null) and (cc.error ='' or cc.error is null) ; ";
 				$cek .= $aqry ;
-				$hsl2 = mysql_fetch_array( mysql_query($aqry) );
+				$hsl2 = sqlArray( sqlQuery($aqry) );
 				
 				//aset tetap + lainnya + ekstra
 				$hsl['cnt1'] = $hsl['cnt1'] + $hsl2['cnt1'];
@@ -552,7 +552,7 @@ class SensusHasil2Obj extends DaftarObj2{
 			if($g!='' && $g != '00') $kondg =  "and g='{$g}'";
 			
 			$aqry = "select count(*) as cnt from barang_tidak_tercatat where tahun_sensus='$fmFiltThnBuku' $kondSKPD $kondf $kondg ;"; $cek .= $aqry;
-			$blmcatat = mysql_fetch_array(mysql_query($aqry	));
+			$blmcatat = sqlArray(sqlQuery($aqry	));
 			$hsl['cnt10'] = $blmcatat['cnt'];	
 		}
 		
@@ -613,14 +613,14 @@ class SensusHasil2Obj extends DaftarObj2{
 		$TotalHalRp = 0;
 		
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry.'<br>';
 		/*
-		$qry = mysql_query($aqry);
-		$numrows = mysql_num_rows($qry); $cek.= " jmlrow = $numrows ";
+		$qry = sqlQuery($aqry);
+		$numrows = sqlNumRow($qry); $cek.= " jmlrow = $numrows ";
 		if( $numrows> 0 ) {
 					
-		while ( $isi=mysql_fetch_array($qry)){
+		while ( $isi=sqlArray($qry)){
 			if ( $isi[$this->KeyFields[0]] != '' ){
 				
 			
@@ -1476,8 +1476,8 @@ table
 		//$sqry=" select *,nm_skpd as nmopd from ref_skpd where  c='04' and d<>'00' and e='00' ";
 		$cek .=$sqry;
 		$cskpd=0;
-		$Qry = mysql_query($sqry);
-		while($isi=mysql_fetch_array($Qry)){
+		$Qry = sqlQuery($sqry);
+		while($isi=sqlArray($Qry)){
 			$cskpd++;
 			if ( $cbxTotal ==TRUE){
 				$KondisiSKPDx = "1=1";
@@ -1538,8 +1538,8 @@ table
 				where kint='01' and ka='01' and kb<>'00' ";
 			
 			
-			$aQry = mysql_query($bqry);		$rowno=0;
-			while($isix=mysql_fetch_array($aQry)){
+			$aQry = sqlQuery($bqry);		$rowno=0;
+			while($isix=sqlArray($aQry)){
 		  		
 				
 				if($isix['g']=='00') $JmlSaldoAwSKPD=$JmlSaldoAwSKPD+$isix['jmlhargaawal'];	
@@ -1696,8 +1696,8 @@ table
 				where kint='01' and ka='02' and kb<>'00'  ";
 				
 			
-			$aQry = mysql_query($bqry);
-			while($isix=mysql_fetch_array($aQry)){
+			$aQry = sqlQuery($bqry);
+			while($isix=sqlArray($aQry)){
 				$rowno++;
 				
 						
@@ -1952,8 +1952,8 @@ table
 				
 				where kint='02' ";
 		 	
-			$aQry = mysql_query($bqry);
-			while($isix=mysql_fetch_array($aQry)){
+			$aQry = sqlQuery($bqry);
+			while($isix=sqlArray($aQry)){
 				
 				$JmlSaldoAwEkstra=$JmlSaldoAwEkstra+$isix['jmlhargaawal'];	
 				$JmlBelanjaEkstra=$JmlBelanjaEkstra+$isix['debet_bmd'];
@@ -2270,8 +2270,8 @@ table
 		//$sqry=" select '00' as c, '00' as d, '00' as e, '00' as e1, 'T O T A L' as nmopd,				'T O T A L' as nm_barcode  ";
 		$sqry=" select *,nm_skpd as nmopd from ref_skpd where  c='04' and d<>'00' and e='00' ";
 		$cskpd=0;
-		$Qry = mysql_query($sqry);
-		while($isi=mysql_fetch_array($Qry)){
+		$Qry = sqlQuery($sqry);
+		while($isi=sqlArray($Qry)){
 			$cskpd++;
 			if ( $cbxTotal ==TRUE){
 				$KondisiSKPDx = "1=1";
@@ -2389,8 +2389,8 @@ table
 				
 				where kint='01' and ka='01' and kb<>'00' ";
 			
-			$aQry = mysql_query($bqry);		$rowno=0;
-			while($isix=mysql_fetch_array($aQry)){
+			$aQry = sqlQuery($bqry);		$rowno=0;
+			while($isix=sqlArray($aQry)){
 		  		$rowno ++;
 				
 				if($isix['g']=='00') $JmlSaldoAwSKPD=$JmlSaldoAwSKPD+$isix['jmlhargaawal'];	
@@ -2621,8 +2621,8 @@ table
 				
 				where kint='01' and ka='02' and kb<>'00'  ";
 			*/
-			$aQry = mysql_query($bqry);
-			while($isix=mysql_fetch_array($aQry)){
+			$aQry = sqlQuery($bqry);
+			while($isix=sqlArray($aQry)){
 				$rowno++;
 				$JmlSaldoAwSKPD=$JmlSaldoAwSKPD+$isix['jmlhargaawal'];	
 				$JmlBelanjaSKPD=$JmlBelanjaSKPD+$isix['debet_bmd'];
@@ -2899,8 +2899,8 @@ table
 				
 				where kint='02' ";
 		 	*/
-			$aQry = mysql_query($bqry);
-			while($isix=mysql_fetch_array($aQry)){
+			$aQry = sqlQuery($bqry);
+			while($isix=sqlArray($aQry)){
 				
 				$JmlSaldoAwEkstra=$JmlSaldoAwEkstra+$isix['jmlhargaawal'];	
 				$JmlBelanjaEkstra=$JmlBelanjaEkstra+$isix['debet_bmd'];

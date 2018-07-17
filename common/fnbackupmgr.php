@@ -97,9 +97,9 @@ class BackupMgrObj  extends DaftarObj2{
 				if($Kondisi != '') $Kondisi = ' where '.$Kondisi;
 
 				$aqry = "select * from ref_ruang $Kondisi"; $cek .= $aqry;
-				$ruang = mysql_fetch_array(mysql_query($aqry));
+				$ruang = sqlArray(sqlQuery($aqry));
 				$aqry = "select * from ref_pegawai where id = '".$ruang['ref_idpegawai']."'"; $cek .= $aqry;
-				$pgw = mysql_fetch_array(mysql_query($aqry));
+				$pgw = sqlArray(sqlQuery($aqry));
 				
 				$hsl->nip = $pgw['nip'];
 				$hsl->nama = $pgw['nama'];
@@ -207,24 +207,24 @@ class BackupMgrObj  extends DaftarObj2{
 				if($fmST == 0){//ins
 					//cek 
 					if( $err=='' ){
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"select count(*) as cnt from ref_ruang where a1='$a1' and a='$a' and b='$b'	 and c='$c' and d='$d' and e='$e' and e1='$e1' and p='$p' and q='$q' "
 						));
 						if($get['cnt']>0 ) $err='Kode Sudah Ada!';
 					}
 					if($err==''){
 						$aqry = "insert into ref_ruang (a1,a,b,c,d,e,e1,p,q,nm_ruang,ref_idpegawai)"."values('$a1','$a','$b','$c','$d','$e','$e1','$p','$q','$nm_ruang','$peg_ruang')";	$cek .= $aqry;	
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 					
 				}else{
 					if( $err=='' ){
-						$old=mysql_fetch_array(mysql_query(
+						$old=sqlArray(sqlQuery(
 							"select * from ref_ruang where id='$idplh'"
 						));
 						if($p!=$old['p'] || $q!=$old['q']){
 						//if($idplh){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"select count(*) as cnt from ref_ruang where a1='$a1' and a='$a' and b='$b'	 and c='$c' and d='$d' and e='$e' and e1='$e1' and p='$p' and q='$q' "
 							));
 							if($get['cnt']>0 ) $err='Kode Sudah Ada!';
@@ -241,7 +241,7 @@ class BackupMgrObj  extends DaftarObj2{
 							"a1='$a1', a='$a', b='$b', c='$c',d='$d',e='$e',e1='$e1',
 							p='$p',q='$q',nm_ruang='$nm_ruang',ref_idpegawai='$peg_ruang'".
 							"where id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 				}
 				
@@ -269,7 +269,7 @@ class BackupMgrObj  extends DaftarObj2{
 					and aa.c=bb.c and aa.d=bb.d and aa.e=bb.e and aa.e1=bb.e1 
 					and aa.p=bb.p and bb.q='0000'
 					where aa.id='$id'";
-				$get = mysql_fetch_array(mysql_query($aqry));				
+				$get = sqlArray(sqlQuery($aqry));				
 				$content = array('id'=>$get['id'], 'p'=>$get['p'], 'q'=>$get['q'], 'nm_ruang'=>$get['nm_ruang'], 'nm_gedung'=>$get['nm_gedung']);
 				break;
 			}
@@ -317,7 +317,7 @@ class BackupMgrObj  extends DaftarObj2{
 		//get data 
 		//$aqry = "select * from ref_ruang where c='$c' and d='$d' and e='$e' and p ='".$kode[0]."' and q='".$kode[1]."' "; $cek.=$aqry;
 		$aqry = "select * from ref_ruang where id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		
 		
@@ -345,16 +345,16 @@ class BackupMgrObj  extends DaftarObj2{
 		}
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
 		//items ----------------------
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];
 		//ambil pegawai
-	    $get = mysql_fetch_array(mysql_query("select * from ref_pegawai where Id = '".$dt['ref_idpegawai']."'"));
+	    $get = sqlArray(sqlQuery("select * from ref_pegawai where Id = '".$dt['ref_idpegawai']."'"));
 		$nama = $get['nama'];
 		$nip = $get['nip'];
 		$jabatan = $get['jabatan'];		
@@ -614,10 +614,10 @@ class BackupMgrObj  extends DaftarObj2{
 		$numrows = count($mylist);
 
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		//$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry.'<br>';
-		//$qry = mysql_query($aqry);
-		// $numrows = mysql_num_rows($qry); 
+		//$qry = sqlQuery($aqry);
+		// $numrows = sqlNumRow($qry); 
 
 		$cek.= " jmlrow = $numrows ";
 		if( $numrows> 0 ) {
@@ -666,7 +666,7 @@ class BackupMgrObj  extends DaftarObj2{
 			
 		}			
 /*
-		while ( $isi=mysql_fetch_array($qry)){
+		while ( $isi=sqlArray($qry)){
 			if ( $isi[$this->KeyFields[0]] != '' ){
 				
 			

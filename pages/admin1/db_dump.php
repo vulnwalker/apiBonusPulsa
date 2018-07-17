@@ -40,8 +40,8 @@ function get_table_def($db, $table, $crlf)
 
     $schema_create .= "CREATE TABLE $table ($crlf";
 
-    $result = mysql_query("SHOW FIELDS FROM $table") or mysql_die();
-    while($row = mysql_fetch_array($result))
+    $result = sqlQuery("SHOW FIELDS FROM $table") or mysql_die();
+    while($row = sqlArray($result))
     {
         $schema_create .= "   $row[Field] $row[Type]";
 
@@ -54,8 +54,8 @@ function get_table_def($db, $table, $crlf)
         $schema_create .= ",$crlf";
     }
     $schema_create = ereg_replace(",".$crlf."$", "", $schema_create);
-    $result = mysql_query("SHOW KEYS FROM $table") or mysql_die();
-    while($row = mysql_fetch_array($result))
+    $result = sqlQuery("SHOW KEYS FROM $table") or mysql_die();
+    while($row = sqlArray($result))
     {
         $kname=$row['Key_name'];
         if(($kname != "PRIMARY") && ($row['Non_unique'] == 0))
@@ -85,7 +85,7 @@ function get_table_def($db, $table, $crlf)
 // $handler must accept one parameter ($sql_insert);
 function get_table_content($db, $table, $handler)
 {
-    $result = mysql_query("SELECT * FROM $table") or mysql_die();
+    $result = sqlQuery("SELECT * FROM $table") or mysql_die();
     $i = 0;
     while($row = mysql_fetch_row($result))
     {
@@ -122,7 +122,7 @@ function get_table_content($db, $table, $handler)
 
 function count_records ($db,$table)
 {
-    $result = mysql_query($db, "select count(*) as num from $table");
+    $result = sqlQuery($db, "select count(*) as num from $table");
     $num = mysql_result($result,0,"num");
     echo $num;
 }
@@ -133,7 +133,7 @@ function count_records ($db,$table)
 // $handler must accept one parameter ($sql_insert);
 function get_table_csv($db, $table, $sep, $handler)
 {
-    $result = mysql_query($db, "SELECT * FROM $table") or mysql_die();
+    $result = sqlQuery($db, "SELECT * FROM $table") or mysql_die();
     $i = 0;
     while($row = mysql_fetch_row($result))
     {

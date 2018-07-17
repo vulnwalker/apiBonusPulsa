@@ -60,7 +60,7 @@ class detailTemplateObj  extends DaftarObj2{
 			$username = $_COOKIE['coID'];
 			$status = "";
 			
-			$get = mysql_fetch_array(mysql_query("select * from temp_template where username = '$username'"));
+			$get = sqlArray(sqlQuery("select * from temp_template where username = '$username'"));
 			
 			if($get['username'] == $username){
 				$status = "644"; 
@@ -72,7 +72,7 @@ class detailTemplateObj  extends DaftarObj2{
 			
 			}else{
 				$aqry = "insert into temp_template (username,nama_template,tanggal,nomor_distribusi,c1,c,d)  values('$username','$nama_template','$tanggal','$nomor_distribusi','$cmbUrusanForm','$cmbBidangForm','$cmbSKPDForm')";	$cek .= $aqry;	
-				$execute = mysql_query($aqry);	
+				$execute = sqlQuery($aqry);	
 				if($execute){
 					$status = "ADDED";
 				}else{
@@ -82,18 +82,18 @@ class detailTemplateObj  extends DaftarObj2{
 				
 				$maxID = "";
 		
-				$get = mysql_fetch_array(mysql_query("select max(id) as aaa from temp_template where username = '$username' "));
+				$get = sqlArray(sqlQuery("select max(id) as aaa from temp_template where username = '$username' "));
 				$maxID = $get['aaa'];
 				
 				
-				$query = mysql_query("select * from ref_skpd where c1='$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e !='00' and e1 !='000'");
-				while($row = mysql_fetch_array($query)){
+				$query = sqlQuery("select * from ref_skpd where c1='$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e !='00' and e1 !='000'");
+				while($row = sqlArray($query)){
 					$e = $row['e'];
 					$e1= $row['e1'];
 					$nama_sub_unit = $row['nm_skpd'];	
 		
 					$aqry = "INSERT into temp_detail_template (c1,c,d,e,e1,nama_sub_unit,ref_id_template,username) values ('$cmbUrusanForm','$cmbBidangForm','$cmbSKPDForm','$e','$e1','$nama_sub_unit','$maxID','$username')";
-					mysql_query($aqry);	
+					sqlQuery($aqry);	
 					
 							
 				}
@@ -132,8 +132,8 @@ class detailTemplateObj  extends DaftarObj2{
 		$username = $_COOKIE['coID'];
 		$arrayID = array();
 		$query = "select id from temp_detail_template where c1='$c1' and c='$c' and d='$d' and e='$e' and username = '$username' ";
-		$execute = mysql_query($query);
-		while($row = mysql_fetch_array($execute)){
+		$execute = sqlQuery($query);
+		while($row = sqlArray($execute)){
 				array_push($arrayID,array('id' => $row['id']));
 		}
 			$content = json_encode($arrayID) ;		
@@ -243,7 +243,7 @@ $baris = $_REQUEST['baris'];
 	
 	$username = $_COOKIE['coID'];
 	$cmbUnitForm = $_REQUEST['cmbUnitForm'];
-	$get = mysql_fetch_array(mysql_query("select sum(jumlah) as total from temp_detail_template where username = '$username' "));
+	$get = sqlArray(sqlQuery("select sum(jumlah) as total from temp_detail_template where username = '$username' "));
 	$totalInput = number_format($get['total'],0,",",".");
 	
 	

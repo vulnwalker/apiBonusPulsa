@@ -260,13 +260,13 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$a = "SELECT count(*) as cnt, aa.satuan_terbesar, aa.satuan_terkecil, bb.nama, aa.f, aa.g, aa.h, aa.i, aa.j FROM ref_barang aa INNER JOIN ref_satuan bb ON aa.satuan_terbesar = bb.nama OR aa.satuan_terkecil = bb.nama WHERE bb.nama='".$this->form_idplh."' "; $cek .= $a;
-		$aq = mysql_query($a);
-		$cnt = mysql_fetch_array($aq);
+		$aq = sqlQuery($a);
+		$cnt = sqlArray($aq);
 		
 		if($cnt['cnt'] > 0) $err = "Satuan Tidak Bisa Diubah ! Sudah Digunakan Di Ref Barang.";
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_satuan WHERE nama='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -289,7 +289,7 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -372,15 +372,15 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	 $idTerima_det = $_REQUEST['idTerima_det'];
 	 
 	 $qry_tampil = "SELECT * FROM ".$DataPengaturan->VPenerima_det()." WHERE Id='$idTerima_det' AND refid_terima='$idTerima' ";
-	 $aqry_tampil = mysql_query($qry_tampil);
-	 $dt = mysql_fetch_array($aqry_tampil);
+	 $aqry_tampil = sqlQuery($qry_tampil);
+	 $dt = sqlArray($aqry_tampil);
 	 
 	 //TAMPIL DISTRIBUSI
 	 $qry_dstr = "SELECT nomor, tgl_dok FROM t_distribusi WHERE refid_terima='$idTerima' AND refid_penerimaan_det='$idTerima_det' AND sttemp='0' LIMIT 0,1";
-	 $daqry_dstr = mysql_query($qry_dstr);
+	 $daqry_dstr = sqlQuery($qry_dstr);
 	 
-	 if(mysql_num_rows($daqry_dstr) > 0){
-	 	$dt_dstr = mysql_fetch_array($daqry_dstr);
+	 if(sqlNumRow($daqry_dstr) > 0){
+	 	$dt_dstr = sqlArray($daqry_dstr);
 		$tgl_dok = explode("-",$dt_dstr['tgl_dok']);
 		$tgl_dok = $tgl_dok[2].'-'.$tgl_dok[1].'-'.$tgl_dok[0];
 		
@@ -401,8 +401,8 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	
 	if($DataOption['skpd'] != '1'){
 		$qry4 = "SELECT * FROM ref_skpd WHERE c1='$c1' AND c='00' AND d='00' AND e='00' AND e1='000'";$cek.=$qry;
-		$aqry4 = mysql_query($qry4);
-		$data4 = mysql_fetch_array($aqry4);
+		$aqry4 = sqlQuery($qry4);
+		$data4 = sqlArray($aqry4);
 		$dataC1 = $DataPengaturan->isiform(
 					array(
 						array(
@@ -423,20 +423,20 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	}
 	
 	$qry = "SELECT * FROM ref_skpd WHERE $WHEREC1 c='$c' AND d='00' AND e='00' AND e1='000'";$cek.=$qry;
-	$aqry = mysql_query($qry);
-	$data = mysql_fetch_array($aqry);
+	$aqry = sqlQuery($qry);
+	$data = sqlArray($aqry);
 	
 	$qry1 = "SELECT * FROM ref_skpd WHERE $WHEREC1 c='$c' AND d='$d' AND e='00' AND e1='000'";$cek.=$qry1;
-	$aqry1 = mysql_query($qry1);
-	$data1 = mysql_fetch_array($aqry1);
+	$aqry1 = sqlQuery($qry1);
+	$data1 = sqlArray($aqry1);
 	
 	$qry2 = "SELECT * FROM ref_skpd WHERE $WHEREC1 c='$c' AND d='$d' AND e='$e' AND e1='000'";$cek.=$qry2;
-	$aqry2 = mysql_query($qry2);
-	$data2 = mysql_fetch_array($aqry2);
+	$aqry2 = sqlQuery($qry2);
+	$data2 = sqlArray($aqry2);
 	
 	$qry3 = "SELECT * FROM ref_skpd WHERE $WHEREC1 c='$c' AND d='$d' AND e='$e' AND e1='$e1'";$cek.=$qry3;
-	$aqry3 = mysql_query($qry3);
-	$data3 = mysql_fetch_array($aqry3);
+	$aqry3 = sqlQuery($qry3);
+	$data3 = sqlArray($aqry3);
 	
 	$qry_unitkerja = "SELECT e, concat(e,'.',nm_skpd) as nm_skpd FROM ref_skpd WHERE $WHEREC1 c='$c' AND d='$d' AND e!='00' GROUP BY e";
 	if($e != '01')$qry_unitkerja.=" AND e='$e'";
@@ -637,14 +637,14 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		for($i = 0; $i<count($ids); $i++)	{
 		
 			$a = "SELECT count(*) as cnt, aa.satuan_terbesar, aa.satuan_terkecil, bb.nama, aa.f, aa.g, aa.h, aa.i, aa.j FROM ref_barang aa INNER JOIN ref_satuan bb ON aa.satuan_terbesar = bb.nama OR aa.satuan_terkecil = bb.nama WHERE bb.nama='".$ids[$i]."' "; $cek .= $a;
-		$aq = mysql_query($a);
-		$cnt = mysql_fetch_array($aq);
+		$aq = sqlQuery($a);
+		$cnt = sqlArray($aq);
 		
 		if($cnt['cnt'] > 0) $err = "Satuan ".$ids[$i]." Tidak Bisa DiHapus ! Sudah Digunakan Di Ref Barang.";
 		
 			if($err=='' ){
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE nama='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;
@@ -673,8 +673,8 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		
 		
 		$dt_barang = "SELECT * FROM t_penerimaan_barang_det WHERE Id='$idTerima_det' AND refid_terima='$idTerima' ";$cek.=$dt_barang;
-		$qry_dt_barang = mysql_query($dt_barang);
-		$aqry_dt_barang = mysql_fetch_array($qry_dt_barang);
+		$qry_dt_barang = sqlQuery($dt_barang);
+		$aqry_dt_barang = sqlArray($qry_dt_barang);
 		
 		$kodebarangnya = "AND f1='".$aqry_dt_barang['f1']."' AND f2='".$aqry_dt_barang['f2']."' AND f='".$aqry_dt_barang['f']."' AND g='".$aqry_dt_barang['g']."' AND h='".$aqry_dt_barang['h']."' AND i='".$aqry_dt_barang['i']."' AND j='".$aqry_dt_barang['j']."' ";
 		
@@ -686,9 +686,9 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		}
 		
 		$cek.=$qry;		
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		$no=1;
-		while($dt = mysql_fetch_array($aqry)){	
+		while($dt = sqlArray($aqry)){	
 			$kodeskpdnya = $c1nya.'_'.$cnya.'_'.$dnya.'_'.$unitkerja."_".$dt['e1'];
 			$datanya.="
 				<tr class='row0'>
@@ -709,7 +709,7 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		}
 		
 						
-		if(mysql_num_rows($aqry) > 0){
+		if(sqlNumRow($aqry) > 0){
 					
 			$content['tabel'] =
 				genFilterBar(
@@ -757,8 +757,8 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	 	$dataskpdnya = $_REQUEST['dataskpdnya'];
 		
 		$tmplTerimaDet = "SELECT * FROM t_penerimaan_barang_det WHERE Id='$idTerima_det' AND refid_terima='$idTerima'";$cek.= $tmplTerimaDet;
-		$qry_tmplTerimaDet = mysql_query($tmplTerimaDet);
-		$daqry_tmDet = mysql_fetch_array($qry_tmplTerimaDet);
+		$qry_tmplTerimaDet = sqlQuery($tmplTerimaDet);
+		$daqry_tmDet = sqlArray($qry_tmplTerimaDet);
 		
 		//KODE UNTUK QUERY
 		$kodebarangnya = "AND f1='".$daqry_tmDet['f1']."' AND f2='".$daqry_tmDet['f2']."' AND f='".$daqry_tmDet['f']."' AND g='".$daqry_tmDet['g']."' AND h='".$daqry_tmDet['h']."' AND i='".$daqry_tmDet['i']."' AND j='".$daqry_tmDet['j']."' ";
@@ -775,10 +775,10 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 							
 					
 				$qry = "SELECT * FROM t_distribusi WHERE $kodeskpd $kodebarangnya AND status='1'  AND refid_penerimaan_det ='$idTerima_det' ";
-				$daqry = mysql_query($qry);
-				$dt_daqry = mysql_fetch_array($daqry);
+				$daqry = sqlQuery($qry);
+				$dt_daqry = sqlArray($daqry);
 				
-				if(mysql_num_rows($daqry) != 0){
+				if(sqlNumRow($daqry) != 0){
 					if($dt_daqry['jumlah'] != $jml_brg)$err ='Ada data yang Belum Disimpan !. Mau Disimpan ?';
 				}else{
 					if($jml_brg > 0)$err ='Ada data yang Belum Disimpan ! Mau Disimpan ?';
@@ -817,10 +817,10 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		
 		
 		$cek.=$qry;
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		$no=1;
 		$jumlah_barang = 0;
-		while($dt = mysql_fetch_array($aqry)){	
+		while($dt = sqlArray($aqry)){	
 			$kodeskpdnya = $c1nya.'_'.$cnya.'_'.$dnya.'_'.$unitkerja."_".$dt['e1'];
 			$datanya.="
 				<tr class='row0'>
@@ -843,8 +843,8 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 		
 		//SISA JUMLAHNYA----------------------------------------------------------------------------------------------
 		$dt_barang = "SELECT * FROM t_penerimaan_barang_det WHERE Id='$idTerima_det' AND refid_terima='$idTerima' ";$cek.=$dt_barang;
-		$qry_dt_barang = mysql_query($dt_barang);
-		$aqry_dt_barang = mysql_fetch_array($qry_dt_barang);
+		$qry_dt_barang = sqlQuery($dt_barang);
+		$aqry_dt_barang = sqlArray($qry_dt_barang);
 		
 		$sisatotal = $aqry_dt_barang['jml'] - $jumlah_barang;
 		
@@ -906,8 +906,8 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	 if(isset($_REQUEST['dataskpdnya'])){
 	 	$dataskpdnya = $_REQUEST['dataskpdnya'];
 		$tmplTerimaDet = "SELECT * FROM t_penerimaan_barang_det WHERE Id='$idTerima_det' AND refid_terima='$idTerima'";$cek.= $tmplTerimaDet;
-		$qry_tmplTerimaDet = mysql_query($tmplTerimaDet);
-		$daqry_tmDet = mysql_fetch_array($qry_tmplTerimaDet);
+		$qry_tmplTerimaDet = sqlQuery($tmplTerimaDet);
+		$daqry_tmDet = sqlArray($qry_tmplTerimaDet);
 		
 		
 		//KODE UNTUK QUERY
@@ -925,15 +925,15 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 				$kodeskpd = "c1='$c1' AND c='$c' AND d='$d' AND e='$ebaru' AND e1='$e1baru' ";
 					
 				$qry = "SELECT * FROM t_distribusi WHERE $kodeskpd $kodebarangnya AND status='1' AND refid_penerimaan_det ='$idTerima_det' ";
-				$daqry = mysql_query($qry);
-				$dt_daqry = mysql_fetch_array($daqry);
+				$daqry = sqlQuery($qry);
+				$dt_daqry = sqlArray($daqry);
 				
 				$masukan = TRUE;
 				
-				if(mysql_num_rows($daqry) != 0){
+				if(sqlNumRow($daqry) != 0){
 					if($dt_daqry['jumlah'] != $jml_brg){
 						$qryupd= "UPDATE t_distribusi SET status='2' WHERE $kodeskpd $kodebarangnya AND refid_terima='$idTerima' AND refid_penerimaan_det='$idTerima_det' ";$cek.=$qryupd;
-						$aqryupd = mysql_query($qryupd);
+						$aqryupd = sqlQuery($qryupd);
 						
 						$masukan = $this->CEKMASUKAN($jml_brg);
 					}else{
@@ -945,7 +945,7 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 					
 				if($masukan == TRUE){
 					$qryins = "INSERT INTO t_distribusi (c1,c,d,e,e1,f1,f2,f,g,h,i,j,jumlah, refid_terima, tahun, refid_penerimaan_det, uid, status, sttemp) values ('$c1', '$c', '$d', '$ebaru', '$e1baru', '".$daqry_tmDet['f1']."', '".$daqry_tmDet['f2']."', '".$daqry_tmDet['f']."', '".$daqry_tmDet['g']."', '".$daqry_tmDet['h']."', '".$daqry_tmDet['i']."', '".$daqry_tmDet['j']."', '$jml_brg', '$idTerima', '$thn_anggaran', '$idTerima_det', '$uid', '1', '1')";$cek.= "| ".$qryins;
-					$aqryins = mysql_query($qryins);
+					$aqryins = sqlQuery($qryins);
 				}	
 					
 			}else{			
@@ -978,12 +978,12 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	 	 
 	 //Cek JUMLAH Barang DIPenerimaan_det;
 	 $qry_cek_pendet = "SELECT jml FROM t_penerimaan_barang_det WHERE Id='$idTerima_det' AND refid_terima='$idTerima' ";$cek.=$qry_cek_pendet;
-	 $aqry_cek_pendet = mysql_fetch_array(mysql_query($qry_cek_pendet));
+	 $aqry_cek_pendet = sqlArray(sqlQuery($qry_cek_pendet));
 	 
 	 //Cek Jumlah Barang Di Distribusi
 	 $qry_cek_distri = "SELECT SUM(jumlah) as jumlah FROM t_distribusi WHERE refid_penerimaan_det='$idTerima_det' AND refid_terima='$idTerima' AND status='1' ";$cek.=' | '.$qry_cek_distri;
 	 
-	 $aqry_cek_distri = mysql_fetch_array(mysql_query($qry_cek_distri));
+	 $aqry_cek_distri = sqlArray(sqlQuery($qry_cek_distri));
 	 
 	 if($err == ''){
 	 	if($aqry_cek_pendet['jml'] < $aqry_cek_distri['jumlah'])$err = "Jumlah Barang Yang Menerima Distribusi, Tidak Boleh melebihi jumlah barang yang didistribusikan !";
@@ -992,10 +992,10 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	 if($err == ''){
 	 	//HAPUS t_distribusi status = '2'
 	 	$qry_del_dstr = "DELETE FROM  t_distribusi WHERE refid_penerimaan_det='$idTerima_det' AND refid_terima='$idTerima' AND status='2' ";
-		$aqry_del_dstr = mysql_query($qry_del_dstr);
+		$aqry_del_dstr = sqlQuery($qry_del_dstr);
 		//UPDATE t_distribusi
 		$qry_upd_dstr = "UPDATE t_distribusi SET sttemp='0', nomor='$nomor_dok', tgl_dok='$tgl_dok' WHERE refid_penerimaan_det='$idTerima_det' AND refid_terima='$idTerima' AND status='1' ";
-		$aqry_upd_dstr = mysql_query($qry_upd_dstr);
+		$aqry_upd_dstr = sqlQuery($qry_upd_dstr);
 	 }				
 	 return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
     }	
@@ -1016,10 +1016,10 @@ class pemasukan_distribusiObj  extends DaftarObj2{
 	 if($err == ''){
 	 	//HAPUS t_distribusi status = '2'
 	 	$qry_del_dstr = "DELETE FROM  t_distribusi WHERE refid_penerimaan_det='$idTerima_det' AND refid_terima='$idTerima' AND sttemp='1' ";
-		$aqry_del_dstr = mysql_query($qry_del_dstr);
+		$aqry_del_dstr = sqlQuery($qry_del_dstr);
 		//UPDATE t_distribusi
 		$qry_upd_dstr = "UPDATE t_distribusi SET status='1' WHERE refid_penerimaan_det='$idTerima_det' AND refid_terima='$idTerima' AND sttemp='0' ";
-		$aqry_upd_dstr = mysql_query($qry_upd_dstr);
+		$aqry_upd_dstr = sqlQuery($qry_upd_dstr);
 	 }
 	 				
 	 return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	

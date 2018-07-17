@@ -82,13 +82,13 @@ class pemasukanObj  extends DaftarObj2{
 		$TotalHalRp = 0;
 		
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry.'<br>';
-		$qry = mysql_query($aqry);
-		$numrows = mysql_num_rows($qry); $cek.= " jmlrow = $numrows ";
+		$qry = sqlQuery($aqry);
+		$numrows = sqlNumRow($qry); $cek.= " jmlrow = $numrows ";
 		if( $numrows> 0 ) {
 					
-		while ( $isi=mysql_fetch_array($qry)){
+		while ( $isi=sqlArray($qry)){
 			if ( $isi[$this->KeyFields[0]] != '' ){
 				$isi = array_map('utf8_encode', $isi);	
 				
@@ -256,7 +256,7 @@ class pemasukanObj  extends DaftarObj2{
 			$content['alert'] = "Berhasil Membatalkan Validasi !";
 		}
 		$cek.=' | '.$qry;
-		$aqry = mysql_query($qry);	
+		$aqry = sqlQuery($qry);	
 	 }
 	 			
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -375,11 +375,11 @@ class pemasukanObj  extends DaftarObj2{
 			$this->form_idplh = $cbid[0];
 			
 			$qry = "SELECT * FROM t_penerimaan_barang WHERE Id = '$idplh' ";$cek=$qry;
-			$aqry = mysql_query($qry);
-			$dt = mysql_fetch_array($aqry);
+			$aqry = sqlQuery($qry);
+			$dt = sqlArray($aqry);
 			
 			$namavalid = "SELECT nama FROM admin WHERE uid='".$dt['uid_validasi']."'";
-			$aqry_namavalid = mysql_fetch_array(mysql_query($namavalid));
+			$aqry_namavalid = sqlArray(sqlQuery($namavalid));
 			
 			//if($dt['status_validasi'] == '1')if($dt['uid_validasi'] != '' || $dt['uid_validasi'] != null)if($dt['uid_validasi'] != $uid) $err = "Data Sudah di Validasi, Perubahan Hanya Bisa Dilakukan oleh yang Memvalidasi !";
 			if($dt['status_validasi'] == '1')if($dt['uid_validasi'] != '' || $dt['uid_validasi'] != null)if($dt['uid_validasi'] != $uid) $err = "Data Sudah di Validasi, Perubahan Hanya Bisa Dilakukan oleh ".$aqry_namavalid['nama']." !";
@@ -547,7 +547,7 @@ class pemasukanObj  extends DaftarObj2{
 		
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -653,7 +653,7 @@ class pemasukanObj  extends DaftarObj2{
 		
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	$qry_ref_ttd = "SELECT Id, nama FROM ref_tandatangan WHERE c1='".$dt['c1']."' AND c='".$dt['c']."' AND d='".$dt['d']."' AND e='".$dt['e']."' AND e1='".$dt['e1']."' ";$cek.=$qry_ref_ttd;
 		
@@ -760,7 +760,7 @@ class pemasukanObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_satuan WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -782,7 +782,7 @@ class pemasukanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -897,8 +897,8 @@ class pemasukanObj  extends DaftarObj2{
 	 
 	//QRY REKENING
 	$qryrekening = "SELECT * FROM v1_penerimaan_barang_rekening WHERE refid_terima='".$isi['Id']."' AND sttemp='0'";
-	$aqry_rekening = mysql_query($qryrekening);	
-	$hitung_rekeningnya = mysql_num_rows($aqry_rekening);
+	$aqry_rekening = sqlQuery($qryrekening);	
+	$hitung_rekeningnya = sqlNumRow($aqry_rekening);
 	$xnya = 0;
 	$harga_tot_rek = 0;
 	 
@@ -908,25 +908,25 @@ class pemasukanObj  extends DaftarObj2{
 	if($isi['jns_trans'] == 2)$where_kptls = "AND barangdistribusi='1' ";
 	
 	$qrypenerimaan_det = "SELECT * FROM ".$DataPengaturan->VPenerima_det()." WHERE refid_terima='".$isi['Id']."' AND sttemp='0' $where_kptls";
-	$aqrypenerimaan_det = mysql_query($qrypenerimaan_det);
-	$hitung_penerimaan_det = mysql_num_rows($aqrypenerimaan_det);
+	$aqrypenerimaan_det = sqlQuery($qrypenerimaan_det);
+	$hitung_penerimaan_det = sqlNumRow($aqrypenerimaan_det);
 	$nhitung = 0;
 	$harga_tot_pendet = 0;
 	$tot_bar = 0;
 	
 	//JUMLAH Total Harga penerimaan_rincian
 	$jml_qrypenerimaan_det = "SELECT SUM(harga_total) as total, SUM(jml) as jml_barangnya FROM ".$DataPengaturan->VPenerima_det()." WHERE refid_terima='".$isi['Id']."' AND sttemp='0'";
-	$qryjml_penerimaan_det = mysql_query($jml_qrypenerimaan_det);
-	$aqryjml_penerimaan_det = mysql_fetch_array($qryjml_penerimaan_det);
+	$qryjml_penerimaan_det = sqlQuery($jml_qrypenerimaan_det);
+	$aqryjml_penerimaan_det = sqlArray($qryjml_penerimaan_det);
 	
 	//QRY ATRIBUSI
 	$qry_atribusi = "SELECT * FROM v1_penerimaan_atribusi WHERE refid_terima='".$isi['Id']."'";
-	$aqry_atribusi = mysql_query($qry_atribusi);
+	$aqry_atribusi = sqlQuery($qry_atribusi);
 	$tot_atr = 0;
 	//JUMLAH TOTAL Harga atribusi
 	$jml_qry_atribusi = "SELECT SUM(TAR_jumlah) as jumlah FROM v1_penerimaan_atribusi WHERE refid_terima='".$isi['Id']."'";
-	$jml_aqry_atribusi = mysql_query($jml_qry_atribusi);
-	$aqryjml_aqry_atribusi = mysql_fetch_array($jml_aqry_atribusi);
+	$jml_aqry_atribusi = sqlQuery($jml_qry_atribusi);
+	$aqryjml_aqry_atribusi = sqlArray($jml_aqry_atribusi);
 	
 	
 	 // TDTR MULAI DISINI ------------------------------------------------------------------------
@@ -944,7 +944,7 @@ class pemasukanObj  extends DaftarObj2{
 	 	
 		
 		$noatri = 0;
-		while($dt_atri = mysql_fetch_array($aqry_atribusi)){
+		while($dt_atri = sqlArray($aqry_atribusi)){
 		
 			$tglsp2d_atri = explode("-",$dt_atri['tgl_sp2d']);
 			$tglsp2d_atri = $tglsp2d_atri[2]."-".$tglsp2d_atri[1]."-".$tglsp2d_atri[0];
@@ -982,7 +982,7 @@ class pemasukanObj  extends DaftarObj2{
 	//REKENING -----------------------------------------------------------------------------------	
 	if($isi['asal_usul'] == '1'){
 		
-		 while($dt_rekening = mysql_fetch_array($aqry_rekening)){
+		 while($dt_rekening = sqlArray($aqry_rekening)){
 		 	if($xnya != 0){
 			$noakhir++;
 				if($noakhir%2 == 0){
@@ -1018,12 +1018,12 @@ class pemasukanObj  extends DaftarObj2{
 	 if($isi['biayaatribusi'] == '1')$atribusi='YA';
 	 $total_harga_perolehan = 0;
 	if($hitung_penerimaan_det > 0){	
-		while($dt_penerimaan_det = mysql_fetch_array($aqrypenerimaan_det)){
+		while($dt_penerimaan_det = sqlArray($aqrypenerimaan_det)){
 			//DISTRIBUSI
 			 $brgdistribusi = 'TDK';
 			 if($dt_penerimaan_det['barangdistribusi'] == '1'){
 			 	$qrytot_disti = "SELECT ifnull(SUM(jumlah),0) as jumlah FROM t_distribusi WHERE refid_terima='".$isi['Id']."' AND refid_penerimaan_det='".$dt_penerimaan_det['Id']."' AND sttemp='0' ";
-				$aqrytot_disti = mysql_fetch_array(mysql_query($qrytot_disti));
+				$aqrytot_disti = sqlArray(sqlQuery($qrytot_disti));
 				
 				$warna_distri = '';
 				if($aqrytot_disti['jumlah'] == $dt_penerimaan_det['jml'])$warna_distri = "style='color:black;' ";
@@ -1072,8 +1072,8 @@ class pemasukanObj  extends DaftarObj2{
 			 $postnya = 'invalid.png';
 			 if($_REQUEST['halmannya'] == '1'){
 			 	$qry_toBI = "SELECT COUNT(*) as cnt FROM buku_induk WHERE refid_terima='".$isi['Id']."' ";
-				$aqry_toBI = mysql_query($qry_toBI);
-				$daqry_toBI = mysql_fetch_array($aqry_toBI);
+				$aqry_toBI = sqlQuery($qry_toBI);
+				$daqry_toBI = sqlArray($aqry_toBI);
 				
 				if($daqry_toBI['cnt'] == $aqryjml_penerimaan_det['jml_barangnya'])$postnya = "valid.png";
 				
@@ -1121,9 +1121,9 @@ class pemasukanObj  extends DaftarObj2{
 			$tot_bar=$tot_bar+$jumlah_barang;
 			
 			if($nhitung == $hitung_penerimaan_det){
-				$qrybaru_atribusi = mysql_query($qry_atribusi);
+				$qrybaru_atribusi = sqlQuery($qry_atribusi);
 				$no_atr_baru = 0;
-				while($dtbaru_atribusi = mysql_fetch_array($qrybaru_atribusi)){
+				while($dtbaru_atribusi = sqlArray($qrybaru_atribusi)){
 					$tglsp2d_atri_baru = explode("-",$dtbaru_atribusi['tgl_sp2d']);
 					$tglsp2d_atri_baru = $tglsp2d_atri_baru[2]."-".$tglsp2d_atri_baru[1]."-".$tglsp2d_atri_baru[0];
 					
@@ -1409,38 +1409,38 @@ class pemasukanObj  extends DaftarObj2{
 		$cek='';
 		//Penerimaan Rekening
 		$hapusrek = "DELETE FROM t_penerimaan_rekening WHERE tgl_update < DATE_SUB(NOW(), INTERVAL 2 HOURS) AND sttemp='1'"; $cek.="| ".$hapusrek;
-		$qry_hapusrek = mysql_query($hapusrek);
+		$qry_hapusrek = sqlQuery($hapusrek);
 		
 		$updrek = "UPDATE t_penerimaan_rekening SET status='0' WHERE tgl_update < DATE_SUB(NOW(), INTERVAL 15 MINUTE) AND sttemp='0'";$cek.="| ".$updrek;
-		$qry_updrek = mysql_query($updrek);		
+		$qry_updrek = sqlQuery($updrek);		
 					
 					
 		//Penerimaan Detail -----------------------------------------------------------------------------------
 		$hapuspenerimaan_det = "DELETE FROM t_penerimaan_barang_det WHERE tgl_update < DATE_SUB(NOW(), INTERVAL 2 HOURS) AND sttemp='1'"; $cek.="| ".$hapuspenerimaan_det;
-		$qry_hapuspenerimaan_det	= mysql_query($hapuspenerimaan_det);
+		$qry_hapuspenerimaan_det	= sqlQuery($hapuspenerimaan_det);
 		
 		$updpenerimaan_det =  "UPDATE t_penerimaan_barang_det SET status='0' WHERE tgl_update < DATE_SUB(NOW(), INTERVAL 15 MINUTE) AND sttemp='0'"; $cek.='| '.$updpenerimaan_det;
 		
-		$qry_updpenerimaan_det = mysql_query($updpenerimaan_det);		
+		$qry_updpenerimaan_det = sqlQuery($updpenerimaan_det);		
 					
 		//Penerimaan ------------------------------------------------------------------------------------------
 		$hapus_penerimaan = "DELETE FROM t_penerimaan_barang WHERE tgl_create < DATE_SUB(NOW(), INTERVAL 2 DAY) AND sttemp='1'"; $cek.="| ".$hapus_penerimaan;		
-		$qry_hapus_penerimaan = mysql_query($hapus_penerimaan);
+		$qry_hapus_penerimaan = sqlQuery($hapus_penerimaan);
 		
 		//ATRIBUSI_RINCIAN
 		$hapus_atribusiRincian = "DELETE FROM t_atribusi_rincian WHERE tgl_update < DATE_SUB(NOW(), INTERVAL 2 HOURS) AND sttemp='1'"; $cek.="| ".$hapus_atribusiRincian;
-		$qryhapus_atribusiRincian = mysql_query($hapus_atribusiRincian);
+		$qryhapus_atribusiRincian = sqlQuery($hapus_atribusiRincian);
 		
 		$upd_atribusirincian = "UPDATE t_atribusi_rincian SET status='0' WHERE tgl_update < DATE_SUB(NOW(), INTERVAL 15 MINUTE) AND sttemp='0'";$cek.="| ".$upd_atribusirincian;
-		$qry_upd_atribusirincian = mysql_query($upd_atribusirincian);
+		$qry_upd_atribusirincian = sqlQuery($upd_atribusirincian);
 		
 		//ATRIBUSI	
 		$hapus_atribusi = "DELETE FROM t_atribusi WHERE tgl_create < DATE_SUB(NOW(), INTERVAL 2 DAY) AND sttemp='1'"; $cek.="| ".$hapus_atribusi;		
-		$qry_hapus_atribusi = mysql_query($hapus_atribusi);
+		$qry_hapus_atribusi = sqlQuery($hapus_atribusi);
 		
 		//DISTRIBUSI
 		$hapus_distribusi = "DELETE FROM t_distribusi WHERE tgl_create < DATE_SUB(NOW(), INTERVAL 2 DAY) AND sttemp='1'"; $cek.="| ".$hapus_distribusi;		
-		$qry_hapus_distribusi = mysql_query($hapus_distribusi);
+		$qry_hapus_distribusi = sqlQuery($hapus_distribusi);
 		
 		return $cek;
 	}
@@ -1452,8 +1452,8 @@ class pemasukanObj  extends DaftarObj2{
 		
 		for($i = 0; $i<count($ids); $i++){
 			$qry = "SELECT * FROM t_penerimaan_barang WHERE Id='".$ids[$i]."' ";
-			$aqry = mysql_query($qry);
-			$dt = mysql_fetch_array($aqry);
+			$aqry = sqlQuery($qry);
+			$dt = sqlArray($aqry);
 			
 			if($err == '' && $dt['status_validasi'] == '1'){
 				$err = "Data dengan ID PENERIMAAN `".$dt['id_penerimaan']."` Tidak Bisa Dihapus, Sudah di Validasi !";
@@ -1471,28 +1471,28 @@ class pemasukanObj  extends DaftarObj2{
 			for($i = 0; $i<count($ids); $i++){
 				//Hapus Rekening
 				$hapusrek = "DELETE FROM t_penerimaan_rekening WHERE refid_terima ='".$ids[$i]."'"; $cek.="| ".$hapusrek;
-				$qry_hapusrek = mysql_query($hapusrek);
+				$qry_hapusrek = sqlQuery($hapusrek);
 				//Hapus Penerimaan Detail
 				$hapuspenerimaan_det = "DELETE FROM t_penerimaan_barang_det WHERE refid_terima ='".$ids[$i]."' "; $cek.="| ".$hapuspenerimaan_det;
-				$qry_hapuspenerimaan_det = mysql_query($hapuspenerimaan_det);
+				$qry_hapuspenerimaan_det = sqlQuery($hapuspenerimaan_det);
 				
 				
 				//Hapus Atribusi Rincian
 				$hps_attr_det = "DELETE FROM t_atribusi_rincian WHERE refid_terima ='".$ids[$i]."'"; $cek.=" | ".$hps_attr_det;
-				$qry_hps_attr_det = mysql_query($hps_attr_det);
+				$qry_hps_attr_det = sqlQuery($hps_attr_det);
 				//Hapus Atribusi
 				$hps_attr = "DELETE FROM t_atribusi WHERE refid_terima ='".$ids[$i]."'"; $cek.=" | ".$hps_attr;
-				$qry_hps_attr = mysql_query($hps_attr);
+				$qry_hps_attr = sqlQuery($hps_attr);
 				
 				//Hapus Distribusi
 				$hps_dstr = "DELETE FROM t_distribusi WHERE refid_terima ='".$ids[$i]."'"; $cek.=" | ".$hps_dstr;
-				$qry_hps_dstr = mysql_query($hps_dstr);
+				$qry_hps_dstr = sqlQuery($hps_dstr);
 				
 				if(file_exists("Media/PENGADAAN/".$ids[$i].".png"))unlink("Media/PENGADAAN/".$ids[$i].".png");
 				
 				//Hapus Penerimaan
 				$hapus_penerimaan = "DELETE FROM t_penerimaan_barang WHERE Id='".$ids[$i]."'"; $cek.="| ".$hapus_penerimaan;		
-				$qry_hapus_penerimaan = mysql_query($hapus_penerimaan);
+				$qry_hapus_penerimaan = sqlQuery($hapus_penerimaan);
 				
 			}
 		}
@@ -1525,25 +1525,25 @@ class pemasukanObj  extends DaftarObj2{
 		}
 		
 		$qry_pengaturan = "SELECT * FROM t_pengaturan WHERE Id = '1' ";
-		$aqry_pengaturan = mysql_query($qry_pengaturan);
-		$daqry_pengaturan = mysql_fetch_array($aqry_pengaturan);
+		$aqry_pengaturan = sqlQuery($qry_pengaturan);
+		$daqry_pengaturan = sqlArray($aqry_pengaturan);
 		
 		$id = addslashes($_REQUEST['idnya']);
 		$qry = "SELECT * FROM t_penerimaan_barang WHERE Id='$id'";
-		$aqry = mysql_query($qry);$daqry=mysql_fetch_array($aqry);
+		$aqry = sqlQuery($qry);$daqry=sqlArray($aqry);
 		
 		$qry_det = "SELECT * FROM ".$DataPengaturan->VPenerima_det()." WHERE refid_terima='$id' AND sttemp='0'";
-		$aqry_det = mysql_query($qry_det);
+		$aqry_det = sqlQuery($qry_det);
 		
 		
 		$qry_rekening = "SELECT * FROM v1_penerimaan_barang_rekening WHERE refid_terima='$id' AND sttemp='0'";
-		$aqry_rek = mysql_query($qry_rekening);
+		$aqry_rek = sqlQuery($qry_rekening);
 		
 		//Nama SKPD
 		$kodeTambahan='';
 		if($DataOption['skpd'] != '1')$kodeTambahan = "c1='".$daqry['c1']."' AND";
 		$qry_skpd = "SELECT nm_skpd FROM ref_skpd WHERE $kodeTambahan c='".$daqry['c']."' AND d='".$daqry['d']."'  AND e='".$daqry['e']."' AND e1='".$daqry['e1']."' ";
-		$aqry_skpd = mysql_query($qry_skpd);$daqry_skpd = mysql_fetch_array($aqry_skpd);
+		$aqry_skpd = sqlQuery($qry_skpd);$daqry_skpd = sqlArray($aqry_skpd);
 		
 		//$css = $this->cetak_xls	? 
 		$gambarnya='';
@@ -1614,7 +1614,7 @@ class pemasukanObj  extends DaftarObj2{
 				$no = 1;
 				$jumtot = 0;
 				$jumtothar = 0;
-				while($daqry_det=mysql_fetch_array($aqry_det)){
+				while($daqry_det=sqlArray($aqry_det)){
 					echo "
 						<tr>
 							<td align='right' class='GarisCetak'>$no</td>
@@ -1645,7 +1645,7 @@ class pemasukanObj  extends DaftarObj2{
 				";
 				$do = 1;
 				$totrek=0;
-				while($daqry_rek = mysql_fetch_array($aqry_rek)){
+				while($daqry_rek = sqlArray($aqry_rek)){
 					$koderekening = $daqry_rek['k'].".".$daqry_rek['l'].".".$daqry_rek['m'].".".$daqry_rek['n'].".".$daqry_rek['o'];	
 					
 				echo 
@@ -1822,7 +1822,7 @@ class pemasukanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -1868,8 +1868,8 @@ class pemasukanObj  extends DaftarObj2{
 		$Id = $cbid[0];
 		
 		$qry = "SELECT * FROM t_penerimaan_barang WHERE Id ='$Id'";$cek.=" | ".$qry;
-		$aqry = mysql_query($qry);
-		$dt = mysql_fetch_array($aqry);
+		$aqry = sqlQuery($qry);
+		$dt = sqlArray($aqry);
 		
 		//CEK APAKAH jns_trans = PEMELIHARAAN
 		if($dt['jns_trans'] == '2')$err=$this->CekKapitalisasiSesuai($Id);
@@ -1877,7 +1877,7 @@ class pemasukanObj  extends DaftarObj2{
 		
 		if($err==''){
 			$qry2 = "SELECT Id, jml FROM t_penerimaan_barang_det WHERE refid_terima = '$Id' ";$cek.=" | ".$qry2;
-			$aqry2 = mysql_query($qry2);
+			$aqry2 = sqlQuery($qry2);
 			
 			$dt['barangnya'] = array();
 			$nomor = 0;
@@ -1885,7 +1885,7 @@ class pemasukanObj  extends DaftarObj2{
 			if($dt['jns_trans'] == '1'){
 			//PENGADAAN ----------------------------------------------------------------------------------------
 				$dt['jml_brgnya']= 0;
-				while($dt2 = mysql_fetch_array($aqry2)){
+				while($dt2 = sqlArray($aqry2)){
 					$dt['barangnya'][$nomor] = "
 						<input type='hidden' name='idbarangnya[]' id='idbarangnya_$nomor' value='".$dt2['Id']."' />
 						<input type='hidden' name='jmlbarangnya_".$dt2['Id']."' id='jmlbarangnya_".$dt2['Id']."' value='".$dt2['jml']."' />
@@ -1895,8 +1895,8 @@ class pemasukanObj  extends DaftarObj2{
 				}
 				
 				$qry_cekBI = "SELECT noreg FROM buku_induk WHERE refid_terima = '$Id'";
-				$aqry_cekBI = mysql_query($qry_cekBI);
-				$jml_BI = mysql_num_rows($aqry_cekBI);
+				$aqry_cekBI = sqlQuery($qry_cekBI);
+				$jml_BI = sqlNumRow($aqry_cekBI);
 				
 				if($jml_BI > 0){
 					$dt['persen'] = floor(($jml_BI / $dt['jml_brgnya']) * 100);
@@ -1909,9 +1909,9 @@ class pemasukanObj  extends DaftarObj2{
 			//PEMELIHARAAN ----------------------------------------------------------------------------------------	
 			
 				$qry_kptls = "SELECT * FROM t_distribusi WHERE refid_terima='$Id' AND sttemp='0'";
-				$aqry = mysql_query($qry_kptls);
+				$aqry = sqlQuery($qry_kptls);
 				
-				while($dt2 = mysql_fetch_array($aqry)){
+				while($dt2 = sqlArray($aqry)){
 					$selesai = '';
 					$cek_pmlhrn = $DataPengaturan->QryHitungData('pemeliharaan', "WHERE refid_terima='$Id' AND refid_terima_det='".$dt2['refid_penerimaan_det']."' AND id_bukuinduk='".$dt2['refid_buku_induk']."'");
 					if($cek_pmlhrn['hasil'] > 0)$selesai = "<input type='hidden'  name='status_pmlhrn_$nomor' id='status_pmlhrn_$nomor' value='selesai' />";
@@ -1923,7 +1923,7 @@ class pemasukanObj  extends DaftarObj2{
 					$nomor++;
 				}
 				
-				$dt['jml_brgnya'] = mysql_num_rows($aqry);
+				$dt['jml_brgnya'] = sqlNumRow($aqry);
 				
 				$hit_pemeliharaan = $DataPengaturan->QryHitungData('pemeliharaan', "WHERE refid_terima='$Id'");
 				
@@ -1963,7 +1963,7 @@ class pemasukanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 		$BARANGNYA = '';
@@ -2070,8 +2070,8 @@ class pemasukanObj  extends DaftarObj2{
 		IF($qryJnsTrans['jns_trans'] == '1'){
 		// Posting Pengadaan Barang -----------------------------------------------------------------------------------
 			$qry_cekBI = "SELECT * FROM buku_induk WHERE refid_terima='$Idplh'";$cek.=$qry_cekBI;
-			$aqry_cekBI = mysql_query($qry_cekBI);
-			$jml_data_BI = mysql_num_rows($aqry_cekBI);
+			$aqry_cekBI = sqlQuery($qry_cekBI);
+			$jml_data_BI = sqlNumRow($aqry_cekBI);
 		
 		//CEK KE Apakah ada data yg di Distribusi ---------------------------------------------------------------------	
 			if(isset($_REQUEST['posting'])){
@@ -2101,13 +2101,13 @@ class pemasukanObj  extends DaftarObj2{
 						}
 						
 						$qry_Penerimaan = "SELECT * FROM t_penerimaan_barang WHERE Id='$Idplh'";
-						$aqry_Penerimaan = mysql_query($qry_Penerimaan);
-						$daqry_Penerimaan = mysql_fetch_array($aqry_Penerimaan);
+						$aqry_Penerimaan = sqlQuery($qry_Penerimaan);
+						$daqry_Penerimaan = sqlArray($aqry_Penerimaan);
 						
 						if($daqry_Penerimaan['biayaatribusi'] == '1'){
 							$qry_attribusi = "SELECT * FROM t_atribusi WHERE refid_terima='$Idplh' AND sttemp='0' ";
-							$aqry_attribusi = mysql_query($qry_attribusi);
-							if(mysql_num_rows($aqry_attribusi) < 1)$content['err'] = "Biaya Atribusi Belum Di Masukan !";
+							$aqry_attribusi = sqlQuery($qry_attribusi);
+							if(sqlNumRow($aqry_attribusi) < 1)$content['err'] = "Biaya Atribusi Belum Di Masukan !";
 						}
 					
 					}
@@ -2173,8 +2173,8 @@ class pemasukanObj  extends DaftarObj2{
 	function HargaRekeningBelanja($WHEREnya){
 		//Harga Beli Barang Satuan ---------------------------------------------------------------------------------------
 		$qry_rekening = "SELECT IFNULL(SUM(jumlah),0) as hrg_rek FROM t_penerimaan_rekening $WHEREnya ";
-		$aqry_rekening = mysql_query($qry_rekening);
-		$daqry_rekening = mysql_fetch_array($aqry_rekening);
+		$aqry_rekening = sqlQuery($qry_rekening);
+		$daqry_rekening = sqlArray($aqry_rekening);
 		
 		return $daqry_rekening;
 	}
@@ -2195,13 +2195,13 @@ class pemasukanObj  extends DaftarObj2{
 		
 		//Tampil Penerimaan Barang Detail
 		$qry_pen_det = "SELECT * FROM t_penerimaan_barang_det WHERE Id='$IdPenDet'";$cek.=' | '.$qry_pen_det;
-		$aqry_pen_det = mysql_query($qry_pen_det);
-		$daqry_pen_det = mysql_fetch_array($aqry_pen_det);
+		$aqry_pen_det = sqlQuery($qry_pen_det);
+		$daqry_pen_det = sqlArray($aqry_pen_det);
 		
 		//Tampil Penerimaan Barang
 		$qry_pen = "SELECT tgl_dokumen_sumber, no_dokumen_sumber, asal_usul, tgl_buku, bk,ck,dk,p,q,biayaatribusi, sumber_dana  FROM t_penerimaan_barang WHERE Id='$pemasukan_idplh' ";$cek.=" | ".$qry_pen;
-		$aqry_pen = mysql_query($qry_pen);
-		$daqry_pen = mysql_fetch_array($aqry_pen);
+		$aqry_pen = sqlQuery($qry_pen);
+		$daqry_pen = sqlArray($aqry_pen);
 		
 		//SET DATA-DATA
 		$Data_a = $Main->DEF_PROPINSI;	
@@ -2329,9 +2329,9 @@ class pemasukanObj  extends DaftarObj2{
 		//KE BUKU INDUK --------------------------------------------------------------------------------------------------
 		
 		$qry_toBI = "SELECT sf_penerimaan_posting('$IdPenDet', '$thn_BAST', '$harga_perolehan_satuan', '$harga_perolehan_satuan_akhir', '$Get_staset', '$Data_a', '$Data_a1', '$Data_b', '$tgl_dokumen_sumber', '$no_BAST', '$asal_usul', '$tgl_buku', '$JMLBRGNY', '0', $harga_beli_barang, $harga_atribusi_barang, '$bk', '$ck', '$dk', '$p', '$q', '$thn_anggaran','$UID', $noregMax, '$sumber_dana', '$HargaSemuaPengadaan') as hasil";$cek.=" | ".$qry_toBI;
-		$aqry_toBI = mysql_query($qry_toBI);
+		$aqry_toBI = sqlQuery($qry_toBI);
 		if(!$aqry_toBI && $err=='')$err='Gagal Memposting Data !';
-		$daqry_toBI = mysql_fetch_array($aqry_toBI);
+		$daqry_toBI = sqlArray($aqry_toBI);
 		
 		$isi_toBI = explode(" ", $daqry_toBI['hasil']);
 		if($isi_toBI[0] == "NEXT")$content['Langsung'] = "1";
@@ -2363,28 +2363,28 @@ class pemasukanObj  extends DaftarObj2{
 			if($cek_jns['jns_trans'] == '1'){
 			
 				$qry_cek = "SELECT * FROM (SELECT COUNT(*) as cnt, tt.*  FROM t_transaksi tt WHERE refid_terima='$idplh' GROUP BY idbi) aa WHERE cnt > 1 ;";$cek.= $qry_cek ;
-				$aqry_cek = mysql_query($qry_cek);
+				$aqry_cek = sqlQuery($qry_cek);
 				
-				if($err == '' && mysql_num_rows($aqry_cek) > 0)$err='Tidak Bisa Membatalkan Posting, Sudah Ada Transaksi Lain Yang Digunakan !';
+				if($err == '' && sqlNumRow($aqry_cek) > 0)$err='Tidak Bisa Membatalkan Posting, Sudah Ada Transaksi Lain Yang Digunakan !';
 							
 				if($err == ''){
 					$qry_del = "DELETE FROM buku_induk WHERE refid_terima = '$idplh' ORDER BY id DESC LIMIT 100";$cek.=$qry_del;
-					$aqry_del = mysql_query($qry_del);
+					$aqry_del = sqlQuery($qry_del);
 					
 					$qry = "SELECT COUNT(*) as cnt FROM buku_induk WHERE refid_terima = '$idplh' ";$cek.=$qry;
-					$aqry = mysql_query($qry);
+					$aqry = sqlQuery($qry);
 										
 				}
 			}else{
 			
 				$qry_del = "DELETE FROM pemeliharaan WHERE refid_terima = '$idplh' ORDER BY id DESC LIMIT 100";$cek.=$qry_del;
-				$aqry_del = mysql_query($qry_del);
+				$aqry_del = sqlQuery($qry_del);
 				
 				$qry = "SELECT COUNT(*) as cnt FROM pemeliharaan WHERE refid_terima = '$idplh' ";$cek.=$qry;
-				$aqry = mysql_query($qry);
+				$aqry = sqlQuery($qry);
 			}
 			
-			$daqry = mysql_fetch_array($aqry);
+			$daqry = sqlArray($aqry);
 			$content['JumlahBarang'] = $daqry['cnt'];	
 			if($daqry['cnt'] > 0 ){
 				$content['Proses'] = "NEXT";
@@ -2411,8 +2411,8 @@ class pemasukanObj  extends DaftarObj2{
 		if($pilihan == 'mengetahui')$Idplh_nama = $_REQUEST['nama_mengetahui'];
 		
 		$qry = "SELECT * FROM ref_tandatangan WHERE Id='$Idplh_nama' ";
-		$aqry = mysql_query($qry);
-		$daqry = mysql_fetch_array($aqry);
+		$aqry = sqlQuery($qry);
+		$daqry = sqlArray($aqry);
 		
 		$content['nip'] = $daqry['nip'];
 		$content['pangkat'] = $daqry['pangkat']."/".$daqry['gol'];
@@ -2524,7 +2524,7 @@ class pemasukanObj  extends DaftarObj2{
 		
 		$qry = "SELECT tpb.*, hit.cnt FROM (SELECT aa.Id, aa.tgl_buku, aa.no_dokumen_sumber, aa.tgl_dokumen_sumber, aa.dokumen_sumber, aa.refid_penyedia, aa.nomor_kontrak, aa.tgl_kontrak, aa.id_penerimaan, bb.nm_barang, bb.ket_barang, bb.jml, bb.harga_satuan, bb.harga_total, bb.keterangan FROM ".$this->TblName." aa RIGHT JOIN ".$DataPengaturan->VPenerima_det()." bb ON aa.Id=bb.refid_terima WHERE $whereskpd AND aa.sttemp='0' AND bb.sttemp='0' AND aa.tgl_dokumen_sumber >= '$tgl_dari' AND aa.tgl_dokumen_sumber <= '$tgl_sampai' AND aa.jns_trans='1' GROUP BY bb.Id) tpb
 LEFT JOIN (SELECT refid_terima, COUNT(Id) as cnt FROM ".$DataPengaturan->VPenerima_det()." GROUP BY refid_terima) hit ON tpb.Id=hit.refid_terima ";
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		
 				
 		//MULAI Halaman Laporan ------------------------------------------------------------------------------------------ 
@@ -2582,7 +2582,7 @@ LEFT JOIN (SELECT refid_terima, COUNT(Id) as cnt FROM ".$DataPengaturan->VPeneri
 		$pid = '';
 		$no_cek = 0;
 		$no = 1;
-		while($daqry = mysql_fetch_array($aqry)){
+		while($daqry = sqlArray($aqry)){
 			if($pid != $daqry['Id'])$no_cek=0;
 			
 			$tgl_dokumen_sumber = explode("-",$daqry['tgl_dokumen_sumber']);
@@ -2836,7 +2836,7 @@ LEFT JOIN (SELECT refid_terima, COUNT(Id) as cnt FROM ".$DataPengaturan->VPeneri
 		
 		$daqry_pengaturan = $DataOption;
 		$qry = "SELECT * FROM (SELECT vtpdet.*, tpd.tgl_dokumen_sumber, tpd.jns_trans FROM ".$DataPengaturan->VPenerima_det()." vtpdet LEFT JOIN t_penerimaan_barang tpd ON vtpdet.refid_terima=tpd.Id WHERE tpd.sttemp='0' AND vtpdet.sttemp='0' AND tpd.jns_trans='1') aa WHERE tgl_dokumen_sumber>='$dari' AND tgl_dokumen_sumber<='$sampai' AND $whereskpd $wherekodbar";
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		
 		
 				
@@ -2881,7 +2881,7 @@ LEFT JOIN (SELECT refid_terima, COUNT(Id) as cnt FROM ".$DataPengaturan->VPeneri
 		$no=1;	
 		$jml_brg = 0;
 		$tot_hrg = 0;					
-		while($daqry = mysql_fetch_array($aqry)){
+		while($daqry = sqlArray($aqry)){
 			$kodebarang = $daqry['f'].".".$daqry['g'].".".$daqry['h'].".".$daqry['i'].".".$daqry['j'];
 			if($DataOption['kode_barang'] != '1')$kodebarang = $daqry['f1'].'.'.$daqry['f2'].$kodebarang;
 			echo				"
@@ -2996,9 +2996,9 @@ LEFT JOIN (SELECT refid_terima, COUNT(Id) as cnt FROM ".$DataPengaturan->VPeneri
 		
 		if($err == ''){
 			$qry = "SELECT sf_penerimaan_posting_pemeliharaan($IdDistribusi, $coThnAnggaran, '$asal_usul') as hasil";$cek.=$qry;
-			$aqry = mysql_query($qry);
+			$aqry = sqlQuery($qry);
 			if(!$aqry)$err=mysql_error();
-			$daqry = mysql_fetch_array($aqry);
+			$daqry = sqlArray($aqry);
 					
 			$hasil = explode(" ",$daqry['hasil']);
 			$selanjutnya = $hasil[0];
@@ -3021,8 +3021,8 @@ LEFT JOIN (SELECT refid_terima, COUNT(Id) as cnt FROM ".$DataPengaturan->VPeneri
 		$idplh = $cbid[0];
 			
 		$qry = "SELECT * FROM t_penerimaan_barang WHERE Id='$idplh' ";
-		$aqry = mysql_query($qry);
-		$dt = mysql_fetch_array($aqry);
+		$aqry = sqlQuery($qry);
+		$dt = sqlArray($aqry);
 			
 		if(isset($_REQUEST['atrib']) ){
 			if($err == '' && $dt['status_validasi'] == '1')$err = "Data Tidak Bisa Diubah, Data Sudah di Validasi !";

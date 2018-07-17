@@ -105,7 +105,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_a_tmp (c,d,e,e1,kd_skpd,kode_barang,thn_perolehan,noreg,nama_barang,jml_barang,jml_harga,status_barang,satuan,tgl_buku,asal_usul,luas,alamat,kota,status_hak,bersertifikat,sertifikat_tgl,sertifikat_no,penggunaan,ket,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kd_skpd','$kode_barang','$thn_perolehan','$noreg','$nama_barang','$jml_barang','$jml_harga','$status_barang','$satuan','$tgl_buku','$asal_usul','$luas','$alamat','$kota','$status_hak','$bersertifikat','$sertifikat_tgl','$sertifikat_no','$penggunaan','$ket','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();
@@ -160,7 +160,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_b_tmp (c,d,e,e1,kode_barang,nama_barang,merk,thn_perolehan,jml_barang,jml_harga,asal_usul,kondisi,ukuran,bahan,no_rangka,no_mesin,no_polisi,no_bpkb,kondisi1,kondisi2,lokasi,ket,noreg,status_barang,tgl_buku,kd_skpd,satuan,no_pabrik,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kode_barang','$nama_barang','$merk','$thn_perolehan','$jml_barang','$jml_harga','$asal_usul','$kondisi','$ukuran','$bahan','$no_rangka','$no_mesin','$no_polisi','$no_bpkb','$kondisi1','$kondisi2','$lokasi','$ket','$noreg','$status_barang','$tgl_buku','$kd_skpd','$satuan','$no_pabrik','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();
@@ -215,7 +215,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_c_tmp (c,d,e,e1,kd_skpd,kode_barang,thn_perolehan,noreg,nama_barang,jml_barang,jml_harga,status_barang,satuan,tgl_buku,asal_usul,kondisi,kondisi_bangunan,konstruksi_tingkat,konstruksi_beton,luas_lantai,alamat,luas,status_tanah,kode_tanah,kode_loktanah,ket,dokumen_tgl,dokumen_no,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kd_skpd','$kode_barang','$thn_perolehan','$noreg','$nama_barang','$jml_barang','$jml_harga','$status_barang','$satuan','$tgl_buku','$asal_usul','$kondisi','$kondisi_bangunan','$konstruksi_tingkat','$konstruksi_beton','$luas_lantai','$alamat','$luas','$status_tanah','$kode_tanah','$kode_loktanah','$ket','$dokumen_tgl','$dokumen_no','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();
@@ -266,7 +266,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_d_tmp (c,d,e,e1,kd_skpd,kode_barang,thn_perolehan,noreg,nama_barang,jml_barang,jml_harga,status_barang,satuan,tgl_buku,asal_usul,konstruksi,kondisi,panjang,lebar,luas,alamat,kota,status_tanah,kode_tanah,ket,dokumen_tgl,dokumen_no,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kd_skpd','$kode_barang','$thn_perolehan','$noreg','$nama_barang','$jml_barang','$jml_harga','$status_barang','$satuan','$tgl_buku','$asal_usul','$konstruksi','$kondisi','$panjang','$lebar','$luas','$alamat','$kota','$status_tanah','$kode_tanah','$ket','$dokumen_tgl','$dokumen_no','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();
@@ -314,7 +314,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_e_tmp (c,d,e,e1,kd_skpd,kode_barang,thn_perolehan,noreg,nama_barang,jml_barang,jml_harga,status_barang,satuan,tgl_buku,asal_usul,buku_judul,buku_spesifikasi,seni_asal_daerah,seni_pencipta,seni_bahan,hewan_jenis,hewan_ukuran,ket,kondisi,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kd_skpd','$kode_barang','$thn_perolehan','$noreg','$nama_barang','$jml_barang','$jml_harga','$status_barang','$satuan','$tgl_buku','$asal_usul','$buku_judul','$buku_spesifikasi','$seni_asal_daerah','$seni_pencipta','$seni_bahan','$hewan_jenis','$hewan_ukuran','$ket','$kondisi','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();
@@ -364,7 +364,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_f_tmp (c,d,e,e1,kd_skpd,kode_barang,thn_perolehan,noreg,nama_barang,jml_barang,jml_harga,status_barang,satuan,tgl_buku,asal_usul,bangunan,konstruksi_tingkat,konstruksi_beton,luas,alamat,status_tanah,kode_tanah,ket,kota,dokumen_tgl,dokumen_no,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kd_skpd','$kode_barang','$thn_perolehan','$noreg','$nama_barang','$jml_barang','$jml_harga','$status_barang','$satuan','$tgl_buku','$asal_usul','$bangunan','$konstruksi_tingkat','$konstruksi_beton','$luas','$alamat','$status_tanah','$kode_tanah','$ket','$kota','$dokumen_tgl','$dokumen_no','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();
@@ -410,7 +410,7 @@ if ($_FILES)
 			if($kd_skpd!='' && $kode_barang!=''){
 				$sql="INSERT into bi_kib_g_tmp (c,d,e,e1,kd_skpd,kode_barang,thn_perolehan,noreg,nama_barang,jml_barang,jml_harga,status_barang,satuan,tgl_buku,asal_usul,ket,kondisi,uraian,software_nama,kajian_nama,kerjasama_nama,pencipta,staset)"."
 			 VALUES ('$c','$d','$e','$e1','$kd_skpd','$kode_barang','$thn_perolehan','$noreg','$nama_barang','$jml_barang','$jml_harga','$status_barang','$satuan','$tgl_buku','$asal_usul','$ket','$kondisi','$uraian','$software_nama','$kajian_nama','$kerjasama_nama','$pencipta','$staset')";
-			 $simpan=mysql_query($sql);
+			 $simpan=sqlQuery($sql);
 			}
 			if (!$simpan){
 				$err="Gagal Migrasi data".mysql_error();

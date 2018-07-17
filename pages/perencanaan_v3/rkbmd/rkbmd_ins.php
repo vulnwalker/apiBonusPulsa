@@ -38,7 +38,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 	
 	function setTitle(){
 	    $id = $_REQUEST['ID_RENJA'];
-	    $getTahun = mysql_fetch_array(mysql_query("select * from tabel_anggaran_v3 where id_anggaran = '$id'"));
+	    $getTahun = sqlArray(sqlQuery("select * from tabel_anggaran_v3 where id_anggaran = '$id'"));
 		return 'RKBMD PENGADAAN TAHUN '.$getTahun['tahun'] ;
 	}
 	
@@ -106,8 +106,8 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 		case 'subDelete':{				
 			$id = $_REQUEST['id'];
 			$username = $_COOKIE['coID'];
-			mysql_query("delete from temp_rkbmd_pengadaan_v3 where id='$id'");	
-			$getRow = mysql_num_rows(mysql_query("select * from temp_rkbmd_pengadaan_v3 where user = '$username'"));	
+			sqlQuery("delete from temp_rkbmd_pengadaan_v3 where id='$id'");	
+			$getRow = sqlNumRow(sqlQuery("select * from temp_rkbmd_pengadaan_v3 where user = '$username'"));	
 			if($getRow > 0){
 				$content = "ada";
 			}else{
@@ -126,7 +126,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 							  'satuan' => $satuan ,
 						  	  'catatan' => $keterangan
 						);
-				mysql_query(VulnWalkerUpdate('temp_rkbmd_pengadaan_v3',$data,"id = '$id'"));
+				sqlQuery(VulnWalkerUpdate('temp_rkbmd_pengadaan_v3',$data,"id = '$id'"));
 			}
 			
 			$content = VulnWalkerUpdate('temp_rkbmd_pengadaan_v3',$data,"id = '$id'");
@@ -143,28 +143,28 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 		}
 		case 'clear':{	
 			 $username = $_COOKIE['coID'];
-		  	 mysql_query("delete from temp_rkbmd_pengadaan_v3 where user='$username'");
+		  	 sqlQuery("delete from temp_rkbmd_pengadaan_v3 where user='$username'");
 		break;
 		}
 		case 'finish':{				
 			$username = $_COOKIE['coID'];
-			$execute = mysql_query("select * from temp_rkbmd_pengadaan_v3 where user='$username'");	
-			$adaData = mysql_num_rows($execute);
+			$execute = sqlQuery("select * from temp_rkbmd_pengadaan_v3 where user='$username'");	
+			$adaData = sqlNumRow($execute);
 			if($this->jenisForm != 'PENYUSUNAN'){
 				$err = "TAHAP PENYUSUNAN TELAH HABIS";
 			}elseif($adaData >= 1 ){
-				$get = mysql_fetch_array($execute);
+				$get = sqlArray($execute);
 			foreach ($get as $key => $value) { 
 				  $$key = $value; 
 			}
 			
-			$getIDRenjaForUpdate = mysql_fetch_array(mysql_query("select * from view_renja_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' "));
+			$getIDRenjaForUpdate = sqlArray(sqlQuery("select * from view_renja_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' "));
 			$arrayUpdateRenja = array('status_validasi' => '1');
-			mysql_query(VulnWalkerUpdate('tabel_anggaran_v3',$arrayUpdateRenja,"id_anggaran='".$getIDRenjaForUpdate['id_anggaran']."'"));
+			sqlQuery(VulnWalkerUpdate('tabel_anggaran_v3',$arrayUpdateRenja,"id_anggaran='".$getIDRenjaForUpdate['id_anggaran']."'"));
 			
 			
-			mysql_query("delete from tabel_anggaran_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and tahun='$this->tahun' and id_tahap ='$this->idTahap' and ((id_jenis_pemeliharaan = '0' and f !='00') or uraian_pemeliharaan = 'RKBMD PENGADAAN') and status_validasi !='1' ");
-			$cekSKPD = mysql_num_rows(mysql_query("select * from view_rkbmd_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk = '0' and ck = '0' and p = '0' and q= '0' and id_tahap='$this->idTahap'"));
+			sqlQuery("delete from tabel_anggaran_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and tahun='$this->tahun' and id_tahap ='$this->idTahap' and ((id_jenis_pemeliharaan = '0' and f !='00') or uraian_pemeliharaan = 'RKBMD PENGADAAN') and status_validasi !='1' ");
+			$cekSKPD = sqlNumRow(sqlQuery("select * from view_rkbmd_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk = '0' and ck = '0' and p = '0' and q= '0' and id_tahap='$this->idTahap'"));
 			if($cekSKPD < 1){
 				$data = array('jenis_anggaran' => $this->jenisAnggaran,
 							  'tahun' => $this->tahun,
@@ -188,9 +188,9 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 							  'tanggal_update' => date('Y-m-d'),
 							  'user_update' => $_COOKIE['coID']
 								);
-					mysql_query(VulnWalkerInsert('tabel_anggaran_v3',$data));
+					sqlQuery(VulnWalkerInsert('tabel_anggaran_v3',$data));
 			}
-			$cekProgram = mysql_num_rows(mysql_query("select * from view_rkbmd_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk = '$bk' and ck = '$ck' and p = '$p' and q= '0' and id_tahap='$this->idTahap' "));												
+			$cekProgram = sqlNumRow(sqlQuery("select * from view_rkbmd_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk = '$bk' and ck = '$ck' and p = '$p' and q= '0' and id_tahap='$this->idTahap' "));												
 			if($cekProgram < 1){
 				$data = array('jenis_anggaran' => $this->jenisAnggaran,
 							  'tahun' => $this->tahun,
@@ -214,10 +214,10 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 							  'tanggal_update' => date('Y-m-d'),
 							  'user_update' => $_COOKIE['coID']
 								);
-					mysql_query(VulnWalkerInsert('tabel_anggaran_v3',$data));
+					sqlQuery(VulnWalkerInsert('tabel_anggaran_v3',$data));
 			}
 			
-			$cekKegiatan = mysql_num_rows(mysql_query("select * from view_rkbmd_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk = '$bk' and ck = '$ck' and p = '$p' and q= '$q' and  f ='00' and id_tahap='$this->idTahap' and uraian_pemeliharaan = 'RKBMD PENGADAAN'"));												
+			$cekKegiatan = sqlNumRow(sqlQuery("select * from view_rkbmd_v3 where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and bk = '$bk' and ck = '$ck' and p = '$p' and q= '$q' and  f ='00' and id_tahap='$this->idTahap' and uraian_pemeliharaan = 'RKBMD PENGADAAN'"));												
 			if($cekKegiatan < 1){
 				$data = array('jenis_anggaran' => $this->jenisAnggaran,
 							  'tahun' => $this->tahun,
@@ -242,12 +242,12 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 							  'user_update' => $_COOKIE['coID'] ,
 							  'uraian_pemeliharaan' => 'RKBMD PENGADAAN'
 								);
-					mysql_query(VulnWalkerInsert('tabel_anggaran_v3',$data));
+					sqlQuery(VulnWalkerInsert('tabel_anggaran_v3',$data));
 			}	
-			$execute2 = mysql_query("select * from temp_rkbmd_pengadaan_v3 where user='$username'");
+			$execute2 = sqlQuery("select * from temp_rkbmd_pengadaan_v3 where user='$username'");
 			
 														
-			while($rows = mysql_fetch_array($execute2)){
+			while($rows = sqlArray($execute2)){
 				foreach ($rows as $key => $value) { 
 				  $$key = $value; 
 				}
@@ -276,9 +276,9 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 							  'user_update' => $_COOKIE['coID'],
 							  
 							  );
-					mysql_query(VulnWalkerInsert("tabel_anggaran_v3",$data));
+					sqlQuery(VulnWalkerInsert("tabel_anggaran_v3",$data));
 					$content = VulnWalkerInsert("tabel_anggaran_v3",$data);
-					mysql_query("delete from temp_rkbmd_pengadaan_v3 where id = '$id'");
+					sqlQuery("delete from temp_rkbmd_pengadaan_v3 where id = '$id'");
 			}
 			}else{
 				$err  = "Data kosong !";
@@ -293,26 +293,26 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 			}
 			
 			$query = "select * from view_rkbmd_v3 where c1 = '$c1' and c ='$c' and d ='$d' and p !='00' and q != '00' and tahun = '$tahunAnggaran'";
-			$ada = mysql_num_rows(mysql_query($query));
+			$ada = sqlNumRow(sqlQuery($query));
 			if($ada > 0){
 			}else{
-				mysql_query("delete from rkbmd where c1 = '$c1' and c ='$c' and d ='$d' and tahun = '$tahunAnggaran' ");
+				sqlQuery("delete from rkbmd where c1 = '$c1' and c ='$c' and d ='$d' and tahun = '$tahunAnggaran' ");
 			}
 			
 			
 			$query = "select * from view_rkbmd_v3 where c1 = '$c1' and c ='$c' and d !='00' and p !='00' and q != '00' and tahun = '$tahunAnggaran'";
-			$ada = mysql_num_rows(mysql_query($query));
+			$ada = sqlNumRow(sqlQuery($query));
 			if($ada > 0){
 			}else{
-				mysql_query("delete from rkbmd where c1 = '$c1' and c ='$c' and d ='00' and tahun = '$tahunAnggaran'");
+				sqlQuery("delete from rkbmd where c1 = '$c1' and c ='$c' and d ='00' and tahun = '$tahunAnggaran'");
 				
 			}
 			
 			$query = "select * from view_rkbmd_v3 where  c1 = '$c1' and c !='00' and d !='00' and p !='00' and q != '00' and tahun = '$tahunAnggaran'";
-			$ada = mysql_num_rows(mysql_query($query));
+			$ada = sqlNumRow(sqlQuery($query));
 			if($ada > 0){
 			}else{
-				mysql_query("delete from rkbmd where c1 = '$c1' and c ='00' and d ='00' and tahun = '$tahunAnggaran' ");
+				sqlQuery("delete from rkbmd where c1 = '$c1' and c ='00' and d ='00' and tahun = '$tahunAnggaran' ");
 				
 			}
 			
@@ -358,7 +358,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 				$err = "Isi jumlah";
 			}
 			$username = $_COOKIE['coID'];
-			$cekAda = mysql_num_rows(mysql_query("select * from temp_rkbmd_pengadaan_v3 where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and user='$username'"));
+			$cekAda = sqlNumRow(sqlQuery("select * from temp_rkbmd_pengadaan_v3 where  f='$f' and g='$g' and h='$h' and i='$i' and j='$j' and user='$username'"));
 			if($cekAda == 1){
 				$err = "Barang sudah ada";
 			}
@@ -386,7 +386,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 			
 				$query = VulnWalkerInsert("temp_rkbmd_pengadaan_v3",$data);
 			
-				mysql_query($query);
+				sqlQuery($query);
 					$codeAndNameKegiatan = "select q, concat(q,'. ', nama) from ref_program where bk = '$bk' and ck = '$ck'  and p = '$p' and q !='0' ";
 	$cmbKegiatan = cmbQuery('q', $q, $codeAndNameKegiatan,' disabled','-- KEGIATAN --'); 
 			}
@@ -417,13 +417,13 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 			$e1 = explode(".",$subunit);
 			$e1 = $e1[0];
 			$username = $_COOKIE['coID'];
-			mysql_query("delete from temp_rkbmd_pengadaan_v3 where user='$username'");
+			sqlQuery("delete from temp_rkbmd_pengadaan_v3 where user='$username'");
 
-			$getAll = mysql_query("select * from view_rkbmd_v3 where tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and jenis_form_modul ='PENYUSUNAN' and id_tahap='$this->idTahap' and j !='000' and id_jenis_pemeliharaan ='0' and c1='$c1' and c='$c' and d='$d' and e='$e' and e1 ='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and status_validasi !='1'");
-			if(mysql_num_rows($getAll) > 0 ){
+			$getAll = sqlQuery("select * from view_rkbmd_v3 where tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and jenis_form_modul ='PENYUSUNAN' and id_tahap='$this->idTahap' and j !='000' and id_jenis_pemeliharaan ='0' and c1='$c1' and c='$c' and d='$d' and e='$e' and e1 ='$e1' and bk='$bk' and ck='$ck' and p='$p' and q='$q' and status_validasi !='1'");
+			if(sqlNumRow($getAll) > 0 ){
 				$tergantung = 'ada';
 				
-				while($rows = mysql_fetch_array($getAll)){
+				while($rows = sqlArray($getAll)){
 					foreach ($rows as $key => $value) { 
 			 	 		$$key = $value; 
 					}
@@ -451,7 +451,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 				);
 			
 				$query = VulnWalkerInsert("temp_rkbmd_pengadaan_v3",$data);
-				mysql_query($query);
+				sqlQuery($query);
 				}
 				
 			}else{
@@ -482,18 +482,18 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 			  $$key = $value; 
 			}
 			
-			$get = mysql_fetch_array(mysql_query("select * from temp_rkbmd_pengadaan_v3 where id = '$id'"));
+			$get = sqlArray(sqlQuery("select * from temp_rkbmd_pengadaan_v3 where id = '$id'"));
 			foreach ($get as $key => $value) { 
 			  $$key = $value; 
 			}
 		    $concat2 = $f.".".$g.".".$h.".".$i.".".$j;
 			$concat = $c1.".".$c.".".$d.".".$e.".".$e1.".".$f.".".$g.".".$h.".".$i.".".$j ; 
-       	    $getKebutuhanMaksimal = mysql_fetch_array(mysql_query("select * from ref_std_kebutuhan_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
+       	    $getKebutuhanMaksimal = sqlArray(sqlQuery("select * from ref_std_kebutuhan_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
 		 
 		 
-		   $getKebutuhanOptimal = mysql_fetch_array(mysql_query("select sum(jml_barang) as kebutuhanOptimal from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and (kondisi = '1' or kondisi = '2') "));	
+		   $getKebutuhanOptimal = sqlArray(sqlQuery("select sum(jml_barang) as kebutuhanOptimal from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and (kondisi = '1' or kondisi = '2') "));	
 		   $kebutuhanOptimal = $getKebutuhanOptimal['kebutuhanOptimal'];	
-		   $getBarang = mysql_fetch_array( mysql_query("select * from ref_barang_v3 where  f=$f and g=$g and h=$h and i=$i and j=$j"));
+		   $getBarang = sqlArray( sqlQuery("select * from ref_barang_v3 where  f=$f and g=$g and h=$h and i=$i and j=$j"));
 		   $content = array('kodeBarang' => $concat2,'jumlah' => $jumlah, 'keterangan' => $catatan, 'jumlahKebutuhanOptimal' => $kebutuhanOptimal, 'jumlahKebutuhanMaksimal' => $getKebutuhanMaksimal['jumlah'], 'namaBarang' => $getBarang['nm_barang'], 'satuan' => $satuan, 'jumlahKebutuhanRill' => $getKebutuhanMaksimal['jumlah'] - $kebutuhanOptimal );
 		break;
 	    }
@@ -583,7 +583,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 			}
 	$Koloms = array();
 	$concat = $f.".".$g.".".$h.".".$i.".".$j;
-	$getNamaBarang = mysql_fetch_array(mysql_query("select * from ref_barang_v3 where concat(f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
+	$getNamaBarang = sqlArray(sqlQuery("select * from ref_barang_v3 where concat(f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
 	$Koloms[] = array('align="center" width="20"', $no.'.' );
     $Koloms[] = array('align="center"', $f.".".$g.".".$h.".".$i.".".$j );
 	$Koloms[] = array('align="left"', $getNamaBarang['nm_barang'] );
@@ -656,7 +656,7 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 	
 	$username = $_COOKIE['coID'];
 	$Syntax_ambil_yang_udah_ada_plafon = "select * from tabel_anggaran_v3 where id_anggaran='$ID_RENJA'";
-	$ambilSKPD = mysql_fetch_array(mysql_query($Syntax_ambil_yang_udah_ada_plafon));
+	$ambilSKPD = sqlArray(sqlQuery($Syntax_ambil_yang_udah_ada_plafon));
 	$c1  = $ambilSKPD['c1'];
 	$c   = $ambilSKPD['c'];
 	$d   = $ambilSKPD['d'];
@@ -677,19 +677,19 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 	$readOnlyJenisKegiatanPlus = "readonly";
 	$readOnlyJenisKegiatanMin = "readonly";
 	$disabledCariProgram = "";
-	$arrayNameUrusan = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='00' and d='00' and e='00' and e1='000'"));
+	$arrayNameUrusan = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='00' and d='00' and e='00' and e1='000'"));
 	$namaUrusan = $arrayNameUrusan['nm_skpd'];
 	
-	$arrayNameBidang = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='$c' and d='00' and e='00' and e1='000'"));
+	$arrayNameBidang = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='$c' and d='00' and e='00' and e1='000'"));
 	$namaBidang = $arrayNameBidang['nm_skpd'];
 	
-	$arrayNameSKPD = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='00' and e1='000'"));
+	$arrayNameSKPD = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='00' and e1='000'"));
 	$namaSKPD = $arrayNameSKPD['nm_skpd'];
 	
-	$arrayNameUNIT = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='000'"));
+	$arrayNameUNIT = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='000'"));
 	$namaUnit = $arrayNameSKPD['nm_skpd'];
 	
-	$arrayNameSUBUNIT = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'"));
+	$arrayNameSUBUNIT = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'"));
 	$namaSubUnit = $arrayNameSKPD['nm_skpd'];
 	
  
@@ -702,14 +702,14 @@ class rkbmd_ins_v3Obj  extends DaftarObj2{
 	$codeAndNameKegiatan = "select q, concat(q,'. ', nama) from ref_program where bk = '$selectedBK' and ck = '$selectedCK'  and p = '$selectedP' and q ='$selecteQ' ";
 	$cmbKegiatan = cmbQuery('q', $selecteQ, $codeAndNameKegiatan,' onchange=rkbmd_ins_v3.CekAda(); ','-- KEGIATAN --');  
 	
-	$cekGordon = mysql_num_rows(mysql_query("select * from temp_rkbmd_pengadaan_v3 where user = '$username'"));
+	$cekGordon = sqlNumRow(sqlQuery("select * from temp_rkbmd_pengadaan_v3 where user = '$username'"));
 	if($cekGordon > 0){
-		$cokot = mysql_fetch_array(mysql_query("select * from temp_rkbmd_pengadaan_v3 where user = '$username'"));
+		$cokot = sqlArray(sqlQuery("select * from temp_rkbmd_pengadaan_v3 where user = '$username'"));
 		$selectedBK = $cokot['bk'];
 		$selectedCK = $cokot['ck'];
 		$selectedP = $cokot['p'];
 		$selecteQ = $cokot['q'];
-		$getNamaProgram = mysql_fetch_array(mysql_query("select * from ref_program where bk='$selectedBK' and ck='$selectedCK' and p = '$selectedP' and q='0'"));
+		$getNamaProgram = sqlArray(sqlQuery("select * from ref_program where bk='$selectedBK' and ck='$selectedCK' and p = '$selectedP' and q='0'"));
 		$program = $getNamaProgram['nama'];
 		$codeAndNameKegiatan = "select q, concat(q,'. ', nama) from ref_program where bk = '$selectedBK' and ck = '$selectedCK'  and p = '$selectedP' and q ='$selecteQ' ";
 		$cmbKegiatan = cmbQuery('q', $selecteQ, $codeAndNameKegiatan,' disabled ','-- KEGIATAN --');  

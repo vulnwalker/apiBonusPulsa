@@ -53,35 +53,35 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 
 	 	$fmST = $_REQUEST[$this->Prefix.'_fmST'];
 	 	$idplh = $_REQUEST[$this->Prefix.'_idplh'];
-		$temp1=mysql_fetch_array(mysql_query("select Id from gambar_uploadmenu_aktif where mnu_id = '$idplh' and stat='0'"));
-		$temp2=mysql_fetch_array(mysql_query("select Id from gambar_uploadmenu_pasif where mnu_id = '$idplh' and stat='0'"));
+		$temp1=sqlArray(sqlQuery("select Id from gambar_uploadmenu_aktif where mnu_id = '$idplh' and stat='0'"));
+		$temp2=sqlArray(sqlQuery("select Id from gambar_uploadmenu_pasif where mnu_id = '$idplh' and stat='0'"));
 		
 		$aq = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='4'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/shortcut/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='4'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		
 		$aq1 = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='5'";$cek .=$aq;
-		$qry1 = mysql_query($aq1);
-		while($del2 = mysql_fetch_array($qry1)){
+		$qry1 = sqlQuery($aq1);
+		while($del2 = sqlArray($qry1)){
 			unlink("Media/shortcut/".$del2['nmfile']);
 		}
 		$hapus1 = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='5'"; $cek .= ' || '.$hapus;
-		$hps1 = mysql_query($hapus1);
+		$hps1 = sqlQuery($hapus1);
 		
 		$upd = "UPDATE gambar_upload SET stat = '0' , stat2 = '0' , tgl_create = NOW() WHERE jns_upload='4' and id_upload = '$idplh'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		$upd2 ="UPDATE gambar_upload SET stat = '0' , stat2 = '0' , tgl_create = NOW() WHERE jns_upload='5' and id_upload = '$idplh'";$cek .= ' ||'. $upd;
-		$qryupd2 = mysql_query($upd2);
-		$temp1=mysql_fetch_array(mysql_query("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='4'"));
-		$temp2=mysql_fetch_array(mysql_query("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='5'"));
+		$qryupd2 = sqlQuery($upd2);
+		$temp1=sqlArray(sqlQuery("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='4'"));
+		$temp2=sqlArray(sqlQuery("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='5'"));
 	//	$cek.="select Id from gambar_upload where mnu_id = '$idplh' and stat='0'";
 		$upd3 = "UPDATE system_shortcut SET file_imagesaktif ='".$temp1['Id']."',file_imagespasif ='".$temp2['Id']."'  WHERE Id_menu = '$idplh'";
-		$qryupd3 = mysql_query($upd3);
+		$qryupd3 = sqlQuery($upd3);
 	
 					
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -127,7 +127,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 if( $err=='' && $baris =='' ) $err= 'Data ROW Belum Di Isi !!';
 	 if( $err=='' && $kolom =='' ) $err= 'Data Colom Belum Di Isi !!';
 	
-	//$ck=mysql_fetch_array(mysql_query("Select kode from system_menu "));
+	//$ck=sqlArray(sqlQuery("Select kode from system_menu "));
 	
 	
 	 
@@ -136,7 +136,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 			if($err==''){
 				
 					$aqry = "INSERT into system_shortcut (Id_menu,Id_modul,Id_system,no_urut,title,alamat_url,row,colom,file_imagesaktif,file_imagespasif,tgl_update,uid) values('$id_menu','$id_modul','$id_system','$nourut','$title','$url','$baris','$kolom','','','$tgl_update2','$username')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{
 				
@@ -147,7 +147,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 				if($err==''){
 				$aqry = "UPDATE system_shortcut SET Id_menu='$id_menu',Id_modul='$id_modul',no_urut='$nourut',title='$title',alamat_url='$url',row='$baris',colom='$kolom',file_imagesaktif='',file_imagespasif='',Id_system='$id_system', title='$title'  where Id_shortcut='".$idplh."'";	$cek .= $aqry;
 			
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else
 					
@@ -257,24 +257,24 @@ class ManagementShortcutObj  extends DaftarObj2{
 		if($err=='' ){
 		
 		$aq = "SELECT * FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='2'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/shortcut/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='2'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		
 		$aq1 = "SELECT * FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='3'";$cek .=$aq;
-		$qry1 = mysql_query($aq1);
-		while($del2 = mysql_fetch_array($qry1)){
+		$qry1 = sqlQuery($aq1);
+		while($del2 = sqlArray($qry1)){
 			unlink("Media/shortcut/".$del2['nmfile']);
 		}
 		$hapus1 = "DELETE FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='3'"; $cek .= ' || '.$hapus;
-		$hps1 = mysql_query($hapus1);
+		$hps1 = sqlQuery($hapus1);
 					
 					$qy = "DELETE FROM system_shortcut WHERE Id_shortcut='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					
 			}else{
 				break;
@@ -332,15 +332,15 @@ class ManagementShortcutObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system_shortcut WHERE Id_shortcut='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$file = "SELECT * FROM gambar_upload WHERE jns_upload='4' and id_upload='$this->form_idplh'LIMIT 0,1";$cek=$qry;
 	//	$file = "SELECT * FROM gambar_uploadmenu_aktif WHERE mnu_id='$this->form_idplh'LIMIT 0,1";$cek=$qry;
-		$aqfile = mysql_query($file);
-		$qryfile = mysql_fetch_array($aqfile);
+		$aqfile = sqlQuery($file);
+		$qryfile = sqlArray($aqfile);
 		
-		if(mysql_num_rows($aqfile) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile);
+		if(sqlNumRow($aqfile) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile);
 			$dt['idfile'] = $qryfile['Id'];
 			$dt['nmfile'] = $qryfile['nmfile'];
 			$dt['nmfile_asli'] = $qryfile['nmfile_asli'];
@@ -349,11 +349,11 @@ class ManagementShortcutObj  extends DaftarObj2{
 		}
 		
 		$file2 = "SELECT * FROM gambar_upload WHERE jns_upload='5' and id_upload='$this->form_idplh'LIMIT 0,1";$cek=$qry;
-		$aqfile2 = mysql_query($file2);
-		$qryfile2 = mysql_fetch_array($aqfile2);
+		$aqfile2 = sqlQuery($file2);
+		$qryfile2 = sqlArray($aqfile2);
 		
-		if(mysql_num_rows($aqfile2) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile2);
+		if(sqlNumRow($aqfile2) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile2);
 			$dt['idfile'] = $qryfile2['Id'];
 			$dt['nmfile'] = $qryfile2['nmfile'];
 			$dt['nmfile_asli'] = $qryfile2['nmfile_asli'];
@@ -380,7 +380,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system_shortcut WHERE Id_shortcut='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setFormeditdata($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -408,7 +408,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 		
 	$queryKF="SELECT max(no_urut)as nourut FROM system_shortcut" ;
 	
-		$get=mysql_fetch_array(mysql_query($queryKF));
+		$get=sqlArray(sqlQuery($queryKF));
 		$no_urut=$get['nourut'] + 1;
 	
 	$datalevel=1;
@@ -417,8 +417,8 @@ class ManagementShortcutObj  extends DaftarObj2{
 	$dataposisi=1;
 	$dataaktif=1;
 	$kdx=$dt['kode'];
-	$datasys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$dt['Id_system']."'"));
-	$datamod=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
+	$datasys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$dt['Id_system']."'"));
+	$datamod=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
 	
 				$l = substr($kdx, 0,2);
 				$m = substr($kdx, 3,2);
@@ -558,17 +558,17 @@ class ManagementShortcutObj  extends DaftarObj2{
 					
 	
 	
-	$akt=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_shortcut']."' and jns_upload='4'"));
-	$pas=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_shortcut']."' and jns_upload='5'"));
+	$akt=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_shortcut']."' and jns_upload='4'"));
+	$pas=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_shortcut']."' and jns_upload='5'"));
 	$datalevel=1;
 	$datatipe=1;
 	$datajenis=1;
 	$dataposisi=1;
 	$dataaktif=1;
 	$kdx=$dt['kode'];
-	$datasys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$dt['Id_system']."'"));
-	$datamod=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
-	 $alt_url2=mysql_fetch_array(mysql_query("select alamat_url from system_menu where Id_menu='".$dt['Id_menu']."'"));
+	$datasys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$dt['Id_system']."'"));
+	$datamod=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
+	 $alt_url2=sqlArray(sqlQuery("select alamat_url from system_menu where Id_menu='".$dt['Id_menu']."'"));
 				$l = substr($kdx, 0,2);
 				$m = substr($kdx, 3,2);
 				$n = substr($kdx, 6,2);
@@ -743,15 +743,15 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 	$posisi='FOOTER';
 	 }
 	 
-	$datasys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$dt['Id_system']."'"));
-	$datamod=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));$cek.="select nm_system from system where Id_system='".$dt['Id_system']."'";
-	//$datamne=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_menu']."'"));
+	$datasys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$dt['Id_system']."'"));
+	$datamod=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));$cek.="select nm_system from system where Id_system='".$dt['Id_system']."'";
+	//$datamne=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_menu']."'"));
 	
 	
-	 $datakt=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where jns_upload='2' and id_upload='".$dt['file_imagesaktif']."'"));
+	 $datakt=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where jns_upload='2' and id_upload='".$dt['file_imagesaktif']."'"));
 	 
 	 $cek.="select nmfile_asli from gambar_uploadmenu_pasif where id_upload='".$dt['file_imagespasif']."'";
-	 $datpsf=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where jns_upload='3' and id_upload='".$dt['file_imagespasif']."'"));
+	 $datpsf=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where jns_upload='3' and id_upload='".$dt['file_imagespasif']."'"));
 	 //items ----------------------
 	  $this->form_fields = array(
 	  		
@@ -963,7 +963,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 	$posisi='Footer';
 	 }
 	 
-	 $img=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_shortcut` RIGHT JOIN `gambar_upload` ON `system_shortcut`.`Id_shortcut` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and gambar_upload.jns_upload='4' and Id_shortcut='".$isi['Id_shortcut']."'"));
+	 $img=sqlArray(sqlQuery("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_shortcut` RIGHT JOIN `gambar_upload` ON `system_shortcut`.`Id_shortcut` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and gambar_upload.jns_upload='4' and Id_shortcut='".$isi['Id_shortcut']."'"));
 	
 	 if($img != ''){
 	 	$file = "<a download='".$img['nmfile_asli']."' href='Media/shortcut/".$img['nmfile']."' title='".$img['nmfile_asli']."'><img width='23px' height='23px' src='images/administrator/images/download_f2.png' /> </a>";
@@ -971,7 +971,7 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 	$file='';
 	 }
 	 
-	  $img2=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_shortcut` RIGHT JOIN `gambar_upload` ON `system_shortcut`.`Id_shortcut` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and `gambar_upload`.`jns_upload` ='5' and Id_shortcut='".$isi['Id_shortcut']."'"));
+	  $img2=sqlArray(sqlQuery("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_shortcut` RIGHT JOIN `gambar_upload` ON `system_shortcut`.`Id_shortcut` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and `gambar_upload`.`jns_upload` ='5' and Id_shortcut='".$isi['Id_shortcut']."'"));
 	
 	 if($img2 != ''){
 	 	$file2 = "<a download='".$img2['nmfile_asli']."' href='Media/shortcut/".$img2['nmfile']."' title='".$img2['nmfile_asli']."'><img width='23px' height='23px' src='images/administrator/images/download_f2.png' /> </a>";
@@ -979,9 +979,9 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 	$file2='';
 	 }
 	 
-	 $datsys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$isi['Id_system']."'"));
-	 $datmenu=mysql_fetch_array(mysql_query("select nm_modul from system_modul where Id_modul='".$isi['Id_modul']."'"));
-	 $alt_url=mysql_fetch_array(mysql_query("select alamat_url from system_menu where Id_menu='".$isi['Id_menu']."'"));
+	 $datsys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$isi['Id_system']."'"));
+	 $datmenu=sqlArray(sqlQuery("select nm_modul from system_modul where Id_modul='".$isi['Id_modul']."'"));
+	 $alt_url=sqlArray(sqlQuery("select alamat_url from system_menu where Id_menu='".$isi['Id_menu']."'"));
 	
 	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
@@ -1128,27 +1128,27 @@ class ManagementShortcutObj  extends DaftarObj2{
 	 $idplh = $_REQUEST[$this->Prefix.'_idplh'];
 	  
 	 	$aq = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='4'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/shortcut/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='4'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd ="UPDATE gambar_upload SET stat = '0' WHERE id_upload = '$idplh' AND stat2 = '0' and jns_upload='4'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		
 		//------------------pasif----------------------------------
 		$aq ="SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='5'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/shortcut/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='5'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd2 = "UPDATE gambar_upload SET stat = '0' WHERE id_upload = '$idplh' AND stat2 = '0' and jns_upload='5'";$cek .= ' ||'. $upd2;
-		$qryupd = mysql_query($upd2);
+		$qryupd = sqlQuery($upd2);
 	
 					
 	return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	

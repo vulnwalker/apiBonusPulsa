@@ -31,27 +31,27 @@ function getTglClosing_($c='00', $d='00', $e='00', $e1='000'){
 	}else{
 		//if($Main->CLOSING_SKPD){
 			$aqry = "select * from t_closing where c='$c' and d='$d' and e='$e' and e1='$e1' order by Id desc limit 0,1 "; $cek .= $aqry;
-			$get = mysql_fetch_array(mysql_query($aqry ));
+			$get = sqlArray(sqlQuery($aqry ));
 					
 			if($get['tgl']== NULL){
 				$aqry = "select * from t_closing where c='$c' and d='$d' and e='$e' order by Id desc limit 0,1 "; $cek .= $aqry;
-				$get = mysql_fetch_array(mysql_query( $aqry ));		
+				$get = sqlArray(sqlQuery( $aqry ));		
 			}
 			if($get['tgl']== NULL){
 				$aqry = "select * from t_closing where c='$c' and d='$d' order by Id desc limit 0,1 " ; $cek .= $aqry;
-				$get = mysql_fetch_array(mysql_query($aqry));		
+				$get = sqlArray(sqlQuery($aqry));		
 			}
 			if($get['tgl']== NULL){
 				$aqry = "select * from t_closing where c='$c' order by Id desc limit 0,1 "; $cek .= $aqry;
-				$get = mysql_fetch_array(mysql_query( $aqry ));		
+				$get = sqlArray(sqlQuery( $aqry ));		
 			}
 			if($get['tgl']==NULL){
 				$aqry = "select * from t_closing where c='00' order by Id desc limit 0,1 " ; $cek .= $aqry;
-				$get = mysql_fetch_array(mysql_query( $aqry));		
+				$get = sqlArray(sqlQuery( $aqry));		
 			}
 			
 		//}else{
-		//	$get = mysql_fetch_array(mysql_query("select * from t_closing where c='00' and d='00' order by Id desc limit 0,1 " ));
+		//	$get = sqlArray(sqlQuery("select * from t_closing where c='00' and d='00' order by Id desc limit 0,1 " ));
 		//}
 		
 	    if ($get['tgl'] == NULL) $get['tgl'] =0;

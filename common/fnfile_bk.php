@@ -97,9 +97,9 @@ function WilSKPD_ajx2($prefix='', $tblwidth='100%', $kol1_width=100) {
    	//skpd -------------------
 	$style = "style='width:318;'";
     $aqry = "select * from ref_skpd where d='00' $KondisiSKPD order by c";   
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }    
@@ -111,9 +111,9 @@ function WilSKPD_ajx2($prefix='', $tblwidth='100%', $kol1_width=100) {
 			> $PilihSKPD $Ops</select></div>";
 	
 	//unit ------------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -126,9 +126,9 @@ function WilSKPD_ajx2($prefix='', $tblwidth='100%', $kol1_width=100) {
 			
 	//sub unit -------------------------
 	$seksi_ = $Main->SUB_UNIT? " and e1='000' ":'';
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $seksi_ $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $seksi_ $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -140,9 +140,9 @@ function WilSKPD_ajx2($prefix='', $tblwidth='100%', $kol1_width=100) {
 
 	//seksi --------------------------------
 	if($Main->SUB_UNIT ){
-	    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d='$fmUNIT' and e='$fmSUBUNIT' and e1<>'000'  $KondisiSEKSI order by e1");
+	    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d='$fmUNIT' and e='$fmSUBUNIT' and e1<>'000'  $KondisiSEKSI order by e1");
 	    $Ops = "";
-	    while ($isi = mysql_fetch_array($Qry)) {
+	    while ($isi = sqlArray($Qry)) {
 	        $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
 	        $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
 	    }
@@ -319,7 +319,7 @@ function cmb2D_KIB($name='txtField', $value='', $arrList = '', $param='') {
 function cmbQuery($name='txtField', $value='', $query='', $param='', $Atas='Pilih', $vAtas='') {
     global $Ref;
     $Input = "<option value='$vAtas'>$Atas</option>";
-    $Query = mysql_query($query);
+    $Query = sqlQuery($query);
     while ($Hasil = mysql_fetch_row($Query)) {
         $Sel = $Hasil[0] == $value ? "selected" : "";
         $Input .= "<option $Sel value='{$Hasil[0]}'>{$Hasil[1]}";
@@ -331,8 +331,8 @@ function cmbQuery($name='txtField', $value='', $query='', $param='', $Atas='Pili
 function cmbQuery1($name='txtField', $value='', $query='', $param='', $Atas='Pilih', $vAtas='') {
     global $Ref;
     $Input = "<option value='$vAtas'>$Atas</option>";
-    $Query = mysql_query($query);
-    while ($Hasil = mysql_fetch_array($Query)) {
+    $Query = sqlQuery($query);
+    while ($Hasil = sqlArray($Query)) {
         $Sel = $Hasil[0] == $value ? "selected" : "";
         $Input .= "<option $Sel value='{$Hasil[0]}'>{$Hasil[0]}. {$Hasil[1]}";
     } $Input = "<select $param name='$name' id='$name'>$Input</select>";
@@ -493,22 +493,22 @@ function WilSKPD() {
         $PilihSEKSI = "";
     }
     
-	/*$Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+	/*$Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
     $Ops = "";    
-	while ($isi = mysql_fetch_array($Qry)) {
+	while ($isi = sqlArray($Qry)) {
         $sel = $fmWIL == $isi['b'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
     } 
 	$ListKab = "<select name='fmWIL'  onChange=\"adminForm.target='_self';adminForm.submit()\"><option value=''>--- Pilih Kabupaten/Kota ---</option>$Ops</select>";
     */
-	$get = mysql_fetch_array(mysql_query("select * from ref_wilayah where b='$Main->DEF_WILAYAH' and b<>'00'"));
+	$get = sqlArray(sqlQuery("select * from ref_wilayah where b='$Main->DEF_WILAYAH' and b<>'00'"));
 	if($get['nm_wilayah']==''){	$ListKab = ' - ';	}else{$ListKab = $get['nm_wilayah']; }
 	
 	$ListKab .= "<input type='hidden' id='fmWIL' name='fmWIL' value='$Main->DEF_WILAYAH'>";
 	
-	$Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+	$Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : ""; //$sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     } 
@@ -523,9 +523,9 @@ function WilSKPD() {
 		"<select $disSKPD name='fmSKPD' 
 			onChange=\"adminForm.target='';adminForm.action=''; adminForm.fmUNIT.value='00';adminForm.fmSUBUNIT.value='00';adminForm.submit()\"
 		>$PilihSKPD $Ops</select>";*/
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : ""; 
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     } 
@@ -534,16 +534,16 @@ function WilSKPD() {
 			onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmSUBUNIT.value='00';adminForm.submit()\"
 		>$PilihUNIT $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     } $ListSUBUNIT = "<select disSUBUNIT name='fmSUBUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\">$PilihSUBUNIT $Ops</select>";
 	
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1 <> '$kdSubUnit0' $KondisiSEKSI order by e1");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1 <> '$kdSubUnit0' $KondisiSEKSI order by e1");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
     } $ListSEKSI = "<select disSEKSI name='fmSEKSI' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\">$PilihSEKSI $Ops</select>";	
@@ -612,27 +612,27 @@ function WilSKPD_() {
         $KondisiSUBUNIT = " and e='$fmSUBUNIT'";
         $PilihSUBUNIT = "";
     }
-    $Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+    $Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmWIL == $isi['b'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
     } $ListKab = "<select name='fmWIL'  onChange=\"adminForm.target='_self';adminForm.submit()\"><option value=''>--- Pilih Kabupaten/Kota ---</option>$Ops</select>";
-    $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+    $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     } $ListSKPD = "<select $disSKPD name='fmSKPD' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmUNIT.value='00';adminForm.submit()\">$PilihSKPD $Ops</select>";
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     } $ListUNIT = "<select $disUNIT name='fmUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihUNIT $Ops</select>";
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     } $ListSUBUNIT = "<select disSUBUNIT name='fmSUBUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\">$PilihSUBUNIT $Ops</select>";
@@ -690,9 +690,9 @@ function WilSKPD1($kol1_width=100) {
 	
 	//SKPD ------------------------------------------------
     $aqry = "select * from ref_skpd where d='00' $KondisiSKPD order by c";
-	$Qry = mysql_query($aqry);
+	$Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -703,18 +703,18 @@ function WilSKPD1($kol1_width=100) {
 		>
 		$PilihSKPD $Ops</select>";
 	//UNIT -------------------------------------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00'  $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00'  $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
     $ListUNIT = "<select $disUNIT name='fmUNIT' id='fmUNIT' onChange=\"adminForm.target='';adminForm.action=''; adminForm.fmSUBUNIT.value='00';adminForm.fmSEKSI.value='$kdSubUnit0';adminForm.submit()\">$PilihUNIT $Ops</select>";
 	//SUBUNIT ------------------------------------------------
 	$aqry = "select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00'  and e1='$kdSubUnit0' $KondisiSUBUNIT order by e";
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -722,9 +722,9 @@ function WilSKPD1($kol1_width=100) {
 	
 	//SEKSI ------------------------------------------------
 	$aqry = "select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e='$fmSUBUNIT' and e1<> '$kdSubUnit0' $KondisiSEKSI order by e1"; 
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -794,9 +794,9 @@ function WilSKPD3($kol1_width=100) {
 	
 	//SKPD ------------------------------------------------
     $aqry = "select * from ref_skpd where d='00' $KondisiSKPD order by c";
-	$Qry = mysql_query($aqry);
+	$Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -807,18 +807,18 @@ function WilSKPD3($kol1_width=100) {
 		>
 		$PilihSKPD $Ops</select>";
 	//UNIT -------------------------------------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00'  $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00'  $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
     $ListUNIT = "<select $disUNIT name='fmUNIT' id='fmUNIT' onChange=\"adminForm.target='';adminForm.action=''; adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihUNIT $Ops</select>";
 	//SUBUNIT ------------------------------------------------
 	$aqry = "select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00'  and e1='$kdSubUnit0' $KondisiSUBUNIT order by e";
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -826,9 +826,9 @@ function WilSKPD3($kol1_width=100) {
 	
 	//SEKSI ------------------------------------------------
 	$aqry = "select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e='$fmSUBUNIT' and e1<> '$kdSubUnit0' $KondisiSEKSI order by e1"; 
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -931,9 +931,9 @@ function WilSKPD_ajx($prefix='', $tblwidth='100%', $kol1_width=100) {
    
    	//skpd -------------------
     $aqry = "select * from ref_skpd where d='00' $KondisiSKPD order by c";   
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }    
@@ -945,9 +945,9 @@ function WilSKPD_ajx($prefix='', $tblwidth='100%', $kol1_width=100) {
 			> $PilihSKPD $Ops</select></div>";
 	
 	//unit ------------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -959,9 +959,9 @@ function WilSKPD_ajx($prefix='', $tblwidth='100%', $kol1_width=100) {
 			</select></div>";
 			
 	//sub unit -------------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1125,9 +1125,9 @@ function WilSKPD_ajx3($prefix='', $tblwidth='100%', $kol1_width=100) {
 
 
     $aqry = "select * from ref_skpd where d='00'  order by c";   
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }    
@@ -1140,9 +1140,9 @@ function WilSKPD_ajx3($prefix='', $tblwidth='100%', $kol1_width=100) {
 	
 	//unit ------------------------
 //		$KondisiUNIT='';
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1156,9 +1156,9 @@ function WilSKPD_ajx3($prefix='', $tblwidth='100%', $kol1_width=100) {
 	//sub unit -------------------------
 //	$KondisiSUBUNIT='';
 	$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e1='$kdSubUnit0' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e1='$kdSubUnit0' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1169,9 +1169,9 @@ function WilSKPD_ajx3($prefix='', $tblwidth='100%', $kol1_width=100) {
 
 	//seksi -------------------------
 //	$KondisiSEKSI='';
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1 <> '00' and e1 <> '000' $KondisiSEKSI order by e1");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1 <> '00' and e1 <> '000' $KondisiSEKSI order by e1");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1252,9 +1252,9 @@ function WilSKPD1b( $fmSKPD, $fmUNIT, $fmSUBUNIT, $kol1_width=100, $fmSEKSI) {
 
     /*
       //nm wilayah
-      $Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+      $Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
       $Ops = "";
-      while($isi=mysql_fetch_array($Qry)) {
+      while($isi=sqlArray($Qry)) {
       $sel = $fmWIL == $isi['b'] ? "selected":"";
       $Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
       }
@@ -1264,37 +1264,37 @@ function WilSKPD1b( $fmSKPD, $fmUNIT, $fmSUBUNIT, $kol1_width=100, $fmSEKSI) {
     //$cekskpd = 'kon='.$KondisiSKPD;
     $aqry = "select * from ref_skpd where d='00' $KondisiSKPD order by c";
     //echo $HTTP_COOKIE_VARS["coSKPD"]." $aqry<br>";
-    $Qry = mysql_query($aqry);
+    $Qry = sqlQuery($aqry);
 
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }
     //$ListSKPD = $cekskpd."<select $disSKPD name='fmSKPD' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmUNIT.value='00';adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihSKPD $Ops</select>";
     $ListSKPD = $cekskpd . "<select $disSKPD name='fmSKPD' id='fmSKPD' onChange=\"adminForm.target='';adminForm.action=''; adminForm.fmUNIT.value='00';adminForm.fmSUBUNIT.value='00';adminForm.fmSEKSI.value='$kdSubUnit0';adminForm.submit()\">$PilihSKPD $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
     //$ListUNIT = "<select $disUNIT name='fmUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihUNIT $Ops</select>";
     $ListUNIT = "<select $disUNIT name='fmUNIT' id='fmUNIT' onChange=\"adminForm.target='';adminForm.action=''; adminForm.fmSUBUNIT.value='00';adminForm.fmSEKSI.value='$kdSubUnit0';adminForm.submit()\">$PilihUNIT $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e1='$kdSubUnit0' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e1='$kdSubUnit0' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
     //$ListSUBUNIT = "<select $disSUBUNIT name='fmSUBUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\">	$PilihSUBUNIT $Ops</select>";
     $ListSUBUNIT = "<select $disSUBUNIT name='fmSUBUNIT' id='fmSUBUNIT' onChange=\"adminForm.target='';adminForm.action='';adminForm.fmSEKSI.value='$kdSubUnit0'; adminForm.submit()\">	$PilihSUBUNIT $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1<>'$kdSEKSI0' $KondisiSEKSI order by e1");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1<>'$kdSEKSI0' $KondisiSEKSI order by e1");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1343,33 +1343,33 @@ function WilSKPD2() {
         $HTTP_COOKIE_VARS["cofmSUBUNIT"] = $fmSUBUNIT;
         $KondisiSUBUNIT = " and e='$fmSUBUNIT'";
         $PilihSUBUNIT = "";
-    } $Qry = mysql_query("select * from ref_pemilik order by nm_pemilik");
+    } $Qry = sqlQuery("select * from ref_pemilik order by nm_pemilik");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmKEPEMILIKAN == $isi['a1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['a1']}'>{$isi['nm_pemilik']}</option>\n";
     } $ListKepemilikan = "<select name='fmKEPEMILIKAN'  onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\"><option value=''>--- Pilih Kepemilikan ---</option>$Ops</select>";
-    $Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+    $Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmWIL == $isi['b'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
     } $ListKab = "<select name='fmWIL'  onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\"><option value=''>--- Pilih Kabupaten/Kota ---</option>$Ops</select>";
-    $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+    $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     } $ListSKPD = "<select $disSKPD name='fmSKPD' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmUNIT.value='00';adminForm.submit()\">$PilihSKPD $Ops</select>";
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     } $ListUNIT = "<select $disUNIT name='fmUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihUNIT $Ops</select>";
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     } $ListSUBUNIT = "<select $disSUBUNIT name='fmSUBUNIT' onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.submit()\">$PilihSUBUNIT $Ops</select>";
@@ -1386,9 +1386,9 @@ function WilSKPD2b() {//v2
       $PilihUNIT = "<option value='00'>--- Semua UNIT ---</option>";
       $PilihSUBUNIT = "<option value='00'>--- Semua SUB UNIT ---</option>";
 
-      $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+      $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
       $Ops = "";
-      while($isi=mysql_fetch_array($Qry)) {
+      while($isi=sqlArray($Qry)) {
       $sel = $fmSKPD == $isi['c'] ? "selected":"";
       $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
       }
@@ -1396,9 +1396,9 @@ function WilSKPD2b() {//v2
       onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg';
       adminForm.fmUNIT.value='00';adminForm.submit()\">$PilihSKPD $Ops</select>";
 
-      $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+      $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
       $Ops = "";
-      while($isi=mysql_fetch_array($Qry)) {
+      while($isi=sqlArray($Qry)) {
       $sel = $fmUNIT == $isi['d'] ? "selected":"";
       $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
       }
@@ -1406,10 +1406,10 @@ function WilSKPD2b() {//v2
       onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg';
       adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihUNIT $Ops</select>";
 
-      $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT
+      $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT
       order by e");
       $Ops = "";
-      while($isi=mysql_fetch_array($Qry)) {
+      while($isi=sqlArray($Qry)) {
       $sel = $fmSUBUNIT == $isi['e'] ? "selected":"";
       $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
       }
@@ -1457,9 +1457,9 @@ function WilSKPDList() {//without table, just list
     $PilihSUBUNIT = "<option value='00'>--- Semua UNIT ---</option>";
 	$PilihSEKSI = "<option value='$kdSubUnit0'>--- Semua SUB UNIT ---</option>";
     
-    $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+    $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1467,9 +1467,9 @@ function WilSKPDList() {//without table, just list
 			onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; 
 				adminForm.fmUNIT.value='00';adminForm.submit()\">$PilihSKPD $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1477,9 +1477,9 @@ function WilSKPDList() {//without table, just list
 			onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; 
 				adminForm.fmSUBUNIT.value='00';adminForm.submit()\">$PilihUNIT $Ops</select>";
     //subunit
-	$Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT and e1='$kdSubUnit0'	order by e");
+	$Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e <> '00' $KondisiSUBUNIT and e1='$kdSubUnit0'	order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1487,9 +1487,9 @@ function WilSKPDList() {//without table, just list
 		onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; 
 				adminForm.submit()\">$PilihSUBUNIT $Ops</select>";
 	//seksi	
-	$Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' $KondisiSEKSI and e1<>'$kdSubUnit0' order by e1");   
+	$Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' $KondisiSEKSI and e1<>'$kdSubUnit0' order by e1");   
 	$Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e1']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -1810,9 +1810,9 @@ function Halaman2b(
 function TahunPerolehan() {
     global $HTTP_POST_VARS, $HTTP_GET_VARS, $fmTahunPerolehan, $Pg, $SPg;
     $str = "";
-    $Qry = mysql_query("select thn_perolehan from buku_induk group by thn_perolehan order by thn_perolehan desc");
+    $Qry = sqlQuery("select thn_perolehan from buku_induk group by thn_perolehan order by thn_perolehan desc");
     $ops = "<option value=''>Semua Tahun</option>";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmTahunPerolehan == $isi['thn_perolehan'] ? "selected" : "";
         $ops .= "<option $sel value='{$isi['thn_perolehan']}'>{$isi['thn_perolehan']}</option>\n";
     }
@@ -1825,9 +1825,9 @@ function TahunPerolehan() {
 function TahunPerolehan2($param = '') {
     global $HTTP_POST_VARS, $HTTP_GET_VARS, $fmTahunPerolehan, $Pg, $SPg;
     $str = "";
-    $Qry = mysql_query("select thn_perolehan from buku_induk group by thn_perolehan order by thn_perolehan desc");
+    $Qry = sqlQuery("select thn_perolehan from buku_induk group by thn_perolehan order by thn_perolehan desc");
     $ops = "<option value=''>Semua Tahun</option>";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmTahunPerolehan == $isi['thn_perolehan'] ? "selected" : "";
         $ops .= "<option $sel value='{$isi['thn_perolehan']}'>{$isi['thn_perolehan']}</option>\n";
     }
@@ -1840,9 +1840,9 @@ function TahunPerolehan2($param = '') {
 function comboTglBuku($param = '') {
     global $HTTP_POST_VARS, $HTTP_GET_VARS, $fmTglBuku, $Pg, $SPg;
     $str = "";
-    $Qry = mysql_query("select tgl_buku from buku_induk group by tgl_buku order by tgl_buku desc");
+    $Qry = sqlQuery("select tgl_buku from buku_induk group by tgl_buku order by tgl_buku desc");
     $ops = "<option value=''>Semua Tgl. Buku</option>";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmTglBuku == $isi['tgl_buku'] ? "selected" : "";
         $ops .= "<option $sel value='{$isi['tgl_buku']}'>" . TglInd($isi['tgl_buku']) . "</option>\n";
     }
@@ -1860,9 +1860,9 @@ function comboBySQL($comboName, $sql, $fieldName, $fieldNameTampil, $defStr) {
     global $HTTP_POST_VARS, $HTTP_GET_VARS, $$comboName;
 	//echo "$comboName = ".$$comboName;
 //echo $sql;
-    $Qry = mysql_query($sql); 
+    $Qry = sqlQuery($sql); 
     $ops = "<option value=''>$defStr</option>";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $$comboName == $isi[$fieldName] ? "selected" : "";
         $ops .= "<option $sel value='{$isi[$fieldName]}'>{$isi[$fieldNameTampil]}</option>\n";
     }
@@ -1871,9 +1871,9 @@ function comboBySQL($comboName, $sql, $fieldName, $fieldNameTampil, $defStr) {
 }
 function genComboBoxQry($name='txtField', $value='',$aqry='', $fieldKey='', $fieldValue='', 
 	$default='Pilih', $param='') { 
-	$qry = mysql_query($aqry);
+	$qry = sqlQuery($aqry);
 	$Input = "<option value=''>$default</option>"; 
-	while ($Hasil=mysql_fetch_array($qry)) { 
+	while ($Hasil=sqlArray($qry)) { 
 		$Sel = $Hasil[$fieldKey]==$value?"selected":""; 
 		$Input .= "<option $Sel value='{$Hasil[$fieldKey]}'>{$Hasil[$fieldValue]}</option>"; 
 	} 
@@ -1882,9 +1882,9 @@ function genComboBoxQry($name='txtField', $value='',$aqry='', $fieldKey='', $fie
 //*
 function comboBySQL2($comboName, $comboValue, $sql, $fieldName, $fieldNameTampil, $defStr) {    
     //global $HTTP_POST_VARS, $HTTP_GET_VARS, $$comboName;
-    $Qry = mysql_query($sql);
+    $Qry = sqlQuery($sql);
     $ops = "<option value=''>$defStr</option>";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $comboValue == $isi[$fieldName] ? "selected" : "";
         $ops .= "<option $sel value='{$isi[$fieldName]}'>{$isi[$fieldNameTampil]}</option>\n";
     }
@@ -1897,9 +1897,9 @@ function comboBySQL2($comboName, $comboValue, $sql, $fieldName, $fieldNameTampil
 function genComboBoxQry2($name='txtField', $value='',$aqry='', $arrfieldKey='', $fieldValue='', 
 	$default='Pilih', $param='') { 
 	// keynya bisa banyak
-	$qry = mysql_query($aqry);
+	$qry = sqlQuery($aqry);
 	$Input = "<option value=''>$default</option>"; 
-	while ($Hasil=mysql_fetch_array($qry)) { 
+	while ($Hasil=sqlArray($qry)) { 
 		//$key = $Hasil[$fieldKey];
 		$arrkey = array();
 		for ($i=0 ; $i<sizeof($arrfieldKey) ; $i++ ) {
@@ -1979,9 +1979,9 @@ function CariCombo4($ArField="",$fmCariComboField , $fmCariComboIsi,
 function PrintSKPD($xls=''){//$fmSKPD='', $fmUNIT='', $fmSUBUNIT='', $fmSEKSI='') {
     global $fmWIL, $fmSKPD, $fmUNIT, $fmSUBUNIT, $fmTAHUNANGGARAN, $fmKEPEMILIKAN, $Main, 
 			$HTTP_COOKIE_VARS, $SKPD, $UNIT, $SUBUNIT, $fmSEKSI, $SEKSI,$WILAYAH;
-    $KEPEMILIKAN = mysql_fetch_array(mysql_query("select nm_pemilik from ref_pemilik where a1='$fmKEPEMILIKAN'"));
+    $KEPEMILIKAN = sqlArray(sqlQuery("select nm_pemilik from ref_pemilik where a1='$fmKEPEMILIKAN'"));
     $KEPEMILIKAN = $KEPEMILIKAN[0];
-    /* $WILAYAH = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where b='$fmWIL' "));
+    /* $WILAYAH = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where b='$fmWIL' "));
       $WILAYAH = $WILAYAH[0]; */
 	if ($Main->DEF_WILAYAH =='00'){
 		$WILAYAH =  '-' ;
@@ -1991,13 +1991,13 @@ function PrintSKPD($xls=''){//$fmSKPD='', $fmUNIT='', $fmSUBUNIT='', $fmSEKSI=''
     
 	$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
 		
-    $SKPD = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where d='00' and c='$fmSKPD' "));
+    $SKPD = sqlArray(sqlQuery("select nm_skpd from ref_skpd where d='00' and c='$fmSKPD' "));
     $SKPD = $SKPD[0];
-    $UNIT = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d <> '00' and e = '00' and d='$fmUNIT' "));
+    $UNIT = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d <> '00' and e = '00' and d='$fmUNIT' "));
     $UNIT = $UNIT[0];
-    $SUBUNIT = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e='$fmSUBUNIT' and e1='$kdSubUnit0'"));
+    $SUBUNIT = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e='$fmSUBUNIT' and e1='$kdSubUnit0'"));
     $SUBUNIT = $SUBUNIT[0];
-	$SEKSI = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1='$fmSEKSI' and e1<>'00' and e1<>'000' "));
+	$SEKSI = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1='$fmSEKSI' and e1<>'00' and e1<>'000' "));
     $SEKSI = $SEKSI[0];
 	if ($xls!='1'){
 		
@@ -2034,19 +2034,19 @@ function PrintSKPD2($fmSKPD, $fmUNIT, $fmSUBUNIT,$fmSEKSI) {
 	//$HTTP_COOKIE_VARS, $SKPD, $UNIT, $SUBUNIT;
 	
 	$PROVINSI=$Main->Provinsi[1];
-    $KEPEMILIKAN = mysql_fetch_array(mysql_query("select nm_pemilik from ref_pemilik where a1='$fmKEPEMILIKAN'"));
+    $KEPEMILIKAN = sqlArray(sqlQuery("select nm_pemilik from ref_pemilik where a1='$fmKEPEMILIKAN'"));
     $KEPEMILIKAN = $KEPEMILIKAN[0];
 	//$fmSKPD = cekPOST('fmSKPD');
-    /* $WILAYAH = mysql_fetch_array(mysql_query("select nm_wilayah from ref_wilayah where b='$fmWIL' "));
+    /* $WILAYAH = sqlArray(sqlQuery("select nm_wilayah from ref_wilayah where b='$fmWIL' "));
       $WILAYAH = $WILAYAH[0]; */
     $WILAYAH = $Main->NM_WILAYAH;
-    $SKPD = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where d='00' and c='$fmSKPD' "));
+    $SKPD = sqlArray(sqlQuery("select nm_skpd from ref_skpd where d='00' and c='$fmSKPD' "));
     $SKPD = $SKPD[0];
-    $UNIT = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d <> '00' and e = '00' and d='$fmUNIT' "));
+    $UNIT = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d <> '00' and e = '00' and d='$fmUNIT' "));
     $UNIT = $UNIT[0];
-    $SUBUNIT = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e='$fmSUBUNIT' "));
+    $SUBUNIT = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e <> '00' and e='$fmSUBUNIT' "));
     $SUBUNIT = $SUBUNIT[0];
-    $SEKSI = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1='$fmSEKSI' and e1<>'00' and e1<>'000' "));
+    $SEKSI = sqlArray(sqlQuery("select nm_skpd from ref_skpd  where  c='$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and e1='$fmSEKSI' and e1<>'00' and e1<>'000' "));
     $SEKSI = $SEKSI[0];
 
     $Hsl = "<table cellpadding=0 cellspacing=0 border=0 width='100%'>
@@ -2072,17 +2072,17 @@ function PrintTTD($pagewidth = '30cm',$xls=FALSE) {
     $JABATANSKPD = "";
     $TITIMANGSA = $Main->CETAK_LOKASI.", " . JuyTgl1(date("Y-m-d"));
     if (c == '04') {
-        $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd1 = '1' ");
+        $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd1 = '1' ");
     } else {
-        $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '00' and ttd1 = '1' ");
+        $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '00' and ttd1 = '1' ");
     }
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD1 = $isi['nik'];
         $NAMASKPD1 = $isi['nm_pejabat'];
         $JABATANSKPD1 = $isi['jabatan'];
     }
-    $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
-    while ($isi = mysql_fetch_array($Qry)) {
+    $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD2 = $isi['nik'];
         $NAMASKPD2 = $isi['nm_pejabat'];
         $JABATANSKPD2 = $isi['jabatan'];
@@ -2195,9 +2195,9 @@ function ComboBarang() {
 
 
 function selKondisiBrg() {
-    $Qry = mysql_query("select * from ref_skpd where c='" . $fmSKPD . "' and d <> '00'  and e = '00' " . $KondisiUNIT . " order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='" . $fmSKPD . "' and d <> '00'  and e = '00' " . $KondisiUNIT . " order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option " . $sel . " value='" . $isi['d'] . "'>" . $isi['nm_skpd'] . "</option>\n";
     }
@@ -2259,9 +2259,9 @@ function WilSKPD1a($doCari) { //create opt cari
         $PilihSUBUNIT = "<option value='00'>--- Semua Sub Unit ---</option>";
         //$disSKPD = 'disabled';
         //Bidang -----------------
-        $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+        $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
         $Ops = "";
-        while ($isi = mysql_fetch_array($Qry)) {
+        while ($isi = sqlArray($Qry)) {
             $sel = $fmSKPD == $isi['c'] ? "selected" : "";
             $Ops .= '<option ' . $sel . ' value="' . $isi['c'] . '">' . $isi['nm_skpd'] . '</option>\n';
         }
@@ -2274,9 +2274,9 @@ function WilSKPD1a($doCari) { //create opt cari
                 '</select>';
 
         //OPD -------------
-        $Qry = mysql_query("select * from ref_skpd where c='" . $fmSKPD . "' and d <> '00'  and e = '00' " . $KondisiUNIT . " order by d");
+        $Qry = sqlQuery("select * from ref_skpd where c='" . $fmSKPD . "' and d <> '00'  and e = '00' " . $KondisiUNIT . " order by d");
         $Ops = "";
-        while ($isi = mysql_fetch_array($Qry)) {
+        while ($isi = sqlArray($Qry)) {
             $sel = $fmUNIT == $isi['d'] ? "selected" : "";
             $Ops .= "<option " . $sel . " value='" . $isi['d'] . "'>" . $isi['nm_skpd'] . "</option>\n";
         }
@@ -2289,9 +2289,9 @@ function WilSKPD1a($doCari) { //create opt cari
                 "</select>";
 
         //Unit --------------------
-        $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD' and d = '" . $fmUNIT . "' and d<>'' and e <> '00' $KondisiSUBUNIT order by e");
+        $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD' and d = '" . $fmUNIT . "' and d<>'' and e <> '00' $KondisiSUBUNIT order by e");
         $Ops = "";
-        while ($isi = mysql_fetch_array($Qry)) {
+        while ($isi = sqlArray($Qry)) {
             $sel = $fmSUBUNIT == $isi['e'] ? "selected" : "";
             $Ops .= "<option " . $sel . " value='" . $isi['e'] . "'>" . $isi['nm_skpd'] . "</option>\n";
         }
@@ -2436,9 +2436,9 @@ function create_optcari() {
 
 function createLookupComboDB($selName, $sqry, $fieldID, $fieldValue, $semua, $selectedValue, $param) {//global
     //$param bisa diisi disabled, onchange, style dll
-    $Qry = mysql_query($sqry);
+    $Qry = sqlQuery($sqry);
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $selectedValue == $isi[$fieldID] ? "selected" : "";
         $Ops .= "<option $sel value='" . $isi[$fieldID] . "'>" . $isi[$fieldValue] . "</option>\n";
     }
@@ -2499,10 +2499,10 @@ function createDBTableList($elTblName, $tblName, $sField, $sFieldKey, $kondisi, 
 
     //generate list
     $sqry = 'select ' . $sField . ' from ' . $tblName . ' ' . $kondisi . ' ' . $limit;
-    $qry = mysql_query($sqry);
+    $qry = sqlQuery($sqry);
     $tblList = '';
     $no = 1;
-    while ($rec = mysql_fetch_array($qry)) {
+    while ($rec = sqlArray($qry)) {
         $clRow = $no % 2 == 0 ? "row1" : "row0";
 
         $idRec = $elTblName;
@@ -3146,9 +3146,9 @@ function WilSKPD1_new() {
 
 
     $cekskpd .= $KondisiSKPD;
-    $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+    $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSKPD_new == $isi['c'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -3156,9 +3156,9 @@ function WilSKPD1_new() {
 		onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmUNIT_new.value='00';adminForm.submit()\">
 			$PilihSKPD $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD_new' and d <> '00' and e = '00' $KondisiUNIT order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD_new' and d <> '00' and e = '00' $KondisiUNIT order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmUNIT_new == $isi['d'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['d']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -3166,9 +3166,9 @@ function WilSKPD1_new() {
 		onChange=\"adminForm.target='_self';adminForm.action='?Pg=$Pg&SPg=$SPg'; adminForm.fmSUBUNIT_new.value='00';adminForm.submit()\">
 			$PilihUNIT $Ops</select>";
 
-    $Qry = mysql_query("select * from ref_skpd where c='$fmSKPD_new' and d = '$fmUNIT_new' and e <> '00' $KondisiSUBUNIT order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmSKPD_new' and d = '$fmUNIT_new' and e <> '00' $KondisiSUBUNIT order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmSUBUNIT_new == $isi['e'] ? "selected" : "";
         $Ops .= "<option $sel value='{$isi['e']}'>{$isi['nm_skpd']}</option>\n";
     }
@@ -3221,9 +3221,9 @@ function Penghapusan_daftar_mutasi_OPD() {
     $PilihSEKSI = "<option value=''>--- Semua Sub Unit ---</option>";
 
 //Bidang -----------------	
-    $Qry = mysql_query("select * from ref_skpd where d='00' $KondisiSKPD order by c");
+    $Qry = sqlQuery("select * from ref_skpd where d='00' $KondisiSKPD order by c");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmPenghapusanSKPD == $isi['c'] ? "selected" : "";
         $Ops .= '<option ' . $sel . ' value="' . $isi['c'] . '">' . $isi['nm_skpd'] . '</option>\n';
     }
@@ -3236,9 +3236,9 @@ function Penghapusan_daftar_mutasi_OPD() {
             '</select>';
 
     //OPD -------------
-    $Qry = mysql_query("select * from ref_skpd where c='" . $fmPenghapusanSKPD . "' and d <> '00'  and e = '00' " . $KondisiUNIT . " order by d");
+    $Qry = sqlQuery("select * from ref_skpd where c='" . $fmPenghapusanSKPD . "' and d <> '00'  and e = '00' " . $KondisiUNIT . " order by d");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmPenghapusanUNIT == $isi['d'] ? "selected" : "";
         $Ops .= "<option " . $sel . " value='" . $isi['d'] . "'>" . $isi['nm_skpd'] . "</option>\n";
     }
@@ -3251,9 +3251,9 @@ function Penghapusan_daftar_mutasi_OPD() {
             "</select>";
 
     //Unit --------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmPenghapusanSKPD' and d = '" . $fmPenghapusanUNIT . "' and d<>'' and e <> '00' and e1='$kdSubUnit0' $KondisiSUBUNIT  order by e");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmPenghapusanSKPD' and d = '" . $fmPenghapusanUNIT . "' and d<>'' and e <> '00' and e1='$kdSubUnit0' $KondisiSUBUNIT  order by e");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmPenghapusanSUBUNIT == $isi['e'] ? "selected" : "";
         $Ops .= "<option " . $sel . " value='" . $isi['e'] . "'>" . $isi['nm_skpd'] . "</option>\n";
     }
@@ -3265,9 +3265,9 @@ function Penghapusan_daftar_mutasi_OPD() {
 
 
     //Sub Unit --------------------
-    $Qry = mysql_query("select * from ref_skpd where c='$fmPenghapusanSKPD' and d = '$fmPenghapusanUNIT' and e='$fmPenghapusanSUBUNIT' and e1 <> '$kdSubUnit0'  $KondisiSEKSI  order by e1");
+    $Qry = sqlQuery("select * from ref_skpd where c='$fmPenghapusanSKPD' and d = '$fmPenghapusanUNIT' and e='$fmPenghapusanSUBUNIT' and e1 <> '$kdSubUnit0'  $KondisiSEKSI  order by e1");
     $Ops = "";
-    while ($isi = mysql_fetch_array($Qry)) {
+    while ($isi = sqlArray($Qry)) {
         $sel = $fmPenghapusanSEKSI == $isi['e1'] ? "selected" : "";
         $Ops .= "<option " . $sel . " value='" . $isi['e1'] . "'>" . $isi['nm_skpd'] . "</option>\n";
     }
@@ -3329,7 +3329,7 @@ function setLastAktif() {
     //cek logn
     if (CekLogin ()) {
         //jika login simpan tgl/jam di last aktif
-        mysql_query("update admin set lastaktif= now(), ipaddr='" . $_SERVER['REMOTE_ADDR'] . "' where uid='{$HTTP_COOKIE_VARS['coID']}'");
+        sqlQuery("update admin set lastaktif= now(), ipaddr='" . $_SERVER['REMOTE_ADDR'] . "' where uid='{$HTTP_COOKIE_VARS['coID']}'");
         //$cek .= '<br> uid='.$HTTP_COOKIE_VARS['coID'];
     }
 
@@ -3380,20 +3380,20 @@ function getList_RekapByBrg($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT, $noawa
     $jmlTotalHargaDisplay = 0;
     $ListData = "";
     $cb = 0;
-    $QryRefBarang = mysql_query("select ref.f,ref.g,ref.nm_barang from ref_barang as ref
+    $QryRefBarang = sqlQuery("select ref.f,ref.g,ref.nm_barang from ref_barang as ref
 						where h='00' order by ref.f,ref.g");
-    $jmlData = mysql_num_rows($QryRefBarang);
+    $jmlData = sqlNumRow($QryRefBarang);
     $TotalHarga = 0;
     $totalBrg = 0;
     $no = $noawal;
-    while ($isi = mysql_fetch_array($QryRefBarang)) {
+    while ($isi = sqlArray($QryRefBarang)) {
 
         $Kondisi1 = "concat(f, g)= '{$isi['f']}{$isi['g']}'";
         $sqry = "select sum(jml_barang) as jml_barang,sum(jml_harga) as jml_harga from buku_induk
 				where $Kondisi1 $Kondisi group by f,g order by f,g";
         $cek .= '<br> qry FG =' . $sqry;
-        $QryBarang = mysql_query($sqry);
-        $isi1 = mysql_fetch_array($QryBarang);
+        $QryBarang = sqlQuery($sqry);
+        $isi1 = sqlArray($QryBarang);
         $no++;
         $clRow = $no % 2 == 0 ? "row1" : "row0";
         $kdBidang = $isi['g'] == "00" ? "" : $isi['g'];
@@ -3401,7 +3401,7 @@ function getList_RekapByBrg($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT, $noawa
 
         $sqry2 = "select sum(jml_barang) as jml_barang, sum(jml_harga) as jml_harga from buku_induk
 				where f='{$isi['f']}' $Kondisi group by f order by f";
-        $QryBarangAtas = mysql_fetch_array(mysql_query($sqry2));
+        $QryBarangAtas = sqlArray(sqlQuery($sqry2));
         $cek .= '<br> qry F =' . $sqry2;
         $jmlBarangAtas = $isi['g'] == "00" ? $QryBarangAtas['jml_barang'] : $isi1['jml_barang'];
         $jmlBarangAtas = empty($jmlBarangAtas) ? "0" : "" . $jmlBarangAtas . "";
@@ -3652,7 +3652,7 @@ function RekapByOPD_CariTotal($c='00', $d='00', $e='00', $e1='000', $kib='', $tg
 	
 	//penatausaha
 	$aqry = "select count(*) as cnt, sum(jml_harga) as jml from buku_induk where $Kondisi "	; //echo $aqry;
-	$qry = mysql_fetch_array(mysql_query($aqry));
+	$qry = sqlArray(sqlQuery($aqry));
 	$JmlBrgBI = $qry['cnt'];
 	$JmlHrgBI = $qry['jml'];
 	//pemelihara
@@ -3704,20 +3704,20 @@ function getList_RekapByOPD2($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $i
     //get resource table
     if ($SPg != '10') {
         $sqry = RekapByOPD_GetQuery($tgl, $KondisiKIB);
-        $qry = mysql_query($sqry . ' ' . $LimitHal);
+        $qry = sqlQuery($sqry . ' ' . $LimitHal);
     } else {
         $sqry = RekapByOPD_GetQuery($tgl, ' and f="01"'); //kib a
-        $qry = mysql_query($sqry . ' ' . $LimitHal);
+        $qry = sqlQuery($sqry . ' ' . $LimitHal);
         $sqry2 = RekapByOPD_GetQuery($tgl, ' and f="02"'); //kib b
-        $qry2 = mysql_query($sqry2 . ' ' . $LimitHal);
+        $qry2 = sqlQuery($sqry2 . ' ' . $LimitHal);
         $sqry3 = RekapByOPD_GetQuery($tgl, ' and f="03"'); //kib c
-        $qry3 = mysql_query($sqry3 . ' ' . $LimitHal);
+        $qry3 = sqlQuery($sqry3 . ' ' . $LimitHal);
         $sqry4 = RekapByOPD_GetQuery($tgl, ' and f="04"'); //kib d
-        $qry4 = mysql_query($sqry4 . ' ' . $LimitHal);
+        $qry4 = sqlQuery($sqry4 . ' ' . $LimitHal);
         $sqry5 = RekapByOPD_GetQuery($tgl, ' and f="05"'); //kib e
-        $qry5 = mysql_query($sqry5 . ' ' . $LimitHal);
+        $qry5 = sqlQuery($sqry5 . ' ' . $LimitHal);
         $sqry6 = RekapByOPD_GetQuery($tgl, ' and f="06"'); //kib f
-        $qry6 = mysql_query($sqry6 . ' ' . $LimitHal);
+        $qry6 = sqlQuery($sqry6 . ' ' . $LimitHal);
     }
     $ListData = '';
     $no = $noawal + 1;
@@ -3727,7 +3727,7 @@ function getList_RekapByOPD2($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $i
         $cltd = 'GarisDaftar';
     }
 	//echo $sqry;
-    while ($isi = mysql_fetch_array($qry)) {
+    while ($isi = sqlArray($qry)) {
 		
 		
 		
@@ -3784,11 +3784,11 @@ function getList_RekapByOPD2($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $i
             if (!mysql_data_seek($qry6, $i)) {
                 echo "6 Cannot seek to row $i: " . mysql_error() . "\n";
             };
-            $isi2 = mysql_fetch_assoc($qry2);
-            $isi3 = mysql_fetch_assoc($qry3);
-            $isi4 = mysql_fetch_assoc($qry4);
-            $isi5 = mysql_fetch_assoc($qry5);
-            $isi6 = mysql_fetch_assoc($qry6);
+            $isi2 = sqlArray($qry2);
+            $isi3 = sqlArray($qry3);
+            $isi4 = sqlArray($qry4);
+            $isi5 = sqlArray($qry5);
+            $isi6 = sqlArray($qry6);
             list($jmlBrg2, $jmlHrg2, $tampil_jmlharga2) = RekapByOPD_TampilJmldanHarga($isi2, $isRibuan, $cltd);
             list($jmlBrg3, $jmlHrg3, $tampil_jmlharga3) = RekapByOPD_TampilJmldanHarga($isi3, $isRibuan, $cltd);
             list($jmlBrg4, $jmlHrg4, $tampil_jmlharga4) = RekapByOPD_TampilJmldanHarga($isi4, $isRibuan, $cltd);
@@ -3814,18 +3814,18 @@ function getList_RekapByOPD2($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $i
     }
     
 	//cari total & jml data----------------------------------------------------
-    $qry = mysql_query($sqry);
+    $qry = sqlQuery($sqry);
     if ($SPg == '10') {
-        $qry2 = mysql_query($sqry2);
-        $qry3 = mysql_query($sqry3);
-        $qry4 = mysql_query($sqry4);
-        $qry5 = mysql_query($sqry5);
-        $qry6 = mysql_query($sqry6);
+        $qry2 = sqlQuery($sqry2);
+        $qry3 = sqlQuery($sqry3);
+        $qry4 = sqlQuery($sqry4);
+        $qry5 = sqlQuery($sqry5);
+        $qry6 = sqlQuery($sqry6);
     }
-    $jmlData = mysql_num_rows($qry);
+    $jmlData = sqlNumRow($qry);
     if ($noawal == 0) {
         $i = 0;
-        while ($isi = mysql_fetch_array($qry)) {
+        while ($isi = sqlArray($qry)) {
             if ($isi['c'] != '00' and $isi['d'] == '00') {
                 $totBrgHPS += $isi['jmlBrgHPS'] + $isi['jmlBrgPD']; 
                 $totHrgHPS += $isi['jmlHrgHPS'] + $isi['jmlHrgPD'];
@@ -3849,11 +3849,11 @@ function getList_RekapByOPD2($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $i
                     if (!mysql_data_seek($qry6, $i)) {
                         echo "6 Cannot seek to row $i: " . mysql_error() . "\n";
                     };
-                    $isi2 = mysql_fetch_assoc($qry2);
-                    $isi3 = mysql_fetch_assoc($qry3);
-                    $isi4 = mysql_fetch_assoc($qry4);
-                    $isi5 = mysql_fetch_assoc($qry5);
-                    $isi6 = mysql_fetch_assoc($qry6);
+                    $isi2 = sqlArray($qry2);
+                    $isi3 = sqlArray($qry3);
+                    $isi4 = sqlArray($qry4);
+                    $isi5 = sqlArray($qry5);
+                    $isi6 = sqlArray($qry6);
                     //B
                     $totBrgHPS2 += $isi2['jmlBrgHPS'] + $isi2['jmlBrgPD']; 
                 	$totHrgHPS2 += $isi2['jmlHrgHPS'] + $isi2['jmlHrgPD'];
@@ -3974,20 +3974,20 @@ function getList_RekapByOPD2_($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $
     //get resource table
     if ($SPg != '10') {
         $sqry = RekapByOPD_GetQuery($tgl, $KondisiKIB);
-        $qry = mysql_query($sqry . ' ' . $LimitHal);
+        $qry = sqlQuery($sqry . ' ' . $LimitHal);
     } else {
         $sqry = RekapByOPD_GetQuery($tgl, ' and f="01"'); //kib a
-        $qry = mysql_query($sqry . ' ' . $LimitHal);
+        $qry = sqlQuery($sqry . ' ' . $LimitHal);
         $sqry2 = RekapByOPD_GetQuery($tgl, ' and f="02"'); //kib b
-        $qry2 = mysql_query($sqry2 . ' ' . $LimitHal);
+        $qry2 = sqlQuery($sqry2 . ' ' . $LimitHal);
         $sqry3 = RekapByOPD_GetQuery($tgl, ' and f="03"'); //kib c
-        $qry3 = mysql_query($sqry3 . ' ' . $LimitHal);
+        $qry3 = sqlQuery($sqry3 . ' ' . $LimitHal);
         $sqry4 = RekapByOPD_GetQuery($tgl, ' and f="04"'); //kib d
-        $qry4 = mysql_query($sqry4 . ' ' . $LimitHal);
+        $qry4 = sqlQuery($sqry4 . ' ' . $LimitHal);
         $sqry5 = RekapByOPD_GetQuery($tgl, ' and f="05"'); //kib e
-        $qry5 = mysql_query($sqry5 . ' ' . $LimitHal);
+        $qry5 = sqlQuery($sqry5 . ' ' . $LimitHal);
         $sqry6 = RekapByOPD_GetQuery($tgl, ' and f="06"'); //kib f
-        $qry6 = mysql_query($sqry6 . ' ' . $LimitHal);
+        $qry6 = sqlQuery($sqry6 . ' ' . $LimitHal);
     }
     $ListData = '';
     $no = $noawal + 1;
@@ -3997,7 +3997,7 @@ function getList_RekapByOPD2_($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $
         $cltd = 'GarisDaftar';
     }
 	//echo $sqry;
-    while ($isi = mysql_fetch_array($qry)) {
+    while ($isi = sqlArray($qry)) {
 		
 		
 		
@@ -4048,11 +4048,11 @@ function getList_RekapByOPD2_($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $
             if (!mysql_data_seek($qry6, $i)) {
                 echo "6 Cannot seek to row $i: " . mysql_error() . "\n";
             };
-            $isi2 = mysql_fetch_assoc($qry2);
-            $isi3 = mysql_fetch_assoc($qry3);
-            $isi4 = mysql_fetch_assoc($qry4);
-            $isi5 = mysql_fetch_assoc($qry5);
-            $isi6 = mysql_fetch_assoc($qry6);
+            $isi2 = sqlArray($qry2);
+            $isi3 = sqlArray($qry3);
+            $isi4 = sqlArray($qry4);
+            $isi5 = sqlArray($qry5);
+            $isi6 = sqlArray($qry6);
             list($jmlBrg2, $jmlHrg2, $tampil_jmlharga2) = RekapByOPD_TampilJmldanHarga($isi2, $isRibuan, $cltd);
             list($jmlBrg3, $jmlHrg3, $tampil_jmlharga3) = RekapByOPD_TampilJmldanHarga($isi3, $isRibuan, $cltd);
             list($jmlBrg4, $jmlHrg4, $tampil_jmlharga4) = RekapByOPD_TampilJmldanHarga($isi4, $isRibuan, $cltd);
@@ -4077,18 +4077,18 @@ function getList_RekapByOPD2_($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $
                 "</tr>";
     }
     //cari total & jml data----------------------------------------------------
-    $qry = mysql_query($sqry);
+    $qry = sqlQuery($sqry);
     if ($SPg == '10') {
-        $qry2 = mysql_query($sqry2);
-        $qry3 = mysql_query($sqry3);
-        $qry4 = mysql_query($sqry4);
-        $qry5 = mysql_query($sqry5);
-        $qry6 = mysql_query($sqry6);
+        $qry2 = sqlQuery($sqry2);
+        $qry3 = sqlQuery($sqry3);
+        $qry4 = sqlQuery($sqry4);
+        $qry5 = sqlQuery($sqry5);
+        $qry6 = sqlQuery($sqry6);
     }
-    $jmlData = mysql_num_rows($qry);
+    $jmlData = sqlNumRow($qry);
     if ($noawal == 0) {
         $i = 0;
-        while ($isi = mysql_fetch_array($qry)) {
+        while ($isi = sqlArray($qry)) {
             if ($isi['c'] != '00' and $isi['d'] == '00') {
                 $totBrgHPS += $isi['jmlBrgHPS'];
                 $totHrgHPS += $isi['jmlHrgHPS'];
@@ -4112,11 +4112,11 @@ function getList_RekapByOPD2_($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $
                     if (!mysql_data_seek($qry6, $i)) {
                         echo "6 Cannot seek to row $i: " . mysql_error() . "\n";
                     };
-                    $isi2 = mysql_fetch_assoc($qry2);
-                    $isi3 = mysql_fetch_assoc($qry3);
-                    $isi4 = mysql_fetch_assoc($qry4);
-                    $isi5 = mysql_fetch_assoc($qry5);
-                    $isi6 = mysql_fetch_assoc($qry6);
+                    $isi2 = sqlArray($qry2);
+                    $isi3 = sqlArray($qry3);
+                    $isi4 = sqlArray($qry4);
+                    $isi5 = sqlArray($qry5);
+                    $isi6 = sqlArray($qry6);
                     //B
                     $totBrgHPS2 += $isi2['jmlBrgHPS'];
                     $totHrgHPS2 += $isi2['jmlHrgHPS'];
@@ -4234,10 +4234,10 @@ function getList_RekapByOPD($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $is
 
     //$cek = ' <br> SPg = '.$SPg;
     $sqry = ' select * from ' . $tblName; //$cek .= ' sqry= '.$sqry.' '.$LimitHal.'<br>';
-    $qry = mysql_query($sqry);
-    $jmlData = mysql_num_rows($qry);
+    $qry = sqlQuery($sqry);
+    $jmlData = sqlNumRow($qry);
 
-    $qry = mysql_query($sqry . ' ' . $LimitHal);
+    $qry = sqlQuery($sqry . ' ' . $LimitHal);
     $ListData = '';
     $no = $noawal; //$Main->PagePerHal * (($HalDefault*1) - 1);
     //$rekap->totPerHal= array('bi'=>0, 'kiba'=>0, 'kibb'=>0, 'kibc'=>0, 'kibd'=>0, 'kibe'=>0, 'kibf'=>0);
@@ -4298,7 +4298,7 @@ function getList_RekapByOPD($SPg, $noawal, $LimitHal, $kolomwidth, $isCetak, $is
     }
 
     //create list -------------------------------------
-    while ($row = mysql_fetch_array($qry)) {
+    while ($row = sqlArray($qry)) {
         $clRow = $no % 2 == 0 ? "row1" : "row0"; //get css row
         if ($isCetak) {
             $clRow = '';
@@ -4568,10 +4568,10 @@ function Mutasi_RekapByBrg_GetList2($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT
 		order by aa.f, aa.g		
 	"; // echo "$sqry";
 	// $cek.=$sqry;
-    $QryRefBarang = mysql_query($sqry);    
-    $jmlData = mysql_num_rows($QryRefBarang); //$totalHarga = 0; $totalBrg =0;    
+    $QryRefBarang = sqlQuery($sqry);    
+    $jmlData = sqlNumRow($QryRefBarang); //$totalHarga = 0; $totalBrg =0;    
 	$no=0;
-    while ($isi = mysql_fetch_array($QryRefBarang)) {
+    while ($isi = sqlArray($QryRefBarang)) {
         //get kondisi1 (barang) ----------------------------------
         $kdBidang = $isi['g'] == "00" ? "" : $isi['g'];
         $nmBarang = $isi['g'] == "00" ? "<b>{$isi['nm_barang']}</b>" : "&nbsp;&nbsp;&nbsp;{$isi['nm_barang']}";
@@ -4619,25 +4619,25 @@ function Mutasi_RekapByBrg_GetList2($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT
 		$jmlHrgHPS_Aman_akhir = $isi['jmlHrgHPS_Aman_akhir'];
 		$jmlHrgHPS_Aman_curr = $jmlHrgHPS_Aman_akhir - $jmlHrgHPS_Aman_awal;
 		//mutasi pelihara
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_mutasi_pelihara 
 			where $Kondisi and tambah_aset=1 and tgl_buku < '$tglAwal' and $KondisiFG $groupFG " 
 		)); //echo "select sum(biaya_pemeliharaan ) as sumbiaya from v2_mutasi_pelihara 
 			//where $Kondisi and tambah_aset=1 and tgl_buku < '$tglAwal' and $KondisiFG $groupFG ";
 		$jmlHrgMut_PLH_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_mutasi_pelihara 
 			where $Kondisi and tambah_aset=1 and tgl_buku <= '$tglAkhir' and $KondisiFG $groupFG " 
 		));		
 		$jmlHrgMut_PLH_akhir = $get['sumbiaya'];
 		$jmlHrgMut_PLH_curr = $jmlHrgMut_PLH_akhir - $jmlHrgMut_PLH_awal;
 		//mutasi pengaman
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_mutasi_pengaman
 			where $Kondisi and tambah_aset=1 and tgl_buku < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgMut_Aman_awal = $get['sumbiaya'];	
-		$get= mysql_fetch_array( mysql_query(			
+		$get= sqlArray( sqlQuery(			
 			"select f, sum(biaya_pengamanan ) as sumbiaya from v2_mutasi_pengaman
 			where $Kondisi and tambah_aset=1 and tgl_buku <= '$tglAkhir' and $KondisiFG $groupFG " 
 		));		 
@@ -4645,13 +4645,13 @@ function Mutasi_RekapByBrg_GetList2($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT
 		$jmlHrgMut_Aman_curr = $jmlHrgMut_Aman_akhir - $jmlHrgMut_Aman_awal;	
 			
 		//pindahtangan ----------------------------------------------------------
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(jml_barang) as sumbrg, sum(jml_harga ) as sumbiaya from v1_pindahtangan 
 			where $Kondisi and tgl_pemindahtanganan < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlBrgPindah_awal = $get['sumbrg'];
 		$jmlHrgPindah_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(jml_barang) as sumbrg, sum(jml_harga ) as sumbiaya from v1_pindahtangan 
 			where $Kondisi and tgl_pemindahtanganan < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
@@ -4659,25 +4659,25 @@ function Mutasi_RekapByBrg_GetList2($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT
 		$jmlHrgPindah_akhir = $get['sumbiaya'];		
 		$jmlHrgPindah_curr = $jmlHrgPindah_akhir - $jmlHrgPindah_awal;
 		//pindahtangan pelihara		
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_pindahtangan_pelihara 
 			where $Kondisi and tambah_aset=1 and tgl_pemindahtanganan < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		
 		$jmlHrgPindah_PLH_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_pindahtangan_pelihara 
 			where $Kondisi and tambah_aset=1 and tgl_pemindahtanganan < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgPindah_PLH_akhir = $get['sumbiaya'];	
 		$jmlHrgPindah_PLH_curr = $jmlHrgPindah_PLH_akhir - $jmlHrgPindah_PLH_awal;	
 		//pindahtangan pengaman		
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_pindahtangan_pengaman 
 			where $Kondisi and tambah_aset=1 and tgl_pemindahtanganan < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgPindah_Aman_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_pindahtangan_pengaman 
 			where $Kondisi and tambah_aset=1 and tgl_pemindahtanganan < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
@@ -4685,13 +4685,13 @@ function Mutasi_RekapByBrg_GetList2($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT
 		$jmlHrgPindah_Aman_curr = $jmlHrgPindah_Aman_akhir - $jmlHrgPindah_Aman_awal;	
 		
 		//gantirugi --------------------------------------------------
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(jml_barang) as sumbrg, sum(jml_harga ) as sumbiaya from v1_gantirugi
 			where $Kondisi and tgl_gantirugi < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlBrgGantirugi_awal = $get['sumbrg'];
 		$jmlHrgGantirugi_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(jml_barang) as sumbrg, sum(jml_harga ) as sumbiaya from v1_gantirugi 
 			where $Kondisi and tgl_gantirugi < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
@@ -4699,24 +4699,24 @@ function Mutasi_RekapByBrg_GetList2($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNIT
 		$jmlHrgGantirugi_akhir = $get['sumbiaya'];		
 		$jmlHrgGantirugi_curr = $jmlHrgGantirugi_akhir - $jmlHrgGantirugi_awal;
 		//Gantirugi pelihara		
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_gantirugi_pelihara 
 			where $Kondisi and tambah_aset=1 and tgl_gantirugi < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgGantirugi_PLH_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_gantirugi_pelihara 
 			where $Kondisi and tambah_aset=1 and tgl_gantirugi < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgGantirugi_PLH_akhir = $get['sumbiaya'];	
 		$jmlHrgGantirugi_PLH_curr = $jmlHrgGantirugi_PLH_akhir - $jmlHrgGantirugi_PLH_awal;	
 		//Gantirugi pengaman		
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_gantirugi_pengaman 
 			where $Kondisi and tambah_aset=1 and tgl_gantirugi < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgGantirugi_Aman_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_gantirugi_pengaman 
 			where $Kondisi and tambah_aset=1 and tgl_gantirugi < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
@@ -5089,11 +5089,11 @@ function Mutasi_RekapByBrg_GetList2_($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNI
 		order by f, g		
 	";
     //echo "$sqry";
-    $QryRefBarang = mysql_query($sqry);
-    //$QryRefBarang2 = mysql_query($sqry);
-    $jmlData = mysql_num_rows($QryRefBarang); //$totalHarga = 0; $totalBrg =0;
-    //while($isi=mysql_fetch_array($QryRefBarang), $isi2=mysql_fetch_array($QryRefBarang2)){
-    while ($isi = mysql_fetch_array($QryRefBarang)) {
+    $QryRefBarang = sqlQuery($sqry);
+    //$QryRefBarang2 = sqlQuery($sqry);
+    $jmlData = sqlNumRow($QryRefBarang); //$totalHarga = 0; $totalBrg =0;
+    //while($isi=sqlArray($QryRefBarang), $isi2=sqlArray($QryRefBarang2)){
+    while ($isi = sqlArray($QryRefBarang)) {
         //get kondisi1 (barang) ----------------------------------
         $kdBidang = $isi['g'] == "00" ? "" : $isi['g'];
         $nmBarang = $isi['g'] == "00" ? "<b>{$isi['nm_barang']}</b>" : "&nbsp;&nbsp;&nbsp;{$isi['nm_barang']}";
@@ -5118,31 +5118,31 @@ function Mutasi_RekapByBrg_GetList2_($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNI
         $jmlHrgBI_awal = $isi['jmlHrgBI_awal'];		
 		$jmlHrgHPS_PLH_awal = $isi['jmlHrgHPS_PLH_awal'];   
 		$jmlHrgHPS_Aman_awal = $isi['jmlHrgHPS_Aman_awal']; 		   		
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_mutasi_pelihara 
 			where $Kondisi and tgl_buku < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgMut_PLH_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_mutasi_pengaman
 			where $Kondisi and tgl_buku < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		$jmlHrgMut_Aman_awal = $get['sumbiaya'];		  
 		//awal pindahtangan 
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(jml_barang) as sumbrg, sum(jml_harga ) as sumbiaya from v1_pindahtangan 
 			where $Kondisi and tgl_pemindahtangan < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		//awal pindahtangan pelihara
 		$jmlBrgPindah_awal = $get['sumbrg'];
 		$jmlHrgPindah_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_pindahtangan_pelihara 
 			where $Kondisi and tgl_pemindahtangan < '$tglAwal' and $KondisiFG $groupFG " 
 		));
 		//awal pindahtangan pengaman
 		$jmlHrgPindah_PLH_awal = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_pindahtangan_pengaman 
 			where $Kondisi and tgl_pemindahtangan < '$tglAwal' and $KondisiFG $groupFG " 
 		));
@@ -5158,32 +5158,32 @@ function Mutasi_RekapByBrg_GetList2_($fmKEPEMILIKAN, $fmSKPD, $fmUNIT, $fmSUBUNI
 		$jmlHrgHPS_PLH_akhir = $isi['jmlHrgHPS_PLH_akhir'];   
 		$jmlHrgHPS_Aman_akhir = $isi['jmlHrgHPS_Aman_akhir']; 
 		//akhir mutasi pelihara
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_mutasi_pelihara 
 			where $Kondisi and tgl_buku <= '$tglAkhir' and $KondisiFG $groupFG " 
 		));		
 		$jmlHrgMut_PLH_akhir = $get['sumbiaya'];		
 		//akhir mutasi pengaman
-		$get= mysql_fetch_array( mysql_query(			
+		$get= sqlArray( sqlQuery(			
 			"select f, sum(biaya_pengamanan ) as sumbiaya from v2_mutasi_pengaman
 			where $Kondisi and tgl_buku <= '$tglAkhir' and $KondisiFG $groupFG " 
 		));		 
 		$jmlHrgMut_Aman_akhir = $get['sumbiaya']; 
 		//akhir pindahtangan 
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(jml_barang) as sumbrg, sum(jml_harga ) as sumbiaya from v1_pindahtangan 
 			where $Kondisi and tgl_pemindahtangan < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
 		//akhir pindahtangan pelihara
 		$jmlBrgPindah_akhir = $get['sumbrg'];
 		$jmlHrgPindah_akhir = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pemeliharaan ) as sumbiaya from v2_pindahtangan_pelihara 
 			where $Kondisi and tgl_pemindahtangan < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
 		//akhir pindahtangan pengaman
 		$jmlHrgPindah_PLH_akhir = $get['sumbiaya'];
-		$get= mysql_fetch_array( mysql_query(
+		$get= sqlArray( sqlQuery(
 			"select sum(biaya_pengamanan ) as sumbiaya from v2_pindahtangan_pengaman 
 			where $Kondisi and tgl_pemindahtangan < '$tglAkhir' and $KondisiFG $groupFG " 
 		));
@@ -5640,29 +5640,29 @@ function Mutasi_GetList($cetak=0) {
         //saldo awal kurang penghapusan ----------------------------------------------
         $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v_penghapusan_bi
 				where tgl_penghapusan < '$tglAwal' $Kondisi"; //echo "<br> qry awal kurang = ".$aqry;
-        $qry = mysql_query($aqry);
-        $isi = mysql_fetch_array($qry);
+        $qry = sqlQuery($aqry);
+        $isi = sqlArray($qry);
         $SaldoAwal_BrgKurang = $isi['totbarang'];
         $SaldoAwal_HrgKurang = $isi['totharga']; //echo"<br>brg=$SaldoAwal_BrgKurang hrg=$SaldoAwal_HrgKurang";
 
 		//saldo awal kurang pelihara,
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_penghapusan_pelihara
 				where tgl_penghapusan < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 
 		//saldo awal kurang pengaman,
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_penghapusan_pengaman
 				where tgl_penghapusan < '$tglAwal' $Kondisi";   //echo "<br> qry awal kurang = ".$aqry;
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		
 		//saldo awal kurang pemindahtangan ---------------------------------------
 		$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_pindahtangan
 				where tgl_pemindahtanganan < '$tglAwal' $Kondisi"; //echo "<br> qry awal kurang = ".$aqry;        
-        $isi = mysql_fetch_array(mysql_query($aqry));
+        $isi = sqlArray(sqlQuery($aqry));
         $SaldoAwal_BrgKurangPindah = $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
 		$SaldoAwal_BrgKurang += $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
         $SaldoAwal_HrgKurangPindah = $isi['totharga']==NULL ? 0 : $isi['totharga'];
@@ -5670,20 +5670,20 @@ function Mutasi_GetList($cetak=0) {
 		//saldo awal kurang pindah pelihara
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_pindahtangan_pelihara
 				where tgl_pemindahtanganan < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPindahPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		//saldo awal kurang pindah pengaman
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_pindahtangan_pengaman
 				where tgl_pemindahtanganan < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangPindahPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		
 		//saldo awal kurang gantirugi --------------------------------------------
 		$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_gantirugi
 				where tgl_gantirugi < '$tglAwal' $Kondisi"; //echo "<br> qry awal kurang = ".$aqry;        
-        $isi = mysql_fetch_array(mysql_query($aqry));
+        $isi = sqlArray(sqlQuery($aqry));
         $SaldoAwal_BrgKurangGantirugi = $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
 		$SaldoAwal_BrgKurang += $isi['totbarang']==NULL ? 0 : $isi['totbarang'];
         $SaldoAwal_HrgKurangGantirugi = $isi['totharga']==NULL ? 0 : $isi['totharga'];
@@ -5691,13 +5691,13 @@ function Mutasi_GetList($cetak=0) {
 		//saldo awal kurang gantirugi pelihara
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_gantirugi_pelihara
 				where tgl_gantirugi < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangGantirugiPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		//saldo awal kurang gantirugi pengaman
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_gantirugi_pengaman
 				where tgl_gantirugi < '$tglAwal' $Kondisi";  //echo "<br> qry awal kurang = ".$aqry; 
-    	$isi = mysql_fetch_array( mysql_query($aqry));
+    	$isi = sqlArray( sqlQuery($aqry));
 		$SaldoAwal_HrgKurangGantirugiPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 		$SaldoAwal_HrgKurang +=  $isi['totharga']==NULL ? 0 : $isi['totharga'];
 
@@ -5707,29 +5707,29 @@ function Mutasi_GetList($cetak=0) {
         //saldo awal tambah perolehan ------------------------------------------------
         $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from buku_induk
 		where tgl_buku < '$tglAwal'   $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;
-        $qry = mysql_query($aqry);
-        $isi = mysql_fetch_array($qry);
+        $qry = sqlQuery($aqry);
+        $isi = sqlArray($qry);
         $SaldoAwal_BrgTambah = $isi['totbarang'];
         $SaldoAwal_HrgTambah = $isi['totharga']; //echo"<br>brg=$SaldoAwal_BrgTambah hrg=$SaldoAwal_HrgTambah";
         //saldo awal tambah pelihara
         $aqry = " select count(*) as totbarang, sum(biaya_pemeliharaan)as totharga from v_pemelihara
 		where tgl_pemeliharaan < '$tglAwal' and tambah_aset=1  $Kondisi ";  //echo "<br> qry awal tambah = ".$aqry;
-        $isi = mysql_fetch_array(mysql_query($aqry));
+        $isi = sqlArray(sqlQuery($aqry));
         $SaldoAwal_HrgTambah += $isi['totharga'];
         //saldo awal tambah pengaman
         $aqry = " select count(*) as totbarang, sum(biaya_pengamanan)as totharga from v_pengaman
 		where tgl_pengamanan < '$tglAwal'  and tambah_aset=1 $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;		
-        $isi = mysql_fetch_array(mysql_query($aqry));		
+        $isi = sqlArray(sqlQuery($aqry));		
         $SaldoAwal_HrgTambah += $isi['totharga'];
 		//saldo awal tambah mut pelihara
 		$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_mutasi_pelihara
 		where tgl_buku < '$tglAwal'  and tambah_aset=1 $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;	
-        $isi = mysql_fetch_array(mysql_query($aqry));		
+        $isi = sqlArray(sqlQuery($aqry));		
         $SaldoAwal_HrgTambah += $isi['totharga'];
 		//saldo awal tambah mut pengaman
 		$aqry = " select sum(biaya_pengamanan)as totharga from v2_mutasi_pengaman
 		where tgl_buku < '$tglAwal'  and tambah_aset=1 $Kondisi";  //echo "<br> qry awal tambah = ".$aqry;		
-        $isi = mysql_fetch_array(mysql_query($aqry));		
+        $isi = sqlArray(sqlQuery($aqry));		
         $SaldoAwal_HrgTambah += $isi['totharga'];
 		
 		
@@ -5739,59 +5739,59 @@ function Mutasi_GetList($cetak=0) {
     //perubahan berkrang ------------------------------------------------
     $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v_penghapusan_bi
 		where tgl_penghapusan >= '$tglAwal' and tgl_penghapusan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgKurang = $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgKurang = $isi['totharga'] == NULL ? 0 : $isi['totharga']; //echo"<br>brg=$BrgKurang hrg=$HrgKurang";
 	//perubahan hapus pelihara
 	$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_penghapusan_pelihara
 		where tgl_penghapusan >= '$tglAwal' and tgl_penghapusan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan hapus pengamanan
 	$aqry = " select sum(biaya_pengamanan)as totharga from v2_penghapusan_pengaman
 		where tgl_penghapusan >= '$tglAwal' and tgl_penghapusan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan pindah tangan --------------------------------------
 	$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_pindahtangan
 		where tgl_pemindahtanganan >= '$tglAwal' and tgl_pemindahtanganan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgKurang += $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_pindahtangan_pelihara
 		where tgl_pemindahtanganan >= '$tglAwal' and tgl_pemindahtanganan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPindahPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pengamanan)as totharga from v2_pindahtangan_pengaman
 		where tgl_pemindahtanganan >= '$tglAwal' and tgl_pemindahtanganan<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangPindahPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	
 	//perubahan kurang gantirugi --------------------------------------
 	$aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from v1_gantirugi
 		where tgl_gantirugi >= '$tglAwal' and tgl_gantirugi<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgKurang += $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pemeliharaan)as totharga from v2_gantirugi_pelihara
 		where tgl_gantirugi>= '$tglAwal' and tgl_gantirugi<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangGantirugiPelihara = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//perubahan kurang pindah pelihara
 	$aqry = " select sum(biaya_pengamanan)as totharga from v2_gantirugi_pengaman
 		where tgl_gantirugi >= '$tglAwal' and tgl_gantirugi<='$tglAkhir'  $Kondisi";  //echo "<br> qry kurang = ".$aqry;    
-    $isi = mysql_fetch_array( mysql_query($aqry));
+    $isi = sqlArray( sqlQuery($aqry));
 	$HrgKurangGantirugiPengaman = $isi['totharga']==NULL ? 0 : $isi['totharga'];    
 	$HrgKurang += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	
@@ -5799,29 +5799,29 @@ function Mutasi_GetList($cetak=0) {
     //perubahan bertambah ------------------------------------------------
     $aqry = " select sum(jml_barang) as totbarang, sum(jml_harga)as totharga from buku_induk
 		where tgl_buku >= '$tglAwal' and tgl_buku <='$tglAkhir'  $Kondisi";  //echo"<br>qry tambah=".$aqry;
-    $qry = mysql_query($aqry);
-    $isi = mysql_fetch_array($qry);
+    $qry = sqlQuery($aqry);
+    $isi = sqlArray($qry);
     $BrgTambah = $isi['totbarang'] == NULL ? 0 : $isi['totbarang'];
     $HrgTambah = $isi['totharga'] == NULL ? 0 : $isi['totharga'];
     //pelihara
     $aqry = " select count(*) as totbarang, sum(biaya_pemeliharaan)as totharga from v_pemelihara
 		where tgl_pemeliharaan >= '$tglAwal' and tgl_pemeliharaan <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry)); //echo ($aqry);
+    $isi = sqlArray(sqlQuery($aqry)); //echo ($aqry);
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
     //pengaman
     $aqry = " select count(*) as totbarang, sum(biaya_pengamanan)as totharga from v_pengaman
 		where tgl_pengamanan >= '$tglAwal' and tgl_pengamanan <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry));
+    $isi = sqlArray(sqlQuery($aqry));
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
 	//mutasi pelihara
     $aqry = " select sum(biaya_pemeliharaan)as totharga from v2_mutasi_pelihara
 		where tgl_buku >= '$tglAwal' and tgl_buku <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry));
+    $isi = sqlArray(sqlQuery($aqry));
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];    
 	//mutasi pengaman
     $aqry = " select sum(biaya_pengamanan)as totharga from v2_mutasi_pengaman
 		where tgl_buku >= '$tglAwal' and tgl_buku <='$tglAkhir' and tambah_aset=1 $Kondisi"; //echo"<br>qry tambah=".$aqry;
-    $isi = mysql_fetch_array(mysql_query($aqry));
+    $isi = sqlArray(sqlQuery($aqry));
     $HrgTambah += $isi['totharga'] == NULL ? 0 : $isi['totharga'];
     //saldo akhir ----------------------------------------------
     $SaldoAkhir_Brg = $SaldoAwal_Brg + $BrgTambah - $BrgKurang ;//+ $BrgKurangPindah);
@@ -6051,18 +6051,18 @@ function Mutasi_GetList($cetak=0) {
 
     //str_replace('<LimitHal>', $LimitHal, $aqry )
     //jml data
-    $qry = mysql_query($aqry);
-    $jmlData = mysql_num_rows($qry);
+    $qry = sqlQuery($aqry);
+    $jmlData = sqlNumRow($qry);
 
     $aqry .=" $OrderBy $LimitHal "; //echo"<br>qryunion=".$aqry;
-    $qry = mysql_query($aqry);
+    $qry = sqlQuery($aqry);
     $totBrgKurangHal = 0;
     $totHrgKurangHal = 0;
     $totBrgTambahHal = 0;
     $totHrgTambahHal = 0;
     $no = !empty($ctk) ? 0 : $Main->PagePerHal * (($HalDefault * 1) - 1);
     
-	while ($isi = mysql_fetch_array($qry)) {
+	while ($isi = sqlArray($qry)) {
 
         if ($cetak == 0) {
             $clRow = $no % 2 == 0 ? "row1" : "row0";
@@ -6406,16 +6406,16 @@ function gen_table_session($nmtable,$uid)
   $LimitHalDPB = " limit ".(($HalDPB*1) - 1) * $Main->PagePerHal.",".$Main->PagePerHal;
 
   //total jumlah harga
-  $jmlTotalHargaDPB = mysql_query("select sum(pemanfaatan.biaya_pemanfaatan) as total  from pemanfaatan inner join ref_barang  using(f,g,h,i,j) where $KondisiTotalDPB ");
-  if($jmlTotalHargaDPB = mysql_fetch_array($jmlTotalHargaDPB)){
+  $jmlTotalHargaDPB = sqlQuery("select sum(pemanfaatan.biaya_pemanfaatan) as total  from pemanfaatan inner join ref_barang  using(f,g,h,i,j) where $KondisiTotalDPB ");
+  if($jmlTotalHargaDPB = sqlArray($jmlTotalHargaDPB)){
   $jmlTotalHargaDPB = $jmlTotalHargaDPB[0];
   }else{
   $jmlTotalHargaDPB=0;
   }
   //jumlah barang
-  $Qry = mysql_query("select pemanfaatan.*,ref_barang.nm_barang from pemanfaatan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg ");
-  $jmlDataDPB = mysql_num_rows($Qry);
-  $Qry = mysql_query("select pemanfaatan.*,ref_barang.nm_barang from pemanfaatan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg $LimitHalDPB");
+  $Qry = sqlQuery("select pemanfaatan.*,ref_barang.nm_barang from pemanfaatan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg ");
+  $jmlDataDPB = sqlNumRow($Qry);
+  $Qry = sqlQuery("select pemanfaatan.*,ref_barang.nm_barang from pemanfaatan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg $LimitHalDPB");
 
   //list
   $no=$Main->PagePerHal * (($HalDPB*1) - 1);
@@ -6424,14 +6424,14 @@ function gen_table_session($nmtable,$uid)
   $JmlTotalHargaListDPB = 0;
   $ListBarangDPB = "";
   $clGaris = $cetak? "GarisCetak": "GarisDaftar";
-  while ($isi = mysql_fetch_array($Qry)){
+  while ($isi = sqlArray($Qry)){
   $jmlTampilDPB++;
   $no++;
   $JmlTotalHargaListDPB += $isi['biaya_pemanfaatan'];
   $kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
   $kdKelBarang = $isi['f'].$isi['g']."00";
-  $nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-  $nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+  $nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+  $nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
   $clRow = $no % 2 == 0 ?"row1":"row0";
 
   $ISI15 = $isi['ket']==""? "-":$isi['ket'];
@@ -6655,9 +6655,9 @@ function gen_table_session($nmtable,$uid)
   '$fmKEPADAINSTANSI','$fmKEPADAALAMAT','$fmKEPADANAMA',
   '$fmKEPADAJABATAN','$fmSURATNOMOR','".$fmSURATTANGGAL."','$fmJANGKAWAKTU','$fmBIAYA','$fmKET','$fmTAHUNANGGARAN')";
   //echo $Qry;
-  $Simpan = mysql_query($Qry);
-  $UpdateBI = mysql_query("update buku_induk set status_barang='2' where id='$fmIDBUKUINDUK'");
-  $InsertHistory = mysql_query("insert into history_barang
+  $Simpan = sqlQuery($Qry);
+  $UpdateBI = sqlQuery("update buku_induk set status_barang='2' where id='$fmIDBUKUINDUK'");
+  $InsertHistory = sqlQuery("insert into history_barang
   (a,b,c,d,e,f,g,h,i,j,id_bukuinduk,tahun,noreg,tgl_update,kejadian,kondisi,status_barang)values
   ('{$ArWILSKPD[1]}','{$ArWILSKPD[2]}','{$ArWILSKPD[3]}','{$ArWILSKPD[4]}','{$ArWILSKPD[5]}','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}',
   '$fmIDBUKUINDUK','$fmTAHUNANGGARAN','$fmNOREG','".$fmTANGGALPEMANFAATAN."','Entry Pemanfaatan','$fmKONDISIBARANG','$fmSTATUSBARANG')");
@@ -6672,8 +6672,8 @@ function gen_table_session($nmtable,$uid)
   kepada_jabatan = '$fmKEPADAJABATAN', surat_no = '$fmSURATNOMOR', surat_tgl = '".$fmSURATTANGGAL."',
   jangkawaktu = '$fmJANGKAWAKTU', biaya_pemanfaatan = '$fmBIAYA', ket = '$fmKET'
   where $Kriteria ";
-  $Simpan = mysql_query($Qry);
-  $InsertHistory = mysql_query("insert into history_barang (a,b,c,d,e,f,g,h,i,j,id_bukuinduk,tahun,noreg,tgl_update,
+  $Simpan = sqlQuery($Qry);
+  $InsertHistory = sqlQuery("insert into history_barang (a,b,c,d,e,f,g,h,i,j,id_bukuinduk,tahun,noreg,tgl_update,
   kejadian,kondisi,status_barang)values('{$ArWILSKPD[1]}','{$ArWILSKPD[2]}','{$ArWILSKPD[3]}','{$ArWILSKPD[4]}','{$ArWILSKPD[5]}','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','$fmIDBUKUINDUK','$fmTAHUNANGGARAN','$fmNOREG','".$fmTANGGALPEMANFAATAN."','Update Pemanfaatan','$fmKONDISIBARANG','$fmSTATUSBARANG')");
   }
 
@@ -6704,11 +6704,11 @@ function gen_table_session($nmtable,$uid)
   $Info = "<script>alert('Pilih hanya satu data!')</script>";
   }else{
   if($Act=="Edit"){
-  $Qry = mysql_query("select * from pemanfaatan where id='{$cidNya[0]}'");
+  $Qry = sqlQuery("select * from pemanfaatan where id='{$cidNya[0]}'");
   }else{
-  $Qry = mysql_query("select * from buku_induk where buku_induk.id='{$cidNya[0]}'");
+  $Qry = sqlQuery("select * from buku_induk where buku_induk.id='{$cidNya[0]}'");
   }
-  $isi = mysql_fetch_array($Qry);
+  $isi = sqlArray($Qry);
 
   //get ID
   if($Act=="Edit"){
@@ -6720,7 +6720,7 @@ function gen_table_session($nmtable,$uid)
 
   //get data
   $kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
-  $nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+  $nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
   $fmWILSKPD = $isi['a1'].".".$isi['a'].".".$isi['b'].".".$isi['c'].".".$isi['d'].".".$isi['e'];
   $fmWILSKPD = $fmWILSKPD == "....." ? "" :$fmWILSKPD;
   $fmIDBARANG = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
@@ -6763,9 +6763,9 @@ function gen_table_session($nmtable,$uid)
   $cidDPB = cekPOST("cidDPB");
   if($Act=="Hapus" && count($cidDPB) > 0){
   for($i = 0; $i<count($cidDPB); $i++){
-  $cekIdBI = mysql_fetch_array(mysql_query("select id_bukuinduk from pemanfaatan where id='{$cidDPB[$i]}'"));$cekIdBI = $cekIdBI[0];
-  $Del = mysql_query("delete from pemanfaatan where id='{$cidDPB[$i]}' limit 1");
-  $UpdateBI = mysql_query("update buku_induk set status_barang='1' where id='$cekIdBI'");
+  $cekIdBI = sqlArray(sqlQuery("select id_bukuinduk from pemanfaatan where id='{$cidDPB[$i]}'"));$cekIdBI = $cekIdBI[0];
+  $Del = sqlQuery("delete from pemanfaatan where id='{$cidDPB[$i]}' limit 1");
+  $UpdateBI = sqlQuery("update buku_induk set status_barang='1' where id='$cekIdBI'");
   $Info = "<script>alert('Data telah di hapus')</script>";
   }
   }
@@ -6888,8 +6888,8 @@ function bilang($x){
 				$sqryKIBA = "select sertifikat_no, luas, ket from kib_a  $KondisiKIB limit 0,1";
 				//$sqryKIBA = "select * from view_kib_a  $KondisiKIB limit 0,1";
 				//echo '<br> qrykibA = '.$sqryKIBA;
-				$QryKIB_A = mysql_query($sqryKIBA);
-				while($isiKIB_A = mysql_fetch_array($QryKIB_A))	{
+				$QryKIB_A = sqlQuery($sqryKIBA);
+				while($isiKIB_A = sqlArray($QryKIB_A))	{
 					//$ISI5 = $isiKIB_A['alamat'].'<br>'.$isiKIB_A['alamat_kel'].'<br>'.$isiKIB_A['alamat_kec'].'<br>'.$isiKIB_A['alamat_kota'] ;
 					$ISI6 = $isiKIB_A['sertifikat_no'];
 					/*$ISI6 = $isiKIB_A['sertifikat_no'].'/<br>'.
@@ -6906,10 +6906,10 @@ function bilang($x){
 				$aqry="select ukuran, merk,no_pabrik,no_rangka,no_mesin,bahan,ket  from kib_b  $KondisiKIB limit 0,1";
 				//echo"<br>qrkbb=".$aqry;
 				
-				$QryKIB_B = mysql_query($aqry);
+				$QryKIB_B = sqlQuery($aqry);
 				
 				//echo "<br>qrkibb=".$aqry;
-				while($isiKIB_B = mysql_fetch_array($QryKIB_B))	{
+				while($isiKIB_B = sqlArray($QryKIB_B))	{
 					
 					$ISI5 = "{$isiKIB_B['merk']}";
 					$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
@@ -6920,9 +6920,9 @@ function bilang($x){
 				break;
 				}	
 			case '03':{//KIB C;
-				$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket,kota, alamat_kec, alamat_kel, alamat,alamat_b,alamat_c from kib_c  $KondisiKIB limit 0,1");
-				//$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1");
-				while($isiKIB_C = mysql_fetch_array($QryKIB_C))	{
+				$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket,kota, alamat_kec, alamat_kel, alamat,alamat_b,alamat_c from kib_c  $KondisiKIB limit 0,1");
+				//$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1");
+				while($isiKIB_C = sqlArray($QryKIB_C))	{
 					//$ISI5 = $isiKIB_C['alamat'].'<br>'.$isiKIB_C['alamat_kel'].'<br>'.$isiKIB_C['alamat_kec'].'<br>'.$isiKIB_C['alamat_kota'] ;
 					$ISI5= getalamat($isiKIB_C['alamat_b'],$isiKIB_C['alamat_c'],$isiKIB_C['alamat'],$isiKIB_C['kota'] ,$isiKIB_C['alamat_kec'],$isiKIB_C['alamat_kel']);
 					$ISI6 = "{$isiKIB_C['dokumen_no']}";
@@ -6932,9 +6932,9 @@ function bilang($x){
 				break;
 			}
 			case '04':{//KIB D;
-				//$QryKIB_D = mysql_query("select dokumen_no, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
-				$QryKIB_D = mysql_query("select dokumen_no, ket  from kib_d  $KondisiKIB limit 0,1");
-				while($isiKIB_D = mysql_fetch_array($QryKIB_D))	{
+				//$QryKIB_D = sqlQuery("select dokumen_no, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
+				$QryKIB_D = sqlQuery("select dokumen_no, ket  from kib_d  $KondisiKIB limit 0,1");
+				while($isiKIB_D = sqlArray($QryKIB_D))	{
 					//$ISI5 = $isiKIB_D['alamat'].'<br>'.$isiKIB_D['alamat_kel'].'<br>'.$isiKIB_D['alamat_kec'].'<br>'.$isiKIB_D['alamat_kota'] ;
 					$ISI6 = "{$isiKIB_D['dokumen_no']}";
 					$ISI15 = "{$isiKIB_D['ket']}";
@@ -6942,8 +6942,8 @@ function bilang($x){
 				break;
 			}
 			case '05':{//KIB E;		
-				$QryKIB_E = mysql_query("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
-				while($isiKIB_E = mysql_fetch_array($QryKIB_E))	{
+				$QryKIB_E = sqlQuery("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
+				while($isiKIB_E = sqlArray($QryKIB_E))	{
 					$ISI7 = "{$isiKIB_E['seni_bahan']}";
 					$ISI15 = "{$isiKIB_E['ket']}";
 				}
@@ -6953,9 +6953,9 @@ function bilang($x){
 				//$cek.='<br> F = '.$isi['f'];
 				//$sqrykibF = "select dokumen_no, bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat  from view_kib_f  $KondisiKIB limit 0,1";
 				$sqrykibF = "select dokumen_no, bangunan, ket from kib_f  $KondisiKIB limit 0,1";
-				$QryKIB_F = mysql_query($sqrykibF);
+				$QryKIB_F = sqlQuery($sqrykibF);
 				$cek.='<br> qrykibF = '.$sqrykibF;
-				while($isiKIB_F = mysql_fetch_array($QryKIB_F))	{
+				while($isiKIB_F = sqlArray($QryKIB_F))	{
 					//$ISI5 = $isiKIB_F['alamat'].'<br>'.$isiKIB_F['alamat_kel'].'<br>'.$isiKIB_F['alamat_kec'].'<br>'.$isiKIB_F['alamat_kota'] ;
 					$ISI6 = "{$isiKIB_F['dokumen_no']}";
 					$ISI10 = $Main->Bangunan[$isiKIB_F['bangunan']-1][1];
@@ -6986,8 +6986,8 @@ function bilang($x){
 				//$sqryKIBA = "select sertifikat_no, luas, ket from kib_a  $KondisiKIB limit 0,1";
 				$sqryKIBA = "select * from view_kib_a  $KondisiKIB limit 0,1";
 				//echo '<br> qrykibA = '.$sqryKIBA;
-				$QryKIB_A = mysql_query($sqryKIBA);
-				while($isiKIB_A = mysql_fetch_array($QryKIB_A))	{
+				$QryKIB_A = sqlQuery($sqryKIBA);
+				while($isiKIB_A = sqlArray($QryKIB_A))	{
 					$ISI5 = $isiKIB_A['alamat']==''? '' : $isiKIB_A['alamat'].'<br>';
 					$ISI5 .= $isiKIB_A['alamat_kel']==''? '': $isiKIB_A['alamat_kel'].'<br>';
 					$ISI5 .= $isiKIB_A['alamat_kec']==''? '': $isiKIB_A['alamat_kec'].'<br>';
@@ -7004,9 +7004,9 @@ function bilang($x){
 				//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'";
 				$aqry="select ukuran, merk,no_pabrik,no_rangka,no_mesin,bahan,ket  from kib_b  $KondisiKIB limit 0,1";
 				//echo"<br>qrkbb=".$aqry;
-				$QryKIB_B = mysql_query($aqry);
+				$QryKIB_B = sqlQuery($aqry);
 				//echo "<br>qrkibb=".$aqry;
-				while($isiKIB_B = mysql_fetch_array($QryKIB_B))	{
+				while($isiKIB_B = sqlArray($QryKIB_B))	{
 					$ISI5 = "{$isiKIB_B['merk']}";
 					$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
 					$ISI7 = "{$isiKIB_B['bahan']}";
@@ -7016,11 +7016,11 @@ function bilang($x){
 				break;
 				}	
 			case '03':{//KIB C;
-				//$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket from kib_c  $KondisiKIB limit 0,1");
+				//$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket from kib_c  $KondisiKIB limit 0,1");
 				$aqry="select dokumen_no, dokumen_tgl, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1";
-				$QryKIB_C = mysql_query($aqry);
+				$QryKIB_C = sqlQuery($aqry);
 				//echo '<br> aqry = '.$aqry;
-				while($isiKIB_C = mysql_fetch_array($QryKIB_C))	{
+				while($isiKIB_C = sqlArray($QryKIB_C))	{
 					$ISI5 = $isiKIB_C['alamat']==''? '' : $isiKIB_C['alamat'].'<br>';
 					$ISI5 .= $isiKIB_C['alamat_kel']==''? '': $isiKIB_C['alamat_kel'].'<br>';
 					$ISI5 .= $isiKIB_C['alamat_kec']==''? '': $isiKIB_C['alamat_kec'].'<br>';
@@ -7035,8 +7035,8 @@ function bilang($x){
 				break;
 			}
 			case '04':{//KIB D;
-				$QryKIB_D = mysql_query("select dokumen_no, dokumen_tgl, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
-				while($isiKIB_D = mysql_fetch_array($QryKIB_D))	{
+				$QryKIB_D = sqlQuery("select dokumen_no, dokumen_tgl, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
+				while($isiKIB_D = sqlArray($QryKIB_D))	{
 					$ISI5 = $isiKIB_D['alamat']==''? '' : $isiKIB_D['alamat'].'<br>';
 					$ISI5 .= $isiKIB_D['alamat_kel']==''? '': $isiKIB_D['alamat_kel'].'<br>';
 					$ISI5 .= $isiKIB_D['alamat_kec']==''? '': $isiKIB_D['alamat_kec'].'<br>';
@@ -7048,8 +7048,8 @@ function bilang($x){
 				break;
 			}
 			case '05':{//KIB E;		
-				$QryKIB_E = mysql_query("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
-				while($isiKIB_E = mysql_fetch_array($QryKIB_E))	{
+				$QryKIB_E = sqlQuery("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
+				while($isiKIB_E = sqlArray($QryKIB_E))	{
 					$ISI7 = "{$isiKIB_E['seni_bahan']}";
 					$ISI15 = "{$isiKIB_E['ket']}";
 				}
@@ -7058,9 +7058,9 @@ function bilang($x){
 			case '06':{//KIB F;
 				//$cek.='<br> F = '.$isi['f'];
 				$sqrykibF = "select dokumen_no, dokumen_tgl, bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat  from view_kib_f  $KondisiKIB limit 0,1";
-				$QryKIB_F = mysql_query($sqrykibF);
+				$QryKIB_F = sqlQuery($sqrykibF);
 				$cek.='<br> qrykibF = '.$sqrykibF;
-				while($isiKIB_F = mysql_fetch_array($QryKIB_F))	{
+				while($isiKIB_F = sqlArray($QryKIB_F))	{
 					$ISI5 = $isiKIB_F['alamat']==''? '' : $isiKIB_F['alamat'].'<br>';
 					$ISI5 .= $isiKIB_F['alamat_kel']==''? '': $isiKIB_F['alamat_kel'].'<br>';
 					$ISI5 .= $isiKIB_F['alamat_kec']==''? '': $isiKIB_F['alamat_kec'].'<br>';
@@ -7111,21 +7111,21 @@ function bilang($x){
 		
 		if ($Baru==0){	//edit
 
-		$pemegang = mysql_fetch_array(mysql_query(
+		$pemegang = sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='$ref_idpemegang'"
 		));
-		$pemegang2 = mysql_fetch_array(mysql_query(
+		$pemegang2 = sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='$ref_idpemegang2'"
 		));
 		//$cek .= "select * from ref_pegawai where Id='$ref_idpemegang'";
 		//$cek .= 'pegang='.$pemegang['nama'];
-		$penanggung = mysql_fetch_array(mysql_query(
+		$penanggung = sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='$ref_idpenanggung'"
 		));
-		$ruang = mysql_fetch_array(mysql_query(
+		$ruang = sqlArray(sqlQuery(
 			"select * from ref_ruang where Id='$ref_idruang'"
 		));
-		$gedung = mysql_fetch_array(mysql_query(
+		$gedung = sqlArray(sqlQuery(
 			"select * from ref_ruang where c='".$ruang['c']."' and d='".$ruang['d']."' and e='".$ruang['e']."' and p='".$ruang['p']."' and q='0000'"
 		));
 			
@@ -7188,24 +7188,24 @@ function bilang($x){
 			' width="150" ',' width="10" ','','valign="top" height="24"');
 		}
 
-		$get= mysql_fetch_array(mysql_query(
+		$get= sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='$ref_idpemegang'"
 		));
 		$nm_pemegang = $get['nama']; $nip_pemegang=$get['nip'];
-		$get= mysql_fetch_array(mysql_query(
+		$get= sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='$ref_idpemegang2'"
 		));
 		$nm_pemegang2 = $get['nama']; $nip_pemegang2=$get['nip'];		
-		$get= mysql_fetch_array(mysql_query(
+		$get= sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='$ref_idpenanggung'"
 		));
 		$nm_penanggung = $get['nama']; $nip_penanggung=$get['nip'];
-		$get= mysql_fetch_array(mysql_query(
+		$get= sqlArray(sqlQuery(
 			"select * from ref_ruang where id='$ref_idruang'"
 		));
 		if($get){
 			$nm_ruang = $get['nm_ruang'];
-			$gdg = mysql_fetch_array(mysql_query(
+			$gdg = sqlArray(sqlQuery(
 				"select * from ref_ruang where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' and e1='".$get['e1']."' and p='".$get['p']."' and q='0000' "
 			));
 			$nm_gedung = $gdg['nm_ruang'];
@@ -8078,8 +8078,8 @@ function bilang($x){
 		
 		
 		$sqry = "select * from buku_induk where id='$idbi'"; $cek .= '<br> qry edit= '.$sqry;
-		$Qry = mysql_query($sqry);
-		$isi = mysql_fetch_array($Qry);
+		$Qry = sqlQuery($sqry);
+		$isi = sqlArray($Qry);
 		
 		/*if (($hanyaStatusInv ) && ($isi['status_barang'] != 1)){	
 			$errmsg = 'Hanya barang dengan status Inventaris yang dapat di Ubah'; 
@@ -8088,8 +8088,8 @@ function bilang($x){
 		if ($errmsg == ''){	
 			$kdBarang 	= $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 			$kdRekening = $isi['k'].$isi['l'].$isi['m'].$isi['n'].$isi['o'];
-			$nmRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where concat(k,l,m,n,o)='$kdRekening'"));
-			$nmBarang	= mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+			$nmRekening = sqlArray(sqlQuery("select * from ref_rekening where concat(k,l,m,n,o)='$kdRekening'"));
+			$nmBarang	= sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
 			
 			$fmIDBARANG = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 			$fmIDBARANG_old = $fmIDBARANG;	$cek = 'idbarangold = '.$fmIDBARANG;
@@ -8166,8 +8166,8 @@ function bilang($x){
 			switch( $isi['f'] ){
 				case '01': {
 					$sqry= "select * from kib_a where $KondisiEditKIB"; //echo '<br> qry a='.$sqry;
-					$Qry = mysql_query($sqry);
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery($sqry);
+					$isi = sqlArray($Qry);
 					$fmLUAS_KIB_A = $isi['luas'];
 					$fmLETAK_KIB_A = $isi['alamat'];
 					$fmHAKPAKAI_KIB_A = $isi['status_hak'];
@@ -8189,8 +8189,8 @@ function bilang($x){
 				}
 				case '02':{
 					$sqryb= "select * from kib_b where $KondisiEditKIB"; $cek .= '<br> qry b='.$sqryb;
-					$Qry = mysql_query($sqryb);
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery($sqryb);
+					$isi = sqlArray($Qry);
 					$fmMERK_KIB_B = $isi['merk'];
 					$fmUKURAN_KIB_B = $isi['ukuran'];
 					$fmBAHAN_KIB_B = $isi['bahan'];
@@ -8203,8 +8203,8 @@ function bilang($x){
 					break;
 				}
 				case '03':{
-					$Qry = mysql_query("select * from kib_c where $KondisiEditKIB");
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery("select * from kib_c where $KondisiEditKIB");
+					$isi = sqlArray($Qry);
 					$fmKONDISI_KIB_C=$isi['kondisi'];//$isi['kondisi_bangunan'];
 					$fmTINGKAT_KIB_C=$isi['konstruksi_tingkat'];
 					$fmBETON_KIB_C=$isi['konstruksi_beton'];
@@ -8228,8 +8228,8 @@ function bilang($x){
 					break;
 				}
 				case '04':{
-					$Qry = mysql_query("select * from kib_d where $KondisiEditKIB");
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery("select * from kib_d where $KondisiEditKIB");
+					$isi = sqlArray($Qry);
 					$fmKONSTRUKSI_KIB_D=$isi['konstruksi'];
 					$fmPANJANG_KIB_D=$isi['panjang'];
 					$fmLEBAR_KIB_D=$isi['lebar'];
@@ -8252,8 +8252,8 @@ function bilang($x){
 					break;
 				}
 				case '05':{
-					$Qry = mysql_query("select * from kib_e where $KondisiEditKIB");
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery("select * from kib_e where $KondisiEditKIB");
+					$isi = sqlArray($Qry);
 					$fmJUDULBUKU_KIB_E=$isi['buku_judul'];
 					$fmSPEKBUKU_KIB_E=$isi['buku_spesifikasi'];
 					$fmSENIBUDAYA_KIB_E=$isi['seni_asal_daerah'];
@@ -8265,8 +8265,8 @@ function bilang($x){
 					break;
 				}
 				case '06':{
-					$Qry = mysql_query("select * from kib_f where $KondisiEditKIB");
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery("select * from kib_f where $KondisiEditKIB");
+					$isi = sqlArray($Qry);
 					$fmBANGUNAN_KIB_F=$isi['bangunan'];
 					$fmTINGKAT_KIB_F=$isi['konstruksi_tingkat'];
 					$fmBETON_KIB_F=$isi['konstruksi_beton'];
@@ -8289,8 +8289,8 @@ function bilang($x){
 					break;
 				}
 				case '07':{
-					$Qry = mysql_query("select * from kib_g where $KondisiEditKIB");
-					$isi = mysql_fetch_array($Qry);
+					$Qry = sqlQuery("select * from kib_g where $KondisiEditKIB");
+					$isi = sqlArray($Qry);
 					$fmURAIAN_KIB_G=$isi['uraian'];
 					$fmKET_KIB_G=$isi['ket'];
 					break;
@@ -8350,13 +8350,13 @@ function bilang($x){
 		
 $nm_kota="";
 		$nm_kec ="";
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 				"select * from ref_kotakec where kd_kota='".$isi['alamat_b']."'  and kd_kec='0'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kota = $get['nm_wilayah'];
 		$nm_kota = $nm_kota!=""?$nm_kota: $isi['kota'];
 		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 		"select * from ref_kotakec where kd_kota='".$isi['alamat_b']."'  and kd_kec='".$isi['alamat_c']."'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kec = $get['nm_wilayah'];
@@ -8491,13 +8491,13 @@ $nm_kota="";
 		global $Main;
 		$nm_kota="";
 		$nm_kec ="";
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 				"select * from ref_kotakec where kd_kota='".$isi['alamat_b']."'  and kd_kec='0'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kota = $get['nm_wilayah'];
 		$nm_kota = $nm_kota!=""?$nm_kota: $isi['kota'];
 		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 		"select * from ref_kotakec where kd_kota='".$isi['alamat_b']."'  and kd_kec='".$isi['alamat_c']."'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kec = $get['nm_wilayah'];
@@ -8762,8 +8762,8 @@ $nm_kota="";
 		$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";				
 		//$aqry2 = "select *, year(tgl_pemeliharaan) as thn_pelihara  from pemeliharaan where id_bukuinduk='$idBI' and tambah_aset=1 order by tgl_pemeliharaan" ;
 		$aqry2 = "select *, year(tgl_pemeliharaan) as thn_pelihara  from pemeliharaan where idbi_awal='$idBI' $k1 and tambah_aset=1 order by tgl_pemeliharaan" ;
-		$Qry2 = mysql_query($aqry2); $i=0;								
-		while($isi2=mysql_fetch_array($Qry2)){					
+		$Qry2 = sqlQuery($aqry2); $i=0;								
+		while($isi2=sqlArray($Qry2)){					
 		if ($i==0){	$clGaris = $cetak? "GarisCetak3": "GarisDaftar3";}else{	$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";			}
 			$tot +=$isi2['biaya_pemeliharaan'];
 			if ($txls=="1"){
@@ -8788,8 +8788,8 @@ $nm_kota="";
 		$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";				
 		//$aqry3 = "select *, year(tgl_pengamanan) as thn_pengamanan  from pengamanan where id_bukuinduk='$idBI' and tambah_aset=1 order by tgl_pengamanan" ;
 		$aqry3 = "select *, year(tgl_pengamanan) as thn_pengamanan  from pengamanan where idbi_awal='$idBI' $k1 and tambah_aset=1 order by tgl_pengamanan" ;
-		$Qry3 = mysql_query($aqry3); $i=0;
-		while($isi3=mysql_fetch_array($Qry3)){
+		$Qry3 = sqlQuery($aqry3); $i=0;
+		while($isi3=sqlArray($Qry3)){
 		if ($i==0){	$clGaris = $cetak? "GarisCetak3": "GarisDaftar3";}else{	$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";}
 			$tot +=$isi3['biaya_pengamanan'];
 			if ($txls=="1"){			
@@ -8810,7 +8810,7 @@ $nm_kota="";
 		$tot_rehab = $tot;//penagmanan+ pemeihara
 		$jmlTotalHargaDisplay+=$tot;
 		$clGaris = $cetak? "GarisCetak": "GarisDaftar";
-		if (mysql_num_rows($Qry2)>0 || mysql_num_rows($Qry3)>0) {
+		if (sqlNumRow($Qry2)>0 || sqlNumRow($Qry3)>0) {
 			$tot += $hrg_perolehan;
 
 		if ($txls=="1"){					
@@ -8860,8 +8860,8 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 		$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";				
 		//$aqry2 = "select *, year(tgl_pemeliharaan) as thn_pelihara  from pemeliharaan where id_bukuinduk='$idBI' and tambah_aset=1 order by tgl_pemeliharaan" ;
 		$aqry2 = "select *, year(tgl_pemeliharaan) as thn_pelihara  from pemeliharaan where idbi_awal='$idBI' $k1 and tambah_aset=1 order by tgl_pemeliharaan" ;
-		$Qry2 = mysql_query($aqry2); $i=0;								
-		while($isi2=mysql_fetch_array($Qry2)){					
+		$Qry2 = sqlQuery($aqry2); $i=0;								
+		while($isi2=sqlArray($Qry2)){					
 		if ($i==0){	$clGaris = $cetak? "GarisCetak3": "GarisDaftar3";}else{	$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";			}
 			$tot +=$isi2['biaya_pemeliharaan'];
 			if ($txls=="1"){
@@ -8886,8 +8886,8 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 		$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";				
 		//$aqry3 = "select *, year(tgl_pengamanan) as thn_pengamanan  from pengamanan where id_bukuinduk='$idBI' and tambah_aset=1 order by tgl_pengamanan" ;
 		$aqry3 = "select *, year(tgl_pengamanan) as thn_pengamanan  from pengamanan where idbi_awal='$idBI' $k1 and tambah_aset=1 order by tgl_pengamanan" ;
-		$Qry3 = mysql_query($aqry3); $i=0;
-		while($isi3=mysql_fetch_array($Qry3)){
+		$Qry3 = sqlQuery($aqry3); $i=0;
+		while($isi3=sqlArray($Qry3)){
 		if ($i==0){	$clGaris = $cetak? "GarisCetak3": "GarisDaftar3";}else{	$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";}
 			$tot +=$isi3['biaya_pengamanan'];
 			if ($txls=="1"){			
@@ -8908,7 +8908,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 		$tot_rehab = $tot;//penagmanan+ pemeihara
 		$jmlTotalHargaDisplay+=$tot;
 		$clGaris = $cetak? "GarisCetak": "GarisDaftar";
-		if (mysql_num_rows($Qry2)>0 || mysql_num_rows($Qry3)>0) {
+		if (sqlNumRow($Qry2)>0 || sqlNumRow($Qry3)>0) {
 			$tot += $hrg_perolehan;
 
 		if ($txls=="1"){					
@@ -8942,8 +8942,8 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 		$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";				
 		//$aqry2 = "select *, year(tgl_pemeliharaan) as thn_pelihara  from pemeliharaan where id_bukuinduk='$idBI' and tambah_aset=1 order by tgl_pemeliharaan" ;
 		$aqry2 = "select *, year(tgl_penghapusan) as thn_penghapusan  from penghapusan_sebagian where idbi_awal='$idBI' $k1 order by tgl_penghapusan" ;
-		$Qry2 = mysql_query($aqry2); $i=0;								
-		while($isi2=mysql_fetch_array($Qry2)){					
+		$Qry2 = sqlQuery($aqry2); $i=0;								
+		while($isi2=sqlArray($Qry2)){					
 		if ($i==0){	$clGaris = $cetak? "GarisCetak3": "GarisDaftar3";}else{	$clGaris = $cetak? "GarisCetak2": "GarisDaftar2";			}
 			$tot +=-$isi2['harga_hapus'];
 			if ($txls=="1"){
@@ -8968,7 +8968,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 		$tot_susut = $tot;//penagmanan+ pemeihara
 		$jmlTotalHargaDisplay+=$tot;
 		$clGaris = $cetak? "GarisCetak": "GarisDaftar";
-		if (mysql_num_rows($Qry2)>0 ) {
+		if (sqlNumRow($Qry2)>0 ) {
 			$tot = $hrg_perolehan+$tot_rehab+$tot_susut;
 
 		if ($txls=="1"){					
@@ -8995,7 +8995,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 				"<span style='font-style:italic;float:right'>$tampilHarga_susut</span>" ));
 			
 		}
-		if (mysql_num_rows($Qry2)>0 || mysql_num_rows($Qry3)>0 ) {
+		if (sqlNumRow($Qry2)>0 || sqlNumRow($Qry3)>0 ) {
 		
 			$ListData .=Penatausahaan_genTableRowJml($clRow, $clGaris, $colspan, 
 				array("<span style='font-style:italic;float:right'>Jumlah (Rp)</span>",
@@ -9054,7 +9054,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 		switch ($Act){		
 			case 'Simpan' :{
 				//prosedure ini dipakai di penatausahaan dan mutasi!!
-				$getdate = mysql_fetch_array(mysql_query("select YEAR(now()) as thn "));
+				$getdate = sqlArray(sqlQuery("select YEAR(now()) as thn "));
 							
 				//validasi	
 				$errmsg='';				
@@ -9104,20 +9104,20 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 				
 					if ($errmsg=='' && $Baru==0){ //edit						
 						$idbi = $_POST['idbi'];
-						$old =  mysql_fetch_array( mysql_query (
+						$old =  sqlArray( sqlQuery (
 							"select * from buku_induk where id = '$idbi'"
 						));//echo  'id='.$idbi .' idlama='.$old['id_lama']. '<br>';
 						
 						//cek tgl pemeliharaan, pengamanan						
-						$pelihara = mysql_fetch_array( mysql_query (
+						$pelihara = sqlArray( sqlQuery (
 							"select min(tgl_pemeliharaan) as mintgl from pemeliharaan where id_bukuinduk = '$idbi'"
 						));
 						if ($errmsg =='' && compareTanggal($tgl_buku, $pelihara['mintgl'])==2 && $pelihara['mintgl']!='' ) $errmsg = 'Tanggal Buku tidak lebih besar dari Tanggal Pemeliharaan!';
-						$pengaman = mysql_fetch_array( mysql_query (
+						$pengaman = sqlArray( sqlQuery (
 							"select min(tgl_pengamanan) as mintgl from pengamanan where id_bukuinduk = '$idbi'"
 						));
 						if ($errmsg =='' && compareTanggal($tgl_buku, $pengaman['mintgl'])==2  && $pengaman['mintgl']!='' ) $errmsg = 'Tanggal Buku tidak lebih besar dari Tanggal Pengamanan!';//.$idbi.' '. $tgl_buku.' '.$pengaman['mintgl'];
-						$pemanfaat = mysql_fetch_array( mysql_query (
+						$pemanfaat = sqlArray( sqlQuery (
 							"select min(tgl_pemanfaatan) as mintgl from pemanfaatan where id_bukuinduk = '$idbi'"
 						));
 						if ($errmsg =='' && compareTanggal($tgl_buku, $pemanfaat['mintgl'])==2 && $pemanfaat['mintgl']!=''  ) $errmsg = 'Tanggal Buku tidak lebih besar dari Tanggal Pemanfaatan!';											
@@ -9127,10 +9127,10 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 						if ($old['status_barang']==5) $errmsg = "Gagal Simpan, Data Sudah di Ganti Rugi!";
 						
 						if($old['id_lama'] != '' || $old['id_lama'] != NULL){ //hasil mutasi
-							$hapus = mysql_fetch_array( mysql_query (
+							$hapus = sqlArray( sqlQuery (
 								"select tgl_penghapusan from penghapusan where id_bukuinduk = '{$old['id_lama']}'"
 							));
-							$bilama = mysql_fetch_array( mysql_query (
+							$bilama = sqlArray( sqlQuery (
 								"select * from buku_induk where id = '{$old['id_lama']}'"
 							)); 
 							if ( compareTanggal($tgl_buku, $hapus['tgl_penghapusan'])==0) 
@@ -9144,12 +9144,12 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 					}	
 				}else{
 					$idbi = $_POST['idbi'];
-					$old =  mysql_fetch_array( mysql_query (
+					$old =  sqlArray( sqlQuery (
 						"select * from buku_induk where id = '$idbi'"
 					));
 					if ($errmsg=='' && $old[''])
 					if ($errmsg==''){
-						$hapus = mysql_fetch_array( mysql_query (
+						$hapus = sqlArray( sqlQuery (
 							"select tgl_penghapusan from penghapusan where id_bukuinduk = '$fmIDLama'"
 						));
 						if ( compareTanggal($tgl_buku, $hapus['tgl_penghapusan'])==0) 
@@ -9193,7 +9193,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 					switch($Baru){
 						case '0':{//edit ------------------------------------------------------------------				
 								$idbi_ = $_REQUEST['idbi'];
-								$old= mysql_fetch_array(mysql_query(
+								$old= sqlArray(sqlQuery(
 									"select * from buku_induk where id='$idbi_'"
 								));
 								$fmSEKSI_old = $old['e1'];//$_REQUEST['fmSEKSI_old'];
@@ -9221,7 +9221,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 									($fmREGISTER != $fmREGISTER_old) || ($fmTAHUNPEROLEHAN != $fmTAHUNPEROLEHAN_old ) || 
 									($fmIDBARANG != $fmIDBARANG_old) || ($fmTAHUNANGGARAN != $fmTAHUNANGGARAN_old) || $fmSEKSI !=$fmSEKSI_old )
 								{							
-										$CekBaru = mysql_num_rows(mysql_query(
+										$CekBaru = sqlNumRow(sqlQuery(
 											"select * from buku_induk where concat(a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg)=
 											'$fmKEPEMILIKAN{$Main->Provinsi[0]}$fmWIL$fmSKPD$fmUNIT$fmSUBUNIT$fmSEKSI{$ArBarang[0]}{$ArBarang[1]}{$ArBarang[2]}{$ArBarang[3]}{$ArBarang[4]}$fmTAHUNPEROLEHAN$fmREGISTER'")
 										);
@@ -9233,7 +9233,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 								
 								//cek sudah dihapus -----------------
 								if($errmsg=='' ){
-									//$get = mysql_fetch_array( mysql_query("select * from buku_induk where ") );
+									//$get = sqlArray( sqlQuery("select * from buku_induk where ") );
 									if ($old['status_barang'] == 3){
 										$errmsg = 'Data Sudah Penghapusan Tidak Bisa Di Edit!';
 									}
@@ -9276,9 +9276,9 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 									
 									$cek .= '<br>qrybi updt='.$Qry;
 									//$errmsg = $cek;
-									$Sukses = mysql_query($Qry);
-									$idbukuinduk = $idbi_;//mysql_fetch_array(mysql_query("select id as id from buku_induk where $Kriteria"));					
-									$InsertHistory = mysql_query("insert into history_barang (a,b,c,d,e,e1,f,g,h,i,j,id_bukuinduk,tahun,noreg,tgl_update,kejadian,kondisi)values('{$Main->Provinsi[0]}','$fmWIL','$fmSKPD','$fmUNIT','$fmSUBUNIT','$fmSEKSI','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','{$idbukuinduk[0]}','$fmTAHUNANGGARAN','$fmREGISTER',now(),'Update Inventaris','$fmKONDISIBARANG')");
+									$Sukses = sqlQuery($Qry);
+									$idbukuinduk = $idbi_;//sqlArray(sqlQuery("select id as id from buku_induk where $Kriteria"));					
+									$InsertHistory = sqlQuery("insert into history_barang (a,b,c,d,e,e1,f,g,h,i,j,id_bukuinduk,tahun,noreg,tgl_update,kejadian,kondisi)values('{$Main->Provinsi[0]}','$fmWIL','$fmSKPD','$fmUNIT','$fmSUBUNIT','$fmSEKSI','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','{$idbukuinduk[0]}','$fmTAHUNANGGARAN','$fmREGISTER',now(),'Update Inventaris','$fmKONDISIBARANG')");
 									
 									//UPDATE KIB A			
 									if($ArBarang[0]=="01"){
@@ -9310,7 +9310,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											ket='$fmKET_KIB_A' where $KriteriaKIB";
 											
 											$cek.='<br> qry udt kiba='.$Qry; //$errmsg.=$cek;
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 										}
 									//UPDATE KIB B
 									else if($ArBarang[0]=="02"){					
@@ -9329,7 +9329,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											"merk = '$fmMERK_KIB_B', ukuran = '$fmUKURAN_KIB_B', bahan = '$fmBAHAN_KIB_B', no_pabrik = '$fmPABRIK_KIB_B', no_rangka = '$fmRANGKA_KIB_B', no_mesin = '$fmMESIN_KIB_B', no_polisi = '$fmPOLISI_KIB_B', no_bpkb = '$fmBPKB_KIB_B', ket = '$fmKET_KIB_B' 
 											where $KriteriaKIB";
 											//echo $Qry ;
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 										}
 									//UPDATE KIB C
 									else if($ArBarang[0]=="03"){
@@ -9367,7 +9367,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											
 											ket = '$fmKET_KIB_C' 
 											where $KriteriaKIB";
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 										}
 									//UPDATE KIB D
 									else if($ArBarang[0]=="04"){
@@ -9397,7 +9397,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											koord_bidang='$koord_bidang',  
 											dokumen_tgl = '".$fmTGLDOKUMEN_KIB_D."', dokumen_no = '$fmNODOKUMEN_KIB_D', status_tanah = '$fmSTATUSTANAH_KIB_D', kode_tanah = '$fmNOKODETANAH_KIB_D', kondisi = '$fmKONDISI_KIB_D', ket = '$fmKET_KIB_D' 
 											where $KriteriaKIB";
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 											}
 									//UPDATE KIB E
 									else if($ArBarang[0]=="05"){
@@ -9416,7 +9416,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											buku_judul = '$fmJUDULBUKU_KIB_E', buku_spesifikasi = '$fmSPEKBUKU_KIB_E', seni_asal_daerah = '$fmSENIBUDAYA_KIB_E', seni_pencipta = '$fmSENIPENCIPTA_KIB_E', seni_bahan = '$fmSENIBAHAN_KIB_E', hewan_jenis = '$fmJENISHEWAN_KIB_E', hewan_ukuran = '$fmUKURANHEWAN_KIB_E', ket = '$fmKET_KIB_E' 
 											where $KriteriaKIB";
 											//echo $Qry;
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 										}
 									//UPDATE KIB F
 									else if($ArBarang[0]=="06"){
@@ -9448,7 +9448,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											tmt = '".$fmTGLMULAI_KIB_F."', status_tanah = '$fmSTATUSTANAH_KIB_F', kode_tanah = '$fmNOKODETANAH_KIB_F', ket = '$fmKET_KIB_F' 
 											where $KriteriaKIB";
 											//
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 									} else if($ArBarang[0]=="07"){
 										$Qry = "update kib_g set
 											c ='$fmSKPD',
@@ -9465,7 +9465,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 											uraian = '$fmURAIAN_KIB_G', ket = '$fmKET_KIB_G' 
 										where $KriteriaKIB";
 											//echo $Qry;
-										$Sukses = mysql_query($Qry);
+										$Sukses = sqlQuery($Qry);
 									}
 									$cek .= '<br> qrykib Sukses edit='.$Qry;
 									
@@ -9484,7 +9484,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 							$str = "select *  from buku_induk where concat(a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg)=
 							'$fmKEPEMILIKAN{$Main->Provinsi[0]}$fmWIL$fmSKPD$fmUNIT$fmSUBUNIT$fmSEKSI{$ArBarang[0]}{$ArBarang[1]}{$ArBarang[2]}{$ArBarang[3]}{$ArBarang[4]}$fmTAHUNPEROLEHAN$fmREGISTER'";
 							
-							$CekBaru = mysql_num_rows(mysql_query( $str ));							
+							$CekBaru = sqlNumRow(sqlQuery( $str ));							
 							//echo "<br>str=$str cek=".$CekBaru;							
 							//$errmsg = " kriteria= $str";
 							if($CekBaru == 0){
@@ -9521,7 +9521,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 										'".$UID."', $fmIDLama, '$fmJUMLAHBARANG')";//, '".$POST['sesi']."$noREG') ";					
 									//echo '<br> qry simpan baru bi= '.$Qry;
 											
-									$Sukses = mysql_query($Qry);//echo "sukses simpan=$Sukses";
+									$Sukses = sqlQuery($Qry);//echo "sukses simpan=$Sukses";
 									if ($Sukses== FALSE){
 										$errmsg = "Gagal simpan BI!";
 									}else{
@@ -9530,12 +9530,12 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 										$idBI = table_get_value('select id from buku_induk where '.$Kriteria,'id');																				
 										
 										//update idawal	------------------------
-										mysql_query(
+										sqlQuery(
 											"update buku_induk set idawal = id 
 											where id='$idBI' and (idawal is null or idawal='' or idawal=0 )"
 										);
 										
-										$InsertHistory = mysql_query(
+										$InsertHistory = sqlQuery(
 											"insert into history_barang (a,b,c,d,e,e1,f,g,h,i,j,
 											id_bukuinduk,
 											tahun,noreg,tgl_update,kejadian,kondisi,status_barang)
@@ -9559,7 +9559,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 													'$fmTAHUNANGGARAN','$fmREGISTER','$fmLUAS_KIB_A',
 													'$fmLETAK_KIB_A', '$alamat_kel','$alamat_kec','$alamat_a','$alamat_b','$koordinat_gps','$koord_bidang', 
 													'$fmHAKPAKAI_KIB_A','$bersertifikat','".$fmTGLSERTIFIKAT_KIB_A."','$fmNOSERTIFIKAT_KIB_A','$fmPENGGUNAAN_KIB_A','$fmKET_KIB_A','$idBI','$alamat_c','$alamat_kota')";
-													$Sukses = mysql_query($Qry);
+													$Sukses = sqlQuery($Qry);
 												if ($Sukses== FALSE){$errmsg = "Gagal simpan KIB A!";}
 												}
 										//SIMPAN KIB B
@@ -9571,7 +9571,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 													'$fmTAHUNANGGARAN','$fmREGISTER','$fmMERK_KIB_B','$fmUKURAN_KIB_B','$fmBAHAN_KIB_B',
 													'$fmPABRIK_KIB_B','$fmRANGKA_KIB_B','$fmMESIN_KIB_B','$fmPOLISI_KIB_B','$fmBPKB_KIB_B',
 													'$fmKET_KIB_B','$idBI')";
-													$Sukses = mysql_query($Qry);
+													$Sukses = sqlQuery($Qry);
 												}
 										//SIMPAN KIB C
 										else if($ArBarang[0]=="03"){		
@@ -9588,7 +9588,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 													'".$fmTGLGUDANG_KIB_C."','$fmNOGUDANG_KIB_C','$fmLUAS_KIB_C','$fmSTATUSTANAH_KIB_C',
 													'$fmNOKODETANAH_KIB_C','$fmKET_KIB_C','$idBI','$alamat_c','$alamat_kota')";
 													//echo "<br> qry simpan kibc=$Qry";
-													$Sukses = mysql_query($Qry); //echo " sukses simpan=$Sukses";
+													$Sukses = sqlQuery($Qry); //echo " sukses simpan=$Sukses";
 												if ($Sukses== FALSE){$errmsg = "Gagal simpan KIB C!";}
 												}
 										//SIMPAN KIB D
@@ -9604,7 +9604,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 													'".$fmTGLDOKUMEN_KIB_D."','$fmNODOKUMEN_KIB_D','$fmSTATUSTANAH_KIB_D',
 													'$fmNOKODETANAH_KIB_D','$fmKONDISI_KIB_D','$fmKET_KIB_D','$idBI','$alamat_c','$alamat_kota')";
 													//echo $Qry;
-													$Sukses = mysql_query($Qry);
+													$Sukses = sqlQuery($Qry);
 												if ($Sukses== FALSE){$errmsg = "Gagal simpan KIB D!";}
 												}
 										//SIMPAN KIB E
@@ -9617,7 +9617,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 													'$fmSENIPENCIPTA_KIB_E','$fmSENIBAHAN_KIB_E','$fmJENISHEWAN_KIB_E','$fmUKURANHEWAN_KIB_E',
 													'$fmKET_KIB_E','$idBI')";
 													//echo $Qry;
-													$Sukses = mysql_query($Qry);
+													$Sukses = sqlQuery($Qry);
 												if ($Sukses== FALSE){$errmsg = "Gagal simpan KIB E!";}
 												}
 										//SIMPAN KIB F
@@ -9633,7 +9633,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 													'".$fmTGLDOKUMEN_KIB_F."','$fmNODOKUMEN_KIB_F','".$fmTGLMULAI_KIB_F."','$fmSTATUSTANAH_KIB_F',
 													'$fmNOKODETANAH_KIB_F','$fmKET_KIB_F','$idBI','$alamat_c','$alamat_kota')";
 													//echo $Qry;
-													$Sukses = mysql_query($Qry);
+													$Sukses = sqlQuery($Qry);
 												if ($Sukses== FALSE){$errmsg = "Gagal simpan KIB F!";}
 										}
 										else if($ArBarang[0]=="07"){						
@@ -9644,7 +9644,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 												'$fmTAHUNANGGARAN','$fmREGISTER',												
 												'$fmURAIAN_KIB_G', '$fmKET_KIB_G','$idBI')";
 												//echo $Qry;
-											$Sukses = mysql_query($Qry);
+											$Sukses = sqlQuery($Qry);
 											if ($Sukses== FALSE){$errmsg = "Gagal simpan KIB G!";}
 										}
 												
@@ -9704,12 +9704,12 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 					for($i = 0; $i<count($cidBI); $i++)	{
 						$aqry = "select * from buku_induk where id='{$cidBI[$i]}'";
 						//echo $aqry.' '.$cidBI[$i] ;
-						$Qry = mysql_query($aqry);		
+						$Qry = sqlQuery($aqry);		
 						
 							
 						//*
 						
-						if($isi = mysql_fetch_array($Qry))	{
+						if($isi = sqlArray($Qry))	{
 							$e1 =$Main->SUB_UNIT ? $isi['e1'].'.' : '';
 								$kdbrg= $isi['a1'].'.'.$isi['a'].'.'.$isi['b'].'.'.$isi['c'].'.'.$isi['d'].'.'.$isi['e'].'.'.$e1.
 								$isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'].'.'.
@@ -9760,16 +9760,16 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 									//Dok_HapusByIdBI($isi['id']);
 								//*	
 									//hapus detail kib 
-								if($isi['f']=="01"){$DelKIB = mysql_query("delete from kib_a where $KondisiEditKIB limit 1");}
-								if($isi['f']=="02"){$DelKIB = mysql_query("delete from kib_b where $KondisiEditKIB limit 1");}
-								if($isi['f']=="03"){$DelKIB = mysql_query("delete from kib_c where $KondisiEditKIB limit 1");}
-								if($isi['f']=="04"){$DelKIB = mysql_query("delete from kib_d where $KondisiEditKIB limit 1");}
-								if($isi['f']=="05"){$DelKIB = mysql_query("delete from kib_e where $KondisiEditKIB limit 1");}
-								if($isi['f']=="06"){$DelKIB = mysql_query("delete from kib_f where $KondisiEditKIB limit 1");}			
+								if($isi['f']=="01"){$DelKIB = sqlQuery("delete from kib_a where $KondisiEditKIB limit 1");}
+								if($isi['f']=="02"){$DelKIB = sqlQuery("delete from kib_b where $KondisiEditKIB limit 1");}
+								if($isi['f']=="03"){$DelKIB = sqlQuery("delete from kib_c where $KondisiEditKIB limit 1");}
+								if($isi['f']=="04"){$DelKIB = sqlQuery("delete from kib_d where $KondisiEditKIB limit 1");}
+								if($isi['f']=="05"){$DelKIB = sqlQuery("delete from kib_e where $KondisiEditKIB limit 1");}
+								if($isi['f']=="06"){$DelKIB = sqlQuery("delete from kib_f where $KondisiEditKIB limit 1");}			
 									//hapus bi
-								$Del = mysql_query("delete from buku_induk where id='{$cidBI[$i]}' limit 1");
+								$Del = sqlQuery("delete from buku_induk where id='{$cidBI[$i]}' limit 1");
 									//set belum mutasi di Penghapusan
-								$Del = mysql_query("update penghapusan set mutasi=0 where id_bukuinduk='{$cidBI[$i]}' and mutasi=1");
+								$Del = sqlQuery("update penghapusan set mutasi=0 where id_bukuinduk='{$cidBI[$i]}' and mutasi=1");
 								$sqry = "insert into history_barang (a1, a,b,c,d,e,e1,f,g,h,i,j,
 									id_bukuinduk,tahun,noreg,tgl_update,kejadian,kondisi,uid)
 										values('".$isi['a1']."', 
@@ -9778,7 +9778,7 @@ function Penatausahaan_GetListDet2($idBI, $fmKIB,
 									'".$isi['id']."','".$isi['thn_perolehan']."','".$isi['noreg']."',
 									now(),'Delete Inventaris','','".$UID."')";
 									//echo $sqry;
-								$InsertHistory = mysql_query($sqry);
+								$InsertHistory = sqlQuery($sqry);
 								//*/
 								$Info = "<script>alert('Data telah di hapus!'  )</script>";
 									//$Info='';
@@ -9914,7 +9914,7 @@ function getkota($alamat_b='')
 		if ($alamat_b<>''){
 			
 		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 				"select * from ref_kotakec where kd_kota='".$alamat_b."'  and kd_kec='0'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kota = $get['nm_wilayah'];
@@ -9930,7 +9930,7 @@ function getkecamatan($alamat_b='',$alamat_c='')
 		$nm_kec ="";
 		if ($alamat_b<>'' && $alamat_c<>'')
 		{
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 		"select * from ref_kotakec where kd_kota='".$alamat_b."'  and kd_kec='".$alamat_c."'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kec = $get['nm_wilayah'];
@@ -9945,7 +9945,7 @@ function getalamat($alamat_b,$alamat_c,$alamat='',$alamat_kota='',$alamat_kec=''
 		if ($alamat_b<>''){
 			
 		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 				"select * from ref_kotakec where kd_kota='".$alamat_b."'  and kd_kec='0'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kota = $get['nm_wilayah'];
@@ -9954,7 +9954,7 @@ function getalamat($alamat_b,$alamat_c,$alamat='',$alamat_kota='',$alamat_kec=''
 		if ($alamat_b<>'' && $alamat_c<>''){
 			
 		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 				"select * from ref_kotakec where kd_kota='".$alamat_b."'  and kd_kec='".$alamat_c."'"
 			));		
 			if($get['nm_wilayah']<>'') $nm_kec = $get['nm_wilayah'];

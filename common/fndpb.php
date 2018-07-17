@@ -124,30 +124,30 @@ class DpbObj extends DaftarObj2{
 		$fmSEKSI = isset($HTTP_COOKIE_VARS['cofmSEKSI'])? $HTTP_COOKIE_VARS['cofmSEKSI']: cekPOST($this->Prefix.'SkpdfmSEKSI');		
 		$nmopdarr=array();		
 		if($fmSKPD == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_bidang where c='".$isi['c']."' "
 			));		
 			if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 		}
 		if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' "
 			));		
 			if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 		}
 		if($fmSUBUNIT == '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_unit where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."'"
 			));		
 			if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 		}
 		if($fmSEKSI == '00' || $fmSEKSI == '000'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select nm_skpd as nmseksi from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 			));		
 			if($get['nmseksi']<>'') $nmopdarr[] = $get['nmseksi'];
 		}
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 				"select ref_jurnal as nmseksi from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"));	
 		
 		
@@ -191,9 +191,9 @@ class DpbObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c!='00' and d='00'  GROUP by c";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDBidang='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['c'] ==  $value ? "selected" : "";
 				if ($nmSKPDBidang=='' ) $nmSKPDBidang =  $value == $Hasil['c'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[c]}'>{$Hasil[nm_skpd]}";
@@ -211,9 +211,9 @@ class DpbObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d!='00' and e='00' GROUP by d";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDskpd='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['d'] ==  $value ? "selected" : "";
 				if ($nmSKPDskpd=='' ) $nmSKPDskpd =  $value == $Hasil['d'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[d]}'>{$Hasil[nm_skpd]}";
@@ -238,9 +238,9 @@ class DpbObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d='$fmSKPDSkpd' and e!='00' and e1='000' GROUP by e";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDUnit='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['e'] ==  $value ? "selected" : "";
 				if ($nmSKPDUnit=='' ) $nmSKPDUnit =  $value == $Hasil['e'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[e]}'>{$Hasil[nm_skpd]}";
@@ -266,9 +266,9 @@ class DpbObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d='$fmSKPDSkpd' and e='$fmSKPDUnit' and e1!='000' GROUP by e1";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDUnit='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['e1'] ==  $value ? "selected" : "";
 				if ($nmSKPDUnit=='' ) $nmSKPDUnit =  $value == $Hasil['e1'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[e1]}'>{$Hasil[nm_skpd]}";
@@ -457,7 +457,7 @@ class DpbObj extends DaftarObj2{
 	
 	function getJmlDKB($tahun, $c, $d, $e,$e1, $f,$g,$h,$i,$j){
 		$aqry = "select * from dkb where tahun='$tahun' and c='$c' and d='$d' and e='$e' and e1='$e1' and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' ";
-		$get =  mysql_fetch_array(mysql_query($aqry));
+		$get =  sqlArray(sqlQuery($aqry));
 		if($get['jml_barang']== NULL) $get['jml_barang']=0;
 		return $get['jml_barang'];
 	}
@@ -485,9 +485,9 @@ class DpbObj extends DaftarObj2{
 		$form_name = $this->Prefix.'_form';
 		
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
-		$akun = mysql_fetch_array(mysql_query("select * from ref_jurnal where concat(ka,kb,kc,kd,ke,kf)='".$dt['k'].$dt['l'].$dt['m'].$dt['n'].$dt['o'].$dt['kf']."'")) ;
+		$akun = sqlArray(sqlQuery("select * from ref_jurnal where concat(ka,kb,kc,kd,ke,kf)='".$dt['k'].$dt['l'].$dt['m'].$dt['n'].$dt['o'].$dt['kf']."'")) ;
 		$dt['nm_account']=$akun['nm_account'];
 		$fm = $this->setForm($dt);
 		
@@ -514,12 +514,12 @@ class DpbObj extends DaftarObj2{
 		//items ----------------------
 		$editunit= $dt['e'] != '' ? $dt['c'].".".$dt['d']:'';
 		$editsubunit=$dt['e1'] != '' ? $dt['c'].".".$dt['d'].".".$dt['e']:'';
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
 		
-	   	$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$dt['f'].$dt['g'].$dt['h'].$dt['i'].$dt['j']."'")) ;
+	   	$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$dt['f'].$dt['g'].$dt['h'].$dt['i'].$dt['j']."'")) ;
 	   	$kode_brg = $dt['f']==''? '' : $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'] ;			
 		$kode_account = $dt['k']==''? '' : $dt['k'].'.'.$dt['l'].'.'.$dt['m'].'.'.$dt['n'].'.'.$dt['o'].'.'.$dt['kf'];
 		
@@ -725,7 +725,7 @@ class DpbObj extends DaftarObj2{
 		$merk_barang = $_REQUEST['fmMEREK'];
 		$ket = $_REQUEST['fmKET'];
 
-		$old = mysql_fetch_array( mysql_query(
+		$old = sqlArray( sqlQuery(
 			"select * from $this->TblName where id='$id' "		
 		));
 		
@@ -741,7 +741,7 @@ class DpbObj extends DaftarObj2{
 		if($err=='' && ($e1 == '' || $e1 == '000' ) )$err = "Dipergunakan Sub Unit belum dipilih!";		
 		
 		if($ref_iddkb != '' || $ref_iddkb != '0' ){
-			$get = mysql_fetch_array( mysql_query("select * from dkb where id='$ref_iddkb'"));
+			$get = sqlArray( sqlQuery("select * from dkb where id='$ref_iddkb'"));
 			
 			$thn_akun = $get['thn_akun'];
 		}
@@ -789,7 +789,7 @@ class DpbObj extends DaftarObj2{
 				
 			}
 			$cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry == FALSE) $err='Gagal SQL'.mysql_error();
 		}		
 		//$err=$cek;
@@ -799,7 +799,7 @@ class DpbObj extends DaftarObj2{
 	function Hapus_Validasi($id){
 		$err ='';
 		//$KeyValue = explode(' ',$id);
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select count(*) as cnt from penerimaan where id_pengadaan ='$id' "
 		));
 		if($err=='' && $get['cnt']>0 ) $err = 'Data Tidak Bisa Dihapus, Sudah ada di Penerimaan!';
@@ -814,7 +814,7 @@ class DpbObj extends DaftarObj2{
 		$cbid = $_POST[$this->Prefix.'_cb'];
 		$id = $cbid[0];		
 		$aqry = "select * from $this->TblName where id='$id' ";
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->stat = $isi['stat'];
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
 	}	
@@ -826,7 +826,7 @@ class DpbObj extends DaftarObj2{
 				"tahun='$tahun'".
 				" and c='$c' and d='$d' and e='$e'  and e1='$e1'  ".
 				" and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' $idstr "; $cek.=$aqry;
-		$get = mysql_fetch_array( mysql_query(
+		$get = sqlArray( sqlQuery(
 			$aqry
 		));	
 		if($get['tot']==NULL) $get['tot'] = 0;

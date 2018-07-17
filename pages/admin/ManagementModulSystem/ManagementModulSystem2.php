@@ -79,12 +79,12 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	 $expired_date = explode("-",$expired_date);
 	 $expired_date2 = $expired_date[2].'-'.$expired_date[1].'-'.$expired_date[0];
 	  
-	  $oldy=mysql_fetch_array(
-	 	mysql_query(
+	  $oldy=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system where no_urut='$nourut'"
 		));
-		$oldy2=mysql_fetch_array(
-	 	mysql_query(
+		$oldy2=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system where no_urut='$nourut' and kode='$kode'"
 		));
 		$cek.="select count(*) as cnt from system where kode='$kode'";
@@ -102,12 +102,12 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 			 if($err=='' && $oldy['cnt']>0) $err="No Urut '$nourut' Sudah Ada";
 				if($err==''){
 					$aqry = "INSERT into system (no_urut,kode,nm_system,kel_user_system,status_system,tgl_update,uid,expired_date) values('$nourut','$kode','$nm_system','$kel_user','$status','$tgl_update2','$uid','$expired_date2')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{
 						if($err==''){
 						$aqry = "UPDATE system set no_urut='$nourut',kode='$kode',nm_system='$nm_system',kel_user_system='$kel_user',status_system='$status',tgl_update='$tgl_update2',expired_date='$expired_date2' where Id_system='".$idplh."'";	$cek .= $aqry;
-								$qry = mysql_query($aqry) or die(mysql_error());
+								$qry = sqlQuery($aqry) or die(mysql_error());
 						}
 			} //end else
 					
@@ -132,15 +132,15 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 		
 		
 		$aq = "SELECT * FROM gambar WHERE ref_id = '$idplh' AND Jns='2' AND stat = '2'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("media/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar WHERE ref_id = '$idplh' AND Jns='2' AND stat = '2'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd = "UPDATE gambar SET stat = '0', stat2='0' WHERE ref_id = '$idplh' AND Jns='2' AND stat = '1'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		
 		
 				
@@ -222,8 +222,8 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 				$m = substr($Id, 4,1);
 				$n = substr($Id, 6,2);
 				$o = substr($Id, 9,2);*/
-				//$get = mysql_fetch_array( mysql_query("select * from system_modul where Id_modul='$Id'"));
-				$get = mysql_fetch_array( mysql_query("SELECT `system`.`nm_system`, `system_modul`.`nm_modul`, `system_modul`.`Id_system`,`system_modul`.`Id_modul` FROM `system` RIGHT JOIN `system_modul` ON `system`.`Id_system` = `system_modul`.`Id_system`  where system_modul.Id_modul='$Id'"));
+				//$get = sqlArray( sqlQuery("select * from system_modul where Id_modul='$Id'"));
+				$get = sqlArray( sqlQuery("SELECT `system`.`nm_system`, `system_modul`.`nm_modul`, `system_modul`.`Id_system`,`system_modul`.`Id_modul` FROM `system` RIGHT JOIN `system_modul` ON `system`.`Id_system` = `system_modul`.`Id_system`  where system_modul.Id_modul='$Id'"));
 			
 				
 				$content = array('id' => $get['Id_modul'],'id_system' => $get['Id_system'], 'nm_system' => $get['nm_system'], 'nm_modul' => $get['nm_modul']);
@@ -344,11 +344,11 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 		//get data 
 		$dt = '';
 		$aqry = "SELECT * FROM  system WHERE Id_system='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
-		/*if(mysql_num_rows($aqfile) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile);
+		/*if(sqlNumRow($aqfile) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile);
 			$dt['idfile'] = $qryfile['Id'];
 			$dt['nmfile'] = $qryfile['nmfile'];
 			$dt['nmfile_asli'] = $qryfile['nmfile_asli'];
@@ -370,15 +370,15 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 		//get data 
 		$dt = '';
 		$qry = "SELECT * FROM system WHERE Id_system='$this->form_idplh' LIMIT 0,1";$cek=$qry;
-		$aq = mysql_query($qry);
-		$dt = mysql_fetch_array($aq);
+		$aq = sqlQuery($qry);
+		$dt = sqlArray($aq);
 		
 		$file = "SELECT * FROM gambar WHERE ref_id='$this->form_idplh' AND Jns='2' AND stat='0' LIMIT 0,1";$cek=$qry;
-		$aqfile = mysql_query($file);
-		$qryfile = mysql_fetch_array($aqfile);
+		$aqfile = sqlQuery($file);
+		$qryfile = sqlArray($aqfile);
 		
-		if(mysql_num_rows($aqfile) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile);
+		if(sqlNumRow($aqfile) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile);
 			$dt['idfile'] = $qryfile['Id'];
 			$dt['nmfile'] = $qryfile['nmfile'];
 			$dt['nmfile_asli'] = $qryfile['nmfile_asli'];
@@ -407,7 +407,7 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 	//	$dt['status_system']
 	//	$dt['kel_user_system']
 	
@@ -544,7 +544,7 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 	$tgl_dokumen_bast = date('d-m-Y');		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -658,7 +658,7 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 	$tgl_dokumen_bast = date('d-m-Y');		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -769,7 +769,7 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 	$tgl_dokumen_bast = date('d-m-Y');		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -893,7 +893,7 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	 	$status='TIDAK AKTIF';
 	 }
 	
-	 $datmod=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$isi['Id_system']."'"));
+	 $datmod=sqlArray(sqlQuery("select nm_system from system where Id_system='".$isi['Id_system']."'"));
 	 $Koloms = array();
 	
 	 
@@ -1030,15 +1030,15 @@ class ManagementModulSystem2Obj  extends DaftarObj2{
 	 $idplh = $_REQUEST[$this->Prefix.'_idplh'];
 	  
 	 $aq = "SELECT * FROM gambar WHERE ref_id = '$idplh' AND Jns='2' AND stat2='1'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("media/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar WHERE ref_id = '$idplh' AND Jns='2' AND stat2 = '1'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd = "UPDATE gambar SET stat = '0' WHERE ref_id = '$idplh' AND Jns='2' AND stat2 = '0'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		
 	
 					

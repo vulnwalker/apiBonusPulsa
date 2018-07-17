@@ -107,10 +107,10 @@ class tgr_ketetapanObj extends DaftarObj2{
 	function setKolomData($no, $isi, $Mode, $TampilCheckBox){
 		global $Ref,$HTTP_COOKIE_VARS;
 		$isi = array_map('utf8_encode', $isi);
-	 $bi_ganti = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$isi['idbi_ganti']."'")) ;
-	 $brg = mysql_fetch_array(mysql_query(
+	 $bi_ganti = sqlArray(sqlQuery("select * from buku_induk where id='".$isi['idbi_ganti']."'")) ;
+	 $brg = sqlArray(sqlQuery(
 				"select * from ref_barang where f='".$isi['f']."' and g='".$isi['g']."' and h='".$isi['h']."' and i='".$isi['i']."' and j='".$isi['j']."'"));	
-	 $akn = mysql_fetch_array(mysql_query(
+	 $akn = sqlArray(sqlQuery(
 				"select * from ref_jurnal where ka='".$isi['ka']."' and kb='".$isi['kb']."' and kc='".$isi['kc']."' and kd='".$isi['kd']."' and ke='".$isi['ke']."' and kf='".$isi['kf']."'"));	
 	 $akn = array_map('utf8_encode', $akn);
 	
@@ -118,25 +118,25 @@ class tgr_ketetapanObj extends DaftarObj2{
 	 			
 		$nmopdarr=array();		
 		if($isi['c'] != '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_bidang where c='".$isi['c']."' "
 			));		
 			if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 		}
 		if($isi['d'] != '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' "
 			));		
 			if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 		}
 		if($isi['e'] != '00'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from v_unit where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."'"
 			));		
 			if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 		}
 		if($isi['e1'] != '00' || $fmSEKSI == '000'){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select nm_skpd as nmseksi from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 			));		
 			if($get['nmseksi']<>'') $nmopdarr[] = $get['nmseksi'];
@@ -177,9 +177,9 @@ class tgr_ketetapanObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c!='00' and d='00'  GROUP by c";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDBidang='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['c'] ==  $value ? "selected" : "";
 				if ($nmSKPDBidang=='' ) $nmSKPDBidang =  $value == $Hasil['c'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[c]}'>{$Hasil[nm_skpd]}";
@@ -197,9 +197,9 @@ class tgr_ketetapanObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d!='00' and e='00' GROUP by d";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDskpd='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['d'] ==  $value ? "selected" : "";
 				if ($nmSKPDskpd=='' ) $nmSKPDskpd =  $value == $Hasil['d'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[d]}'>{$Hasil[nm_skpd]}";
@@ -224,9 +224,9 @@ class tgr_ketetapanObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d='$fmSKPDSkpd' and e!='00' and e1='000' GROUP by e";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDUnit='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['e'] ==  $value ? "selected" : "";
 				if ($nmSKPDUnit=='' ) $nmSKPDUnit =  $value == $Hasil['e'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[e]}'>{$Hasil[nm_skpd]}";
@@ -252,9 +252,9 @@ class tgr_ketetapanObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d='$fmSKPDSkpd' and e='$fmSKPDUnit' and e1!='000' GROUP by e1";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDUnit='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['e1'] ==  $value ? "selected" : "";
 				if ($nmSKPDUnit=='' ) $nmSKPDUnit =  $value == $Hasil['e1'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[e1]}'>{$Hasil[nm_skpd]}";
@@ -477,9 +477,9 @@ class tgr_ketetapanObj extends DaftarObj2{
 		$form_name = $this->Prefix.'_form';
 		
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
-		$akun = mysql_fetch_array(mysql_query("select * from ref_jurnal where concat(ka,kb,kc,kd,ke,kf)='".$dt['ka'].$dt['kb'].$dt['kc'].$dt['kd'].$dt['ke'].$dt['kf']."'")) ;
+		$akun = sqlArray(sqlQuery("select * from ref_jurnal where concat(ka,kb,kc,kd,ke,kf)='".$dt['ka'].$dt['kb'].$dt['kc'].$dt['kd'].$dt['ke'].$dt['kf']."'")) ;
 		$akun = array_map('utf8_encode', $akun);
 		$dt['nm_account']=$akun['nm_account'];
 		$dt['spek_alamat']=$this->getSpesifikasi($dt['id_bukuinduk']);
@@ -508,7 +508,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 	  }else{
 		$this->form_caption = 'EDIT';		
 		$jenis_pengganti_brg_visible = $dt['jns_ganti']==0?"style='display:none'":"style='display:block'"; 
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$dt['idbi_ganti']."'")) ;
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$dt['idbi_ganti']."'")) ;
 		switch($bi['f']){
 			case '01':$tblkib="kib_a";break;
 			case '02':$tblkib="kib_b";break;
@@ -520,14 +520,14 @@ class tgr_ketetapanObj extends DaftarObj2{
 		}
 	    $kode_account2 = $dt['ka_ganti']==''? '' : $dt['ka_ganti'].'.'.$dt['kb_ganti'].'.'.$dt['kc_ganti'].'.'.$dt['kd_ganti'].'.'.$dt['ke_ganti'].'.'.$dt['kf_ganti'];
 		
-	    $akun = mysql_fetch_array(mysql_query("select * from ref_jurnal where concat(ka,kb,kc,kd,ke,kf)='".$dt['ka_ganti'].$dt['kb_ganti'].$dt['kc_ganti'].$dt['kd_ganti'].$dt['ke_ganti'].$dt['kf_ganti']."'"));
+	    $akun = sqlArray(sqlQuery("select * from ref_jurnal where concat(ka,kb,kc,kd,ke,kf)='".$dt['ka_ganti'].$dt['kb_ganti'].$dt['kc_ganti'].$dt['kd_ganti'].$dt['ke_ganti'].$dt['kf_ganti']."'"));
 	   $akun = array_map('utf8_encode', $akun);
 	   $dt['nm_account_ganti']=$akun['nm_account'];
 	  
-	   $brg_ganti = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$bi['f'].$bi['g'].$bi['h'].$bi['i'].$bi['j']."'")) ;
+	   $brg_ganti = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$bi['f'].$bi['g'].$bi['h'].$bi['i'].$bi['j']."'")) ;
 	   $fmIDBARANG = $brg_ganti['f']==''? '':  $brg_ganti['f'].'.'.$brg_ganti['g'].'.'.$brg_ganti['h'].'.'.$brg_ganti['i'].'.'.$brg_ganti['j'] ;
 		$fmNMBARANG = $brg_ganti['nm_barang'];
-		$kib = mysql_fetch_array(mysql_query("select * from ".$tblkib." where idbi='".$dt['idbi_ganti']."'")) ;
+		$kib = sqlArray(sqlQuery("select * from ".$tblkib." where idbi='".$dt['idbi_ganti']."'")) ;
 		$kib = array_map('utf8_encode', $kib);
 		
 	  }
@@ -535,12 +535,12 @@ class tgr_ketetapanObj extends DaftarObj2{
 		//items ----------------------
 		$editunit= $dt['e'] != '' ? $dt['c'].".".$dt['d']:'';
 		$editsubunit=$dt['e1'] != '' ? $dt['c'].".".$dt['d'].".".$dt['e']:'';
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
 		
-	   	$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$dt['f'].$dt['g'].$dt['h'].$dt['i'].$dt['j']."'")) ;
+	   	$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$dt['f'].$dt['g'].$dt['h'].$dt['i'].$dt['j']."'")) ;
 	   	$kode_brg = $dt['f']==''? '' : $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'] ;			
 		$kode_account = $dt['ka']==''? '' : $dt['ka'].'.'.$dt['kb'].'.'.$dt['kc'].'.'.$dt['kd'].'.'.$dt['ke'].'.'.$dt['kf'];
 				
@@ -848,11 +848,11 @@ class tgr_ketetapanObj extends DaftarObj2{
 		$fmST_bi=$fmST;//buat status edit bi
 		$fmST_kib=$fmST;//buat status edit kib
 
-		$old = mysql_fetch_array( mysql_query(
+		$old = sqlArray( sqlQuery(
 			"select * from $this->TblName where id='$id' "		
 		));
 		
-		$old_bi_ganti = mysql_fetch_array( mysql_query(
+		$old_bi_ganti = sqlArray( sqlQuery(
 			"select * from buku_induk where id='$idbi_ganti' "		
 		));
 		
@@ -880,7 +880,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 				
 			}else{//Edit ganti barang jadi ganti uang
 				$aqry = "DELETE FROM buku_induk WHERE id='".$idbi_ganti."'";	$cek .= " --- Hapus BI ".$idbi_ganti." dan ganti cara pengganti uang jadi barang --- ".$aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry == FALSE) $err='Gagal Hapus '.mysql_error();
 				
 				$idbi_ganti='';
@@ -917,7 +917,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 						" '$tgl_buku','$staset',".
 						" '1','11',".
 						" '$UID',now())"; $cek.=" --- Insert BI Baru --- ".$query;	
-				$result=mysql_query($query);
+				$result=sqlQuery($query);
 				if($result == FALSE) $err='Gagal SQL Insert BI '.mysql_error();					
 				$idbi_baru =mysql_insert_id();
 				$idbi_ganti=	$idbi_baru;			
@@ -933,13 +933,13 @@ class tgr_ketetapanObj extends DaftarObj2{
 						" status_barang='1',asal_usul='11',".
 						" uid='$UID', tgl_update= now() ".
 						"where id='".$idbi_ganti."' "; $cek.=" --- Update BI $idbi_ganti --- ".$query;
-				$new_bi_ganti = mysql_fetch_array( mysql_query(
+				$new_bi_ganti = sqlArray( sqlQuery(
 							"select * from buku_induk where id='$idbi_ganti' "		
 						));
-				$id_kib_ganti = mysql_fetch_array( mysql_query(
+				$id_kib_ganti = sqlArray( sqlQuery(
 							"select * from ".$tblkib." where idbi='$idbi_ganti' "		
 						));
-				$result=mysql_query($query);
+				$result=sqlQuery($query);
 				if($result == FALSE) $err='Gagal SQL Update BI '.mysql_error();					
 				$idbi_baru =$idbi_ganti;				
 				$idkib =$id_kib_ganti['id'];
@@ -954,7 +954,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 			 	$cek.=" --- Edit Ganti Kib --- ";
 		 		
 				$aqryh = "DELETE FROM ".$tblkib." WHERE idbi='".$old_bi_ganti['id']."'";	$cek .= " --- Hapus Kib Lama --- ".$aqry;	
-				$qryh = mysql_query($aqryh);
+				$qryh = sqlQuery($aqryh);
 				if($qryh == FALSE) $err='Gagal Hapus '.mysql_error();
 				$idkib="";
 			$fmST_kib=0;
@@ -1203,7 +1203,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 	
 		if($err==''){
 			if($fmST == 0){//baru
-				$ck_tgr = mysql_fetch_array( mysql_query(
+				$ck_tgr = sqlArray( sqlQuery(
 				"select * from $this->TblName where id='$idtgr' "		
 				));
 				if($err=='' && $ck_tgr['no_sk'] != '')$err = "Barang sudah masuk di ketetapan gantirugi!";
@@ -1230,7 +1230,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 			}
 			if($err==''){
 				$cek .= $aqry;
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry == FALSE) $err='Gagal SQL'.mysql_error();
 			}
 			
@@ -1251,12 +1251,12 @@ class tgr_ketetapanObj extends DaftarObj2{
 		$Kondisi = join(' and ',$arrKondisi);
 		if ($Kondisi !='')$Kondisi = ' Where '.$Kondisi;
 		//$Kondisi = 	"Id='".$id."'";
-		$old = mysql_fetch_array( mysql_query(
+		$old = sqlArray( sqlQuery(
 			"select * from $this->TblName ".$Kondisi		
 		));
 		if($old['jns_ganti']=='1'){
 			$aqry = "DELETE FROM buku_induk WHERE id='".$idbi_ganti."'";	$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 			if($qry == FALSE) $err='Gagal Hapus BI '.mysql_error();
 		}
 		
@@ -1267,7 +1267,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 					" idbi_ganti='',". 
 					" ka_ganti='',kb_ganti='',kc_ganti='',kd_ganti='',ke_ganti='',kf_ganti='',thn_akun_ganti='',".
 					" uid='$UID', tgl_update= now() ".$Kondisi; $cek.=$aqry;
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		if ($qry==FALSE){
 			$err = 'Gagal Hapus Ketetapan';
 		}
@@ -1413,13 +1413,13 @@ class tgr_ketetapanObj extends DaftarObj2{
 		$jBARU = $fmIDBARANGBARU[4];
 		
 		if($err==''){
-			$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$fBARU.$gBARU.$hBARU.$iBARU.$jBARU."'")) ;
+			$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$fBARU.$gBARU.$hBARU.$iBARU.$jBARU."'")) ;
 			
 			$fmThnAnggaran=  $_COOKIE['coThnAnggaran'];
 			
 			$kueri1="select max(thn_akun) as thn_akun from ref_jurnal where thn_akun <= '$fmThnAnggaran'";
-			$tmax = mysql_fetch_array(mysql_query($kueri1));
-			$akn = mysql_fetch_array(mysql_query("select * from ref_jurnal where thn_akun = '".$tmax['thn_akun']."' 
+			$tmax = sqlArray(sqlQuery($kueri1));
+			$akn = sqlArray(sqlQuery("select * from ref_jurnal where thn_akun = '".$tmax['thn_akun']."' 
 					and ka='".$brg['ka']."' and kb='".$brg['kb']."' 
 					and kc='".$brg['kc']."' and kd='".$brg['kd']."' 
 					and ke='".$brg['ke']."' and kf='".$brg['kf']."'")) ;
@@ -1976,11 +1976,11 @@ class tgr_ketetapanObj extends DaftarObj2{
 		global $Main;
 		$cek = ''; $err=''; $content=''; $json=TRUE;
 		
-		$tgr = mysql_fetch_array(mysql_query("select * from gantirugi where id='".$idtgr."'")) ;
+		$tgr = sqlArray(sqlQuery("select * from gantirugi where id='".$idtgr."'")) ;
 		$cek.="select * from gantirugi where id='".$idtgr."'";
 		
 		if($err==''){
-			$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$tgr['id_bukuinduk']."'")) ;
+			$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$tgr['id_bukuinduk']."'")) ;
 			$cek.="select * from buku_induk where id='".$tgr['id_bukuinduk']."'";
 			$content->plhidbi=$bi['id'];
 			$content->idbi_awal=$bi['idawal'];
@@ -1998,19 +1998,19 @@ class tgr_ketetapanObj extends DaftarObj2{
 	}
 	
 	function getSpesifikasi($idbi=""){
-		$arrbi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$idbi."'")) ;
+		$arrbi = sqlArray(sqlQuery("select * from buku_induk where id='".$idbi."'")) ;
 		
 	 		if ($arrbi['f']=="01"){
 				$aqry = "select * from kib_a where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				//mengambil nama kota
 					$aqry1 = "select nm_wilayah from ref_wilayah where 
 					a='".$arrdet['alamat_a']."' and b='".$arrdet['alamat_b']."' ";
-					$qry1=mysql_query($aqry1);			
-					$kota=mysql_fetch_array($qry1);	
+					$qry1=sqlQuery($aqry1);			
+					$kota=sqlArray($qry1);	
 
 				$spesifikasi=$arrdet['alamat'].
 							" ".$arrdet['alamat_kel'].
@@ -2021,14 +2021,14 @@ class tgr_ketetapanObj extends DaftarObj2{
 			if ($arrbi['f']=="03"){
 				$aqry = "select * from kib_c where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				//mengambil nama kota
 					$aqry1 = "select nm_wilayah from ref_wilayah where 
 					a='".$arrdet['alamat_a']."' and b='".$arrdet['alamat_b']."' ";
-					$qry1=mysql_query($aqry1);			
-					$kota=mysql_fetch_array($qry1);														
+					$qry1=sqlQuery($aqry1);			
+					$kota=sqlArray($qry1);														
 				
 				$spesifikasi=$arrdet['alamat'].
 							" ".$arrdet['alamat_kel'].
@@ -2039,14 +2039,14 @@ class tgr_ketetapanObj extends DaftarObj2{
 			if ($arrbi['f']=="04"){
 				$aqry = "select * from kib_d where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				//mengambil nama kota
 					$aqry1 = "select nm_wilayah from ref_wilayah where 
 					a='".$arrdet['alamat_a']."' and b='".$arrdet['alamat_b']."' ";
-					$qry1=mysql_query($aqry1);			
-					$kota=mysql_fetch_array($qry1);	
+					$qry1=sqlQuery($aqry1);			
+					$kota=sqlArray($qry1);	
 					
 				$spesifikasi=$arrdet['alamat'].
 							" ".$arrdet['alamat_kel'].
@@ -2057,8 +2057,8 @@ class tgr_ketetapanObj extends DaftarObj2{
 			if ($arrbi['f']=="02"){
 				$aqry = "select * from kib_b where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				$spesifikasi=$arrdet['merk']." / ".$arrdet['no_polisi']." / ".$arrdet['no_bpkb'];
 				
@@ -2066,8 +2066,8 @@ class tgr_ketetapanObj extends DaftarObj2{
 			if ($arrbi['f']=="05"){
 				$aqry = "select * from kib_e where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				$spesifikasi=$arrdet['buku_judul'];
 				
@@ -2075,14 +2075,14 @@ class tgr_ketetapanObj extends DaftarObj2{
 			if ($arrbi['f']=="06"){
 				$aqry = "select * from kib_f where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				//mengambil nama kota
 					$aqry1 = "select nm_wilayah from ref_wilayah where 
 					a='".$arrdet['alamat_a']."' and b='".$arrdet['alamat_b']."' ";
-					$qry1=mysql_query($aqry1);			
-					$kota=mysql_fetch_array($qry1);														
+					$qry1=sqlQuery($aqry1);			
+					$kota=sqlArray($qry1);														
 				
 				$spesifikasi=$arrdet['alamat'].
 							" ".$arrdet['alamat_kel'].
@@ -2092,8 +2092,8 @@ class tgr_ketetapanObj extends DaftarObj2{
 			if ($arrbi['f']=="07"){
 				$aqry = "select * from kib_g where 
 				idbi='".$idbi."' ";
-				$qry=mysql_query($aqry);			
-				$arrdet=mysql_fetch_array($qry);
+				$qry=sqlQuery($aqry);			
+				$arrdet=sqlArray($qry);
 				
 				$spesifikasi=$bi['jenis'];
 			}
@@ -2113,7 +2113,7 @@ class tgr_ketetapanObj extends DaftarObj2{
 		
 		$kond = $c.$d.$e.$e1.$fmIDBARANG.$thn_perolehan;
 		$aqry = " select (ifnull(max(noreg),0)+1) as maxno from buku_induk where concat(c,d,e,e1,f,'.',g,'.',h,'.',i,'.',j,thn_perolehan) = '$kond' " ; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			$aqry
 		));
 		$fmN = ($get['maxno']+10000)."";

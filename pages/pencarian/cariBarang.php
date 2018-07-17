@@ -57,12 +57,12 @@ class cariBarangObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama)values('$nama')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_satuan set nama='$nama' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -135,8 +135,8 @@ class cariBarangObj  extends DaftarObj2{
 					}
 					
 					$qry = "SELECT * FROM ref_barang WHERE $where_kode = '$kodebarangambil' ";$cek.=$qry;
-					$aqry = mysql_query($qry);
-					$daqry = mysql_fetch_array($aqry);
+					$aqry = sqlQuery($qry);
+					$daqry = sqlArray($aqry);
 						
 					
 					if($htng_stringKode >= 3){
@@ -205,7 +205,7 @@ class cariBarangObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_satuan WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -227,7 +227,7 @@ class cariBarangObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(

@@ -8,8 +8,8 @@ $qty = 0;
 $uid = $_GET['id'];
 
 $aqry = "select * from barcode_status_print where uid='$uid'";
-$qry = mysql_query($aqry);
-while ($isi = mysql_fetch_array($qry)){
+$qry = sqlQuery($aqry);
+while ($isi = sqlArray($qry)){
 	$status = $isi['status'];
 	$qty = $isi['qty'];
 }

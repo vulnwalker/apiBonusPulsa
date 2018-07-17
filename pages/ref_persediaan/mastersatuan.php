@@ -53,7 +53,7 @@ class MasterSatuanObj  extends DaftarObj2{
 	 $e = $_REQUEST['e'];	 
 	 $kode_satuan = $_REQUEST['kode_satuan'];
 	 $nama_satuan = strtoupper($_REQUEST['nama_satuan']);
-	 $s=mysql_fetch_array(mysql_query("select * from ref_satuan_persediaan where nama_satuan = '".$nama_satuan."'"));	 	 
+	 $s=sqlArray(sqlQuery("select * from ref_satuan_persediaan where nama_satuan = '".$nama_satuan."'"));	 	 
 	 if($s['nama_satuan']!='') $err="Nama Satuan sudah ada";	 		 	 
 
 	 
@@ -61,7 +61,7 @@ class MasterSatuanObj  extends DaftarObj2{
 				if($err==''){ 
 					$aqry1 = "INSERT into ref_satuan_persediaan (nama_satuan)
 					"."values('$nama_satuan')";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					$content->no=4;							
 					$content->kode_satuan=mysql_insert_id();
 					$content->satuan=$nama_satuan;							
@@ -78,7 +78,7 @@ class MasterSatuanObj  extends DaftarObj2{
 							$aqry2 = "UPDATE ref_satuan_persediaan
 				        	 set "." nama_satuan = '$nama_satuan'".
 							 "WHERE j='".$idplh."'";	$cek .= $aqry2;
-							$qry = mysql_query($aqry2);
+							$qry = sqlQuery($aqry2);
 
 					}
 			}else{
@@ -91,7 +91,7 @@ class MasterSatuanObj  extends DaftarObj2{
 						 $j=$kode_barang[4];
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga)
 						"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);
+						$qry = sqlQuery($aqry1);
 						 
 				}
 			} //end else
@@ -182,7 +182,7 @@ class MasterSatuanObj  extends DaftarObj2{
 		//get data 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select v1_kunjungan.*, concat(c,d) as cd from v1_kunjungan where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['readonly']='';
 		$fm = $this->setForm($dt);
 		
@@ -207,7 +207,7 @@ class MasterSatuanObj  extends DaftarObj2{
 		$j=$kode[4]; 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_satuan_persediaan where j='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);

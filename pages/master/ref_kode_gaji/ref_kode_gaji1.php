@@ -71,7 +71,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		$j=$kode_barang[4];
 				
 		$quricoy="select count(*) as cnt from ref_barang where f='$f' and g='$g' and h<>'00' and i<>'00' and j<>'000'";
-		$dt3 = mysql_fetch_array(mysql_query($quricoy));
+		$dt3 = sqlArray(sqlQuery($quricoy));
 		$korong = $dt3 ['cnt'];
 		
 		if($korong>0){
@@ -81,7 +81,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		}
 		
 		if($err=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where f='$f' and g='$g' and h='$h' and i='$i' and j='$j' ")
 				) >0 )
 				
@@ -120,11 +120,11 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		}
 	 }*/
 	 /*$kondisi="concat(f,g,h,i,j) Like '%".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."%'";
-	 $cek_barang=mysql_fetch_array(mysql_query("select count(*) as jml_barang from ref_barang where concat(f,g,h,i,j) = '".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."'"));
+	 $cek_barang=sqlArray(sqlQuery("select count(*) as jml_barang from ref_barang where concat(f,g,h,i,j) = '".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."'"));
 	 if($err='' && $cek_barang>0) $err = 'Kode Barang yang sama/Sudah ada tidak bisa di simpan';
 	 if($err=='' && $kode_barang =='' ) $err= 'Kode Barang belum diisi';
 	  $kondisi="concat(f,g,h,i,j) Like '%".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."%'";
-	 $cek_barang=mysql_fetch_array(mysql_query("select count(*) as jml_barang from ref_barang where concat(f,g,h,i,j) = '".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."'"));
+	 $cek_barang=sqlArray(sqlQuery("select count(*) as jml_barang from ref_barang where concat(f,g,h,i,j) = '".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."'"));
 	 if($err='' && $cek_barang>1) $err = 'Kode Barang yang sama/Sudah ada tidak bisa di simpan';
 	 if($err=='' && $kode_barang =='' ) $err= 'Kode Barang Sudah ada di Penatausahaan';
 	 	 
@@ -163,7 +163,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 						 
 						 //memecah kode jurnal akum penyusutan			 	 	  
 						$aqry1 = "INSERT into ref_kodegaji (nama_gaji,k,l,m,n,o,ka,kb,kc,kd,ke,ka2,kb2,kc2,kd2,ke2,status)values('$nmgaji','$k','$l','$m','$n','$o','$ka','$kb','$kc','$kd','$ke','$ka2','$kb2','$kc2','$kd2','$ke2','$status')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);						
+						$qry = sqlQuery($aqry1);						
 						if($qry==FALSE)
 						{ 
 						//	$err="Kode Barang yang sama/Sudah ada tidak bisa di simpan";
@@ -192,7 +192,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 									  m6='$m6'".
 									  //residu='$residu'".
 						 			 "WHERE $kondisi";	$cek .= $aqry2;						
-							$qry2 = mysql_query($aqry2);
+							$qry2 = sqlQuery($aqry2);
 						}
 														
 				}/*else{else{
@@ -200,16 +200,16 @@ class ref_kode_gajiObj  extends DaftarObj2{
 				}*/
 			}elseif($fmST == 1){
 			$quricoy="select count(*) as cnt from ref_barang where f='$f' and g='$g' and h='$h' and i='$i' and j='$j'";
-		$dt3 = mysql_num_rows(mysql_query($quricoy));
+		$dt3 = sqlNumRow(sqlQuery($quricoy));
 		$queryold = "select * from ref_barang where concat(f,g,h,i,j) = '".$cb[0].$cb[1].$cb[2].$cb[3].$cb[4]."'";
-		$old = mysql_fetch_array(mysql_query($queryold));
+		$old = sqlArray(sqlQuery($queryold));
 		if($old['nm_barang']!=$nama_barang){
 		if($dt3 >0){
 		$err = "ada kode barang tidak bisa di edit/hapus, Kode Barang Sudah Ada Di Buku Induk !";
 		}	
 	}
 		if($err=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where f='$f' and g='$g' and h='$h' and i='$i' and j='$j'")
 				) >0 )
 				
@@ -272,7 +272,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 								  m6='$m6'".
 								  //"	  residu='$residu'".
 					 			 "WHERE concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'";	$cek .= $aqry2;
-						$qry = mysql_query($aqry2);
+						$qry = sqlQuery($aqry2);
 						if($qry==FALSE)
 						{ 
 							$err="Gagal menyimpan barang";
@@ -299,7 +299,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 									  m6='$m6'".
 									  //residu='$residu'".
 						 			 "WHERE $kondisi";	$cek .= $aqry2;						
-							$qry2 = mysql_query($aqry2);*/
+							$qry2 = sqlQuery($aqry2);*/
 						}
 					}
 		//return $errmsg;
@@ -366,18 +366,18 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		$j=$kode_barang[4];
 		
 		//query ambil data ref_program
-		$get = mysql_fetch_array( mysql_query("select * from ref_barang where f=$f and g=$g and h=$h and i=$i and j=$j"));
+		$get = sqlArray( sqlQuery("select * from ref_barang where f=$f and g=$g and h=$h and i=$i and j=$j"));
 		$kode_barang=$get['f'].'.'.$get['g'].'.'.$get['h'].'.'.$get['i'].'.'.$get['j'];
 		
 		$fmThnAnggaran=  $_COOKIE['coThnAnggaran'];
 			$kueri1="select max(thn_akun) as thn_akun from ref_jurnal where thn_akun <= '$fmThnAnggaran'";
-			$tmax = mysql_fetch_array(mysql_query($kueri1));
+			$tmax = sqlArray(sqlQuery($kueri1));
 			$kueri="select * from ref_jurnal 
 					where thn_akun = '".$tmax['thn_akun']."' 
 					and ka='".$get['m1']."' and kb='".$get['m2']."' 
 					and kc='".$get['m3']."' and kd='".$get['m4']."'
 					and ke='".$get['m5']."' and kf='".$get['m6']."'"; //echo "$kueri";
-			$row=mysql_fetch_array(mysql_query($kueri));
+			$row=sqlArray(sqlQuery($kueri));
 						
 			$kode_account =$row['ka'].".".$row['kb'].".".$row['kc'].".".$row['kd'].".".$row['ke'].".".$row['kf'];
 						
@@ -474,7 +474,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		
 		
 		$quricoy="select count(*) as cnt from ref_barang where f='$f' and g='$g' and h<>'00' and i<>'00' and j<>'000'";
-		$dt3 = mysql_fetch_array(mysql_query($quricoy));
+		$dt3 = sqlArray(sqlQuery($quricoy));
 		$korong = $dt3 ['cnt'];
 		
 		if($korong>0){
@@ -484,7 +484,7 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		}
 		
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where f='$f' and g='$g' and h='$h' and i='$i' and j='$j' ")
 				) >0 )
 				
@@ -553,10 +553,10 @@ class ref_kode_gajiObj  extends DaftarObj2{
 		$bulan=date('Y-m-')."1";
 		//query ambil data ref_barang
 		$aqry = "select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j)='".$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
-		$na_at=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$dt['ka']."' and kb='".$dt['kb']."' and kc='".$dt['kc']."' and kd='".$dt['kd']."' and ke='".$dt['ke']."'"));
-		$na_bm=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$dt['m1']."' and kb='".$dt['m2']."' and kc='".$dt['m3']."' and kd='".$dt['m4']."' and ke='".$dt['m5']."'"));
-		$na_ap=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$dt['l1']."' and kb='".$dt['l2']."' and kc='".$dt['l3']."' and kd='".$dt['l4']."' and ke='".$dt['l5']."'"));
+		$dt = sqlArray(sqlQuery($aqry));
+		$na_at=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$dt['ka']."' and kb='".$dt['kb']."' and kc='".$dt['kc']."' and kd='".$dt['kd']."' and ke='".$dt['ke']."'"));
+		$na_bm=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$dt['m1']."' and kb='".$dt['m2']."' and kc='".$dt['m3']."' and kd='".$dt['m4']."' and ke='".$dt['m5']."'"));
+		$na_ap=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$dt['l1']."' and kb='".$dt['l2']."' and kc='".$dt['l3']."' and kd='".$dt['l4']."' and ke='".$dt['l5']."'"));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j;
 		$dt['kode_account_at']=$dt['ka'].'.'.$dt['kb'].'.'.$dt['kc'].'.'.$dt['kd'].'.'.$dt['ke'].'.'.$dt['kf']; 
 		$dt['kode_account_bm']=$dt['m1'].'.'.$dt['m2'].'.'.$dt['m3'].'.'.$dt['m4'].'.'.$dt['m5'].'.'.$dt['m6']; 
@@ -693,13 +693,13 @@ class ref_kode_gajiObj  extends DaftarObj2{
 	 global $Ref;
 	 global $Main;
 	/* $aqry_at = "select * from ref_jurnal where ka='".$isi['ka']."' and kb='".$isi['kb']."' and kc='".$isi['kc']."' and kd='".$isi['kd']."' and ke='".$isi['ke']."' ";
-	 $na_at=mysql_fetch_array(mysql_query($aqry_at));
+	 $na_at=sqlArray(sqlQuery($aqry_at));
 	 $kode_account_at=$isi['ka'].'.'.$isi['kb'].'.'.$isi['kc'].'.'.$isi['kd'].'.'.$isi['ke'].'.'.$isi['kf'];	 
 	 $aqry_bm = "select * from ref_jurnal where ka='".$isi['m1']."' and kb='".$isi['m2']."' and kc='".$isi['m3']."' and kd='".$isi['m4']."' and ke='".$isi['m5']."' ";
-	 $na_bm=mysql_fetch_array(mysql_query($aqry_bm));
+	 $na_bm=sqlArray(sqlQuery($aqry_bm));
 	 $kode_account_bm=$isi['m1'].'.'.$isi['m2'].'.'.$isi['m3'].'.'.$isi['m4'].'.'.$isi['m5'].'.'.$isi['m6'];
 	 $aqry_ap = "select * from ref_jurnal where ka='".$isi['l1']."' and kb='".$isi['l2']."' and kc='".$isi['l3']."' and kd='".$isi['l4']."' and ke='".$isi['l5']."' ";
-	 $na_ap=mysql_fetch_array(mysql_query($aqry_ap));
+	 $na_ap=sqlArray(sqlQuery($aqry_ap));
 	 $kode_account_ap=$isi['l1'].'.'.$isi['l2'].'.'.$isi['l3'].'.'.$isi['l4'].'.'.$isi['l5'].'.'.$isi['l6'];
 	 $kode_barang=$isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
 	 $Koloms = array();

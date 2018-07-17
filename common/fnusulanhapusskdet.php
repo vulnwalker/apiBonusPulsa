@@ -94,13 +94,13 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 		if($fmST == 0){
 			if($err==''){
 				$aqry = "insert into penghapusan_usul_det (id_bukuinduk,disetujui,tgl_update,uid)"."values('$id_bukuinduk','$disetujui',now(),'$uid')";	$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 			}
 		}else{
-			$old = mysql_fetch_array(mysql_query("select * from penghapusan_usul where Id='$idplh'"));
+			$old = sqlArray(sqlQuery("select * from penghapusan_usul where Id='$idplh'"));
 			if( $err=='' ){
 				if($no_usulan!=$old['no_usulan'] ){
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 					"select count(*) as cnt from penghapusan_usul where no_usulan='$no_usulan' "
 					));
 					if($get['cnt']>0 ) $err='No Usulan Sudah Ada!';
@@ -121,7 +121,7 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 							tgl_usul='$tgl_usul',
 							ref_idpegawai_usul = '$pejabat_pengadaan'".
 							"where Id='".$idplh."'";	$cek .= $aqry;
-							$qry = mysql_query($aqry);
+							$qry = sqlQuery($aqry);
 			}
 		} //end else
 		
@@ -205,7 +205,7 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 			case 'getdata':{
 				$id = $_REQUEST['id'];
 				$aqry = "select * from ref_pegawai where id='$id' "; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('nip'=>$get['nip'],'nama'=>$get['nama'],'jabatan'=>$get['jabatan']);
 				break;
@@ -273,7 +273,7 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from penghapusan_usul where Id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$fm = $this->setForm($dt);
@@ -300,13 +300,13 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."' "));
 		$seksi= $get['nm_skpd'];		
 		
 		$this->form_fields = array(				
@@ -354,7 +354,7 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 		$query ="select count(*) AS jml , sum(ifnull(jml_harga,0)+ ifnull(tot_pelihara,0)+ ifnull(tot_pengaman,0) ) AS harga 								 
 				 from v1_penghapusan_usul_det_bi
 				 where Id='".$Id."' and f='".$kib."'";
-		$rs = mysql_fetch_array(mysql_query($query));
+		$rs = sqlArray(sqlQuery($query));
 		$hsl->jml = $rs['jml'];
 		$hsl->harga = $rs['harga'];			
 		return $hsl;
@@ -405,26 +405,26 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 			///*
 			$nmopdarr=array();	
 			//if($fmSKPD == '00'){
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 				"select * from v_bidang where c='".$c."' "
 				));		
 				if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 			//}
 			//if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 				"select * from v_opd where c='".$c."' and d='".$d."' "
 				));		
 				if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 				$opd = $get['nmopd'];
 			//}
 			//if($fmSUBUNIT == '00'){
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 				"select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"
 				));		
 				if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 			//}
 			//if($fmSUBUNIT == '00'){
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."'  and e1='".$e1."'"
 				));		
 				if($get['nm_skpd']<>'') $nmopdarr[] = $get['nm_skpd'];
@@ -438,48 +438,48 @@ class UsulanHapusskdetObj  extends DaftarObj2{
 	 /** Jumlah harga yang ditampilkan hanya status tindak lanjut 2 dan 3 **/
 	 //kib A 
 	 $totalduitkiba=  "SELECT SUM(harga) AS hargakiba FROM v1_penghapusan_usul_det_bi WHERE Id ='".$idrefusulan ."' AND f='01' AND tindak_lanjut!='1' and tindak_lanjut!=0  and status=1 ";
-	 $resskiba = mysql_query($totalduitkiba);
-	 while($row =mysql_fetch_array($resskiba)) {
+	 $resskiba = sqlQuery($totalduitkiba);
+	 while($row =sqlArray($resskiba)) {
 				$totetotkiba = $row['hargakiba'];
 	 }
 	 $totetotkiba =$totetotkiba==0?'0':$totetotkiba;
 	 
 	 //kib b 
 	 $totalduitkibb=  "SELECT SUM(harga) AS hargakibb FROM v1_penghapusan_usul_det_bi WHERE Id ='".$idrefusulan ."' AND f='02' AND tindak_lanjut!='1' and tindak_lanjut!=0  and status=1 ";
-	 $resskibb = mysql_query($totalduitkibb);
-	 while($row =mysql_fetch_array($resskibb)) {
+	 $resskibb = sqlQuery($totalduitkibb);
+	 while($row =sqlArray($resskibb)) {
 				$totetotkibb = $row['hargakibb'];
 	 }
 	 $totetotkibb =$totetotkibb==0?'0':$totetotkibb;
 	
 	//kib c 
 	 $totalduitkibc=  "SELECT SUM(harga) AS hargakibc FROM v1_penghapusan_usul_det_bi WHERE Id ='".$idrefusulan ."' AND f='03' AND tindak_lanjut!='1' and tindak_lanjut!=0  and status=1 ";
-	 $resskibc = mysql_query($totalduitkibc);
-	 while($row =mysql_fetch_array($resskibc)) {
+	 $resskibc = sqlQuery($totalduitkibc);
+	 while($row =sqlArray($resskibc)) {
 				$totetotkibc = $row['hargakibc'];
 	 }
 	 $totetotkibc =$totetotkibc==0?'0':$totetotkibc;
 	
 	//kib d 
 	 $totalduitkibd=  "SELECT SUM(harga) AS hargakibd FROM v1_penghapusan_usul_det_bi WHERE Id ='".$idrefusulan ."' AND f='04' AND tindak_lanjut!='1' and tindak_lanjut!=0  and status=1 ";
-	 $resskibd = mysql_query($totalduitkibd);
-	 while($row =mysql_fetch_array($resskibd)) {
+	 $resskibd = sqlQuery($totalduitkibd);
+	 while($row =sqlArray($resskibd)) {
 				$totetotkibd = $row['hargakibd'];
 	 }
 	 $totetotkibd =$totetotkibd==0?'0':$totetotkibd;
 	 
 	//kib e
 	 $totalduitkibe=  "SELECT SUM(harga) AS hargakibe FROM v1_penghapusan_usul_det_bi WHERE Id ='".$idrefusulan ."' AND f='05' AND tindak_lanjut!='1' and tindak_lanjut!=0  and status=1 ";
-	 $resskibe = mysql_query($totalduitkibe);
-	 while($row =mysql_fetch_array($resskibe)) {
+	 $resskibe = sqlQuery($totalduitkibe);
+	 while($row =sqlArray($resskibe)) {
 				$totetotkibe = $row['hargakibe'];
 	 }
 	 $totetotkibe =$totetotkibe==0?'0':$totetotkibe;
 	
 	//kib f
 	 $totalduitkibf=  "SELECT SUM(harga) AS hargakibf FROM v1_penghapusan_usul_det_bi WHERE Id ='".$idrefusulan ."' AND f='06' AND tindak_lanjut!='1' and tindak_lanjut!=0  and status=1 ";
-	 $resskibf = mysql_query($totalduitkibf);
-	 while($row =mysql_fetch_array($resskibf)) {
+	 $resskibf = sqlQuery($totalduitkibf);
+	 while($row =sqlArray($resskibf)) {
 				$totetotkibf = $row['hargakibf'];
 	 }
 	 $totetotkibf =$totetotkibf==0?'0':$totetotkibf;

@@ -289,42 +289,42 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	
 	 $Koloms[] = array('align="center"',$no); 
 	// $Koloms[] = array('align="center"',$k.".".$l.".".$m.".".$n.".".$o); 
-	 $namaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
+	 $namaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
 	 $Koloms[] = array('align="left"',$namaRekening['nm_rekening']); 
-	 $total = mysql_fetch_array(mysql_query("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $total = sqlArray(sqlQuery("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($total[0] ,0,',','.')); 
-	 $jan = mysql_fetch_array(mysql_query("select sum(alokasi_jan) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $jan = sqlArray(sqlQuery("select sum(alokasi_jan) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($jan[0] ,0,',','.'));
-	 $feb = mysql_fetch_array(mysql_query("select sum(alokasi_feb) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $feb = sqlArray(sqlQuery("select sum(alokasi_feb) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($feb[0] ,0,',','.')); 
-	 $mar = mysql_fetch_array(mysql_query("select sum(alokasi_mar) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $mar = sqlArray(sqlQuery("select sum(alokasi_mar) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($mar[0] ,0,',','.')); 
 	 $triwulan1 = $jan[0] + $feb[0] + $mar[0];
 	// $Koloms[] = array('align="right"',number_format($triwulan1 ,2,',','.'));
 	 
-	 $apr = mysql_fetch_array(mysql_query("select sum(alokasi_apr) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $apr = sqlArray(sqlQuery("select sum(alokasi_apr) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($apr[0] ,0,',','.'));
-	 $mei = mysql_fetch_array(mysql_query("select sum(alokasi_mei) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $mei = sqlArray(sqlQuery("select sum(alokasi_mei) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($mei[0] ,0,',','.')); 
-	 $jun = mysql_fetch_array(mysql_query("select sum(alokasi_jun) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $jun = sqlArray(sqlQuery("select sum(alokasi_jun) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($jun[0] ,0,',','.')); 
 	 $triwulan2 = $apr[0] + $mei[0] + $jun[0];
 	// $Koloms[] = array('align="right"',number_format($triwulan2 ,2,',','.'));
 	 
-	 $jul = mysql_fetch_array(mysql_query("select sum(alokasi_jul) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $jul = sqlArray(sqlQuery("select sum(alokasi_jul) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($jul[0] ,0,',','.'));
-	 $agu = mysql_fetch_array(mysql_query("select sum(alokasi_agu) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $agu = sqlArray(sqlQuery("select sum(alokasi_agu) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($agu[0] ,0,',','.')); 
-	 $sep = mysql_fetch_array(mysql_query("select sum(alokasi_sep) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $sep = sqlArray(sqlQuery("select sum(alokasi_sep) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($sep[0] ,0,',','.')); 
 	 $triwulan3 = $jul[0] + $agu[0] + $sep[0];
 	// $Koloms[] = array('align="right"',number_format($triwulan3 ,2,',','.'));
 	 
-	 $okt = mysql_fetch_array(mysql_query("select sum(alokasi_okt) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $okt = sqlArray(sqlQuery("select sum(alokasi_okt) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($okt[0] ,0,',','.'));
-	 $nop = mysql_fetch_array(mysql_query("select sum(alokasi_nop) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $nop = sqlArray(sqlQuery("select sum(alokasi_nop) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($nop[0] ,0,',','.')); 
-	 $des = mysql_fetch_array(mysql_query("select sum(alokasi_des) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+	 $des = sqlArray(sqlQuery("select sum(alokasi_des) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 	 $Koloms[] = array('align="right"',number_format($des[0] ,0,',','.')); 
 	 $triwulan4 = $okt[0] + $nop[0] + $des[0];
 	// $Koloms[] = array('align="right"',number_format($triwulan4 ,2,',','.'));
@@ -335,15 +335,15 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	
 		 $Koloms[] = array('align="center"',$no); 
 		 $Koloms[] = array('align="center"',$k.".".$l.".".$m.".".$n.".".$o); 
-		 $namaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
+		 $namaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
 		 $Koloms[] = array('align="left"',$namaRekening['nm_rekening']); 
-		 $total = mysql_fetch_array(mysql_query("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $total = sqlArray(sqlQuery("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($total[0] ,0,',','.')); 
-		 $jan = mysql_fetch_array(mysql_query("select sum(alokasi_jan) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $jan = sqlArray(sqlQuery("select sum(alokasi_jan) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($jan[0] ,0,',','.'));
-		 $feb = mysql_fetch_array(mysql_query("select sum(alokasi_feb) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $feb = sqlArray(sqlQuery("select sum(alokasi_feb) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($feb[0] ,0,',','.')); 
-		 $mar = mysql_fetch_array(mysql_query("select sum(alokasi_mar) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $mar = sqlArray(sqlQuery("select sum(alokasi_mar) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($mar[0] ,0,',','.')); 
 		 $triwulan1 = $jan[0] + $feb[0] + $mar[0];
 		 $Koloms[] = array('align="right"',number_format($triwulan1 ,0,',','.'));
@@ -352,15 +352,15 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	
 		 $Koloms[] = array('align="center"',$no); 
 		 $Koloms[] = array('align="center"',$k.".".$l.".".$m.".".$n.".".$o); 
-		 $namaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
+		 $namaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
 		 $Koloms[] = array('align="left"',$namaRekening['nm_rekening']); 
-		 $total = mysql_fetch_array(mysql_query("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $total = sqlArray(sqlQuery("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($total[0] ,0,',','.')); 
-		 $apr = mysql_fetch_array(mysql_query("select sum(alokasi_apr) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $apr = sqlArray(sqlQuery("select sum(alokasi_apr) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($apr[0] ,0,',','.'));
-		 $mei = mysql_fetch_array(mysql_query("select sum(alokasi_mei) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $mei = sqlArray(sqlQuery("select sum(alokasi_mei) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($mei[0] ,0,',','.')); 
-		 $jun = mysql_fetch_array(mysql_query("select sum(alokasi_jun) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $jun = sqlArray(sqlQuery("select sum(alokasi_jun) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($jun[0] ,0,',','.')); 
 		 $triwulan2 = $apr[0] + $mei[0] + $jun[0];
 		 $Koloms[] = array('align="right"',number_format($triwulan2 ,0,',','.'));
@@ -369,15 +369,15 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	
 		 $Koloms[] = array('align="center"',$no); 
 		 $Koloms[] = array('align="center"',$k.".".$l.".".$m.".".$n.".".$o); 
-		 $namaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
+		 $namaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
 		 $Koloms[] = array('align="left"',$namaRekening['nm_rekening']); 
-		 $total = mysql_fetch_array(mysql_query("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $total = sqlArray(sqlQuery("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($total[0] ,0,',','.')); 
-		 $jul = mysql_fetch_array(mysql_query("select sum(alokasi_jul) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $jul = sqlArray(sqlQuery("select sum(alokasi_jul) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($jul[0] ,0,',','.'));
-		 $agu = mysql_fetch_array(mysql_query("select sum(alokasi_agu) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $agu = sqlArray(sqlQuery("select sum(alokasi_agu) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($agu[0] ,0,',','.')); 
-		 $sep = mysql_fetch_array(mysql_query("select sum(alokasi_sep) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $sep = sqlArray(sqlQuery("select sum(alokasi_sep) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($sep[0] ,0,',','.')); 
 		 $triwulan3 = $jul[0] + $agu[0] + $sep[0];
 		 $Koloms[] = array('align="right"',number_format($triwulan3 ,0,',','.'));
@@ -386,15 +386,15 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	
 		 $Koloms[] = array('align="center"',$no); 
 		 $Koloms[] = array('align="center"',$k.".".$l.".".$m.".".$n.".".$o); 
-		 $namaRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
+		 $namaRekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
 		 $Koloms[] = array('align="left"',$namaRekening['nm_rekening']); 
-		 $total = mysql_fetch_array(mysql_query("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $total = sqlArray(sqlQuery("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($total[0] ,0,',','.')); 
-		 $okt = mysql_fetch_array(mysql_query("select sum(alokasi_okt) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $okt = sqlArray(sqlQuery("select sum(alokasi_okt) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($okt[0] ,0,',','.'));
-		 $nop = mysql_fetch_array(mysql_query("select sum(alokasi_nop) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $nop = sqlArray(sqlQuery("select sum(alokasi_nop) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($nop[0] ,0,',','.')); 
-		 $des = mysql_fetch_array(mysql_query("select sum(alokasi_des) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		 $des = sqlArray(sqlQuery("select sum(alokasi_des) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o' $kondisiSKPD and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		 $Koloms[] = array('align="right"',number_format($des[0] ,0,',','.')); 
 		 $triwulan4 = $okt[0] + $nop[0] + $des[0];
 		 $Koloms[] = array('align="right"',number_format($triwulan4 ,0,',','.'));
@@ -424,7 +424,7 @@ $selectedC1 = $_REQUEST['cmbUrusan'];
 	
 	
 	if(!isset($selectedC1) ){
-	   		$arrayData = mysql_fetch_array(mysql_query("select * from current_filter where username ='".$_COOKIE['coID']."'"));
+	   		$arrayData = sqlArray(sqlQuery("select * from current_filter where username ='".$_COOKIE['coID']."'"));
 			foreach ($arrayData as $key => $value) { 
 			  $$key = $value; 
 			 }
@@ -525,9 +525,9 @@ $selectedC1 = $_REQUEST['cmbUrusan'];
 
 	
 	
-	$get1 = mysql_fetch_array(mysql_query("select max(id_anggaran) as max from view_rkbmd "));
+	$get1 = sqlArray(sqlQuery("select max(id_anggaran) as max from view_rkbmd "));
 	$maxID = $get1['max'];
-	$get2 = mysql_fetch_array(mysql_query("select * from view_rkbmd where id_anggaran = '$maxID' "));
+	$get2 = sqlArray(sqlQuery("select * from view_rkbmd where id_anggaran = '$maxID' "));
 	$nomorUrutSebelumnya =  $get2['no_urut'];
 
 	
@@ -543,13 +543,13 @@ $selectedC1 = $_REQUEST['cmbUrusan'];
 	
 	
 	
-	/*$codeAndNameProgram = mysql_query("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p as pFromProgram, tabel_anggaran.q  , ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD' and tabel_anggaran.e = '$selectedE' and tabel_anggaran.e1 = '$selectedE1' and tabel_anggaran.q='0'  ");
+	/*$codeAndNameProgram = sqlQuery("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p as pFromProgram, tabel_anggaran.q  , ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD' and tabel_anggaran.e = '$selectedE' and tabel_anggaran.e1 = '$selectedE1' and tabel_anggaran.q='0'  ");
 	if(!empty($selectedD) && empty($selectedE) ){*/
-		$codeAndNameProgram = mysql_query("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p as pFromProgram, tabel_anggaran.q  , ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD'  and tabel_anggaran.q='0'  ");
+		$codeAndNameProgram = sqlQuery("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p as pFromProgram, tabel_anggaran.q  , ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD'  and tabel_anggaran.q='0'  ");
 	//}
 	$pSama = "";
 	$arrayP = array() ;
-	while($rows = mysql_fetch_array($codeAndNameProgram)){
+	while($rows = sqlArray($codeAndNameProgram)){
 		foreach ($rows as $key => $value) { 
 				  $$key = $value; 
 		}
@@ -574,14 +574,14 @@ $selectedC1 = $_REQUEST['cmbUrusan'];
 	
 	$program = "<input type='hidden' id='bk' name='bk' value='$selectedBK'> <input type='hidden' id='ck' name='ck' value='$selectedCK'> <input type='hidden' id='hiddenP' name='hiddenP' value='$selectedP'>".cmbArray('p',$_REQUEST['p'],$arrayP,'-- PROGRAM --','onchange=alokasiDpa.programChanged();');
 	
-	/*$codeAndNameKegiatan = mysql_query("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p, tabel_anggaran.q, ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD' and tabel_anggaran.e = '$selectedE' and tabel_anggaran.e1 = '$selectedE1' and tabel_anggaran.q !='0' and tabel_anggaran.bk='$selectedBK' and tabel_anggaran.ck='$selectedCK' and tabel_anggaran.p='$selectedP'  ");
+	/*$codeAndNameKegiatan = sqlQuery("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p, tabel_anggaran.q, ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD' and tabel_anggaran.e = '$selectedE' and tabel_anggaran.e1 = '$selectedE1' and tabel_anggaran.q !='0' and tabel_anggaran.bk='$selectedBK' and tabel_anggaran.ck='$selectedCK' and tabel_anggaran.p='$selectedP'  ");
 	if(!empty($selectedD) && empty($selectedE) ){*/
-		$codeAndNameKegiatan = mysql_query("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p, tabel_anggaran.q, ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD' and tabel_anggaran.q !='0' and tabel_anggaran.bk='$selectedBK' and tabel_anggaran.ck='$selectedCK' and tabel_anggaran.p='$selectedP'  ");
+		$codeAndNameKegiatan = sqlQuery("select tabel_anggaran.bk, tabel_anggaran.ck, tabel_anggaran.p, tabel_anggaran.q, ref_program.nama from tabel_anggaran  inner join ref_program on tabel_anggaran.bk = ref_program.bk and tabel_anggaran.ck = ref_program.ck and tabel_anggaran.p = ref_program.p and tabel_anggaran.q = ref_program.q  inner join ref_tahap_anggaran on tabel_anggaran.id_tahap = ref_tahap_anggaran.id_tahap where tabel_anggaran.dk='0' and ref_tahap_anggaran.no_urut = '$nomorUrutSebelumnya' and tabel_anggaran.tahun ='$this->tahun' and tabel_anggaran.jenis_anggaran = '$this->jenisAnggaran' and tabel_anggaran.c1 = '$selectedC1' and tabel_anggaran.c = '$selectedC' and tabel_anggaran.d = '$selectedD' and tabel_anggaran.q !='0' and tabel_anggaran.bk='$selectedBK' and tabel_anggaran.ck='$selectedCK' and tabel_anggaran.p='$selectedP'  ");
 	
 	//}
 	$qSama = "";
 	$arrayQ = array() ;
-	while($rows = mysql_fetch_array($codeAndNameKegiatan)){
+	while($rows = sqlArray($codeAndNameKegiatan)){
 		foreach ($rows as $key => $value) { 
 				  $$key = $value; 
 		}
@@ -750,10 +750,10 @@ $selectedC1 = $_REQUEST['cmbUrusan'];
 			 );
 		}
 		
-		mysql_query(VulnWalkerUpdate("current_filter",$data,"username='$this->username'"));
+		sqlQuery(VulnWalkerUpdate("current_filter",$data,"username='$this->username'"));
 		
 		if(!isset($cmbUrusan) ){
-	   		$arrayData = mysql_fetch_array(mysql_query("select * from current_filter where username ='".$_COOKIE['coID']."'"));
+	   		$arrayData = sqlArray(sqlQuery("select * from current_filter where username ='".$_COOKIE['coID']."'"));
 			foreach ($arrayData as $key => $value) { 
 			  $$key = $value; 
 			 }
@@ -886,13 +886,13 @@ $selectedC1 = $_REQUEST['cmbUrusan'];
 		$arrKondisi[] = "anggaran = '$this->jenisAnggaran'";
 		
 		
-		$grabAllSPD = mysql_query("select * from tabel_spd where tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran' group by k,l,m,n,o");
-		while($rows = mysql_fetch_array($grabAllSPD)){
+		$grabAllSPD = sqlQuery("select * from tabel_spd where tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran' group by k,l,m,n,o");
+		while($rows = sqlArray($grabAllSPD)){
 			foreach ($rows as $key => $value) { 
 				  $$key = $value; 
 			 }
 			 $concat = $k.".".$l.".".$m.".".$n.".".$o;
-			 if(mysql_num_rows(mysql_query("select * from tabel_spd where tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran' and concat(k,'.',l,'.',m,'.',n,'.',o) ='$concat' $kondisiSKPD")) == 0){
+			 if(sqlNumRow(sqlQuery("select * from tabel_spd where tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran' and concat(k,'.',l,'.',m,'.',n,'.',o) ='$concat' $kondisiSKPD")) == 0){
 				
 				$arrKondisi[] = "concat(k,'.',l,'.',m,'.',n,'.',o) !='$concat'";			 	
 			 }
@@ -966,27 +966,27 @@ function Laporan($xls =FALSE){
 			$Kondisi = " and ".$Kondisi;
 		}*/
 		$qry ="select * from tabel_spd where $Kondisi group by k,l,m,n,o";
-		$aqry = mysql_query($qry);
-		$getKuasapenggunaBarang = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'"));
+		$aqry = sqlQuery($qry);
+		$getKuasapenggunaBarang = sqlArray(sqlQuery("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'"));
 		$kuasaPenggunaBarang = $getKuasapenggunaBarang['nm_skpd'];		
 		
 		
 		//Get Id Awal Renja
 		
-		$getIdRenja = mysql_fetch_array(mysql_query("select min(id_anggaran) from view_renja where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and bk='$hublaBK' and ck='$hublaCK' and p='$hiddenP' and q='$hublaQ' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
+		$getIdRenja = sqlArray(sqlQuery("select min(id_anggaran) from view_renja where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and bk='$hublaBK' and ck='$hublaCK' and p='$hiddenP' and q='$hublaQ' and tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' "));
 		$idRenja = $getIdRenja['min(id_anggaran)'];
-		$getDetailRenja = mysql_fetch_array(mysql_query("select * from detail_renja where id_anggaran = '$idRenja'"));
-		$getUrusan = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='00'"));
+		$getDetailRenja = sqlArray(sqlQuery("select * from detail_renja where id_anggaran = '$idRenja'"));
+		$getUrusan = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='00'"));
 		$urusan = $getUrusan['nm_skpd'];
-		$getBidang = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='00'"));
+		$getBidang = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='00'"));
 		$bidang = $getBidang['nm_skpd'];
-		$getSKPD = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='00'"));
+		$getSKPD = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='00'"));
 		$skpd = $getSKPD['nm_skpd'];
-		$getSubUnit = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='$cmbUnit' and e1='$cmbSubUnit' "));
+		$getSubUnit = sqlArray(sqlQuery("select * from ref_skpd where c1='$cmbUrusan' and c='$cmbBidang' and d='$cmbSKPD' and e='$cmbUnit' and e1='$cmbSubUnit' "));
 		$subUnit = $getSubUnit['nm_skpd'];
-		$getProgram = mysql_fetch_array(mysql_query("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='0'"));
+		$getProgram = sqlArray(sqlQuery("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='0'"));
 		$program = $getProgram['nama'];
-		$getKegiatan = mysql_fetch_array(mysql_query("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='$hublaQ'"));
+		$getKegiatan = sqlArray(sqlQuery("select * from ref_program where bk='$hublaBK' and ck='$hublaCK' and dk='0' and p='$hublaP' and q='$hublaQ'"));
 		$kegiatan = $getKegiatan['nama'];
 				
 		
@@ -1137,35 +1137,35 @@ function Laporan($xls =FALSE){
 								
 									
 		";
-		/*$getTotal = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from view_dpa_2_2_1 where $Kondisi  "));
+		/*$getTotal = sqlArray(sqlQuery("select sum(jumlah_harga) from view_dpa_2_2_1 where $Kondisi  "));
 		$total = number_format($getTotal['sum(jumlah_harga)'],2,',','.');*/
 		$no = 1;
-		while($daqry = mysql_fetch_array($aqry)){
+		while($daqry = sqlArray($aqry)){
 			foreach ($daqry as $key => $value) { 
 				  $$key = $value; 
 			} 
 			
-			$nm_rekening = mysql_fetch_array(mysql_query("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
+			$nm_rekening = sqlArray(sqlQuery("select * from ref_rekening where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'"));
 			$nm_rekening = $nm_rekening['nm_rekening'];
-			$total = mysql_fetch_array(mysql_query("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $jan = mysql_fetch_array(mysql_query("select sum(alokasi_jan) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $feb = mysql_fetch_array(mysql_query("select sum(alokasi_feb) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $mar = mysql_fetch_array(mysql_query("select sum(alokasi_mar) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+			$total = sqlArray(sqlQuery("select sum(total) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $jan = sqlArray(sqlQuery("select sum(alokasi_jan) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $feb = sqlArray(sqlQuery("select sum(alokasi_feb) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $mar = sqlArray(sqlQuery("select sum(alokasi_mar) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		   $triwulan1 = $jan[0] + $feb[0] + $mar[0];
 		   
-		   $apr = mysql_fetch_array(mysql_query("select sum(alokasi_apr) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $mei = mysql_fetch_array(mysql_query("select sum(alokasi_mei) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $jun = mysql_fetch_array(mysql_query("select sum(alokasi_jun) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $apr = sqlArray(sqlQuery("select sum(alokasi_apr) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $mei = sqlArray(sqlQuery("select sum(alokasi_mei) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $jun = sqlArray(sqlQuery("select sum(alokasi_jun) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		   $triwulan2 = $apr[0] + $mei[0] + $jun[0];
 		   
-		   $jul = mysql_fetch_array(mysql_query("select sum(alokasi_jul) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $agu = mysql_fetch_array(mysql_query("select sum(alokasi_agu) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $sep = mysql_fetch_array(mysql_query("select sum(alokasi_sep) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $jul = sqlArray(sqlQuery("select sum(alokasi_jul) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $agu = sqlArray(sqlQuery("select sum(alokasi_agu) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $sep = sqlArray(sqlQuery("select sum(alokasi_sep) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
 		   $triwulan3 = $jul[0] + $agu[0] + $sep[0];
 		   
-		   $okt = mysql_fetch_array(mysql_query("select sum(alokasi_okt) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $nop = mysql_fetch_array(mysql_query("select sum(alokasi_nop) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
-		   $des = mysql_fetch_array(mysql_query("select sum(alokasi_des) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'")); 
+		   $okt = sqlArray(sqlQuery("select sum(alokasi_okt) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $nop = sqlArray(sqlQuery("select sum(alokasi_nop) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'"));
+		   $des = sqlArray(sqlQuery("select sum(alokasi_des) from $this->TblName where k='$k' and l='$l' and m='$m' and n='$n' and o ='$o'  and tahun ='$this->tahun' and anggaran ='$this->jenisAnggaran'")); 
 		   $triwulan4 = $okt[0] + $nop[0] + $des[0];
 			
 			if($_COOKIE['triwulan'] == '1'){
@@ -1301,9 +1301,9 @@ $alokasiDpa->username = $_COOKIE['coID'];
 
 if(empty($alokasiDpa->tahun)){
     
-	$get1 = mysql_fetch_array(mysql_query("select max(id_anggaran)  from view_dpa_2_2_1 "));
+	$get1 = sqlArray(sqlQuery("select max(id_anggaran)  from view_dpa_2_2_1 "));
 	$maxAnggaran = $get1['max(id_anggaran)'];
-	$get2 = mysql_fetch_array(mysql_query("select * from view_dpa_2_2_1 where id_anggaran = '$maxAnggaran'"));
+	$get2 = sqlArray(sqlQuery("select * from view_dpa_2_2_1 where id_anggaran = '$maxAnggaran'"));
 	/*$alokasiDpa->tahun = "select max(id_anggaran) as max from view_dpa_2_2_1 where nama_modul = 'alokasiDpa'";*/
 	$alokasiDpa->tahun  = $get2['tahun'];
 	$alokasiDpa->jenisAnggaran = $get2['jenis_anggaran'];
@@ -1313,7 +1313,7 @@ if(empty($alokasiDpa->tahun)){
 	
 	
 	$idtahapTerakhir = $get2['id_tahap'];
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
 	$alokasiDpa->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$arrayMasa = explode("-",$namaTahap['tanggal_mulai']);
 	$lastTanggalMulai = $arrayMasa[2]."-".$arrayMasa[1]."-".$arrayMasa[0];
@@ -1324,10 +1324,10 @@ if(empty($alokasiDpa->tahun)){
 	$arrayHasil =  VulnWalkerLASTTahap_v2();
 	$alokasiDpa->currentTahap = $arrayHasil['currentTahap'];
 }else{
-	$getCurrenttahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$alokasiDpa->idTahap'"));
+	$getCurrenttahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$alokasiDpa->idTahap'"));
 	$alokasiDpa->currentTahap = $getCurrenttahap['nama_tahap'];
 	
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$alokasiDpa->idTahap'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$alokasiDpa->idTahap'"));
 	$alokasiDpa->jenisFormTerakhir =  $namaTahap['jenis_form_modul'];
 	$alokasiDpa->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$arrayMasa = explode("-",$namaTahap['tanggal_mulai']);

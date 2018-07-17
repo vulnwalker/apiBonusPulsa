@@ -62,7 +62,7 @@ class CBPBObj  extends DaftarObj2{
 				         set "." hrg='$hrg_supplier',
 						 qty='$qty_supplier'". 
 						 "WHERE Id='".$idplh."'";	$cek .= $aqry;
-				mysql_query($aqry);			
+				sqlQuery($aqry);			
 				
 				}
 			}elseif($fmST == 1){						
@@ -141,11 +141,11 @@ class CBPBObj  extends DaftarObj2{
 			for($i = 0; $i<count($arrpo); $i++){ 
 
 				$get = "select * from ref_obat where b = '".$arrpo[$i]."' ";$cek.='pilih obat = '.$get;
-				//$p = mysql_fetch_array(mysql_query("SELECT * from ref_penjamin where Id='".$penjamin."'"));$cek .= $p;
+				//$p = sqlArray(sqlQuery("SELECT * from ref_penjamin where Id='".$penjamin."'"));$cek .= $p;
 			
-				$rss = mysql_query($get);
+				$rss = sqlQuery($get);
 
-				while($row=mysql_fetch_array($rss)){
+				while($row=sqlArray($rss)){
 					
 					//$harga_obat = $row['hna_baru'];//-($row['harga_jual']*$p['indexobat']/100); $cek.= $harga_obatdis;
 					//$$qty_sedia = $p['jml'];
@@ -165,7 +165,7 @@ class CBPBObj  extends DaftarObj2{
 			else {
 			$querypr = "INSERT INTO penerimaan_obat_d(ref_idterima,kd_obat,qty,hrg,konv_kemasan,hna_baru_prev) VALUES".$valuestr;$cek.='Query prr='.$querypr;
 			}
-			mysql_query($querypr);
+			sqlQuery($querypr);
 		break;
 	   }
 	   	
@@ -176,7 +176,7 @@ class CBPBObj  extends DaftarObj2{
 			$idr = $_REQUEST['idr'];
 			$jml = $_REQUEST['jml'];
 			$aqry1 = "SELECT * FROM perencanaan_obat_d WHERE Id=$idr "; $cek .= $aqry1;
-			$dt=mysql_fetch_array(mysql_query($aqry1));
+			$dt=sqlArray(sqlQuery($aqry1));
 			if($err=='' && $jml>$dt['qty_rencana'] ) 
 			{
 				$err= 'Jumlah yang disetujui tidak boleh lebih dari Qty Rencana !!';
@@ -186,7 +186,7 @@ class CBPBObj  extends DaftarObj2{
 				$aqry = "UPDATE perencanaan_obat_d
 				         set "." qty_disetujui='$jml'". 
 						 "WHERE Id='".$idr."'";	$cek .= $aqry;
-				mysql_query($aqry);	
+				sqlQuery($aqry);	
 			}
 		break;
 	   }	    
@@ -240,7 +240,7 @@ class CBPBObj  extends DaftarObj2{
 		//get data 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from v1_penerimaandetail where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm1($dt);			
 		
 		
@@ -411,11 +411,11 @@ class CBPBObj  extends DaftarObj2{
 	 	$qty_disetujui=$isi['qty_rencana'];
 	 }
 	 $hrg_beli=$isi['hrg']*$isi['konv_kemasan'];
-	 $fg=mysql_fetch_array(mysql_query("select f, g, nama_barang from ref_barang_persediaan where f =".$isi['f']." and g=".$isi['g'].""));
-	 $h=mysql_fetch_array(mysql_query("select h, nama_merk from ref_merk_persediaan where h=".$isi['h'].""));	 
-	 $i=mysql_fetch_array(mysql_query("select i, nama_type from ref_type_persediaan where i=".$isi['i'].""));
-	 $j=mysql_fetch_array(mysql_query("select j, nama_spec from ref_spec_persediaan where j=".$isi['j'].""));	 	 	 
-	 $s=mysql_fetch_array(mysql_query("select Id, nama_satuan from ref_satuan_persediaan where Id=".$isi['satuan'].""));	 	 	 
+	 $fg=sqlArray(sqlQuery("select f, g, nama_barang from ref_barang_persediaan where f =".$isi['f']." and g=".$isi['g'].""));
+	 $h=sqlArray(sqlQuery("select h, nama_merk from ref_merk_persediaan where h=".$isi['h'].""));	 
+	 $i=sqlArray(sqlQuery("select i, nama_type from ref_type_persediaan where i=".$isi['i'].""));
+	 $j=sqlArray(sqlQuery("select j, nama_spec from ref_spec_persediaan where j=".$isi['j'].""));	 	 	 
+	 $s=sqlArray(sqlQuery("select Id, nama_satuan from ref_satuan_persediaan where Id=".$isi['satuan'].""));	 	 	 
 	$spesifikasi=$h['nama_merk'].' / '.$i['nama_type'].' / '.$j['nama_spec'];
 	 
 	 $Koloms = array();

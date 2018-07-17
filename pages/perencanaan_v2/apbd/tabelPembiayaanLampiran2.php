@@ -152,7 +152,7 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 		$e=$kode_skpd[2];	
 		$e1=$kode_skpd[3];
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where c='$c' and d='$d' and e='$e' and e1='$e1' ")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! SKPD Sudah ada di Buku Induk!';}
@@ -191,7 +191,7 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 			$dt['kode_barang']=$fmBIDANG.'.'.$fmKELOMPOK.'.'.$fmSUBKELOMPOK.'.'.$fmSUBSUBKELOMPOK.'.'.'000';
 		}	
 		
-		$ck=mysql_fetch_array(mysql_query("select * from ref_skpd where concat(f,'.',g,'.',h,'.',i,'.',j)='".$dt['kode_barang']."' order by persen1 desc limit 0,1"));
+		$ck=sqlArray(sqlQuery("select * from ref_skpd where concat(f,'.',g,'.',h,'.',i,'.',j)='".$dt['kode_barang']."' order by persen1 desc limit 0,1"));
 		if($ck['Id'] != ''){
 			$dt['persen1'] = $ck['persen2'];
 			$dt['readonly'] = 'readonly';
@@ -226,7 +226,7 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 		$this->form_fmST = 1;
 		//query ambil data ref_tambah_manfaat
 		$aqry = "select * from ref_skpd where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'];
 		$dt['readonly'] = '';
 		$fm = $this->setForm($dt);
@@ -244,7 +244,7 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_sumber_dana WHERE nama= '".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -314,7 +314,7 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 			$kondisiFilter = $kondisiFilter." and status_validasi ='1' ";
 		}
 	}else{
-		$getIdTahapTerakhir = mysql_fetch_array(mysql_query("select max(id_tahap) from tabel_anggaran where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and nama_modul = 'RKA-SKPD'"));
+		$getIdTahapTerakhir = sqlArray(sqlQuery("select max(id_tahap) from tabel_anggaran where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and nama_modul = 'RKA-SKPD'"));
 		$idTahapTerakhir = $getIdTahapTerakhir['max(id_tahap)'];
 		$kondisiFilter = " and id_tahap = '$idTahapTerakhir' ";
 		if($this->jenisFormTerakhir == "VALIDASI"){
@@ -323,19 +323,19 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 	}
 	 $Koloms = array();
 	 $Koloms[] = array('align="left"', $c1.".".$c.".".$d );
-	 $getNamaSkpd = mysql_fetch_array(mysql_query("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' "));
+	 $getNamaSkpd = sqlArray(sqlQuery("select * from ref_skpd where c1='$c1' and c='$c' and d='$d' "));
 	
 	 $Koloms[] = array('align="left"',$getNamaSkpd['nm_skpd']);
 	 if($d =='00'){
-	 	$getPenerimaan = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c'  and k='6' and l='1' $kondisiFilter  "));
+	 	$getPenerimaan = sqlArray(sqlQuery("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c'  and k='6' and l='1' $kondisiFilter  "));
 	 	$Koloms[] = array('align="right"',number_format($getPenerimaan['sum(jumlah_harga)'],2,',','.'));
-		$getPengeluaran = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c'  and k='6' and l='2' $kondisiFilter  "));
+		$getPengeluaran = sqlArray(sqlQuery("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c'  and k='6' and l='2' $kondisiFilter  "));
 	 	$Koloms[] = array('align="right"',number_format($getPengeluaran['sum(jumlah_harga)'],2,',','.'));
 		$Koloms[] = array('align="right"',number_format( $getPenerimaan['sum(jumlah_harga)'] - $getPengeluaran['sum(jumlah_harga)'],2,',','.'));
 	 }else{
-	 	$getPenerimaan = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c' and d='$d' and k='6' and l='1' $kondisiFilter  "));
+	 	$getPenerimaan = sqlArray(sqlQuery("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c' and d='$d' and k='6' and l='1' $kondisiFilter  "));
 	 	$Koloms[] = array('align="right"',number_format($getPenerimaan['sum(jumlah_harga)'],2,',','.'));
-		$getPengeluaran = mysql_fetch_array(mysql_query("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c' and d='$d' and k='6' and l='2' $kondisiFilter  "));
+		$getPengeluaran = sqlArray(sqlQuery("select sum(jumlah_harga) from tabel_anggaran where  rincian_perhitungan !='' and c1='$c1' and c='$c' and d='$d' and k='6' and l='2' $kondisiFilter  "));
 	 	$Koloms[] = array('align="right"',number_format($getPengeluaran['sum(jumlah_harga)'],2,',','.'));
 		$Koloms[] = array('align="right"',number_format( $getPenerimaan['sum(jumlah_harga)'] - $getPengeluaran['sum(jumlah_harga)'],2,',','.'));
 	 }
@@ -362,8 +362,8 @@ class tabelPembiayaanLampiran2_v2Obj  extends DaftarObj2{
 		//kondisi -----------------------------------
 		$arrKondisi = array();	
  		$arrKondisi[] = "d !='00'";
-		$getAllD = mysql_query("select *  from tabel_anggaran where  rincian_perhitungan !=''  ");
-		while($rows = mysql_fetch_array($getAllD)){
+		$getAllD = sqlQuery("select *  from tabel_anggaran where  rincian_perhitungan !=''  ");
+		while($rows = sqlArray($getAllD)){
 			foreach ($rows as $key => $value) { 
 		  			$$key = $value; 
 			}
@@ -405,9 +405,9 @@ $tabelPembiayaanLampiran2_v2->idTahap = $idTahap;
 
 if(empty($tabelPembiayaanLampiran2_v2->tahun)){
     
-	$get1 = mysql_fetch_array(mysql_query("select max(id_anggaran)  from view_r_apbd "));
+	$get1 = sqlArray(sqlQuery("select max(id_anggaran)  from view_r_apbd "));
 	$maxAnggaran = $get1['max(id_anggaran)'];
-	$get2 = mysql_fetch_array(mysql_query("select * from view_r_apbd where id_anggaran = '$maxAnggaran'"));
+	$get2 = sqlArray(sqlQuery("select * from view_r_apbd where id_anggaran = '$maxAnggaran'"));
 	/*$tabelPembiayaanLampiran2_v2->tahun = "select max(id_anggaran) as max from view_r_apbd where nama_modul = 'apbd'";*/
 	$tabelPembiayaanLampiran2_v2->tahun  = $get2['tahun'];
 	$tabelPembiayaanLampiran2_v2->jenisAnggaran = $get2['jenis_anggaran'];
@@ -417,7 +417,7 @@ if(empty($tabelPembiayaanLampiran2_v2->tahun)){
 	
 	
 	$idtahapTerakhir = $get2['id_tahap'];
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
 	$tabelPembiayaanLampiran2_v2->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$tabelPembiayaanLampiran2_v2->jenisFormTerakhir =  $namaTahap['jenis_form_modul'];
 	$tabelPembiayaanLampiran2_v2->noUrutTerakhirapbd = $namaTahap['no_urut'];
@@ -430,10 +430,10 @@ if(empty($tabelPembiayaanLampiran2_v2->tahun)){
 	$arrayHasil =  VulnWalkerLASTTahap_v2();
 	$tabelPembiayaanLampiran2_v2->currentTahap = $arrayHasil['currentTahap'];
 }else{
-	$getCurrenttahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$tabelPembiayaanLampiran2_v2->idTahap'"));
+	$getCurrenttahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$tabelPembiayaanLampiran2_v2->idTahap'"));
 	$tabelPembiayaanLampiran2_v2->currentTahap = $getCurrenttahap['nama_tahap'];
 	
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$tabelPembiayaanLampiran2_v2->idTahap'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$tabelPembiayaanLampiran2_v2->idTahap'"));
 	$tabelPembiayaanLampiran2_v2->jenisFormTerakhir =  $namaTahap['jenis_form_modul'];
 	$tabelPembiayaanLampiran2_v2->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$tabelPembiayaanLampiran2_v2->noUrutTerakhirapbd = $namaTahap['no_urut'];

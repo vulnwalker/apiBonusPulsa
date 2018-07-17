@@ -82,13 +82,13 @@ class refurusanObj  extends DaftarObj2{
  	 if($err=='' && $nama_urusan =='' ) $err= 'Nama Urusan belum diisi';	 	 	 	 	 
 	 $kondisi1=" concat(bk,ck,dk)='".$bk.$ck.$dk."' ";$cek.=$kondisi1;
 			if($fmST == 0){ //input ref_urusan
-			$ck_urusan = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM ref_urusan WHERE $kondisi1 "));
+			$ck_urusan = sqlArray(sqlQuery("SELECT count(*) as cnt FROM ref_urusan WHERE $kondisi1 "));
 				if($ck_urusan['cnt']>0 && $err=="") $err="Kode Urusan Sudah Ada!";
 		
 				if($err==''){ 
 					$aqry1 = "INSERT into ref_urusan (bk,ck,dk,nm_urusan,stpakai)
 							 "."values('$bk','$ck','$dk','$nama_urusan',0)";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					if($qry==FALSE) $err="Gagal menyimpan Urusan";
 							
 				}
@@ -99,7 +99,7 @@ class refurusanObj  extends DaftarObj2{
 							 " bk = '$bk',ck = '$ck',dk = '$dk',".
 							 " nm_urusan = '$nama_urusan'".
 					 		 "WHERE concat(bk,ck,dk)='".$oldbk.$oldck.$olddk."'";	$cek .= $aqry2;
-					$qry = mysql_query($aqry2);
+					$qry = sqlQuery($aqry2);
 					if($qry==FALSE) $err="Gagal Edit Urusan";							
 				}
 			}
@@ -153,7 +153,7 @@ class refurusanObj  extends DaftarObj2{
 		$dk=$kode_urusan[2];
 		
 		//query ambil data ref_urusan
-		$get = mysql_fetch_array( mysql_query("select * from ref_urusan where bk=$bk and ck=$ck and dk=$dk"));
+		$get = sqlArray( sqlQuery("select * from ref_urusan where bk=$bk and ck=$ck and dk=$dk"));
 		$kode_urusan=$get['bk'].'.'.$get['ck'].'.'.$get['dk'];
 		
 		$content = array('kode_urusan'=>$kode_urusan, 'nama_urusan'=>$get['nm_urusan']);	
@@ -207,7 +207,7 @@ class refurusanObj  extends DaftarObj2{
 		$Kondisi = join(' and ',$arrKondisi);
 				
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select * from ref_urusan where ".$Kondisi." and stpakai=1")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! Urusan Sudah Dipakai!';}
@@ -245,7 +245,7 @@ class refurusanObj  extends DaftarObj2{
 		$dk=$kode[2]; 
 		//query ambil data ref_urusan
 		$aqry = "select * from ref_urusan where concat(bk,ck,dk)='".$bk.$ck.$dk."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$fm = $this->setForm($dt);
 		

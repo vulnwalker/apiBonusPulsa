@@ -106,23 +106,23 @@ class popupBarangPemeliharaan_v3Obj  extends DaftarObj2{
 		}
 		
 		//query ambil data ref_program
-		$get = mysql_fetch_array( mysql_query("select * from ref_barang_v3 where   f=$f and g=$g and h=$h and i=$i and j=$j"));
+		$get = sqlArray( sqlQuery("select * from ref_barang_v3 where   f=$f and g=$g and h=$h and i=$i and j=$j"));
 		$kode_barang=$get['f'].'.'.$get['g'].'.'.$get['h'].'.'.$get['i'].'.'.$get['j'];
 		
 
 		 
 		 $concat = $c1.".".$c.".".$d.".".$e.".".$e1.".".$f.".".$g.".".$h.".".$i.".".$j ; 
-         $getKebutuhanMaksimal = mysql_fetch_array(mysql_query("select * from ref_std_kebutuhan_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f1,'.',f2,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
+         $getKebutuhanMaksimal = sqlArray(sqlQuery("select * from ref_std_kebutuhan_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f1,'.',f2,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
 		 
 		 
-		 $getKebutuhanOptimal = mysql_fetch_array(mysql_query("select sum(jml_barang) as kebutuhanOptimal from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and (kondisi = '1' or kondisi = '2' or kondisi = '3') "));	
+		 $getKebutuhanOptimal = sqlArray(sqlQuery("select sum(jml_barang) as kebutuhanOptimal from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and (kondisi = '1' or kondisi = '2' or kondisi = '3') "));	
 		 $kebutuhanOptimal = $getKebutuhanOptimal['kebutuhanOptimal'];		
 		 
-		 $getKondisiBaik = mysql_fetch_array(mysql_query("select sum(jml_barang) as baik from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and kondisi = '1'" ));		
+		 $getKondisiBaik = sqlArray(sqlQuery("select sum(jml_barang) as baik from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and kondisi = '1'" ));		
 		 $baik = $getKondisiBaik['baik'];
-		 $getKondisiKurangBaik = mysql_fetch_array(mysql_query("select sum(jml_barang) as kurangBaik from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and kondisi = '2'" ));		
+		 $getKondisiKurangBaik = sqlArray(sqlQuery("select sum(jml_barang) as kurangBaik from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and kondisi = '2'" ));		
 		 $kurangBaik = $getKondisiKurangBaik['kurangBaik'];
-		 $getKondisiRusakBerat = mysql_fetch_array(mysql_query("select sum(jml_barang) as rusakBerat from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and kondisi = '3'" ));		
+		 $getKondisiRusakBerat = sqlArray(sqlQuery("select sum(jml_barang) as rusakBerat from buku_induk_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat' and status_barang = '1' and kondisi = '3'" ));		
 		 $rusakBerat = $getKondisiRusakBerat['rusakBerat'];
 		 
 		 $content = array('kodeBarang'=>$kode_barang, 'namaBarang'=>$get['nm_barang'],'satuanBarang'=>$get['satuan'] , 'jumlah' =>$kebutuhanOptimal, "baik"=> $baik, "kurangBaik" => $kurangBaik, "rusakBerat" => $rusakBerat );	
@@ -225,7 +225,7 @@ class popupBarangPemeliharaan_v3Obj  extends DaftarObj2{
 		$errmsg = "ada kode barang tidak bisa di edit/hapus, karena masih ada rinciannya !";
 		}*/
 /*		//&& 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk_v3 where f='$f' and g='$g' and h='$h' and i='$i' and j='$j' ")
 				) >0*/
 /*		if($errmsg=='' )
@@ -297,7 +297,7 @@ class popupBarangPemeliharaan_v3Obj  extends DaftarObj2{
 		$bulan=date('Y-m-')."1";
 		//query ambil data ref_barang_v3
 		$aqry = "select * from ref_barang_v3 where concat(f1,'.',f2,'.',f,'.',g,'.',h,'.',i,'.',j)='".$f1.'.'.$f2.'.'.$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 			
 		//$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);
@@ -336,32 +336,32 @@ class popupBarangPemeliharaan_v3Obj  extends DaftarObj2{
 		$i = $dt['i'];
 		$j = $dt['j'];
 		 $aqry_at = "select * from ref_jurnal where ka='".$dt['ka']."' and kb='".$dt['kb']."' and kc='".$dt['kc']."' and kd='".$dt['kd']."' and ke='".$dt['ke']."' and kf='".$dt['kf']."' ";
-	 $na_at=mysql_fetch_array(mysql_query($aqry_at));
+	 $na_at=sqlArray(sqlQuery($aqry_at));
 	 
 	 $kode_account_at=$dt['ka'].'.'.$dt['kb'].'.'.$dt['kc'].'.'.$dt['kd'].'.'.$dt['ke'].'.'.$dt['kf'];	 
 	 $aqry_bm = "select * from ref_jurnal where ka='".$dt['m1']."' and kb='".$dt['m2']."' and kc='".$dt['m3']."' and kd='".$dt['m4']."' and ke='".$dt['m5']."' and kf='".$dt['m6']."' ";
-	 $na_bm=mysql_fetch_array(mysql_query($aqry_bm));
+	 $na_bm=sqlArray(sqlQuery($aqry_bm));
 	 $kode_account_bm=$dt['m1'].'.'.$dt['m2'].'.'.$dt['m3'].'.'.$dt['m4'].'.'.$dt['m5'].'.'.$dt['m6'];
 	 
 	 $aqry_ap = "select * from ref_jurnal where ka='".$dt['l1']."' and kb='".$dt['l2']."' and kc='".$dt['l3']."' and kd='".$dt['l4']."' and ke='".$dt['l5']."' and kf='".$dt['l6']."' ";
-	 $na_ap=mysql_fetch_array(mysql_query($aqry_ap));
+	 $na_ap=sqlArray(sqlQuery($aqry_ap));
 	 $kode_account_ap=$dt['l1'].'.'.$dt['l2'].'.'.$dt['l3'].'.'.$dt['l4'].'.'.$dt['l5'].'.'.$dt['l6'];
 	 
 	 //vw
 	 $query_rek_bm = "select * from ref_rekening where k='".$dt['k11']."' and l='".$dt['l11']."' and m='".$dt['m11']."' and n='".$dt['n11']."' and o='".$dt['o11']."' ";
-	 $na_rek_bm = mysql_fetch_array(mysql_query($query_rek_bm));
+	 $na_rek_bm = sqlArray(sqlQuery($query_rek_bm));
 	 $kode_rek_bm=$dt['k11'].'.'.$dt['l11'].'.'.$dt['m11'].'.'.$dt['n11'].'.'.$dt['o11'];
 	 
 	 $query_rek_bp = "select * from ref_rekening where k='".$dt['k12']."' and l='".$dt['l12']."' and m='".$dt['m12']."' and n='".$dt['n12']."' and o='".$dt['o12']."' ";
-	 $na_rek_bp = mysql_fetch_array(mysql_query($query_rek_bp));
+	 $na_rek_bp = sqlArray(sqlQuery($query_rek_bp));
 	 $kode_rek_bp=$dt['k12'].'.'.$dt['l12'].'.'.$dt['m12'].'.'.$dt['n12'].'.'.$dt['o12'];
 	 
 	 $query_akun_pemeliharaan = "select * from ref_jurnal where ka='".$dt['o1']."' and kb='".$dt['o2']."' and kc='".$dt['o3']."' and kd='".$dt['o4']."' and ke='".$dt['o5']."' and kf='".$dt['o6']."' ";
-	 $na_akun_pemeliharaan=mysql_fetch_array(mysql_query($query_akun_pemeliharaan));
+	 $na_akun_pemeliharaan=sqlArray(sqlQuery($query_akun_pemeliharaan));
 	 $kode_account_pemeliharaan=$dt['o1'].'.'.$dt['o2'].'.'.$dt['o3'].'.'.$dt['o4'].'.'.$dt['o5'].'.'.$dt['o6'];
 	 
 	 $query_akun_beban_penyusutan = "select * from ref_jurnal where ka='".$dt['n1']."' and kb='".$dt['n2']."' and kc='".$dt['n3']."' and kd='".$dt['n4']."' and ke='".$dt['n5']."' and kf='".$dt['n6']."' ";
-	 $na_akun_beban_penyusutan=mysql_fetch_array(mysql_query($query_akun_beban_penyusutan));
+	 $na_akun_beban_penyusutan=sqlArray(sqlQuery($query_akun_beban_penyusutan));
 	 $kode_account_beban_penyusutan=$dt['n1'].'.'.$dt['n2'].'.'.$dt['n3'].'.'.$dt['n4'].'.'.$dt['n5'].'.'.$dt['n6'];
 		//$readonly='readonly';
 	  }
@@ -526,7 +526,7 @@ class popupBarangPemeliharaan_v3Obj  extends DaftarObj2{
 	 
 	 $kode_barang= $isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
 	 $concat = $isi['c1'].".".$isi['c'].".".$isi['d'].".".$isi['e'].".".$isi['e1'].".".$isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
-	 $getMinID = mysql_fetch_array(mysql_query("select min(Id) as min from view_barang_rkbmd_pemeliharaan_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
+	 $getMinID = sqlArray(sqlQuery("select min(Id) as min from view_barang_rkbmd_pemeliharaan_v3 where concat(c1,'.',c,'.',d,'.',e,'.',e1,'.',f,'.',g,'.',h,'.',i,'.',j) = '$concat'"));
 	 if($isi['Id'] == $getMinID['min']){
 	 	$Koloms = array();
 		 $Koloms[] = array('align="center" width="20"', $no.'.' );

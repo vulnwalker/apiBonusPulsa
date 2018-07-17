@@ -51,7 +51,7 @@ if($Act == "Simpan")
 		else
 		{
 			$CekKon = $fmKODEPENGGUNA;
-			$Cek = mysql_num_rows(mysql_query("select * from admin where uid='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from admin where uid='$CekKon' "));
 			if($Cek && $BARU=="1")
 			{
 				$Info = "<script>alert('Kode $fmKODEPENGGUNA sudah ada, data tidak disimpan');</script>";
@@ -62,7 +62,7 @@ if($Act == "Simpan")
 				if($BARU=="1")
 				{
 					$PWD = md5($fmSANDIPENGGUNA);
-					$Simpan = mysql_query("insert into admin (
+					$Simpan = sqlQuery("insert into admin (
 				uid,password,nama,level,`group`,modul01,modul02,modul03,modul04,modul05,modul06,modul07,modul08,modul09,modul10,modul11,modul12,modul13,modulref,moduladm,status)values(
 				'$fmKODEPENGGUNA','$PWD','$fmNAMAPENGGUNA','$fmLEVELPENGGUNA','$fmGROUPPENGGUNA',
 				'$fmMODUL01','$fmMODUL02','$fmMODUL03','$fmMODUL04','$fmMODUL05','$fmMODUL06',
@@ -72,7 +72,7 @@ if($Act == "Simpan")
 				if($BARU=="0")
 				{
 					$PWD = $fmSANDIPENGGUNA == $SANDI2 ? $fmSANDIPENGGUNA:md5($fmSANDIPENGGUNA);
-					$Simpan = mysql_query("update admin set 
+					$Simpan = sqlQuery("update admin set 
 					uid='$fmKODEPENGGUNA',
 					password='$PWD',
 						nama='$fmNAMAPENGGUNA',
@@ -117,7 +117,7 @@ if($Act == "Hapus")
 	for ($i=0;$i<count($fmID);$i++)
 	{
 		$Kondisi = "uid='{$fmID[$i]}'";
-		$Hapus = mysql_query("delete from admin where $Kondisi limit 1");
+		$Hapus = sqlQuery("delete from admin where $Kondisi limit 1");
 	}
 	if($Hapus)
 	{
@@ -137,8 +137,8 @@ if($Act == "Edit")
 	{
 		$fmID = $cidSKPD[0];
 		$Kondisi = "uid = '$fmID'";
-		$Qry = mysql_query("select * from admin where $Kondisi limit 1");
-		while($isi=mysql_fetch_array($Qry))
+		$Qry = sqlQuery("select * from admin where $Kondisi limit 1");
+		while($isi=sqlArray($Qry))
 		{
 			$fmKODEPENGGUNA = $isi['uid'];
 			$fmNAMAPENGGUNA = $isi['nama'];
@@ -222,16 +222,16 @@ $ListSUBUNIT = cmbQuery1("fmSUBUNIT",$fmSUBUNIT,"select e,nm_skpd from ref_skpd 
 
 
 $NmHEAD = "NAMA PENGGUNA";
-$Qry = mysql_query("select * from admin where $Kondisi order by `group`");
+$Qry = sqlQuery("select * from admin where $Kondisi order by `group`");
 //echo "select * from admin where $Kondisi order by `group`";
-$jmlDataSKPD = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from admin where $Kondisi order by `group` $LimitHalPENGGUNA ");
+$jmlDataSKPD = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from admin where $Kondisi order by `group` $LimitHalPENGGUNA ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalPENGGUNA*1) - 1);
 $cb=0;
 $jmlTampilSKPD = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilSKPD++;

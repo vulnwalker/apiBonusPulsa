@@ -19,10 +19,10 @@ $KondisiD = $fmUNIT == "00" ? "":" and pengeluaran.d='$fmUNIT' ";
 $KondisiE = $fmSUBUNIT == "00" ? "":" and pengeluaran.e='$fmSUBUNIT' ";
 $Kondisi = "pengeluaran.a='{$Main->Provinsi[0]}' and pengeluaran.b='$fmWIL' and pengeluaran.c='$fmSKPD' $KondisiD $KondisiE and pengeluaran.tahun='$fmTAHUNANGGARAN'";
 
-$Qry = mysql_query("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang on concat(pengeluaran.f,pengeluaran.g,pengeluaran.h,pengeluaran.i,pengeluaran.j) = concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
-$jmlData = mysql_num_rows($Qry);
+$Qry = sqlQuery("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang on concat(pengeluaran.f,pengeluaran.g,pengeluaran.h,pengeluaran.i,pengeluaran.j) = concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
+$jmlData = sqlNumRow($Qry);
 
-$Qry = mysql_query("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang on concat(pengeluaran.f,pengeluaran.g,pengeluaran.h,pengeluaran.i,pengeluaran.j) = concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHal");
+$Qry = sqlQuery("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang on concat(pengeluaran.f,pengeluaran.g,pengeluaran.h,pengeluaran.i,pengeluaran.j) = concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHal");
 
 // copy untuk kondisi jumlah total
 $KondisiTotal = $Kondisi;
@@ -35,9 +35,9 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(jml_harga) as total from pengeluaran where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total from pengeluaran where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -45,20 +45,20 @@ else
 {$jmlTotalHarga=0;}
 // copy untuk kondisi jumlah total sampai sini
 
-//$jmlTotalHarga = mysql_query("select sum(pengeluaran.jml_harga) as total from pengeluaran");
+//$jmlTotalHarga = sqlQuery("select sum(pengeluaran.jml_harga) as total from pengeluaran");
 
 $jmlTotalHargaDisplay = 0;
 $ListKeluarBarang = "";
 
 $no=$Main->PagePerHal * (($HalKeluar*1) - 1);
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$no++;
 	$jmlTotalHargaDisplay += $isi['jml_harga'];
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
 	$kdGudang = $isi['c'].$isi['d'].$isi['e'].$isi['id_gudang'];
-	$nmGudang = mysql_fetch_array(mysql_query("select * from ref_gudang where concat(c,d,e,id_gudang)='$kdGudang'"));
+	$nmGudang = sqlArray(sqlQuery("select * from ref_gudang where concat(c,d,e,id_gudang)='$kdGudang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListKeluarBarang .= "
 	

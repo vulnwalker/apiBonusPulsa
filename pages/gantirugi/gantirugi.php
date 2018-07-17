@@ -93,10 +93,10 @@ class gantirugiObj  extends DaftarObj2{
 		if ($no_usul==''){
 			$err="No Usul Tidak Boleh Kosong ";
 		}
-		if(mysql_fetch_array(mysql_query("select id_bukuinduk from gantirugi where id_bukuinduk='$id_bukuinduk'"))){
+		if(sqlArray(sqlQuery("select id_bukuinduk from gantirugi where id_bukuinduk='$id_bukuinduk'"))){
 		//$err="Data Sudah Diusulkan 1 ";			
 		}
-		$bi = mysql_fetch_array(mysql_query("select idawal from buku_induk where id='$id_bukuinduk'"));
+		$bi = sqlArray(sqlQuery("select idawal from buku_induk where id='$id_bukuinduk'"));
 		$idbi_awal = $bi['idawal'];
 		//------------------------------------------------------
 		$nilai_buku = getNilaiBuku($id_bukuinduk,$tgl_usul,0);
@@ -115,10 +115,10 @@ class gantirugiObj  extends DaftarObj2{
 					('$id_bukuinduk','$idbi_awal','".$Main->DEF_KEPEMILIKAN."','".$Main->DEF_PROPINSI."','".$Main->DEF_WILAYAH."',
 					'$c','$d','$e','$e1','$f','$g','$h','$i','$j','$no_usul','$tgl_usul','$tahun','$tahun','$noreg','$kepada_nama',
 					'$kepada_alamat','$uraian','$ket','$tgl_gantirugi','$stat','$uid','$tgl_update','$harga_perolehan',$vfield)";$cek.=$aqry;
-				$qry=mysql_query($aqry);				
+				$qry=sqlQuery($aqry);				
 				if($qry) {
 					$aqry1="Update buku_induk set stusul='4' where id='$id_bukuinduk' "; $cek.=$aqry1;
-					$qry1=mysql_query($aqry1);	
+					$qry1=sqlQuery($aqry1);	
 					if($qry1==FALSE) $err="Gagal Simpan data ".mysql_error();
 				}else{
 					$err="Gagal Simpan data ".mysql_error();
@@ -142,7 +142,7 @@ class gantirugiObj  extends DaftarObj2{
 				tgl_gantirugi='$tgl_gantirugi',
 				jml_harga='$harga_perolehan'
 				where id='$idplh'";$cek.=$aqry;
-				$qry=mysql_query($aqry);
+				$qry=sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal Simpan data ".mysql_error();				
 			}
 		}
@@ -165,8 +165,8 @@ class gantirugiObj  extends DaftarObj2{
 		if($err=='' && $ids[0] == '') $err = 'Barang belum dipilih!';
 		
 		if($err==''){
-			$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$ids[0]."'")) ;
-			$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j)='". $bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j']."'")) ;
+			$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$ids[0]."'")) ;
+			$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j)='". $bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j']."'")) ;
 			$nilai_buku = getNilaiBuku($bi['id'],$tgl,0);
 		
 			$content->fmIDBARANG = $bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j'] ;// '1';
@@ -210,14 +210,14 @@ class gantirugiObj  extends DaftarObj2{
 		
 		
 		//=======================================================================================
-		$dtTGR=mysql_fetch_array(mysql_query("select * from gantirugi where id='$idplh'"));
+		$dtTGR=sqlArray(sqlQuery("select * from gantirugi where id='$idplh'"));
 		//$tgl_gantirugi=explode('-',$dtTGR['tgl_gantirugi']);
 		$tgl_gantirugi = $_REQUEST['tgl_gantirugi'];
 		$tgl_gantirugi_arr=explode('-', $tgl_gantirugi);
 		$tgl_gantirugi_thn=$tgl_gantirugi_arr['0'];
 		$query_susut = "select count(*)as jml_susut from penyusutan where idbi='$id_bukuinduk' and tahun>='$tgl_gantirugi_thn'";
-		$get_susut = mysql_fetch_array(mysql_query($query_susut));
-		$dtbi = mysql_fetch_array(mysql_query("select c,d,e,e1,staset from buku_induk where id='$id_bukuinduk'"));
+		$get_susut = sqlArray(sqlQuery($query_susut));
+		$dtbi = sqlArray(sqlQuery("select c,d,e,e1,staset from buku_induk where id='$id_bukuinduk'"));
 		$nilai_buku = getNilaiBuku($id_bukuinduk,$tgl_sk,0);
 		$nilai_susut = getAkumPenyusutan($id_bukuinduk,$tgl_sk);
 		//if ($tgl_gantirugi_thn<=$Main->TAHUN_CLOSING){
@@ -250,10 +250,10 @@ class gantirugiObj  extends DaftarObj2{
 			}
 			
 			$qry_transaksi="select tgl_buku from t_transaksi where idawal='$id_bukuinduk' and jns_trans2='9' and tgl_buku>'$tgl_sk' order by tgl_buku desc limit 1";
-			$cnt = mysql_num_rows(mysql_query($qry_transaksi));
+			$cnt = sqlNumRow(sqlQuery($qry_transaksi));
 			if($cnt>0)$err = 'Gagal Ketetapan, karena ada transaksi pemeliharaan setelahnya !';
 			$qry_jurnal="select tgl_buku from t_jurnal_aset where idbi='$id_bukuinduk' and tgl_buku>'$tgl_sk' order by tgl_buku desc limit 1";
-			$cnt2 = mysql_num_rows(mysql_query($qry_jurnal));
+			$cnt2 = sqlNumRow(sqlQuery($qry_jurnal));
 			if($cnt2>0)$err = 'Gagal Ketetapan, karena ada transaksi lain setelahnya !';
 			if($err==''){
 				$stat='1';
@@ -274,7 +274,7 @@ class gantirugiObj  extends DaftarObj2{
 					"staset='".$dtbi['staset']."'".
 					"where id='$idplh'";$cek.=$aqry;
 								
-				$qry=mysql_query($aqry);
+				$qry=sqlQuery($aqry);
 				$cek.=$aqry;
 				if($qry==FALSE) $err="Gagal Batal Ketetapan ".mysql_error();
 				$staset='6';
@@ -286,7 +286,7 @@ class gantirugiObj  extends DaftarObj2{
 				stusul='$stusul'
 				where id='$id_bukuinduk';					
 				";$cek.=$aqry1;
-				$qry1=mysql_query($aqry1);
+				$qry1=sqlQuery($aqry1);
 				if($qry1==FALSE) $err="Gagal Simpan data ".mysql_error();
 				
 				}	
@@ -349,8 +349,8 @@ class gantirugiObj  extends DaftarObj2{
 			$fmTANGGALgantirugi  = $_POST['tgl_gantirugi'];
 			$thn_gantirugi = substr($fmTANGGALgantirugi,0,4);
 			$query_susut = "select count(*)as jml_susut from penyusutan where idbi='$id_bukuinduk' and tahun>='$thn_gantirugi'";
-			$get_susut = mysql_fetch_array(mysql_query($query_susut));
-			$get_cd = mysql_fetch_array(mysql_query("select c,d,e,e1,staset,idawal from buku_induk where id='$id_bukuinduk'"));
+			$get_susut = sqlArray(sqlQuery($query_susut));
+			$get_cd = sqlArray(sqlQuery("select c,d,e,e1,staset,idawal from buku_induk where id='$id_bukuinduk'"));
 			$staset=$get_cd['staset'];
 			$idbi_awal=$get_cd['idawal'];
 			//cek sudah ada penyusutan / tdk untuk data baru			
@@ -377,10 +377,10 @@ class gantirugiObj  extends DaftarObj2{
 					kepada_alamat,uraian,ket,tgl_gantirugi,stat,uid,tgl_update,no_sk,tgl_sk,jml_harga,harga,$field) values
 					('$id_bukuinduk','".$Main->DEF_KEPEMILIKAN."','".$Main->DEF_PROPINSI."','".$Main->DEF_WILAYAH."','$c','$d','$e','$e1','$f','$g','$h','$i','$j','$no_usul','$tgl_usul','$tahun','$tahun','$noreg','$kepada_nama',
 					'$kepada_alamat','$uraian','$ket','$tgl_gantirugi','$stat','$uid','$tgl_update','$no_sk','$tgl_sk','$harga_perolehan','$harga',$vfield)";$cek.=$aqry;
-				$qry=mysql_query($aqry);
+				$qry=sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal Simpan data ".mysql_error();
 				}	
-			$cek_dt = mysql_fetch_array(mysql_query("select count(*) as cnt from v1_ref_tambah_manfaat  where f='$f' and g='$g' and 	h='$h' and i='$i' and j='$j'"));	
+			$cek_dt = sqlArray(sqlQuery("select count(*) as cnt from v1_ref_tambah_manfaat  where f='$f' and g='$g' and 	h='$h' and i='$i' and j='$j'"));	
 	if($cek_dt['cnt']>0){
 		$err= 'Barang sudah ada !';
 	}
@@ -524,7 +524,7 @@ class gantirugiObj  extends DaftarObj2{
 			
 			if($err==''){
 				$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi; $cek.=$aqry;
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if ($qry==FALSE){
 				$err = 'Gagal Hapus Data';}
 			}
@@ -545,8 +545,8 @@ class gantirugiObj  extends DaftarObj2{
 			$cek =$cbid[0];			
 			$this->form_idplh = $cbid[0];
 			for($i = 0; $i<count($ids); $i++)	{
-				$cekdata=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$this->form_idplh."'"));
-				$cekdata2=mysql_fetch_array(mysql_query("select count(*)as cnt_bayar from gantirugi_bayar where ref_idgantirugi='".$this->form_idplh."'"));
+				$cekdata=sqlArray(sqlQuery("select * from gantirugi where id='".$this->form_idplh."'"));
+				$cekdata2=sqlArray(sqlQuery("select count(*)as cnt_bayar from gantirugi_bayar where ref_idgantirugi='".$this->form_idplh."'"));
 				if($cekdata['no_sk']!=''){
 					$err="Tidak bisa Dihapus, Sudah Ada Ketetapan!";
 				}
@@ -581,8 +581,8 @@ class gantirugiObj  extends DaftarObj2{
 			$this->form_idplh = $cbid[0];
 			
 			$KeyValue = explode(' ',$cbid);
-			$cekdata=mysql_fetch_array(mysql_query("select count(*)as jml_bayar from v_gantirugi_bayar where ref_idgantirugi='".$this->form_idplh."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$this->form_idplh."'"));
+			$cekdata=sqlArray(sqlQuery("select count(*)as jml_bayar from v_gantirugi_bayar where ref_idgantirugi='".$this->form_idplh."'"));
+			$dtTGR=sqlArray(sqlQuery("select * from gantirugi where id='".$this->form_idplh."'"));
 			$status_barang='5';
 			$stat='0';
 			$tgl_gantirugi = $dtTGR['tgl_gantirugi'];
@@ -595,7 +595,7 @@ class gantirugiObj  extends DaftarObj2{
 					}*/
 				$kueri="select * from $this->TblName_Hapus 
 				where id = '".$this->form_idplh."' "; //echo "$kueri";
-				$data=mysql_fetch_array(mysql_query($kueri));
+				$data=sqlArray(sqlQuery($kueri));
 				if($Main->VERSI_NAME != 'JABAR'){
 					$param_closing=$tgl_gantirugi.','.$dtTGR['c'].','.$dtTGR['d'].','.$dtTGR['e'].','.$dtTGR['e1'];
 				}else{
@@ -605,7 +605,7 @@ class gantirugiObj  extends DaftarObj2{
 				//cek sudah ada penyusutan / tdk untuk data baru			
 				$oldthn_gantirugi = substr($data['tgl_gantirugi'],0,4);
 				$query_susut = "select count(*)as jml_susut from penyusutan where idbi='".$data['id_bukuinduk']."' and tahun>='$oldthn_gantirugi'";
-				$get_susut = mysql_fetch_array(mysql_query($query_susut));
+				$get_susut = sqlArray(sqlQuery($query_susut));
 				/*if($get_susut['jml_susut']>0){
 					$err="Tidak bisa Dibatalkan, Sudah ada penyusutan !";
 					}*/
@@ -618,7 +618,7 @@ class gantirugiObj  extends DaftarObj2{
 					//status_barang='$status_barang'
 					" status_barang=1, stusul=4 ".
 					" where id='".$dtTGR['id_bukuinduk']."'"; $cek.=$aqry1;
-					$qry1 = mysql_query($aqry1);
+					$qry1 = sqlQuery($aqry1);
 					if ($qry1==FALSE){
 					$err = 'Gagal Update Data BI '.mysql_error();}*/
 					if($err==''){
@@ -632,7 +632,7 @@ class gantirugiObj  extends DaftarObj2{
 						stat='$stat'
 						
 						where id='".$this->form_idplh."'"; $cek.=$aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 						if ($qry==FALSE){
 						$err = 'Gagal Hapus Data'.mysql_error();}}
 					}
@@ -723,15 +723,15 @@ class gantirugiObj  extends DaftarObj2{
 					$cek =$cbid[0];			
 					$this->form_idplh = $cbid[0];
 					$this->form_fmST = 2;
-					$cekdata=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$this->form_idplh."'"));
+					$cekdata=sqlArray(sqlQuery("select * from gantirugi where id='".$this->form_idplh."'"));
 				if($cekdata['no_sk']!=''){	$fm['err']="Sudah Ditetapan!";	}
 					
 					if($fm['err']==''){
 						$aqry = "select * from ".$this->TblName." where id='".$this->form_idplh."'"; $cek.=$aqry;
 						
-						$qry=mysql_query($aqry);
+						$qry=sqlQuery($aqry);
 						
-						$dt=mysql_fetch_array($qry);
+						$dt=sqlArray($qry);
 						$dt['tgl_gantirugi'] = $tgl_buku;
 						$dt['tgl_sk'] = Date('Y-m-d');
 						$fm = $this->setForm($dt);
@@ -792,12 +792,12 @@ class gantirugiObj  extends DaftarObj2{
 					$this->form_idplh = $cbid[0];
 					$this->form_fmST = 1;
 					
-					$cekdata=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$this->form_idplh."'"));
+					$cekdata=sqlArray(sqlQuery("select * from gantirugi where id='".$this->form_idplh."'"));
 				if($cekdata['no_sk']!=''){ $fm['err']="Tidak bisa Diedit, Sudah Ada Ketetapan!"; }
 					if($fm['err']==''){
 						$aqry = "select * from ".$this->TblName." where id='".$this->form_idplh."'"; $cek.=$aqry;
-						$qry=mysql_query($aqry);
-						$dt=mysql_fetch_array($qry);
+						$qry=sqlQuery($aqry);
+						$dt=sqlArray($qry);
 						$fm = $this->setForm($dt);
 					}
 					
@@ -821,8 +821,8 @@ class gantirugiObj  extends DaftarObj2{
 						$this->form_caption = 'Form Ketetapan ';
 					}
 					
-					/*$dtTGR=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$dt['id']."'"));
-					$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$dtTGR['f'].$dtTGR['g'].$dtTGR['h'].$dtTGR['i'].$dtTGR['j']."'")) ;
+					/*$dtTGR=sqlArray(sqlQuery("select * from gantirugi where id='".$dt['id']."'"));
+					$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$dtTGR['f'].$dtTGR['g'].$dtTGR['h'].$dtTGR['i'].$dtTGR['j']."'")) ;
 					if ($dtTGR['tgl_usul']='0000-00-00'){
 						$dtTGR['tgl_usul']=Date('Y-m-d');
 					}
@@ -836,7 +836,7 @@ class gantirugiObj  extends DaftarObj2{
 					*/
 					$kdbarang = $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'];
 					$qrbrg = "select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '".$kdbarang."'";
-					$brg = mysql_fetch_array(mysql_query($qrbrg)) ;			
+					$brg = sqlArray(sqlQuery($qrbrg)) ;			
 					//items ----------------------
 					if ($this->form_fmST==0 || $this->form_fmST==1){ //baru /edit usulan
 						$this->form_width = 720;
@@ -1115,8 +1115,8 @@ class gantirugiObj  extends DaftarObj2{
 							$sqryKIBA = "select sertifikat_no, luas, ket from kib_a  $KondisiKIB limit 0,1";
 							//$sqryKIBA = "select * from view_kib_a  $KondisiKIB limit 0,1";
 							//echo '<br> qrykibA = '.$sqryKIBA;
-							$QryKIB_A = mysql_query($sqryKIBA);
-							while($isiKIB_A = mysql_fetch_array($QryKIB_A))	{
+							$QryKIB_A = sqlQuery($sqryKIBA);
+							while($isiKIB_A = sqlArray($QryKIB_A))	{
 								$isiKIB_A = array_map('utf8_encode', $isiKIB_A);	
 								//$ISI5 = $isiKIB_A['alamat'].'<br>'.$isiKIB_A['alamat_kel'].'<br>'.$isiKIB_A['alamat_kec'].'<br>'.$isiKIB_A['alamat_kota'] ;
 								$ISI6 = $isiKIB_A['sertifikat_no'];
@@ -1134,10 +1134,10 @@ class gantirugiObj  extends DaftarObj2{
 							$aqry="select ukuran, merk,no_pabrik,no_rangka,no_mesin,bahan,ket,no_polisi  from kib_b  $KondisiKIB limit 0,1";
 							//echo"<br>qrkbb=".$aqry;
 							
-							$QryKIB_B = mysql_query($aqry);
+							$QryKIB_B = sqlQuery($aqry);
 							
 							//echo "<br>qrkibb=".$aqry;
-							while($isiKIB_B = mysql_fetch_array($QryKIB_B))	{
+							while($isiKIB_B = sqlArray($QryKIB_B))	{
 								$isiKIB_B = array_map('utf8_encode', $isiKIB_B);
 								$ISI5 = "{$isiKIB_B['merk']}";
 								$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']} / {$isiKIB_B['no_polisi']}";
@@ -1148,9 +1148,9 @@ class gantirugiObj  extends DaftarObj2{
 							break;
 							}	
 						case '03':{//KIB C;
-							$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket,kota, alamat_kec, alamat_kel, alamat,alamat_b,alamat_c from kib_c  $KondisiKIB limit 0,1");
-							//$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1");
-							while($isiKIB_C = mysql_fetch_array($QryKIB_C))	{
+							$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket,kota, alamat_kec, alamat_kel, alamat,alamat_b,alamat_c from kib_c  $KondisiKIB limit 0,1");
+							//$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1");
+							while($isiKIB_C = sqlArray($QryKIB_C))	{
 								$isiKIB_C = array_map('utf8_encode', $isiKIB_C);
 								//$ISI5 = $isiKIB_C['alamat'].'<br>'.$isiKIB_C['alamat_kel'].'<br>'.$isiKIB_C['alamat_kec'].'<br>'.$isiKIB_C['alamat_kota'] ;
 								$ISI5= getalamat($isiKIB_C['alamat_b'],$isiKIB_C['alamat_c'],$isiKIB_C['alamat'],$isiKIB_C['kota'] ,$isiKIB_C['alamat_kec'],$isiKIB_C['alamat_kel']);
@@ -1161,9 +1161,9 @@ class gantirugiObj  extends DaftarObj2{
 							break;
 						}
 						case '04':{//KIB D;
-							//$QryKIB_D = mysql_query("select dokumen_no, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
-							$QryKIB_D = mysql_query("select dokumen_no, ket  from kib_d  $KondisiKIB limit 0,1");
-							while($isiKIB_D = mysql_fetch_array($QryKIB_D))	{
+							//$QryKIB_D = sqlQuery("select dokumen_no, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
+							$QryKIB_D = sqlQuery("select dokumen_no, ket  from kib_d  $KondisiKIB limit 0,1");
+							while($isiKIB_D = sqlArray($QryKIB_D))	{
 								$isiKIB_D = array_map('utf8_encode', $isiKIB_D);
 								//$ISI5 = $isiKIB_D['alamat'].'<br>'.$isiKIB_D['alamat_kel'].'<br>'.$isiKIB_D['alamat_kec'].'<br>'.$isiKIB_D['alamat_kota'] ;
 								$ISI6 = "{$isiKIB_D['dokumen_no']}";
@@ -1172,8 +1172,8 @@ class gantirugiObj  extends DaftarObj2{
 							break;
 						}
 						case '05':{//KIB E;		
-							$QryKIB_E = mysql_query("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
-							while($isiKIB_E = mysql_fetch_array($QryKIB_E))	{
+							$QryKIB_E = sqlQuery("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
+							while($isiKIB_E = sqlArray($QryKIB_E))	{
 								$isiKIB_E = array_map('utf8_encode', $isiKIB_E);
 								$ISI7 = "{$isiKIB_E['seni_bahan']}";
 								$ISI15 = "{$isiKIB_E['ket']}";
@@ -1184,9 +1184,9 @@ class gantirugiObj  extends DaftarObj2{
 							//$cek.='<br> F = '.$isi['f'];
 							//$sqrykibF = "select dokumen_no, bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat  from view_kib_f  $KondisiKIB limit 0,1";
 							$sqrykibF = "select dokumen_no, bangunan, ket from kib_f  $KondisiKIB limit 0,1";
-							$QryKIB_F = mysql_query($sqrykibF);
+							$QryKIB_F = sqlQuery($sqrykibF);
 							$cek.='<br> qrykibF = '.$sqrykibF;
-							while($isiKIB_F = mysql_fetch_array($QryKIB_F))	{
+							while($isiKIB_F = sqlArray($QryKIB_F))	{
 								$isiKIB_F = array_map('utf8_encode', $isiKIB_F);
 								//$ISI5 = $isiKIB_F['alamat'].'<br>'.$isiKIB_F['alamat_kel'].'<br>'.$isiKIB_F['alamat_kec'].'<br>'.$isiKIB_F['alamat_kota'] ;
 								$ISI6 = "{$isiKIB_F['dokumen_no']}";
@@ -1199,10 +1199,10 @@ class gantirugiObj  extends DaftarObj2{
 					
 					$ISI5 	= !empty($ISI5)?$ISI5:"-"; 
 					$ISI6 	= !empty($ISI6)?$ISI6:"-";
-					$dt1=mysql_fetch_array(mysql_query("select * from kib_b where idbi='".$isi['id_bukuinduk']."'"));
-					$dtbi=mysql_fetch_array(mysql_query("select * from buku_induk where id='".$isi['id_bukuinduk']."'"));
-					$dtTGR=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$isi['id']."'"));
-					$dt2=mysql_fetch_array(mysql_query("select * from ref_barang where f='".$dtTGR['f']."' 
+					$dt1=sqlArray(sqlQuery("select * from kib_b where idbi='".$isi['id_bukuinduk']."'"));
+					$dtbi=sqlArray(sqlQuery("select * from buku_induk where id='".$isi['id_bukuinduk']."'"));
+					$dtTGR=sqlArray(sqlQuery("select * from gantirugi where id='".$isi['id']."'"));
+					$dt2=sqlArray(sqlQuery("select * from ref_barang where f='".$dtTGR['f']."' 
 					and g='".$dtTGR['g']."' and h='".$dtTGR['h']."' and i='".$dtTGR['i']."' and j='".$dtTGR['j']."'"));
 					$nilai_buku = getNilaiBuku($isi['id_bukuinduk'],$dtTGR['tgl_gantirugi'],0);					
 					$nilai_susut = getAkumPenyusutan($isi['id_bukuinduk'],$dtTGR['tgl_gantirugi']);

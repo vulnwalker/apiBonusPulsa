@@ -510,7 +510,7 @@ function tbl_update($Tblname,$Fields, $Kondisi, $msg=''){//tes
 	$klmstr=join(',',$klm);
 	if($klmstr !=''){
 		$aqry = " update $Tblname set $klmstr $Kondisi ";
-		$Simpan = mysql_query($aqry);
+		$Simpan = sqlQuery($aqry);
 		if($Simpan==FALSE)$errmsg ='Gagal Update Data!';
 	}else{
 		$errmsg = 'Tidak Ada Data!';
@@ -532,7 +532,7 @@ function tbl_insert($Tblname,$Fields, $Kondisi='', $msg=''){//tes
 	$valstr=join(',',$vals);
 	if($keystr !=''){
 		$aqry = " insert into $Tblname (".$keystr.") values(".$valstr.") $Kondisi ";
-		$Simpan = mysql_query($aqry);
+		$Simpan = sqlQuery($aqry);
 		if($Simpan==FALSE)$errmsg ='Gagal Insert Data!';//.mysql_error();//.$aqry.$keystr.$valstr;
 	}else{
 		$errmsg = 'Tidak Ada Data!';
@@ -546,8 +546,8 @@ function get_admin_akses($uid, $kodei){
 	$fvalue=array();	
 	
 	$aqry = "select * from admin_akses where uid = '$uid' and i='$kodei'";
-	$qry = mysql_query($aqry);	
-	if($isi = mysql_fetch_array($qry)){		
+	$qry = sqlQuery($aqry);	
+	if($isi = sqlArray($qry)){		
 		//get modul akses ----------------------		
 		for($i=0;$i< sizeof($usr->DaftarModulsLabel) ;$i++){
 			$fname = 'modul'.genNumber(($i+1),2);//'modul01';
@@ -561,8 +561,8 @@ function get_admin_akses($uid, $kodei){
 function cekNoTable($tblname, $fieldNo, $fieldTgl, $noValue, $tglValue){
 	$cnt = 0;
 	$aqry = "select count(*) as cnt from $tblname where $fieldNo='$noValue' and year($fieldTgl)='$tglValue'";
-	$qry = mysql_query($aqry);
-	if($isi = mysql_fetch_array($qry)){
+	$qry = sqlQuery($aqry);
+	if($isi = sqlArray($qry)){
 		$cnt= $isi['cnt'];
 	}
 	return $cnt==0;
@@ -571,8 +571,8 @@ function cekNoTable($tblname, $fieldNo, $fieldTgl, $noValue, $tglValue){
 function genNoTable($tblname, $fieldNo, $fieldTgl){
 	//$aqry = "select (max(coalesce($fieldNo))+1) as maxno from $tblname where year(fieldTgl) ";
 	$aqry = "select max(coalesce($fieldNo,0)) as maxno from $tblname where year($fieldTgl) ";
-	$qry = mysql_query($aqry);
-	if($isi = mysql_fetch_array($qry)){
+	$qry = sqlQuery($aqry);
+	if($isi = sqlArray($qry)){
 		$maxno=$isi['maxno'];
 		if ($maxno=='') {
 			$maxno=1;
@@ -914,7 +914,7 @@ class DaftarObj{
 	function Hapus_Validasi($id){//id -> multi id with space delimiter
 		$errmsg ='';
 		/*if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from tagihan where ref_idpenetapan='".$id."'")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! SKPD Sudah ada di Tagihan!';}*/
@@ -931,7 +931,7 @@ class DaftarObj{
 		//$Kondisi = 	"Id='".$id."'";
 		
 		$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi;
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		if ($qry==FALSE){
 			$errmsg = 'Gagal Hapus Data'. $aqry;
 		}
@@ -995,7 +995,7 @@ class DaftarObj{
 					$fieldupd = join(',',$arrfieldupd);
 					//insert tabel -----------------------------
 					$aqry = "insert into $tblsimpan ($fields) values ($fieldupd) "; $cek .= $aqry;
-					$Simpan = mysql_query($aqry);
+					$Simpan = sqlQuery($aqry);
 					if ($Simpan == FALSE) $errmsg = 'Gagal Update Data !';//.$aqry;
 				}	
 				break;
@@ -1025,7 +1025,7 @@ class DaftarObj{
 					if ($fieldupd != '') $fieldupd = " set $fieldupd";
 					//update tabel -----------------------------
 					$aqry = "update $tblsimpan $fieldupd $kondisi"; $cek .= $aqry;
-					$Simpan = mysql_query($aqry);
+					$Simpan = sqlQuery($aqry);
 					if ($Simpan == FALSE) $errmsg = 'Gagal Update Data !';//.$aqry;
 				}
 				break;
@@ -1275,7 +1275,7 @@ class DaftarObj{
 	}
 	function setDaftar_query($Kondisi='', $Order='', $Limit=''){
 		$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//return mysql_query($aqry);
+		//return sqlQuery($aqry);
 		return $aqry;
 	}
 	function setDaftar_after_getrow($list_row, $isi){
@@ -1313,10 +1313,10 @@ class DaftarObj{
 		$TotalHalRp = 0;
 		
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry;
-		$qry = mysql_query($aqry);
-		while ( $isi=mysql_fetch_array($qry)){
+		$qry = sqlQuery($aqry);
+		while ( $isi=sqlArray($qry)){
 			$isi = array_map('utf8_encode', $isi);
 			$no++;
 			$jmlDataPage++;
@@ -1482,8 +1482,8 @@ class DaftarObj{
 		
 		//$aqry = "select count(*) as cnt,  sum(jml_terima) as totterima  from $this->TblName $Kondisi "; //echo $aqry;
 		$aqry = "select $fsum from $this->TblName $Kondisi "; //echo $aqry;
-		$qry = mysql_query($aqry);
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry);
+		if ($isi= sqlArray($qry)){			
 			$jmlData = $isi['cnt'];			
 			/*$Hal= "<table class='koptable' border='1' width='100%' style='margin:4 0 0 0'>
 				<tr><td align=center style='padding:4'>".
@@ -1528,8 +1528,8 @@ class DaftarObj{
 		$jmlTotal = 0;
 		
 		$aqry = "select count(*) as sum1, sum(jml_ketetapan) as sum2 from $this->TblName $Kondisi "; //echo $aqry;
-		$qry = mysql_query($aqry);
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry);
+		if ($isi= sqlArray($qry)){			
 			$jmlData = $isi['sum1'];
 			$jmlTotal= $isi['sum2'];
 			$Sum = number_format($jmlTotal, 2, ',' ,'.');
@@ -2079,7 +2079,7 @@ class DaftarObj2{
 	function Hapus_Validasi($id){
 		$errmsg ='';		
 		/*if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from tagihan where ref_idpenetapan='".$id."'")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! SKPD Sudah ada di Tagihan!';}*/
@@ -2098,7 +2098,7 @@ class DaftarObj2{
 		//$Kondisi = 	"Id='".$id."'";
 		
 		$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi; $cek.=$aqry;
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		if ($qry==FALSE){
 			$err = 'Gagal Hapus Data';
 		}
@@ -2163,7 +2163,7 @@ class DaftarObj2{
 				$aqry  = "insert into $tblsimpan (".implode(',',array_keys($fieldsval)).
 					") values (".implode(',',array_values($fieldsval)).") ;";
 				$cek .= $aqry;
-				$Simpan = mysql_query($aqry);
+				$Simpan = sqlQuery($aqry);
 				if ($Simpan == FALSE) $errmsg = 'Gagal Simpan Data !';//.$aqry;		
 				break;
 			}
@@ -2192,7 +2192,7 @@ class DaftarObj2{
 					if ($fieldupd != '') $fieldupd = " set $fieldupd";
 					//update tabel -----------------------------
 					$aqry  = "update $tblsimpan $fieldupd $kondisi"; $cek.=$aqry;
-					$Simpan = mysql_query($aqry);
+					$Simpan = sqlQuery($aqry);
 					if ($Simpan == FALSE) $errmsg = 'Gagal Update Data !';//.$aqry;
 				}
 				break;
@@ -2225,7 +2225,7 @@ class DaftarObj2{
 					if ($fieldupd != '') $fieldupd = " set $fieldupd";
 					//update tabel -----------------------------
 					$aqry  = "update $tblsimpan $fieldupd $kondisi"; $cek.=$aqry;
-					$Simpan = mysql_query($aqry);
+					$Simpan = sqlQuery($aqry);
 					if ($Simpan == FALSE) $errmsg = 'Gagal Update Data !';//.$aqry;
 				}
 				break;
@@ -2247,7 +2247,7 @@ class DaftarObj2{
 				$aqry  = "insert into $tblsimpan (".implode(',',array_keys($fieldval)).
 					") values (".implode(',',array_values($fieldval)).") ;";
 				$cek .= $aqry;
-				$Simpan = mysql_query($aqry);
+				$Simpan = sqlQuery($aqry);
 				if ($Simpan == FALSE) $errmsg = 'Gagal Simpan Data !';//.$aqry;		
 				break;
 			}			
@@ -2272,7 +2272,7 @@ class DaftarObj2{
 					if ($fieldupd != '') $fieldupd = " set $fieldupd";
 					//update tabel -----------------------------
 					$aqry  = "update $tblsimpan $fieldupd $kondisi"; $cek.=$aqry;
-					$Simpan = mysql_query($aqry);
+					$Simpan = sqlQuery($aqry);
 					if ($Simpan == FALSE) $errmsg = 'Gagal Update Data !';//.$aqry;
 				}
 				break;
@@ -2359,7 +2359,7 @@ class DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from pbb_entryawal where id =$this->form_idplh "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$this->setForm($dt);
@@ -3009,13 +3009,13 @@ class DaftarObj2{
 		$TotalHalRp = 0;
 		
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry.'<br>';
-		$qry = mysql_query($aqry);
-		$numrows = mysql_num_rows($qry); $cek.= " jmlrow = $numrows ";
+		$qry = sqlQuery($aqry);
+		$numrows = sqlNumRow($qry); $cek.= " jmlrow = $numrows ";
 		if( $numrows> 0 ) {
 					
-		while ( $isi=mysql_fetch_array($qry)){
+		while ( $isi=sqlArray($qry)){
 			if ( $isi[$this->KeyFields[0]] != '' ){
 				$isi = array_map('utf8_encode', $isi);	
 				
@@ -3312,8 +3312,8 @@ class DaftarObj2{
 		//$aqry = "select count(*) as cnt,  sum(jml_terima) as totterima  from $this->TblName $Kondisi "; //echo $aqry;
 		//$aqry = "select $fsum from $this->TblName $Kondisi "; //echo $aqry;
 		$aqry = $this->setSumHal_query($Kondisi, $fsum); $cek .= $aqry;
-		$qry = mysql_query($aqry); 
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry); 
+		if ($isi= sqlArray($qry)){			
 			$jmlData = $isi['cnt'];			
 			/*$Hal= "<table class='koptable' border='1' width='100%' style='margin:4 0 0 0'>
 				<tr><td align=center style='padding:4'>".
@@ -3430,8 +3430,8 @@ class DaftarObj2{
 		$jmlTotal = 0;
 		
 		$aqry = "select count(*) as sum1, sum(jml_ketetapan) as sum2 from $this->TblName $Kondisi "; //echo $aqry;
-		$qry = mysql_query($aqry);
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry);
+		if ($isi= sqlArray($qry)){			
 			$jmlData = $isi['sum1'];
 			$jmlTotal= $isi['sum2'];
 			$Sum = number_format($jmlTotal, 2, ',' ,'.');

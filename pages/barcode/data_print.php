@@ -4,22 +4,22 @@ $cek = ''; $err='';
 $recs = array();
 $cidBI = $_REQUEST["cidBI"];
 $aqry1 = "select * from barcode_data_print where uid='$uid'";	
-$qry1 = mysql_query($aqry1);
-while ($isi = mysql_fetch_array($qry1)){
+$qry1 = sqlQuery($aqry1);
+while ($isi = sqlArray($qry1)){
 	$aqry = "select * from view_buku_induk2 where id='{$isi['idbi']}'"; // $cek .= $aqry;
 	//echo $aqry;
-	$qry = mysql_query($aqry);
-	while ($row = mysql_fetch_array($qry)){		
+	$qry = sqlQuery($aqry);
+	while ($row = sqlArray($qry)){		
 		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from ref_skpd where c='".$row['c']."'  and d='00' and e='00'"
 		));
 		$nmbidang_barcode = $get['nm_barcode'];
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from ref_skpd where c='".$row['c']."'  and d='".$row['d']."' and e='00'"
 		));
 		$nmopd_barcode = $get['nm_barcode'];
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from ref_skpd where c='".$row['c']."'  and d='".$row['d']."' and e='".$row['e']."'"
 		));
 		$nmunit_barcode = $get['nm_barcode'];

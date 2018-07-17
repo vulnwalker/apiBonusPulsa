@@ -147,9 +147,9 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c!='00' and d='00'  GROUP by c";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDBidang='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['c'] ==  $value ? "selected" : "";
 				if ($nmSKPDBidang=='' ) $nmSKPDBidang =  $value == $Hasil['c'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[c]}'>{$Hasil[nm_skpd]}";
@@ -167,9 +167,9 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d!='00' and e='00' GROUP by d";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDskpd='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['d'] ==  $value ? "selected" : "";
 				if ($nmSKPDskpd=='' ) $nmSKPDskpd =  $value == $Hasil['d'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[d]}'>{$Hasil[nm_skpd]}";
@@ -194,9 +194,9 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d='$fmSKPDSkpd' and e!='00' and e1='000' GROUP by e";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDUnit='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['e'] ==  $value ? "selected" : "";
 				if ($nmSKPDUnit=='' ) $nmSKPDUnit =  $value == $Hasil['e'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[e]}'>{$Hasil[nm_skpd]}";
@@ -222,9 +222,9 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 			
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d='$fmSKPDSkpd' and e='$fmSKPDUnit' and e1!='000' GROUP by e1";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDUnit='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['e1'] ==  $value ? "selected" : "";
 				if ($nmSKPDUnit=='' ) $nmSKPDUnit =  $value == $Hasil['e1'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[e1]}'>{$Hasil[nm_skpd]}";
@@ -329,7 +329,7 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 	
 	function getJmlDKB($tahun, $c, $d, $e,$e1, $f,$g,$h,$i,$j){
 		$aqry = "select * from dkb where tahun='$tahun' and c='$c' and d='$d' and e='$e' and e1='$e1' and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' ";
-		$get =  mysql_fetch_array(mysql_query($aqry));
+		$get =  sqlArray(sqlQuery($aqry));
 		if($get['jml_barang']== NULL) $get['jml_barang']=0;
 		return $get['jml_barang'];
 	}
@@ -356,7 +356,7 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 		$this->form_fmST = 1;
 		$form_name = $this->Prefix.'_form';		
 		$aqry = "select * from $this->TblName where Id='$this->form_idplh'";
-		$dt = mysql_fetch_array(mysql_query($aqry));		
+		$dt = sqlArray(sqlQuery($aqry));		
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$fm['cek'], 'err'=>$fm['err']	, 'content'=> $fm['content']);
@@ -456,7 +456,7 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 				
 			}
 			$cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry == FALSE) $err='Gagal SQL'.mysql_error();
 		}		
 		//$err=$cek;
@@ -466,7 +466,7 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 	/*function Hapus_Validasi($id){
 		$err ='';
 		//$KeyValue = explode(' ',$id);
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select count(*) as cnt from penerimaan where id_pengadaan ='$id' "
 		));
 		if($err=='' && $get['cnt']>0 ) $err = 'Data Tidak Bisa Dihapus, Sudah ada di Penerimaan!';
@@ -481,7 +481,7 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 		$cbid = $_POST[$this->Prefix.'_cb'];
 		$id = $cbid[0];		
 		$aqry = "select * from $this->TblName where id='$id' ";
-		$isi = mysql_fetch_array(mysql_query($aqry));
+		$isi = sqlArray(sqlQuery($aqry));
 		$content->stat = $isi['stat'];
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);					
 	}	
@@ -493,7 +493,7 @@ class pemusnahan_panitiaObj extends DaftarObj2{
 				"tahun='$tahun'".
 				" and c='$c' and d='$d' and e='$e'  and e1='$e1'  ".
 				" and f='$f' and g='$g' and h='$h' and i='$i' and j='$j' $idstr "; $cek.=$aqry;
-		$get = mysql_fetch_array( mysql_query(
+		$get = sqlArray( sqlQuery(
 			$aqry
 		));	
 		if($get['tot']==NULL) $get['tot'] = 0;

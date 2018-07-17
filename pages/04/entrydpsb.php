@@ -62,8 +62,8 @@ if($Act=="Simpan")
 		$JmlHARGA = $fmHARGASATUAN * $fmJUMLAH;
 		$KondisiCek = $Main->Provinsi[0].$fmWIL.$fmSKPD.$fmUNIT.$fmSUBUNIT.$ArBarang[0].$ArBarang[1].$ArBarang[2].$ArBarang[3].$ArBarang[4].$fmTAHUNANGGARAN;
 		$CekID = false;
-		$Qry = mysql_query("select * from penetapan where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek'");
-		$CekID = mysql_num_rows($Qry);
+		$Qry = sqlQuery("select * from penetapan where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek'");
+		$CekID = sqlNumRow($Qry);
 		//echo $CekID;
 		//echo "select * from penetapan where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek'";
 		/*
@@ -82,8 +82,8 @@ if($Act=="Simpan")
 			$Qry = "insert into penetapan (a,b,c,d,e,f,g,h,i,j,id_pengeluaran,merk_barang,jml_barang,harga,satuan,jml_harga,ket,tahun,skgub_tgl,skgub_no,jml_baik,jml_kbaik)
 			values ('{$Main->Provinsi[0]}','$fmWIL','$fmSKPD','$fmUNIT','$fmSUBUNIT','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','$fmIDPENGELUARAN','$fmMEREK','$fmJUMLAH','$fmHARGASATUAN','$fmSATUAN','$JmlHARGA','$fmKET','$fmTAHUNANGGARAN','".TglSQL($fmTANGGALSKGUBERNUR)."','$fmNOSKGUBERNUR','$fmKONDISIBAIK','$fmKONDISIKURANGBAIK')";
 			//echo $Qry;
-			$Simpan = mysql_query($Qry);
-			$Q = mysql_fetch_array(mysql_query("select id from penetapan where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek' order by id desc"));
+			$Simpan = sqlQuery($Qry);
+			$Q = sqlArray(sqlQuery("select id from penetapan where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek' order by id desc"));
 			$fmID = $Q['id'];
 		}
 		if($Baru=="0")
@@ -93,7 +93,7 @@ if($Act=="Simpan")
 			update penetapan set 
 				merk_barang='$fmMEREK',jml_barang='$fmJUMLAH',harga='$fmHARGASATUAN',satuan='$fmSATUAN',jml_harga='$JmlHARGA',ket='$fmKET',skgub_tgl='".TglSQL($fmTANGGALSKGUBERNUR)."',skgub_no='$fmNOSKGUBERNUR',jml_baik='$fmKONDISIBAIK',jml_kbaik='$fmKONDISIKURANGBAIK' 
 			where $Kriteria ";
-			$Simpan = mysql_query($Qry);
+			$Simpan = sqlQuery($Qry);
 		}
 		if($Simpan)
 		{
@@ -134,19 +134,19 @@ if($Act=="Edit"|| $Act == "TambahEdit")
 	{
 		if($Act=="Edit")
 		{
-			$Qry = mysql_query("select * from penetapan where id='{$cidNya[0]}'");
+			$Qry = sqlQuery("select * from penetapan where id='{$cidNya[0]}'");
 		}
 		else
 		{
-			$Qry = mysql_query("select pengeluaran.*,penerimaan.faktur_tgl from pengeluaran inner join penerimaan  using(id) where pengeluaran.id='{$cidNya[0]}'");
+			$Qry = sqlQuery("select pengeluaran.*,penerimaan.faktur_tgl from pengeluaran inner join penerimaan  using(id) where pengeluaran.id='{$cidNya[0]}'");
 			//echo "select pengeluaran.*,penerimaan.faktur_tgl from pengeluaran inner join penerimaan on pengeluaran.id_penerimaan=penerimaan.id where pengeluaran.id='{$cidNya[0]}'";
 		}
-		$isi = mysql_fetch_array($Qry);
+		$isi = sqlArray($Qry);
 
 		$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 //		$kdRekening = $isi['k'].$isi['l'].$isi['m'].$isi['n'].$isi['o'];
-//		$nmRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where concat(k,l,m,n,o)='$kdRekening'"));
-		$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+//		$nmRekening = sqlArray(sqlQuery("select * from ref_rekening where concat(k,l,m,n,o)='$kdRekening'"));
+		$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
 		
 		$fmIDBARANG = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 		$fmIDBARANG = $fmIDBARANG == "...." ? "":$fmIDBARANG;
@@ -195,7 +195,7 @@ if($Act=="Hapus" && count($cidDBP) > 0)
 {
 	for($i = 0; $i<count($cidDBP); $i++)
 	{
-		$Del = mysql_query("delete from penetapan where id='{$cidDBP[$i]}' limit 1");
+		$Del = sqlQuery("delete from penetapan where id='{$cidDBP[$i]}' limit 1");
 		$Info = "<script>alert('Data telah di hapus')</script>";
 	}
 }
@@ -231,10 +231,10 @@ if(!empty($fmBARANGCARI))
 
 
 //LIST DPBL
-//$jmlTotalHarga = mysql_query("select sum(jml_harga) as total from pengeluaran where $Kondisi");
-$jmlTotalHargaDPBL = mysql_query("select sum(pengeluaran.jml_harga) as total  from pengeluaran inner join ref_barang  using(f,g,h,i,j) where $Kondisi ");
+//$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total from pengeluaran where $Kondisi");
+$jmlTotalHargaDPBL = sqlQuery("select sum(pengeluaran.jml_harga) as total  from pengeluaran inner join ref_barang  using(f,g,h,i,j) where $Kondisi ");
 
-if($jmlTotalHargaDPBL = mysql_fetch_array($jmlTotalHargaDPBL))
+if($jmlTotalHargaDPBL = sqlArray($jmlTotalHargaDPBL))
 {
 	$jmlTotalHargaDPBL = $jmlTotalHargaDPBL[0];
 }
@@ -242,9 +242,9 @@ else
 {$jmlTotalHargaDPBL=0;}
 
 //echo "select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang on concat(pengeluaran.f,pengeluaran.g,pengeluaran.h,pengeluaran.i,pengeluaran.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
-$Qry = mysql_query("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
-$jmlDataDPBL = mysql_num_rows($Qry);
-$Qry = mysql_query("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDPBL");
+$Qry = sqlQuery("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
+$jmlDataDPBL = sqlNumRow($Qry);
+$Qry = sqlQuery("select pengeluaran.*,ref_barang.nm_barang from pengeluaran inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDPBL");
 
 
 $ListBarang = "";
@@ -252,7 +252,7 @@ $JmlTotalHargaListDPBL = 0;
 $no=$Main->PagePerHal * (($HalDPBL*1) - 1);
 $cb=0;
 $jmlTampilDPBL = 0;
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilDPBL++;
 	$JmlTotalHargaListDPBL += $isi['jml_harga'];
@@ -260,8 +260,8 @@ while ($isi = mysql_fetch_array($Qry))
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarang .= "
 	
@@ -296,11 +296,11 @@ if(!empty($fmBARANGCARIDPSB))
 	$Kondisi .= " and ref_barang.nm_barang like '%$fmBARANGCARIDPSB%' ";
 }
 
-//$jmlTotalHarga = mysql_query("select sum(jml_harga) as total from penetapan where $Kondisi");
-$jmlTotalHargaDPSB = mysql_query("select sum(penetapan.jml_harga) as total from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi ");
+//$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total from penetapan where $Kondisi");
+$jmlTotalHargaDPSB = sqlQuery("select sum(penetapan.jml_harga) as total from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi ");
 
 
-if($jmlTotalHargaDPSB = mysql_fetch_array($jmlTotalHargaDPSB))
+if($jmlTotalHargaDPSB = sqlArray($jmlTotalHargaDPSB))
 {
 	$jmlTotalHargaDPSB = $jmlTotalHargaDPSB[0];
 }
@@ -308,9 +308,9 @@ else
 {$jmlTotalHargaDPSB=0;}
 
 //echo "select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang on concat(penetapan.f,penetapan.g,penetapan.h,penetapan.i,penetapan.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
-$Qry = mysql_query("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
-$jmlDataDPSB = mysql_num_rows($Qry);
-$Qry = mysql_query("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDPSB");
+$Qry = sqlQuery("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
+$jmlDataDPSB = sqlNumRow($Qry);
+$Qry = sqlQuery("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDPSB");
 //echo "select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang on concat(penetapan.f,penetapan.g,penetapan.h,penetapan.i,penetapan.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
 
 $JmlTotalHargaListDPSB = 0;
@@ -319,7 +319,7 @@ $cb=0;
 $jmlTampilDPSB = 0;
 
 $ListBarangDPSB = "";
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilDPSB++;
 	$JmlTotalHargaListDPSB += $isi['jml_harga'];
@@ -327,8 +327,8 @@ while ($isi = mysql_fetch_array($Qry))
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangDPSB .= "
 	

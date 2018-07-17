@@ -60,14 +60,14 @@ class programKegiatanObj  extends DaftarObj2{
 				
 				if($err==''){
 					$aqry = "INSERT into ref_programkegiatan (p,q,nama_program_kegiatan) values ('$kode1','$kode2','$namaprogramKegiatan')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}else{
 					
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_programkegiatan set p = '$kode1' , q ='$kode2', nama_program_kegiatan='$namaprogramKegiatan' WHERE concat(p,' ',q)='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -114,7 +114,7 @@ class programKegiatanObj  extends DaftarObj2{
 	    case 'getdata':{
 				$Id = $_REQUEST['id'];
 					    	
-				$get = mysql_fetch_array( mysql_query("select * from ref_programkegiatan where concat(p,' ',q)='$Id'"));
+				$get = sqlArray( sqlQuery("select * from ref_programkegiatan where concat(p,' ',q)='$Id'"));
 				$selectedP  = $get['p'];
 				$refDataNamaKegiatan= "SELECT q, nama_program_kegiatan  FROM ref_programkegiatan where p = '$selectedP' and q <> '00'";
 				$content = array('p' => $get['p'], 'q' => $get['q'], 'nama_program_kegiatan' => $get['nama_program_kegiatan'], 'cmbLucknut' => cmbQuery('cmbKegiatan', $get['p'], $refDataNamaKegiatan,'  onChange=\''.$this->Prefix.'.Bidangsdsdfterform()\'','-- Pilih Semua --') );
@@ -166,7 +166,7 @@ class programKegiatanObj  extends DaftarObj2{
 		if($cnt['cnt'] > 0) $err = "programKegiatan Tidak Bisa Diubah ! Sudah Digunakan Di Ref Barang.";
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_programKegiatan WHERE concat(p,' ',q)='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -191,7 +191,7 @@ class programKegiatanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "select *from " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -336,7 +336,7 @@ class programKegiatanObj  extends DaftarObj2{
 		//Cari 
 		switch($fmPILCARI){			
 			case 'program':
-			$get = mysql_fetch_array( mysql_query("select p from ref_programkegiatan where nama_program_kegiatan like '%$fmPILCARIvalue%' and q ='00'"));
+			$get = sqlArray( sqlQuery("select p from ref_programkegiatan where nama_program_kegiatan like '%$fmPILCARIvalue%' and q ='00'"));
 			$selectedP  = $get['p'];
 			$arrKondisi[] = " p = '$selectedP'"; 
 			break;	
@@ -391,15 +391,15 @@ class programKegiatanObj  extends DaftarObj2{
 		
 		
 			if($err=='' ){
-					$get = mysql_fetch_array( mysql_query("select * from ref_programkegiatan where concat(p,' ',q)='".$ids[$i]."'"));
+					$get = sqlArray( sqlQuery("select * from ref_programkegiatan where concat(p,' ',q)='".$ids[$i]."'"));
 					$qsamadengannol  = $get['q'];
 					$getP = $get['p'];
 					if($qsamadengannol == '00'){
 						$qy = "DELETE FROM $this->TblName_Hapus WHERE p = '$getP' ";$cek.=$qy;
-						$qry = mysql_query($qy);
+						$qry = sqlQuery($qy);
 					}else{
 						$qy = "DELETE FROM $this->TblName_Hapus WHERE concat(p,' ',q)='".$ids[$i]."' ";$cek.=$qy;
-						$qry = mysql_query($qy);	
+						$qry = sqlQuery($qy);	
 					}
 					
 

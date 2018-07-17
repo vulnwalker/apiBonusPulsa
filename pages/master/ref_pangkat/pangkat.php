@@ -72,38 +72,38 @@ class PangkatObj  extends DaftarObj2{
 	 		
 				
 			if($fmST == 0){
-		$oldy=mysql_fetch_array(
-	 	mysql_query(
+		$oldy=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from ref_pangkat where gol='$gol' and ruang= '$ruang'"
 		));
 		//$cek.="select count(*) as cnt from t_penerimaan where no_ba='$no_ba'";
 	 if($err=='' && $oldy['cnt']>0) $err="Golongan $gol Ruang $ruang Sudah Ada";
-		//		$get2=mysql_fetch_array(mysql_query("SELECT toRoman(gol) as gol,ruang FROM ref_pangkat  WHERE gol='$gol' and ruang='$ruang'"));
-		//		$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM ref_pangkat WHERE gol='$gol' and ruang='$ruang'"));
+		//		$get2=sqlArray(sqlQuery("SELECT toRoman(gol) as gol,ruang FROM ref_pangkat  WHERE gol='$gol' and ruang='$ruang'"));
+		//		$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM ref_pangkat WHERE gol='$gol' and ruang='$ruang'"));
 		//		if($get['cnt']>0 ) $err='Golongan "'.$get2['gol'].'" Ruang "'.$get2['ruang'].'" Sudah Ada !';
 			
 				if($err==''){
 					$aqry = "INSERT into ref_pangkat (gol,ruang,nama) values('$gol','$ruang','$nama')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{
 			
-				$old = mysql_fetch_array(mysql_query("SELECT gol,ruang FROM ref_pangkat WHERE Id=$idplh"));
+				$old = sqlArray(sqlQuery("SELECT gol,ruang FROM ref_pangkat WHERE Id=$idplh"));
 				if($gol==$old['gol'] && $ruang==$old['ruang']){
 
 						if($err==''){
 						$aqry = "UPDATE ref_pangkat set gol='$gol',ruang='$ruang',nama='$nama' WHERE Id='".$idplh."'";	$cek .= $aqry;
-								$qry = mysql_query($aqry) or die(mysql_error());
+								$qry = sqlQuery($aqry) or die(mysql_error());
 						}
 				
 				}else{
-						$get2=mysql_fetch_array(mysql_query("SELECT toRoman(gol) as gol,ruang FROM ref_pangkat  WHERE gol='$gol' and ruang='$ruang'"));
-				       	$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM ref_pangkat WHERE gol='$gol' and ruang='$ruang'"));
+						$get2=sqlArray(sqlQuery("SELECT toRoman(gol) as gol,ruang FROM ref_pangkat  WHERE gol='$gol' and ruang='$ruang'"));
+				       	$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM ref_pangkat WHERE gol='$gol' and ruang='$ruang'"));
 					   	if($get['cnt']>0 ) $err='Golongan "'.$get2['gol'].'" Ruang "'.$get2['ruang'].'" Sudah Ada !';
 				
 						if($err==''){
 						$aqry = "UPDATE ref_pangkat set gol='$gol',ruang='$ruang',nama='$nama' WHERE Id='".$idplh."'";	$cek .= $aqry;
-								$qry = mysql_query($aqry) or die(mysql_error());
+								$qry = sqlQuery($aqry) or die(mysql_error());
 						}
 				}
 									
@@ -177,7 +177,7 @@ class PangkatObj  extends DaftarObj2{
 		for($i = 0; $i<count($ids); $i++)	{
 			if($err=='' ){
 					$qy = "DELETE FROM ref_pangkat WHERE Id='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;
@@ -216,7 +216,7 @@ class PangkatObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_pangkat WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -238,7 +238,7 @@ class PangkatObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(

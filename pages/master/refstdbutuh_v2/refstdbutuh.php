@@ -97,7 +97,7 @@ class refstdbutuh_v2Obj  extends DaftarObj2{
 									   'jumlah' => $jumlah
 									   );
 						 $cek .= VulnWalkerInsert("ref_std_kebutuhan",$data);
-						$input =  mysql_query(VulnWalkerInsert("ref_std_kebutuhan",$data));
+						$input =  sqlQuery(VulnWalkerInsert("ref_std_kebutuhan",$data));
 						if($input){
 							
 						}else{
@@ -108,7 +108,7 @@ class refstdbutuh_v2Obj  extends DaftarObj2{
 			}elseif($fmST == 1){		
 			 			$data= array('jumlah' => $jumlah);
 						$cek .= VulnWalkerUpdate("ref_std_kebutuhan",$data,"concat(c1,' ',c,' ',d,' ',e,' ',e1' ',f,' ',g,' ',h,' ',i,' ',j) = '$idplh'");	
-						mysql_query(VulnWalkerUpdate("ref_std_kebutuhan",$data,"concat(c1,' ',c,' ',d,' ',e,' ',e1,' ',f,' ',g,' ',h,' ',i,' ',j) = '$idplh'"));				
+						sqlQuery(VulnWalkerUpdate("ref_std_kebutuhan",$data,"concat(c1,' ',c,' ',d,' ',e,' ',e1,' ',f,' ',g,' ',h,' ',i,' ',j) = '$idplh'"));				
 
 			}else{
 			/*if($err==''){ 
@@ -121,7 +121,7 @@ class refstdbutuh_v2Obj  extends DaftarObj2{
  						
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga)
 						"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);
+						$qry = sqlQuery($aqry1);
 						 
 				}*/
 			} //end else
@@ -256,7 +256,7 @@ class refstdbutuh_v2Obj  extends DaftarObj2{
 		$aqry = "select * from ref_std_kebutuhan where concat(c1,' ',c,' ',d,' ',e,' ',e1,' ',f,' ',g,' ',h,' ',i,' ',j) ='".$this->form_idplh."' "; $cek.=$aqry;
 		
 
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		
@@ -290,7 +290,7 @@ class refstdbutuh_v2Obj  extends DaftarObj2{
 		
 		$kodebarang = $dt['f']." ".$dt['g']." ".$dt['h']." ".$dt['i']." ".$dt['j'];
 		$syntax = "select * from ref_barang where concat(f,' ',g,' ',h,' ',i,' ',j) = '$kodebarang' ";
-		$getBarang = mysql_fetch_array(mysql_query($syntax));
+		$getBarang = sqlArray(sqlQuery($syntax));
 		$dt['kodeBarang'] = str_replace(" ",".",$kodebarang);
 		$dt['namaBarang'] = $getBarang['nm_barang'];
 		$dt['satuan'] = $getBarang['satuan'];
@@ -417,13 +417,13 @@ $comboBoxSubUnit =  cmbQuery('cmbSubUnitForm', $selectedSubUnit, $codeAndNameSub
 	 if ($Mode == 1) $Koloms[] = array(" align='center'  ", $TampilCheckBox);
 	 
 	 $kodeSKPD = $isi['c1'].".".$isi['c'].".".$isi['d'].".".$isi['e'].".".$isi['e1'];
-	 $getSubUnit = mysql_fetch_array(mysql_query("select * from ref_skpd where concat(c1,'.',c,'.',d,'.',e,'.',e1) = '$kodeSKPD'"));
+	 $getSubUnit = sqlArray(sqlQuery("select * from ref_skpd where concat(c1,'.',c,'.',d,'.',e,'.',e1) = '$kodeSKPD'"));
 	 $Koloms[] = array('align="left" width="200"',$getSubUnit['nm_skpd']);	 	
 	 $Koloms[] = array('align="center" width="100" ',$isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j']);
 	 
 	 $kodeBarang =$isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'] ;
 	 $syntax = "select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j) = '$kodeBarang'";
-	 $getBarang = mysql_fetch_array(mysql_query($syntax));
+	 $getBarang = sqlArray(sqlQuery($syntax));
  	 $Koloms[] = array('align="left" width="200"',$getBarang['nm_barang']);	 	 	 	 
 	 $Koloms[] = array('align="left" width="100" ',$getBarang['satuan']);
  	 $Koloms[] = array('align="right" width="200"',number_format($isi['jumlah'],0,',','.'));
@@ -452,8 +452,8 @@ $comboBoxSubUnit =  cmbQuery('cmbSubUnitForm', $selectedSubUnit, $codeAndNameSub
 	 if($Main->WITH_THN_ANGGARAN){
 		$aqry1 = "select Max(thn_akun) as thnMax from ref_jurnal where 
 				thn_akun<=$fmThnAnggaran";
-				$qry1=mysql_query($aqry1);			
-				$qry_jurnal=mysql_fetch_array($qry1);
+				$qry1=sqlQuery($aqry1);			
+				$qry_jurnal=sqlArray($qry1);
 				$thn_akun=$qry_jurnal['thnMax'];
 				//$arrKondisi[] = " thn_akun = '$thn_akun'";														
 		$vthnakun = " and thn_akun=$thn_akun ";
@@ -529,8 +529,8 @@ $comboBoxSubUnit =  cmbQuery('cmbSubUnitForm', $selectedSubUnit, $codeAndNameSub
 			
 		}else{
 			/*$query = "select * from ref_barang where nm_barang like '%$fmBARANG%'";
-			$execute = mysql_query($query);
-			while($row = mysql_fetch_array($execute)){
+			$execute = sqlQuery($query);
+			while($row = sqlArray($execute)){
 				$KodeBarang = $row['f1'].".".$row['f2'].".".$row['f'].".".$row['g'].".".$row['h'].".".$row['i'].".".$row['j'];
 				$arrKondisiLike[]= "concat(f1,'.',f2,'.',f,'.',g,'.',h,'.',i,'.',j) = $KodeBarang";
 			}*/

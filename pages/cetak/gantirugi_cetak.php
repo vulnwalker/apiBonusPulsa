@@ -47,23 +47,23 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and gantirugi.thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$Qry = mysql_query("select gantirugi.*,ref_barang.nm_barang from gantirugi inner join ref_barang on concat(gantirugi.f,gantirugi.g,gantirugi.h,gantirugi.i,gantirugi.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg ");
-$jmlDataTGR = mysql_num_rows($Qry);
-$Qry = mysql_query("select gantirugi.*,ref_barang.nm_barang from gantirugi inner join ref_barang on concat(gantirugi.f,gantirugi.g,gantirugi.h,gantirugi.i,gantirugi.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg $LimitHalTGR");
+$Qry = sqlQuery("select gantirugi.*,ref_barang.nm_barang from gantirugi inner join ref_barang on concat(gantirugi.f,gantirugi.g,gantirugi.h,gantirugi.i,gantirugi.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg ");
+$jmlDataTGR = sqlNumRow($Qry);
+$Qry = sqlQuery("select gantirugi.*,ref_barang.nm_barang from gantirugi inner join ref_barang on concat(gantirugi.f,gantirugi.g,gantirugi.h,gantirugi.i,gantirugi.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a1,a,b,c,d,e,f,g,h,i,j,noreg $LimitHalTGR");
 
 $no=$Main->PagePerHal * (($HalTGR*1) - 1);
 $cb=0;
 $jmlTampilTGR = 0;
 
 $ListBarangTGR = "";
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilTGR++;
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangTGR .= "
 	

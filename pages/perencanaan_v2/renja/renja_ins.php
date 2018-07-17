@@ -38,7 +38,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 	
 	function setTitle(){
 	    $id = $_REQUEST['ID_PLAFON'];
-	    $getTahun = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$id'"));
+	    $getTahun = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$id'"));
 		return 'RENCANA KERJA SKPD TAHUN '.$getTahun['tahun'] ;
 	}
 	
@@ -95,26 +95,26 @@ class renja_ins_v2Obj  extends DaftarObj2{
 			}
 			
 			$query = "select * from view_renja where c1 = '$c1' and c ='$c' and d ='$d' and p !='00' and q != '00' and tahun = '$this->tahun'";
-			$ada = mysql_num_rows(mysql_query($query));
+			$ada = sqlNumRow(sqlQuery($query));
 			if($ada > 0){
 			}else{
-				mysql_query("delete from renja where c1 = '$c1' and c ='$c' and d ='$d' and tahun = '$this->tahun' ");
+				sqlQuery("delete from renja where c1 = '$c1' and c ='$c' and d ='$d' and tahun = '$this->tahun' ");
 			}
 			
 			
 			$query = "select * from view_renja where c1 = '$c1' and c ='$c' and d !='00' and p !='00' and q != '00' and tahun = '$this->tahun'";
-			$ada = mysql_num_rows(mysql_query($query));
+			$ada = sqlNumRow(sqlQuery($query));
 			if($ada > 0){
 			}else{
-				mysql_query("delete from renja where c1 = '$c1' and c ='$c' and d ='00' and tahun = '$this->tahun'");
+				sqlQuery("delete from renja where c1 = '$c1' and c ='$c' and d ='00' and tahun = '$this->tahun'");
 				
 			}
 			
 			$query = "select * from view_renja where  c1 = '$c1' and c !='00' and d !='00' and p !='00' and q != '00' and tahun = '$this->tahun'";
-			$ada = mysql_num_rows(mysql_query($query));
+			$ada = sqlNumRow(sqlQuery($query));
 			if($ada > 0){
 			}else{
-				mysql_query("delete from renja where c1 = '$c1' and c ='00' and d ='00' and tahun = '$this->tahun' ");
+				sqlQuery("delete from renja where c1 = '$c1' and c ='00' and d ='00' and tahun = '$this->tahun' ");
 				
 			}
 			
@@ -186,7 +186,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 						$cmbSKPDForm = $skpd[0];
 						
 						
-					$cekUrusan =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
+					$cekUrusan =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
 					if($cekUrusan > 0 ){
 						
 					}else{
@@ -208,10 +208,10 @@ class renja_ins_v2Obj  extends DaftarObj2{
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
 						$cek .= "select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'";
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 					
-					$cekBidang =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekBidang =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekBidang > 0 ){
 						
 					}else{
@@ -233,11 +233,11 @@ class renja_ins_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 
 					
-					$cekSKPD =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$cmbSKPDForm' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekSKPD =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$cmbSKPDForm' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekSKPD > 0 ){
 					}else{
 						$data = array(
@@ -258,7 +258,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query);					
+						sqlQuery($query);					
 					}
 						
 						
@@ -271,7 +271,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 						
 						
 						$cekProgram = "select * from tabel_anggaran  where jenis_anggaran = '$this->jenisAnggaran' and tahun = '$this->tahun' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e = '$cmbUnitForm' and e1 = '$cmbSubUnitForm' and bk ='$bk' and ck ='$ck' and p = '$p' and q='0' and id_tahap = '$this->idTahap'";	
-						if(mysql_num_rows(mysql_query($cekProgram)) == 0){
+						if(sqlNumRow(sqlQuery($cekProgram)) == 0){
 							$data = array(
 											'jenis_anggaran' => $this->jenisAnggaran,
 											'tahun' => $this->tahun,
@@ -288,14 +288,14 @@ class renja_ins_v2Obj  extends DaftarObj2{
 											'nama_modul' => $this->modul
 										  );
 							 $query = VulnWalkerInsert("tabel_anggaran",$data);
-							 mysql_query($query);
+							 sqlQuery($query);
 						}
 						
-						$getTotalPagu = mysql_fetch_array(mysql_query("select sum(jumlah) as paguTotal from view_renja where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and id_tahap = '$this->idTahap'"));
+						$getTotalPagu = sqlArray(sqlQuery("select sum(jumlah) as paguTotal from view_renja where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and id_tahap = '$this->idTahap'"));
 						$totaPagu = $getTotalPagu['paguTotal'];
 						
 						$nomorUrutSebelumnya = $this->nomorUrut - 1;
-						$getPlafon  =  mysql_fetch_array(mysql_query("select plafon from view_plafon where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and no_urut = '$nomorUrutSebelumnya'"));
+						$getPlafon  =  sqlArray(sqlQuery("select plafon from view_plafon where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and no_urut = '$nomorUrutSebelumnya'"));
 						$plafon = $getPlafon['plafon'];
 						$sisanya = $plafon - $totaPagu;
 						$angkaSekarang = $plus + $minus + $paguIndikatif;
@@ -303,7 +303,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 							$err = "Pagu tidak dapat melebihi Plafon !!! ";
 						}else{
 								$cekKegiatan = "select * from tabel_anggaran  where jenis_anggaran = '$this->jenisAnggaran' and tahun = '$this->tahun' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e = '$cmbUnitForm' and e1 = '$cmbSubUnitForm' and bk ='$bk' and ck ='$ck' and p = '$p' and q='$cmbKegiatan' and id_tahap = '$this->idTahap'";	
-								if(mysql_num_rows(mysql_query($cekKegiatan)) == 0){
+								if(sqlNumRow(sqlQuery($cekKegiatan)) == 0){
 								$data = array(
 												'jenis_anggaran' => $this->jenisAnggaran,
 												'tahun' => $this->tahun,
@@ -324,8 +324,8 @@ class renja_ins_v2Obj  extends DaftarObj2{
 												'nama_modul' => $this->modul
 											  );
 								 $queryK = VulnWalkerInsert("tabel_anggaran",$data);
-								 mysql_query($queryK);
-								 $getIDAnggaran = mysql_fetch_array(mysql_query("select max(id_anggaran) as maxIDAnggaran from tabel_anggaran  " ));
+								 sqlQuery($queryK);
+								 $getIDAnggaran = sqlArray(sqlQuery("select max(id_anggaran) as maxIDAnggaran from tabel_anggaran  " ));
 								 $dataDetailRenja = array('lokasi_kegiatan' => $lokasiKegiatan,
 								 						  'jenis_kegiatan' => $jenisKegiatan,
 														  'pagu_indikatif' => $paguIndikatif,
@@ -347,7 +347,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 														  'id_anggaran' => $getIDAnggaran['maxIDAnggaran']
 													);
 								 $queryDetail = VulnWalkerInsert('detail_renja',$dataDetailRenja);
-								 mysql_query($queryDetail);
+								 sqlQuery($queryDetail);
 								 
 							}else{
 								$err = "DATA SUDAH ADA !";
@@ -396,17 +396,17 @@ class renja_ins_v2Obj  extends DaftarObj2{
 						$tanggalSelesai = explode("-",$tanggalSelesai);
 						$tanggalSelesai = $tanggalSelesai[2]."-".$tanggalSelesai[1]."-".$tanggalSelesai[0];
 		
-		$getSKPD = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$ID_RENJA'"));
+		$getSKPD = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$ID_RENJA'"));
 		$sTahun = $getSKPD['tahun'];
 		$sJenisAnggaran = $getSKPD['jenis_anggaran'];
 		$cmbUrusanForm = $getSKPD['c1'];
 		$cmbBidangForm = $getSKPD['c'];
 		$cmbSKPDForm = $getSKPD['d'];
 		$paguSebelumnya = $getSKPD['jumlah'];
-		$getTotalPagu = mysql_fetch_array(mysql_query("select sum(jumlah) as paguTotal from view_renja where tahun = '$sTahun' and jenis_anggaran = '$sJenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and id_tahap = '$this->idTahap'"));
+		$getTotalPagu = sqlArray(sqlQuery("select sum(jumlah) as paguTotal from view_renja where tahun = '$sTahun' and jenis_anggaran = '$sJenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and id_tahap = '$this->idTahap'"));
 		$totaPagu = $getTotalPagu['paguTotal'] - $paguSebelumnya;
 		$nomorUrutSebelumnya = $this->nomorUrut - 1;
-		$getPlafon  =  mysql_fetch_array(mysql_query("select plafon from view_plafon where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and no_urut = '$nomorUrutSebelumnya'"));
+		$getPlafon  =  sqlArray(sqlQuery("select plafon from view_plafon where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and no_urut = '$nomorUrutSebelumnya'"));
 		$plafon = $getPlafon['plafon'];
 		$sisanya = $plafon - $totaPagu;
 		$angkaSekarang = $plus + $minus + $paguIndikatif;
@@ -420,7 +420,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 		else{
 			if(!empty($cmbUnitForm) && empty($cmbSubUnitForm))$err = "Pilih Unit Pelaksana";
 			if($err == ""){
-				$cekSKPD =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$cmbSKPDForm' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+				$cekSKPD =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$cmbSKPDForm' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekSKPD > 0 ){
 					}else{
 						$data = array(
@@ -441,7 +441,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query);					
+						sqlQuery($query);					
 					}
 						
 						
@@ -452,7 +452,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 					}
 						
 						$cekProgram = "select * from tabel_anggaran  where jenis_anggaran = '$this->jenisAnggaran' and tahun = '$this->tahun' and c1= '$cmbUrusanForm' and c='$cmbBidangForm' and d='$cmbSKPDForm' and e = '$cmbUnitForm' and e1 = '$cmbSubUnitForm' and bk ='$bk' and ck ='$ck' and p = '$p' and q='0' and id_tahap = '$this->idTahap'";	
-						if(mysql_num_rows(mysql_query($cekProgram)) == 0){
+						if(sqlNumRow(sqlQuery($cekProgram)) == 0){
 							$data = array(
 											'jenis_anggaran' => $this->jenisAnggaran,
 											'tahun' => $this->tahun,
@@ -469,7 +469,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 											'nama_modul' => $this->modul
 										  );
 							 $query = VulnWalkerInsert("tabel_anggaran",$data);
-							 mysql_query($query);
+							 sqlQuery($query);
 						}
 		
 					
@@ -495,7 +495,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 									   
 										);
 							$query = VulnWalkerUpdate('detail_renja',$data,"id_anggaran='$ID_RENJA'");			
-							mysql_query($query);
+							sqlQuery($query);
 						 $dataAnggaran = array("jumlah" => $paguIndikatif + $plus + $minus,
 						 					   'sumber_dana' => $cmbSumberDana,
 											 'tanggal_update' => date('y-m-d'),
@@ -509,7 +509,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 												);
 												
 												
-				mysql_query(VulnWalkerUpdate("tabel_anggaran",$dataAnggaran," id_anggaran = '$ID_RENJA' "));	
+				sqlQuery(VulnWalkerUpdate("tabel_anggaran",$dataAnggaran," id_anggaran = '$ID_RENJA' "));	
 			}		
 		}
 			 
@@ -714,7 +714,7 @@ class renja_ins_v2Obj  extends DaftarObj2{
 	$ID_PLAFON = $_REQUEST['ID_PLAFON'];
 	$ID_RENJA = $_REQUEST['ID_RENJA'];
 	$Syntax_ambil_yang_udah_ada_plafon = "select * from tabel_anggaran where id_anggaran='$ID_PLAFON'";
-	$ambilSKPD = mysql_fetch_array(mysql_query($Syntax_ambil_yang_udah_ada_plafon));
+	$ambilSKPD = sqlArray(sqlQuery($Syntax_ambil_yang_udah_ada_plafon));
 	$c1 = $ambilSKPD['c1'];
 	$c  = $ambilSKPD['c'];
 	$d  = $ambilSKPD['d'];
@@ -734,23 +734,23 @@ class renja_ins_v2Obj  extends DaftarObj2{
 	$readOnlyJenisKegiatanPlus = "readonly";
 	$readOnlyJenisKegiatanMin = "readonly";
 	$disabledCariProgram = "";
-	$arrayNameUrusan = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='00' and d='00' and e='00' and e1='000'"));
+	$arrayNameUrusan = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='00' and d='00' and e='00' and e1='000'"));
 	$namaUrusan = $arrayNameUrusan['nm_skpd'];
 	
-	$arrayNameBidang = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='$c' and d='00' and e='00' and e1='000'"));
+	$arrayNameBidang = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='$c' and d='00' and e='00' and e1='000'"));
 	$namaBidang = $arrayNameBidang['nm_skpd'];
 	
-	$arrayNameSKPD = mysql_fetch_array(mysql_query("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='00' and e1='000'"));
+	$arrayNameSKPD = sqlArray(sqlQuery("select * from ref_skpd where c1 ='$c1' and c='$c' and d='$d' and e='00' and e1='000'"));
 	$namaSKPD = $arrayNameSKPD['nm_skpd'];
 	
-	$getPengurangan = mysql_fetch_array(mysql_query("select sum(jumlah) as jumlah from view_renja where q != 0 and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d'"));
+	$getPengurangan = sqlArray(sqlQuery("select sum(jumlah) as jumlah from view_renja where q != 0 and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d'"));
 	$sisaPlafon = $plafon - $getPengurangan['jumlah'] ;
 	$sisaDariDB = $getPengurangan['jumlah'] ;
 	
 	$tujuan = "Simpan()";
 	$codeAndNameKegiatan = "select q, concat(q, '. ', nama_program_kegiatan) as vnama from ref_programkegiatan where p='$selectedProgram' and q!='00'";
 	if($ID_RENJA != '' && $ID_RENJA > 0){
-	    $getRenja = mysql_fetch_array(mysql_query("select * from tabel_anggaran where id_anggaran = '$ID_RENJA'"));
+	    $getRenja = sqlArray(sqlQuery("select * from tabel_anggaran where id_anggaran = '$ID_RENJA'"));
 		$selectedUnit = $getRenja['e'];
 		$selectedSubUnit = $getRenja['e1'];
 		$selectedProgram = $getRenja['p'];
@@ -759,13 +759,13 @@ class renja_ins_v2Obj  extends DaftarObj2{
 		$selectedProgram = $getRenja['p'];
 		$selectedP = $getRenja['p'];
 		
-		$getNamaRefUrusan = mysql_fetch_array(mysql_query("select * from ref_urusan where bk = '$bk' and ck ='0' and dk='0'"));
+		$getNamaRefUrusan = sqlArray(sqlQuery("select * from ref_urusan where bk = '$bk' and ck ='0' and dk='0'"));
 		$urusanProgram = $getNamaRefUrusan['nm_urusan'];
-		$getNamaRefBidang = mysql_fetch_array(mysql_query("select * from ref_urusan where bk = '$bk' and ck ='$ck' and dk='0'"));
+		$getNamaRefBidang = sqlArray(sqlQuery("select * from ref_urusan where bk = '$bk' and ck ='$ck' and dk='0'"));
 		$bidangProgram = $getNamaRefBidang['nm_urusan'];
-		$getNamaProgram = mysql_fetch_array(mysql_query("select * from ref_program where bk = '$selectedBK' and ck ='$selectedCK' and p='$selectedProgram' and q='0'"));
+		$getNamaProgram = sqlArray(sqlQuery("select * from ref_program where bk = '$selectedBK' and ck ='$selectedCK' and p='$selectedProgram' and q='0'"));
 		$program = $getNamaProgram ['nama'];
-		$getDetail = mysql_fetch_array(mysql_query("select * from detail_renja where id_anggaran = '$ID_RENJA'"));
+		$getDetail = sqlArray(sqlQuery("select * from detail_renja where id_anggaran = '$ID_RENJA'"));
 		$sisaDariDB = $getPengurangan['jumlah']  - $getDetail['pagu_indikatif'] ;
 	    $paguIndikatif = $getDetail['pagu_indikatif'];
 		$tanggalMulai = explode('-',$getDetail['tanggal_mulai']) ;
@@ -1143,7 +1143,7 @@ $waktuPelaksanaan = $mulai."&nbsp&nbsp s/d &nbsp&nbsp ".$selesai." &nbsp&nbsp ".
 		
 		$idplh = addslashes($_REQUEST['renja_ins_v2_idplh']);
 		$ID_RENJA = $_REQUEST['ID_RENJA'];
-		$getKeterangan = mysql_fetch_array(mysql_query("select * from detail_renja where id_anggaran= '$ID_RENJA'"));
+		$getKeterangan = sqlArray(sqlQuery("select * from detail_renja where id_anggaran= '$ID_RENJA'"));
 		$CPTU = $getKeterangan['capaian_program_tuk'];
 		$CPTK = $getKeterangan['capaian_program_tk'];
 		$MTU = $getKeterangan['masuk_tuk'];

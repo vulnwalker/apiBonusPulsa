@@ -1,9 +1,9 @@
 <?php
 
 //Kabupaten/Kota
-$Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+$Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmWIL == $isi['b'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
@@ -11,9 +11,9 @@ while($isi=mysql_fetch_array($Qry))
 $ListKab = "<select name='fmWIL'  onChange=\"adminForm.submit()\"><option value=''>--- Pilih Kabupaten/Kota ---</option>$Ops</select>";
 
 //SKPD
-$Qry = mysql_query("select * from ref_skpd where d='00' order by nm_skpd");
+$Qry = sqlQuery("select * from ref_skpd where d='00' order by nm_skpd");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmSKPD == $isi['c'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['c']}'>{$isi['nm_skpd']}</option>\n";

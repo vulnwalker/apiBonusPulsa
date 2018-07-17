@@ -879,7 +879,7 @@ else
 				for ($cc = 0; $cc < count($ArTabelTemp); $cc++)
 				{
 					//JalankanQuery
-					MySql_Query($ArTabelTemp[$cc]);
+					sqlQuery($ArTabelTemp[$cc]);
 				}
 
 				$SisipKeun = "";
@@ -921,7 +921,7 @@ else
 					}
 					//echo $SisipKeun1 . "<br>";
 					//Laksanakan Isi Tabel Temp
-					MySQL_Query($SisipKeun);
+					sqlQuery($SisipKeun);
 					
 				}
 
@@ -930,11 +930,11 @@ else
 				$tables = array("buku_induk","dkb","dkpb","gantirugi","history_barang","kib_a","kib_b","kib_c","kib_d","kib_e","kib_f","kir","pemanfaatan","pembiayaan","pemeliharaan","pemindahtanganan","penerimaan","penetapan","pengadaan","pengadaan_pemeliharaan","pengamanan","pengeluaran","penghapusan","penilaian","rkb","rkpb");
 				for ($iTabel = 0; $iTabel < count($tables); $iTabel++)
 				{
-					$IdAkhir = mysql_fetch_array(mysql_query("select max(id)+1 as akhir from {$tables[$iTabel]}"));$IdAkhir=$IdAkhir[0];
+					$IdAkhir = sqlArray(sqlQuery("select max(id)+1 as akhir from {$tables[$iTabel]}"));$IdAkhir=$IdAkhir[0];
 					//echo $IdAkhir;
 					$nIdBaru = $IdAkhir;
-					$JmRow = mysql_num_rows(mysql_query("select * from {$tables[$iTabel]}"));
-					MySQL_Query("update {$tables[$iTabel]}_temp set id_baru=id_baru+$IdAkhir");
+					$JmRow = sqlNumRow(sqlQuery("select * from {$tables[$iTabel]}"));
+					sqlQuery("update {$tables[$iTabel]}_temp set id_baru=id_baru+$IdAkhir");
 					
 				}
 				
@@ -944,73 +944,73 @@ else
 				for ($iBi = 0; $iBi < count($TabelBI); $iBi++)
 				{
 					$TabelBINya = $TabelBI[$iBi];
-					$DataHistori = mysql_query("select a.id as sumber,a.id_baru as sumber_baru, b.id_bukuinduk as target,b.id_bukuinduk_baru as target_baru  from buku_induk_temp as a inner join {$TabelBI[$iBi]}_temp as b on (a.id=b.id_bukuinduk)");
+					$DataHistori = sqlQuery("select a.id as sumber,a.id_baru as sumber_baru, b.id_bukuinduk as target,b.id_bukuinduk_baru as target_baru  from buku_induk_temp as a inner join {$TabelBI[$iBi]}_temp as b on (a.id=b.id_bukuinduk)");
 					//echo "select a.id as sumber,a.id_baru as sumber_baru, b.id_bukuinduk as target,b.id_bukuinduk_baru as target_baru  from buku_induk_temp as a inner join {$TabelBI[$iBi]}_temp as b on (a.id=b.id_bukuinduk)<br>";
-					while ($res = mysql_fetch_array($DataHistori))
+					while ($res = sqlArray($DataHistori))
 					{
 						//Update id_bukuinduk_baru di histori_temp
 						$IdCari = $res['sumber'];
 						$IdBaru = $res['sumber_baru'];
-						MySQL_Query ("update {$TabelBI[$iBi]}_temp set id_bukuinduk_baru = '$IdBaru' where id_bukuinduk='$IdCari'");
+						sqlQuery ("update {$TabelBI[$iBi]}_temp set id_bukuinduk_baru = '$IdBaru' where id_bukuinduk='$IdCari'");
 					}
-					MySQL_Query ("update {$TabelBI[$iBi]}_temp set id_bukuinduk = id_bukuinduk_baru");
+					sqlQuery ("update {$TabelBI[$iBi]}_temp set id_bukuinduk = id_bukuinduk_baru");
 				}
 
 				//Update ID_PENGADAAN DI TABEL PENERIMAAN DARI TABEL PENGADAAN
-					$DataHistori = mysql_query("select a.id as sumber,a.id_baru as sumber_baru, b.id_pengadaan as target,b.id_pengadaan_baru as target_baru  from pengadaan_temp as a inner join penerimaan_temp as b on (a.id=b.id_pengadaan)");
-					while ($res = mysql_fetch_array($DataHistori))
+					$DataHistori = sqlQuery("select a.id as sumber,a.id_baru as sumber_baru, b.id_pengadaan as target,b.id_pengadaan_baru as target_baru  from pengadaan_temp as a inner join penerimaan_temp as b on (a.id=b.id_pengadaan)");
+					while ($res = sqlArray($DataHistori))
 					{
 						$IdCari = $res['sumber'];
 						$IdBaru = $res['sumber_baru'];
-						MySQL_Query ("update penerimaan_temp set id_pengadaan_baru = '$IdBaru' where id_pengadaan='$IdCari'");
+						sqlQuery ("update penerimaan_temp set id_pengadaan_baru = '$IdBaru' where id_pengadaan='$IdCari'");
 					}
-					MySQL_Query ("update penerimaan_temp set id_pengadaan = id_pengadaan_baru");
+					sqlQuery ("update penerimaan_temp set id_pengadaan = id_pengadaan_baru");
 
 				//Update ID_PENERIMAAN DI TABEL PENGELUARAN DARI TABEL PENERIMAAN
-					$DataHistori = mysql_query("select a.id as sumber,a.id_baru as sumber_baru, b.id_penerimaan as target,b.id_penerimaan_baru as target_baru  from penerimaan_temp as a inner join pengeluaran_temp as b on (a.id=b.id_penerimaan)");
-					while ($res = mysql_fetch_array($DataHistori))
+					$DataHistori = sqlQuery("select a.id as sumber,a.id_baru as sumber_baru, b.id_penerimaan as target,b.id_penerimaan_baru as target_baru  from penerimaan_temp as a inner join pengeluaran_temp as b on (a.id=b.id_penerimaan)");
+					while ($res = sqlArray($DataHistori))
 					{
 						$IdCari = $res['sumber'];
 						$IdBaru = $res['sumber_baru'];
-						MySQL_Query ("update pengeluaran_temp set id_penerimaan_baru = '$IdBaru' where id_penerimaan='$IdCari'");
+						sqlQuery ("update pengeluaran_temp set id_penerimaan_baru = '$IdBaru' where id_penerimaan='$IdCari'");
 
 					}
-					MySQL_Query ("update pengeluaran_temp set id_penerimaan = id_penerimaan_baru");
+					sqlQuery ("update pengeluaran_temp set id_penerimaan = id_penerimaan_baru");
 
 				//Update ID_PENGELUARAN DI TABEL PENETAPAN DARI TABEL PENGELUARAN
-					$DataHistori = mysql_query("select a.id as sumber,a.id_baru as sumber_baru, b.id_pengeluaran as target,b.id_pengeluaran_baru as target_baru  from pengeluaran_temp as a inner join penetapan_temp as b on (a.id=b.id_pengeluaran)");
-					while ($res = mysql_fetch_array($DataHistori))
+					$DataHistori = sqlQuery("select a.id as sumber,a.id_baru as sumber_baru, b.id_pengeluaran as target,b.id_pengeluaran_baru as target_baru  from pengeluaran_temp as a inner join penetapan_temp as b on (a.id=b.id_pengeluaran)");
+					while ($res = sqlArray($DataHistori))
 					{
 						$IdCari = $res['sumber'];
 						$IdBaru = $res['sumber_baru'];
-						MySQL_Query ("update penetapan_temp set id_pengeluaran_baru = '$IdBaru' where id_pengeluaran='$IdCari'");
+						sqlQuery ("update penetapan_temp set id_pengeluaran_baru = '$IdBaru' where id_pengeluaran='$IdCari'");
 					}
-					MySQL_Query ("update penetapan_temp set id_pengeluaran = id_pengeluaran_baru");
+					sqlQuery ("update penetapan_temp set id_pengeluaran = id_pengeluaran_baru");
 
 				//Update ID with ID_BARU
 				for ($iTabel = 0; $iTabel < count($tables); $iTabel++)
 				{
-					MySQL_Query("update {$tables[$iTabel]}_temp set id=id_baru");
+					sqlQuery("update {$tables[$iTabel]}_temp set id=id_baru");
 				}
 
 
 
 				//Laksanakan Delete Then Insert
-				//MySQL_Query($SisipKeun1);
+				//sqlQuery($SisipKeun1);
 				for ($iRet = 0; $iRet < count($tables); $iRet++)
 				{
 					//Ambil Column
 					$ListKolom = "";
-					$Qry = mysql_query("desc {$tables[$iRet]}");
-					while($isiListKolom = mysql_fetch_array($Qry))
+					$Qry = sqlQuery("desc {$tables[$iRet]}");
+					while($isiListKolom = sqlArray($Qry))
 					{
 						$ListKolom .= ",".$isiListKolom[0];
 					}
 					$ListKolom = substr($ListKolom,1,strlen($ListKolom));
 					$Delete = "delete from {$tables[$iRet]} where c='$fmSKPD'; ";
 					$Insert = "insert into {$tables[$iRet]} select $ListKolom from {$tables[$iRet]}_temp; ";
-					MySQl_Query($Delete);
-					MySQl_Query($Insert);
+					sqlQuery($Delete);
+					sqlQuery($Insert);
 
 				}
 				
@@ -1048,7 +1048,7 @@ else
 					for ($cc = 0; $cc < count($ArTabelTemp); $cc++)
 					{
 						//JalankanQuery
-						MySql_Query($ArTabelTemp[$cc]);
+						sqlQuery($ArTabelTemp[$cc]);
 					}
 					$Main->Isi = "<br><br>Restor data selesai...";
 

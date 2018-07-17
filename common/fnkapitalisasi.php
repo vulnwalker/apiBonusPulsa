@@ -60,9 +60,9 @@ class KapitalisasiObj  extends DaftarObj2{
 		$kondisi = $_REQUEST['kondisi'];
 		$kondisi_baru = $_REQUEST['kondisi_baru'];
 		
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id = '$idbi' "));
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id = '$idbi' "));
 		$idbi_awal = $bi['idawal'];		
-		$old = mysql_fetch_array(mysql_query("select * from t_kapitalisasi where Id='$Id' "));
+		$old = sqlArray(sqlQuery("select * from t_kapitalisasi where Id='$Id' "));
 				
 		//if($err=='' && $staset_baru == '') $err = "Status Aset belum dipilih!";
 		//if($err=='' && $staset_baru == $staset) $err = "Status Aset harus beda!";
@@ -80,17 +80,17 @@ class KapitalisasiObj  extends DaftarObj2{
 		//tgl >=tgl_buku
 		if(compareTanggal($bi['tgl_buku'],$tgl)==2) $err = 'Tanggal tidak kecil dari Tanggal Buku Barang !';				
 		$tgl_closing=getTglClosing($bi['c'],$bi['d'],$bi['e'],$bi['e1']); 
-		$tgl_susutAkhir = mysql_fetch_array(mysql_query("select tgl from penyusutan where idbi_awal='$idbi' order by tgl desc limit 1"));
+		$tgl_susutAkhir = sqlArray(sqlQuery("select tgl from penyusutan where idbi_awal='$idbi' order by tgl desc limit 1"));
 		
 		$nilai_buku = getNilaiBuku($idbi,$tgl,0);
 		$nilai_susut = getAkumPenyusutan($idbi,$tgl);
 		switch ($fmST){
 			case 0 : { //baru	
-				$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='$idbi'"));
+				$bi = sqlArray(sqlQuery("select * from buku_induk where id='$idbi'"));
 				$staset = $bi['staset'];
 				//- tanggal >= tgl terakhir transaski u/ barang ini
 				if($err=='' && $old['tgl'] <> $tgl ){ 			
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_kapitalisasi where idbi_awal ='$idbi_awal'  "
 					));
 					if( compareTanggal( $tgl, $get['maxtgl'] )==0  ) $err = "Tanggal tidak lebih kecil dari transaksi sebelumnya!";
@@ -114,15 +114,15 @@ class KapitalisasiObj  extends DaftarObj2{
 					
 					$aqry = "insert into t_kapitalisasi (tgl,idbi,uid,tgl_update,staset,staset_baru,ket, idbi_awal,nilai_buku,nilai_susut) ".
 						" values('$tgl','$idbi','$uid',now(),'$staset','$staset_baru','$ket', '$idbi_awal','$nilai_buku','$nilai_susut') "; $cek .= $aqry;
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					$newid= mysql_insert_id();
 					if($qry){
-						mysql_query("update buku_induk set staset = '$staset_baru' where  id='$idbi' ");
+						sqlQuery("update buku_induk set staset = '$staset_baru' where  id='$idbi' ");
 						//jurnal							
 						$jur = jurnalKapitalisasi($bi, $idbi,$uid,$tgl, 1, FALSE, $newid);						
 						$cek .= $jur['cek']; $err .=$jur['err'];
 						//history Aset
-						mysql_query(
+						sqlQuery(
 							"insert into t_history_aset ".
 							"(tgl,idbi,uid,tgl_update,staset,staset_baru,div_staset,idbi_awal,jns,refid) ".
 							" values ".
@@ -137,13 +137,13 @@ class KapitalisasiObj  extends DaftarObj2{
 				if($err==''){
 					//$query = "select Id from t_kapitalisasi where idbi_awal='$idbi_awal' order by tgl desc, Id desc limit 0,1";
 					$query = "select * from t_history_aset where idbi_awal='$idbi_awal'  order by tgl desc, Id desc limit 0,1";
-					$check = mysql_fetch_array(mysql_query($query));				
+					$check = sqlArray(sqlQuery($query));				
 					$cek .= $query;
 					if($check['refid']!= $Id && $check['jns']==3 && $old['tgl'] <> $tgl) $err = "Hanya status aset terakhir yang dapat di edit! \nKecuali Keterangan";	
 				}					
 				if($err=='' && $old['tgl'] <> $tgl ){ 			
 					//- tanggal >= tgl terakhir transaski u/ barang ini
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_kapitalisasi where idbi_awal ='$idbi_awal'  and Id<>'$Id' "
 					));
 					if( compareTanggal( $tgl, $get['maxtgl'] )==0  ) $err = "Tanggal tidak lebih kecil dari transaksi sebelumnya!";
@@ -166,9 +166,9 @@ class KapitalisasiObj  extends DaftarObj2{
 							nilai_susut='$nilai_susut' 
 							WHERE Id='".$Id."'";	
 							$cek .= $aqry;
-					$qry = mysql_query($aqry) or die(mysql_error());
+					$qry = sqlQuery($aqry) or die(mysql_error());
 					if($qry){
-						mysql_query(
+						sqlQuery(
 							"update t_history_aset set tgl='$tgl', uid='$uid', tgl_update=now() where jns=3 and refid='$Id'"
 						);
 					}
@@ -241,10 +241,10 @@ class KapitalisasiObj  extends DaftarObj2{
 		 $err=''; $cek = '';
 		for($i = 0; $i<count($ids); $i++)	{
 			//cek id terakhir
-			$old=mysql_fetch_array(mysql_query("select * from t_kapitalisasi where Id='".$ids[$i]."' "));
+			$old=sqlArray(sqlQuery("select * from t_kapitalisasi where Id='".$ids[$i]."' "));
 			//$aqry = "select Id from t_kapitalisasi where idbi_awal='".$old['idbi_awal']."' order by tgl desc, Id desc limit 0,1";
 			$aqry = "select * from t_history_aset where idbi_awal='".$old['idbi_awal']."'  order by tgl desc, Id desc limit 0,1";			
-			$get = mysql_fetch_array(mysql_query($aqry));
+			$get = sqlArray(sqlQuery($aqry));
 			$cek .= $aqry;
 			//if($err == '' && $get['Id'] != $old['Id'] && $get['jns']==3) $err = "Hanya status aset terakhir yang bisa dihapus!";
 			if($err == '' && $get['jns']!=3) $err = "Hanya status aset terakhir yang bisa dihapus!";
@@ -253,12 +253,12 @@ class KapitalisasiObj  extends DaftarObj2{
 			
 			if($err == ''){
 				$aqry2 = "delete from t_kapitalisasi where Id='".$old['Id']."' "; $cek = $aqry2;
-				$qry = mysql_query($aqry2);
+				$qry = sqlQuery($aqry2);
 				if($qry){
 					$aqry = "update buku_induk set staset = '".$old['staset']."' where id='".$old['idbi']."' "; $cek .= $aqry;
-					mysql_query($aqry);
+					sqlQuery($aqry);
 					$aqry = "delete from t_history_aset where jns=3 and refid='".$ids[$i]."' ";
-					mysql_query($aqry);
+					sqlQuery($aqry);
 				}
 			}
 			
@@ -286,7 +286,7 @@ class KapitalisasiObj  extends DaftarObj2{
 		$cidBI = $_REQUEST['cidBI'];
 		$idbi = $cidBI[0];// 735615;
 		$aqry = "select * from buku_induk where id ='$idbi'"; $cek .= $aqry;
-		$bi = mysql_fetch_array(mysql_query($aqry));
+		$bi = sqlArray(sqlQuery($aqry));
 		
 		$dt['idbi']= $idbi;
 		$dt['staset'] =  $bi['staset'];
@@ -314,12 +314,12 @@ class KapitalisasiObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from t_kapitalisasi where id ='".$this->form_idplh."'  "; 
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		
-		/*$row = mysql_fetch_array(mysql_query("select count(*) as cnt from t_kapitalisasi where idbi_awal='".$get['idbi_awal']."'"));
+		/*$row = sqlArray(sqlQuery("select count(*) as cnt from t_kapitalisasi where idbi_awal='".$get['idbi_awal']."'"));
 		if($row['cnt']>1){
 			$query="select * from t_kapitalisasi where idbi_awal='".$get['idbi_awal']."' order by tgl,Id limit 1";$cek.=$query;
-			$dt=mysql_fetch_array(mysql_query($query));
+			$dt=sqlArray(sqlQuery($query));
 			
 			//set form
 			$fm = $this->setForm($dt);
@@ -353,7 +353,7 @@ class KapitalisasiObj  extends DaftarObj2{
 			$this->form_height = $Main->STASET_OTOMATIS? 120: 150;
 			
 			$idbi = $dt['idbi'];
-			$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id = '$idbi' "));
+			$bi = sqlArray(sqlQuery("select * from buku_induk where id = '$idbi' "));
 			
 			//$stasetAwal = $Main->StatusAsetView[$dt['staset']-1][1] ."<input type='hidden' id='staset' name='staset' value='".$dt['staset']."'>" ;
 			

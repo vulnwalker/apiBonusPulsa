@@ -26,13 +26,13 @@ $head='';
 }
 
 
-$Qry = mysql_query("select * from ref_skpd  order by c,d,e,e1 ");
+$Qry = sqlQuery("select * from ref_skpd  order by c,d,e,e1 ");
 $ListData = "";
 $no=0;
 $cb=0;
 $jmlTampilBRG = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilBRG++;

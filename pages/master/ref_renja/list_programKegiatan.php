@@ -85,12 +85,12 @@ class listProgramKegiatanObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama)values('$nama')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_satuan set nama='$nama' WHERE nama='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -143,8 +143,8 @@ class listProgramKegiatanObj  extends DaftarObj2{
 		case 'getdata':{
 				$Id = $_REQUEST['id'];
 				//query ambil data ref_pegawai
-				$get = mysql_fetch_array( mysql_query("select * from programKegiatan where id='$Id'"));
-				//$stn=mysql_fetch_array(mysql_query("select nama from ref_satuan where Id='".$get['ref_idsatuan']."'"));
+				$get = sqlArray( sqlQuery("select * from programKegiatan where id='$Id'"));
+				//$stn=sqlArray(sqlQuery("select nama from ref_satuan where Id='".$get['ref_idsatuan']."'"));
 				 //$content = array('el_id_barang_temp'=>$get['Id'],'el_nm_barang_temp'=>$get['nama'],'spesifikasi'=>$get['merk'],'ref_idsatuan'=>$get['ref_idsatuan'],'satuan'=>$stn['nama']);	
 				
 					
@@ -199,7 +199,7 @@ class listProgramKegiatanObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_satuan WHERE nama='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -221,7 +221,7 @@ class listProgramKegiatanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(

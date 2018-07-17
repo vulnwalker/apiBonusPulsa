@@ -398,7 +398,7 @@ class SensusScanObj extends DaftarObj2{
 				
 		$tampilCheckbox = $cetak ? "":"<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>"; //<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>
 		
-		/*$brg = mysql_fetch_array(mysql_query(
+		/*$brg = sqlArray(sqlQuery(
 			"select * from ref_barang where concat(f,g,h,i,j)='".$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j']."'"
 		));
 		$vnmbarang = $brg['nm_barang'];
@@ -463,7 +463,7 @@ class SensusScanObj extends DaftarObj2{
 		
 		$vthnperolehan = $isi['thn_perolehan'];
 		$vkondisi = $Main->KondisiBarang[$isi['kondisi']-1][1];
-		$pgw = mysql_fetch_array(mysql_query("select * from ref_pegawai where id='".$isi['ref_idpemegang2']."'"));
+		$pgw = sqlArray(sqlQuery("select * from ref_pegawai where id='".$isi['ref_idpemegang2']."'"));
 		$vPenanggungJawab = $pgw['nip'].'<br>'.$pgw['nama'];
 		$vjml_barang = number_format( $isi['jml_barang'],0, ',', '.');
 		$vjml_harga = number_format( $isi['jml_harga'],2, ',', '.');
@@ -473,9 +473,9 @@ class SensusScanObj extends DaftarObj2{
 		$vthnsensus = $isi['tahun_sensus'];
 	 	$vpetugas = $isi['petugas'];
 		
-		$rng = mysql_fetch_array(mysql_query("select * from ref_ruang where id='".$isi['ref_idruang']."'"));
+		$rng = sqlArray(sqlQuery("select * from ref_ruang where id='".$isi['ref_idruang']."'"));
 		$vRuang = $rng['nm_ruang'];
-		$gdg = mysql_fetch_array(mysql_query("select * from ref_ruang where concat(c,d,e,p,q)='".$rng['c'].$rng['d'].$rng['e'].$rng['p']."0000'"));
+		$gdg = sqlArray(sqlQuery("select * from ref_ruang where concat(c,d,e,p,q)='".$rng['c'].$rng['d'].$rng['e'].$rng['p']."0000'"));
 		$vGedung = $gdg['nm_ruang'];
 		*/
 		
@@ -483,19 +483,19 @@ class SensusScanObj extends DaftarObj2{
 
 		
 		$aqry = "select * from ref_skpd where c='".$isi['c']."' and d='00' and e='00' and e1='".$kdSubUnit0."' ";
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$skpd = $get['nm_skpd'];
 		
 		$aqry = "select * from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='00' and e1='".$kdSubUnit0."' ";
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$opd = $get['nm_skpd'];
 		
 		$aqry = "select * from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$kdSubUnit0."' ";
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$biro = $get['nm_skpd'];
 
 		$aqry = "select * from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."' ";
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$seksi = $get['nm_skpd'];
 		
 		$Koloms[] = array('align=right', $no.'.' );
@@ -712,7 +712,7 @@ class SensusScanObj extends DaftarObj2{
 		//get data 
 		//$aqry = "select * from ref_ruang where c='$c' and d='$d' and e='$e' and p ='".$kode[0]."' and q='".$kode[1]."' "; $cek.=$aqry;
 		$aqry = "select * from barang_tidak_tercatat where id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$fm = $this->setForm($dt);
@@ -743,13 +743,13 @@ class SensusScanObj extends DaftarObj2{
 		}
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
 		
-		$get = mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get = sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];				
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."'"));
 		$seksi = $get['nm_skpd'];				
 		$fmIDBARANG = $dt['f']==''? '':  $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'] ;//'01.01.01.02.01';
 		$bersertifikat = $dt['bersertifikat'];
@@ -769,10 +769,10 @@ class SensusScanObj extends DaftarObj2{
 			case '05': $fmkibevisible = "style='display:block'"; break;
 		}
 		//ambil pegawai Pengurus Barang
-		$read = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpemegang2']."'"));
-		$select = mysql_fetch_array(mysql_query("SELECT* FROM ref_ruang WHERE id = '".$dt['ref_idruang']."'"));
-		$gdg = mysql_fetch_array(
-			   mysql_query("SELECT* FROM ref_ruang 
+		$read = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpemegang2']."'"));
+		$select = sqlArray(sqlQuery("SELECT* FROM ref_ruang WHERE id = '".$dt['ref_idruang']."'"));
+		$gdg = sqlArray(
+			   sqlQuery("SELECT* FROM ref_ruang 
 							WHERE c = '".$select['c']."' 
 							And d = '".$select['d']."'
 							And e ='".$select['e']."'

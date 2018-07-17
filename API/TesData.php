@@ -1,11 +1,11 @@
 <?php
 	 
 	$query = "select * from ref_barang limit 5 ";
-	$hasil = mysql_query($query);
-	if (mysql_num_rows($hasil) > 0) {
+	$hasil = sqlQuery($query);
+	if (sqlNumRow($hasil) > 0) {
 		$response = array();
 		$response["barang"] = array();
-		while ($data = mysql_fetch_array($hasil)){
+		while ($data = sqlArray($hasil)){
 			$h['nm_barang']     = $data['nm_barang'] ;
 			$h['f']      = $data['f'] ;
 			$h['g']      = $data['g'] ;

@@ -80,7 +80,7 @@ class PerbandinganObj extends DaftarObj2{
 		$TotalHalRp = 0;
 		
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry.'<br>';
 		
 		$ListData .= $this->setDaftar_After($no, $ColStyle);
@@ -435,7 +435,7 @@ table
 						IF(4>=$fmTriwulan1 && 4<=$fmTriwulan2,triwulan4,0)
 					) AS jml_rla
 					FROM ref_lra WHERE tahun='$fmTahun' $kond"; 
-			$isi2 = mysql_fetch_array(mysql_query($aqry));
+			$isi2 = sqlArray(sqlQuery($aqry));
 			
 			$lra = $isi2['jml_rla']==''?0:$isi2['jml_rla'];
 			$bm = $isi['belanja_modal']==''?0:$isi['belanja_modal'];
@@ -591,8 +591,8 @@ table
 					"FROM $v_jurnal where jns_trans=1 and kint='01' and ka='01' $kond1 GROUP BY f,g,h,i WITH ROLLUP) bb ".
 				"ON aa.f = bb.f AND aa.g = bb.g AND aa.h = bb.h AND aa.i= bb.i ".
 				"WHERE kint='01' AND ka='01' group by f,g,h,i ;"; $cek .= $query1;
-		$aQry = mysql_query($query1);
-		while($isix=mysql_fetch_array($aQry)){
+		$aQry = sqlQuery($query1);
+		while($isix=sqlArray($aQry)){
 			$no++;
 			
 			//kondisi query jml_rla
@@ -620,7 +620,7 @@ table
 						IF(4>=$fmTriwulan1 && 4<=$fmTriwulan2,triwulan4,0)
 					) AS jml_rla
 					FROM ref_lra WHERE tahun='$fmTahun' $kond $kond2 "; 
-			$isi2 = mysql_fetch_array(mysql_query($aqry)); $cek .= $aqry;
+			$isi2 = sqlArray(sqlQuery($aqry)); $cek .= $aqry;
 			
 			$selisih = $isix['belanja_modal']-$isi2['jml_rla'];
 			
@@ -689,8 +689,8 @@ table
 					"FROM $v_jurnal where jns_trans=1 and kint='01' and ka='02' $kond1 GROUP BY f,g,h,i WITH ROLLUP) bb ".
 				"ON aa.f = bb.f AND aa.g = bb.g AND aa.h = bb.h AND aa.i= bb.i ".
 				"WHERE kint='01' AND ka='02' group by f,g,h,i ;";  $cek .= $query2;
-		$aQry2 = mysql_query($query2);
-		while($isixx=mysql_fetch_array($aQry2)){
+		$aQry2 = sqlQuery($query2);
+		while($isixx=sqlArray($aQry2)){
 			$no++;
 			
 			//kondisi query jml_rla
@@ -716,7 +716,7 @@ table
 						IF(4>=$fmTriwulan1 && 4<=$fmTriwulan2,triwulan4,0)
 					) AS jml_rla
 					FROM ref_lra WHERE tahun='$fmTahun' $kond"; 
-			$isi22 = mysql_fetch_array(mysql_query($aqry2));
+			$isi22 = sqlArray(sqlQuery($aqry2));
 			
 			$selisih2 = $isixx['belanja_modal']-$isi22['jml_rla'];
 			

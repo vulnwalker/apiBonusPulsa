@@ -1,10 +1,10 @@
 <?php
 $Cari = isset($HTTP_GET_VARS['Cari'])?$HTTP_GET_VARS['Cari']:"xxxxx";
-$Qry = mysql_query("select * from ref_rekening where nm_rekening like '%$Cari%' and o <> '00' limit 100");
-$numRow = mysql_num_rows($Qry);
+$Qry = sqlQuery("select * from ref_rekening where nm_rekening like '%$Cari%' and o <> '00' limit 100");
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$no++;
 	$Isi1 = $isi['k'].".".$isi['l'].".".$isi['m'].".".$isi['n'].".".$isi['o'];

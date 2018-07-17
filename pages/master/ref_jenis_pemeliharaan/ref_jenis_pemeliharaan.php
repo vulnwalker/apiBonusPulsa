@@ -58,12 +58,12 @@ class ref_modulObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_modul (nama_modul,status) values('$namaModul','$status')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_modul set nama_modul='$namaModul', status = '$status' WHERE id_modul='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} 
 					
@@ -150,7 +150,7 @@ class ref_modulObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_modul WHERE id_modul='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -347,7 +347,7 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		
 			if($err=='' ){
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id_modul='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;

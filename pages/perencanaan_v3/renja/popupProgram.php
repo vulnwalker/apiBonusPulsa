@@ -83,7 +83,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
 					$kf=$kode_jurnal[5];  
 					$aqry1 ="INSERT into ref_jurnal (ka,kb,kc,kd,ke,kf, nm_account)
 							 "."values('$ka','$kb','$kc','$kd','$ke','$kf','$nm_account')";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					if($qry==FALSE) $err="Gagal Simpan Kode Akun Sudah Ada";
 							
 				}else{
@@ -102,7 +102,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
 					$aqry2 = "UPDATE ref_jurnal
 			        		 set "." nm_account = '$nm_account' ".
 					 		 "WHERE concat(ka,'.',kb,'.',kc,'.',kd,'.',ke,'.',kf)= '".$_REQUEST['kode_jurnal']."'";	$cek .= $aqry2;
-					$qry = mysql_query($aqry2);
+					$qry = sqlQuery($aqry2);
 					if($qry==FALSE) $err="Gagal Edit jurnal";							
 				}else{
 					$err="Gagal menyimpan jurnal";
@@ -118,7 +118,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
  						
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga)
 						"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);
+						$qry = sqlQuery($aqry1);
 						 
 				}*/
 			} //end else
@@ -175,7 +175,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
 			$p = $explodeCode[2];
 			$codeAndNameKegiatan  = "select q, concat(q,'. ',nama) from  ref_program where bk = '$bk' and ck = '$ck' and dk='0' and p='$p' and q != '0'";
 			$cmbKegiatan = cmbQuery('cmbKegiatan', $get['q'], $codeAndNameKegiatan,'','-- Pilih Kegiatan --');
-			$get = mysql_fetch_array(mysql_query("select * from ref_program where concat(bk,'.',ck,'.',p,'.',q) = '$id' and dk = '0' "));
+			$get = sqlArray(sqlQuery("select * from ref_program where concat(bk,'.',ck,'.',p,'.',q) = '$id' and dk = '0' "));
 			$content = array("p" => $get['p'] ,  "nama" => $get['nama'], 'cmbKegiatan' => $cmbKegiatan, "bk" => $bk, "ck" => $ck);
 		
 		break;
@@ -228,7 +228,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
 		$kf=$kode_jurnal[5];
 		
 		$quricoy="select count(*) as cnt from ref_barang where ka='$ka' and kb='$kb' and kc='$kc' and kd='$kd' and ke='$ke' and kf='$kf'";
-		$dt3 = mysql_fetch_array(mysql_query($quricoy));
+		$dt3 = sqlArray(sqlQuery($quricoy));
 		$korong = $dt3 ['cnt'];
 		
 		if($korong>0){
@@ -238,7 +238,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
 		}
 		
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where ka='$ka' and kb='$kb' and kc='$kc' and kd='$kd' and ke='$ke' and kf='$kf' ")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! KODE AKUN Sudah ada di Buku Induk!';}
@@ -298,7 +298,7 @@ class popupProgramRenjaObj  extends DaftarObj2{
 		//$bulan=date('Y-m-')."1";
 		//query ambil data ref_jurnal
 		$aqry = "select * from ref_jurnal where concat(ka,'.',kb,'.',kc,'.',kd,'.'ke,'.',kf)='".$ka.'.'.$kb.'.'.$kc.'.'.$kd.'.'.$ke.'.'.$kf."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_jurnal']=$ka.'.'.$kb.'.'.$kc.'.'.$kd.'.'.$ke.'.'.$kf; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);

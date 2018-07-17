@@ -61,7 +61,7 @@ if($Act=="Simpan")
 			//Simpan Baru
 			$Qry = "insert into rkpb (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,noreg,thn_perolehan,jml_barang,harga,satuan,jml_biaya,uraian,ket,tahun)
 			values ('{$ArWILSKPD[0]}','{$ArWILSKPD[1]}','{$ArWILSKPD[2]}','{$ArWILSKPD[3]}','{$ArWILSKPD[4]}','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','{$ArRekening[0]}','{$ArRekening[1]}','{$ArRekening[2]}','{$ArRekening[3]}','{$ArRekening[4]}','$fmNOREG','$fmTAHUNPEROLEHAN','$fmJUMLAH','$fmHARGASATUAN','$fmSATUAN','$JmlBIAYA','$fmURAIAN','$fmKET','$fmTAHUNANGGARAN')";
-			$Simpan = mysql_query($Qry);
+			$Simpan = sqlQuery($Qry);
 		}
 		if($Baru=="0")
 		{
@@ -79,7 +79,7 @@ if($Act=="Simpan")
 				jml_barang = '$fmJUMLAH', harga = '$fmHARGASATUAN', satuan = '$fmSATUAN', uraian = '$fmURAIAN', ket = '$fmKET', jml_biaya = '$JmlBIAYA',k='{$ArRekening[0]}',l='{$ArRekening[1]}',m='{$ArRekening[2]}',n='{$ArRekening[3]}',o='{$ArRekening[4]}'
 			where $Kriteria ";
 			//echo $Qry;
-			$Simpan = mysql_query($Qry);
+			$Simpan = sqlQuery($Qry);
 		}
 		if($Simpan)
 		{
@@ -121,16 +121,16 @@ if($Act=="Edit"|| $Act == "TambahEdit")
 	{
 		if($Act=="Edit")
 		{
-			$Qry = mysql_query("select * from rkpb where id='{$cidNya[0]}'");
+			$Qry = sqlQuery("select * from rkpb where id='{$cidNya[0]}'");
 		}
 		else
 		{
-			$Qry = mysql_query("select * from view_bi_pemeliharaan where view_bi_pemeliharaan.id='{$cidNya[0]}'");
+			$Qry = sqlQuery("select * from view_bi_pemeliharaan where view_bi_pemeliharaan.id='{$cidNya[0]}'");
 		}
-		$isi = mysql_fetch_array($Qry);
+		$isi = sqlArray($Qry);
 
 		$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
-		$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+		$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
 		$fmWILSKPD = $isi['a'].".".$isi['b'].".".$isi['c'].".".$isi['d'].".".$isi['e'];
 		$fmWILSKPD = $fmWILSKPD == "...." ? "" :$fmWILSKPD;
 		$fmIDBARANG = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
@@ -176,7 +176,7 @@ if($Act=="Hapus" && count($cidRKPB) > 0)
 {
 	for($i = 0; $i<count($cidRKPB); $i++)
 	{
-		$Del = mysql_query("delete from rkpb where id='{$cidRKPB[$i]}' limit 1");
+		$Del = sqlQuery("delete from rkpb where id='{$cidRKPB[$i]}' limit 1");
 		$Info = "<script>alert('Data telah di hapus')</script>";
 	}
 }
@@ -199,9 +199,9 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and view_bi_pemeliharaan.thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(view_bi_pemeliharaan.jml_harga) as total  from view_bi_pemeliharaan inner join ref_barang using(f,g,h,i,j) where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(view_bi_pemeliharaan.jml_harga) as total  from view_bi_pemeliharaan inner join ref_barang using(f,g,h,i,j) where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -209,9 +209,9 @@ else
 {$jmlTotalHarga=0;}
 
 
-$Qry = mysql_query("select view_bi_pemeliharaan.*,ref_barang.nm_barang from view_bi_pemeliharaan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
-$jmlDataBI = mysql_num_rows($Qry);
-$Qry = mysql_query("select view_bi_pemeliharaan.*,ref_barang.nm_barang from view_bi_pemeliharaan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalBI");
+$Qry = sqlQuery("select view_bi_pemeliharaan.*,ref_barang.nm_barang from view_bi_pemeliharaan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
+$jmlDataBI = sqlNumRow($Qry);
+$Qry = sqlQuery("select view_bi_pemeliharaan.*,ref_barang.nm_barang from view_bi_pemeliharaan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalBI");
 
 
 $ListBarang = "";
@@ -219,7 +219,7 @@ $JmlTotalHargaListBI = 0;
 $no=$Main->PagePerHal * (($HalBI*1) - 1);
 $cb=0;
 $jmlTampilBI = 0;
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilBI++;
 	$JmlTotalHargaListBI += $isi['jml_harga'];
@@ -227,8 +227,8 @@ while ($isi = mysql_fetch_array($Qry))
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarang .= "
@@ -296,9 +296,9 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHargaRKPB = mysql_query("select sum(jml_biaya) as total  from rkpb where $KondisiTotalRKPB ");
+$jmlTotalHargaRKPB = sqlQuery("select sum(jml_biaya) as total  from rkpb where $KondisiTotalRKPB ");
 
-if($jmlTotalHargaRKPB = mysql_fetch_array($jmlTotalHargaRKPB))
+if($jmlTotalHargaRKPB = sqlArray($jmlTotalHargaRKPB))
 {
 	$jmlTotalHargaRKPB = $jmlTotalHargaRKPB[0];
 }
@@ -307,15 +307,15 @@ else
 // copy untuk kondisi jumlah total sampai sini
 
 
-$Qry = mysql_query("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
-$jmlDataRKPB = mysql_num_rows($Qry);
-$Qry = mysql_query("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalRKPB");
+$Qry = sqlQuery("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
+$jmlDataRKPB = sqlNumRow($Qry);
+$Qry = sqlQuery("select rkpb.*,ref_barang.nm_barang from rkpb inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalRKPB");
 $no=$Main->PagePerHal * (($HalRKPB*1) - 1);
 $cb=0;
 $jmlTampilRKPB = 0;
 $jmlTotalHargaListRKPB = 0;
 $ListBarangRKPB = "";
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilRKPB++;
 	$jmlTotalHargaListRKPB += $isi['jml_biaya'];
@@ -323,9 +323,9 @@ while ($isi = mysql_fetch_array($Qry))
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdBarang1 = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['noreg'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
-	$TotalBiayaPemeliharaan = mysql_fetch_array(mysql_query("select sum(biaya_pemeliharaan) as biaya from pemeliharaan where concat(f,g,h,i,j,noreg)='$kdBarang1' "));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$TotalBiayaPemeliharaan = sqlArray(sqlQuery("select sum(biaya_pemeliharaan) as biaya from pemeliharaan where concat(f,g,h,i,j,noreg)='$kdBarang1' "));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangRKPB .= "
 	

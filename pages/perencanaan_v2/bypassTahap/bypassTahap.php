@@ -73,7 +73,7 @@ class bypassTahap_v2Obj  extends DaftarObj2{
 	 if( $err=='' && $nama_tahap =='' ) $err= 'NAMA TAHAP ANGGARAN Belum Di Isi !!';
 	 
 	 if($status == "AKTIF"){
-	 	mysql_query("update ref_tahap_anggaran set status_penyusunan = 'TIDAK AKTIF'");
+	 	sqlQuery("update ref_tahap_anggaran set status_penyusunan = 'TIDAK AKTIF'");
 	 }
 	 
 	 
@@ -97,13 +97,13 @@ class bypassTahap_v2Obj  extends DaftarObj2{
 								   'user' => $user
 								  );
 								  
-					mysql_query(VulnWalkerInsert("ref_tahap_anggaran",$data));
+					sqlQuery(VulnWalkerInsert("ref_tahap_anggaran",$data));
 					$nomor_urut = 1;
-								$execute = mysql_query("select * from ref_tahap_anggaran where  anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
-								while($rows = mysql_fetch_array($execute)){
+								$execute = sqlQuery("select * from ref_tahap_anggaran where  anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
+								while($rows = sqlArray($execute)){
 									$dataUpdateAll = array("no_urut" => $nomor_urut);
 									$currentIdTahap = $rows['id_tahap'];
-									mysql_query(VulnWalkerUpdate('ref_tahap_anggaran',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
+									sqlQuery(VulnWalkerUpdate('ref_tahap_anggaran',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
 								   $nomor_urut = $nomor_urut + 1;
 								}
 					
@@ -123,14 +123,14 @@ class bypassTahap_v2Obj  extends DaftarObj2{
 								   'tgl_update'=> date("Y-m-d"),
 								   'user' => $user
 								  );
-						mysql_query(VulnWalkerUpdate('ref_tahap_anggaran',$data, "id_tahap = '$idplh'"))	;
+						sqlQuery(VulnWalkerUpdate('ref_tahap_anggaran',$data, "id_tahap = '$idplh'"))	;
 						
 						$nomor_urut = 1;
-								$execute = mysql_query("select * from ref_tahap_anggaran where  anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
-								while($rows = mysql_fetch_array($execute)){
+								$execute = sqlQuery("select * from ref_tahap_anggaran where  anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
+								while($rows = sqlArray($execute)){
 									$dataUpdateAll = array("no_urut" => $nomor_urut);
 									$currentIdTahap = $rows['id_tahap'];
-									mysql_query(VulnWalkerUpdate('ref_tahap_anggaran',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
+									sqlQuery(VulnWalkerUpdate('ref_tahap_anggaran',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
 								   $nomor_urut = $nomor_urut + 1;
 								}
 				
@@ -228,7 +228,7 @@ class bypassTahap_v2Obj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_tahap_anggaran WHERE id_tahap='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -245,16 +245,16 @@ class bypassTahap_v2Obj  extends DaftarObj2{
 	  if ($this->form_fmST==0) {
 		$this->form_caption = 'Baru';
 		$username = $_COOKIE['coID'];
-		$cekRows = mysql_num_rows(mysql_query("select * from default_tahap where user = '$username'"));
+		$cekRows = sqlNumRow(sqlQuery("select * from default_tahap where user = '$username'"));
 		if($cekRows > 0){
-			$getDefault = mysql_fetch_array(mysql_query("select * from default_tahap where user = '$username'"));
+			$getDefault = sqlArray(sqlQuery("select * from default_tahap where user = '$username'"));
 			$tahun = $getDefault['tahun'];
 			$anggaran = $getDefault['jenis_anggaran'];
 		}
 		$status = "PASIF";
-		$getMaxNomorAku = mysql_fetch_array(mysql_query("select max(id_tahap) max from ref_tahap_anggaran"));
+		$getMaxNomorAku = sqlArray(sqlQuery("select max(id_tahap) max from ref_tahap_anggaran"));
 		$maxNomorAku = $getMaxNomorAku['max'];
-		$getNomorAku = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$maxNomorAku'"));
+		$getNomorAku = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$maxNomorAku'"));
 		$nomor_aku = $getNomorAku['no_urut'];
 		$maxJenisAnggaran = $getNomorAku['anggaran'];
 		$maxTahun = $getNomorAku['tahun'];
@@ -292,18 +292,18 @@ class bypassTahap_v2Obj  extends DaftarObj2{
 		$arrayJenisForm = "";
 		$namaModul = "";
 		 for ($i = 0 ; $i < sizeof($arrayIdModule); $i ++){
-		 	$getModul = mysql_fetch_array(mysql_query("select * from ref_modul where id_modul = '$arrayIdModule[$i]' "));
+		 	$getModul = sqlArray(sqlQuery("select * from ref_modul where id_modul = '$arrayIdModule[$i]' "));
 			
 			$namaModul .= $getModul['nama_modul'].$pemisah; 		
 		 }
 		$idTahap = $dt['id_tahap'];
-		if(mysql_num_rows(mysql_query("select * from tabel_anggaran where id_tahap = '$idTahap'")) != 0){
+		if(sqlNumRow(sqlQuery("select * from tabel_anggaran where id_tahap = '$idTahap'")) != 0){
 		$adaGak = "disabled";
 	}	
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "select *from " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		   $jamMulai = "<input type ='text' class = 'clockpicker'>";
 		   $arrayJam = array(array('00','00'),
 		   					 array('01','01'),
@@ -385,13 +385,13 @@ class bypassTahap_v2Obj  extends DaftarObj2{
     $findModul = "<input type='text' id ='namaModul' name = 'namaModul' value='$namaModul' style='width : 300px;' readonly > <input type='hidden' name='idModul' id='idModul' value='$idModul'>  <button type='button' onclick='bypassTahap_v2.CariModul()'>CARI </button>";
    
 	$maxNoUrut = $nomor_aku ;
-	$getDataMax = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut = '$maxNoUrut' and anggaran = '$maxJenisAnggaran' and tahun = '$maxTahun'  " ));
+	$getDataMax = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut = '$maxNoUrut' and anggaran = '$maxJenisAnggaran' and tahun = '$maxTahun'  " ));
 	$arrayTanggalMulaiBefore = explode("-",$getDataMax['tanggal_mulai']);
 	$mulaiBefore =  $arrayTanggalMulaiBefore[2]."-".$arrayTanggalMulaiBefore[1]."-".$arrayTanggalMulaiBefore[0]. "  JAM : ".$getDataMax['jam_mulai'];
 	$arrayTanggalSelesaiBefore = explode("-",$getDataMax['tanggal_selesai']);
 	$mulaiAfter =  $arrayTanggalSelesaiBefore[2]."-".$arrayTanggalSelesaiBefore[1]."-".$arrayTanggalSelesaiBefore[0]. "  JAM : ".$getDataMax['jam_selesai'];
 	
-$getDataMaxSetelah = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where no_urut = '$maxNoUrutSesudahnya' and anggaran = '$maxJenisAnggaran' and tahun = '$maxTahun' " ));
+$getDataMaxSetelah = sqlArray(sqlQuery("select * from ref_tahap_anggaran where no_urut = '$maxNoUrutSesudahnya' and anggaran = '$maxJenisAnggaran' and tahun = '$maxTahun' " ));
 	$arrayTanggalMulaiSetelah = explode("-",$getDataMaxSetelah['tanggal_mulai']);
 	$mulaiSetelahnya =  $arrayTanggalMulaiSetelah[2]."-".$arrayTanggalMulaiSetelah[1]."-".$arrayTanggalMulaiSetelah[0]. "  JAM : ".$getDataMaxSetelah['jam_mulai'];
 	$arrayTanggalSelesaiSetelah = explode("-",$getDataMaxSetelah['tanggal_selesai']);
@@ -489,7 +489,7 @@ $getDataMaxSetelah = mysql_fetch_array(mysql_query("select * from ref_tahap_angg
 	 $arrayIdModule = explode(';',$isi['id_modul']);
 	 $arrayNamaModule = array();
 	 for ($i = 0 ; $i < sizeof($arrayIdModule); $i ++){
-	 	$getModul = mysql_fetch_array(mysql_query("select * from ref_modul where id_modul = '$arrayIdModule[$i]' "));
+	 	$getModul = sqlArray(sqlQuery("select * from ref_modul where id_modul = '$arrayIdModule[$i]' "));
 		
 		$arrayNamaModule[] = $getModul['nama_modul'];
 	 }
@@ -648,37 +648,37 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		 $err=''; $cek='';
 		for($i = 0; $i<count($ids); $i++)	{
 		
-			$cekAdaData = mysql_num_rows(mysql_query("select * from tabel_anggaran where id_tahap = '$ids[$i]'"));
+			$cekAdaData = sqlNumRow(sqlQuery("select * from tabel_anggaran where id_tahap = '$ids[$i]'"));
 			if($cekAdaData != 0){
 				//$err = "Tidak Dapat Menghapus Tahap";
-				mysql_query("delete from tabel_anggaran where id_tahap = '$ids[$i]'");
+				sqlQuery("delete from tabel_anggaran where id_tahap = '$ids[$i]'");
 			}
 			
 			
 			if($err=='' ){
 					
 					$queryGet = "select * FROM $this->TblName_Hapus WHERE id_tahap='".$ids[$i]."'";
-					$getInfo = mysql_fetch_array(mysql_query($queryGet));
+					$getInfo = sqlArray(sqlQuery($queryGet));
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id_tahap='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					$anggaran = $getInfo['anggaran'];
 					$tahun = $getInfo['tahun'];
 					$nomor_urut = 1;
-					$execute = mysql_query("select * from ref_tahap_anggaran where status_penyusunan ='AKTIF' and anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
-					while($rows = mysql_fetch_array($execute)){
+					$execute = sqlQuery("select * from ref_tahap_anggaran where status_penyusunan ='AKTIF' and anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
+					while($rows = sqlArray($execute)){
 					      $dataUpdateAll = array("no_urut" => $nomor_urut);
 						  $currentIdTahap = $rows['id_tahap'];
-						  mysql_query(VulnWalkerUpdate('bypassTahap_v2',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
+						  sqlQuery(VulnWalkerUpdate('bypassTahap_v2',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
 						  $nomor_urut = $nomor_urut + 1;
 					}
 					$cek .= $queryGet;	
 					
 					$nomor_urut = 1;
-								$execute = mysql_query("select * from ref_tahap_anggaran where  anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
-								while($rows = mysql_fetch_array($execute)){
+								$execute = sqlQuery("select * from ref_tahap_anggaran where  anggaran='$anggaran' and  tahun = '$tahun' ORDER BY id_tahap");
+								while($rows = sqlArray($execute)){
 									$dataUpdateAll = array("no_urut" => $nomor_urut);
 									$currentIdTahap = $rows['id_tahap'];
-									mysql_query(VulnWalkerUpdate('ref_tahap_anggaran',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
+									sqlQuery(VulnWalkerUpdate('ref_tahap_anggaran',$dataUpdateAll," id_tahap = '$currentIdTahap'") );
 								   $nomor_urut = $nomor_urut + 1;
 								}
 			}else{

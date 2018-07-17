@@ -359,16 +359,16 @@ switch ($Pg) {
 					" and tgl_ba>='".$tg_ba."' and tgl_ba<='".$tg_ba_ak."' ".
 					" group by tgl_ba, no_ba, no_spk, tgl_spk, bk,ck,dk, bk_p,ck_p,dk_p, p,q ;"
 				; $cek.= $qry4;
-				$qrba = mysql_query($qry4) ;			
+				$qrba = sqlQuery($qry4) ;			
 				$jml_ba = 0;
 				$bast = array();
-				while($isiba = mysql_fetch_array($qrba) ){
+				while($isiba = sqlArray($qrba) ){
 					$kd_unit = '';$kd_bidang='';$kd_urus=''; $nm_urus='';
 					$no_ba  = $isiba['no_ba'];
 					$no_kontrak=$isiba['no_spk'];
 					$tgl_kontrak = $isiba['tgl_spk'];
 					//$aqrskpd = "select * from ref_skpd where c='".$isiba['c']."' and d='".$isiba['d']."' and e='00' and e1='000' ;"; $cek.= $aqrskpd;
-					//$skpd = mysql_fetch_array(mysql_query($aqrskpd));
+					//$skpd = sqlArray(sqlQuery($aqrskpd));
 					//$nm_unit = $skpd['nm_skpd'];
 					
 					//urusan - bidang ---------------------------------------------------------
@@ -377,28 +377,28 @@ switch ($Pg) {
 					$kd_unit= $isiba['dk'];
 					/**if($kd_urus == ''){	
 						//ambil mapping
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"select * from ref_skpd_urusan where c='".$isiba['c']."' and d='".$isiba['d']."' "
 						));
 						$kd_urus = $get['bk']; $kd_bidang = $get['ck']; $kd_unit=$get['dk'];
 					}**/
 					
-					$get = mysql_fetch_array(mysql_query( "select * from ref_urusan where bk='$kd_urus' and ck='0' "	));
+					$get = sqlArray(sqlQuery( "select * from ref_urusan where bk='$kd_urus' and ck='0' "	));
 					$nm_urus = $get['nm_urusan'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk=0 "	));
+					$get = sqlArray(sqlQuery( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk=0 "	));
 					$nm_bidang = $get['nm_urusan'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk='$kd_unit' "	));
+					$get = sqlArray(sqlQuery( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk='$kd_unit' "	));
 					$nm_unit = $get['nm_urusan'];
 					
 					
 					//program - kegiatan -------------------------------------------------------
 					$kd_prog=$isiba['bk_p'].'.'.$isiba['ck_p'].'.'. $isiba['p'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_program ".
+					$get = sqlArray(sqlQuery( "select * from ref_program ".
 						"where bk='".$isiba['bk_p']."' and ck='".$isiba['ck_p']."' and dk='".$isiba['dk_p']."' and p='$kd_prog' and q=0 "	));				
 					$nm_prog =$get['nama'];				
 					
 					$kd_keg=$isiba['bk_p'].'.'.$isiba['ck_p'].'.'. $isiba['p'].'.'.$isiba['q'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_program ".
+					$get = sqlArray(sqlQuery( "select * from ref_program ".
 						"where bk='".$isiba['bk_p']."' and ck='".$isiba['ck_p']."' and dk='".$isiba['dk_p']."' and p='$kd_prog' and q='$kd_keg' "	));
 					$nm_keg=$get['nama']; 
 					
@@ -432,13 +432,13 @@ switch ($Pg) {
 					//}
 
 					$cek .= $aqrbi;
-					$qrbi = mysql_query($aqrbi);
-					while($bi = mysql_fetch_array($qrbi)){
+					$qrbi = sqlQuery($aqrbi);
+					while($bi = sqlArray($qrbi)){
 						//cari akun belanja modal dari ref_barang
 						
 						
 						$kd_akun = $bi['m1'].'.'.$bi['m2'].'.'.$bi['m3'].'.'.genNumber($bi['m4'],2).'.'. genNumber( $bi['m5'],2 );
-						$isiakun = mysql_fetch_array(mysql_query(
+						$isiakun = sqlArray(sqlQuery(
 							" select * from ref_jurnal where ka='".$bi['m1']."' and kb='".$bi['m2']."' and kc='".$bi['m3']."' and kd='".$bi['m4']."' and ke='".$bi['m5']."' and kf='0' "
 						));
 						
@@ -453,10 +453,10 @@ switch ($Pg) {
 								" and bb.m1='".$bi['m1']."' and bb.m2='".$bi['m2']."' and bb.m3='".$bi['m3']."' and bb.m4='".$bi['m4']."' and bb.m5='".$bi['m5']."' ".
 								" and (id_lama is null or id_lama ='') "
 								; $cekbrg = $aqrbi2;
-							$qrbi2 = mysql_query($aqrbi2);
+							$qrbi2 = sqlQuery($aqrbi2);
 							$jml_brg = 0; $data_brg = array();
-							while($bi2 = mysql_fetch_array($qrbi2)){
-								$brg = mysql_fetch_array(mysql_query(
+							while($bi2 = sqlArray($qrbi2)){
+								$brg = sqlArray(sqlQuery(
 									" select * from ref_barang  ".						
 									" where f='".$bi2['f']."' and g='".$bi2['g']."' and h='".$bi2['h']."' and i='".$bi2['i']."' and j='".$bi2['j']."' "
 								));	
@@ -708,15 +708,15 @@ switch ($Pg) {
 					//" and tgl_ba>='".$tg_ba."' and tgl_ba<='".$tg_ba_ak."' ".
 					" group by tgl_ba, no_ba, no_spk, tgl_spk, bk,ck,dk, bk_p,ck_p,dk_p, p,q ;"
 				; $cek.= $qry4;
-				$qrba = mysql_query($qry4) ;			
+				$qrba = sqlQuery($qry4) ;			
 				$jml_ba = 0;
 				$bast = array();
-				while($isiba = mysql_fetch_array($qrba) ){
+				while($isiba = sqlArray($qrba) ){
 					$kd_unit = '';$kd_bidang='';$kd_urus=''; $nm_urus='';
 					$no_ba  = $isiba['no_ba'];
 					$no_kontrak=$isiba['no_spk'];
 					//$aqrskpd = "select * from ref_skpd where c='".$isiba['c']."' and d='".$isiba['d']."' and e='00' and e1='000' ;"; $cek.= $aqrskpd;
-					//$skpd = mysql_fetch_array(mysql_query($aqrskpd));
+					//$skpd = sqlArray(sqlQuery($aqrskpd));
 					//$nm_unit = $skpd['nm_skpd'];
 					
 					//urusan - bidang ---------------------------------------------------------
@@ -725,28 +725,28 @@ switch ($Pg) {
 					$kd_unit= $isiba['dk'];
 					/**if($kd_urus == ''){	
 						//ambil mapping
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"select * from ref_skpd_urusan where c='".$isiba['c']."' and d='".$isiba['d']."' "
 						));
 						$kd_urus = $get['bk']; $kd_bidang = $get['ck']; $kd_unit=$get['dk'];
 					}**/
 					
-					$get = mysql_fetch_array(mysql_query( "select * from ref_urusan where bk='$kd_urus' and ck='0' "	));
+					$get = sqlArray(sqlQuery( "select * from ref_urusan where bk='$kd_urus' and ck='0' "	));
 					$nm_urus = $get['nm_urusan'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk=0 "	));
+					$get = sqlArray(sqlQuery( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk=0 "	));
 					$nm_bidang = $get['nm_urusan'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk='$kd_unit' "	));
+					$get = sqlArray(sqlQuery( "select * from ref_urusan where bk='$kd_urus' and ck='$kd_bidang' and dk='$kd_unit' "	));
 					$nm_unit = $get['nm_urusan'];
 					
 					
 					//program - kegiatan -------------------------------------------------------
 					$kd_prog=$isiba['bk_p'].'.'.$isiba['ck_p'].'.'. $isiba['p'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_program ".
+					$get = sqlArray(sqlQuery( "select * from ref_program ".
 						"where bk='".$isiba['bk_p']."' and ck='".$isiba['ck_p']."' and dk='".$isiba['dk_p']."' and p='$kd_prog' and q=0 "	));				
 					$nm_prog =$get['nama'];				
 					
 					$kd_keg=$isiba['bk_p'].'.'.$isiba['ck_p'].'.'. $isiba['p'].'.'.$isiba['q'];
-					$get = mysql_fetch_array(mysql_query( "select * from ref_program ".
+					$get = sqlArray(sqlQuery( "select * from ref_program ".
 						"where bk='".$isiba['bk_p']."' and ck='".$isiba['ck_p']."' and dk='".$isiba['dk_p']."' and p='$kd_prog' and q='$kd_keg' "	));
 					$nm_keg=$get['nama']; 
 					
@@ -780,15 +780,15 @@ switch ($Pg) {
 					
 
 					$cek .= $aqrbi;
-					$qrbi = mysql_query($aqrbi);
-					while($bi = mysql_fetch_array($qrbi)){
+					$qrbi = sqlQuery($aqrbi);
+					while($bi = sqlArray($qrbi)){
 						//cari akun belanja modal dari ref_barang
-						/**$brg = mysql_fetch_array(mysql_query(
+						/**$brg = sqlArray(sqlQuery(
 							" select * from ref_barang  ".						
 							" where f='".$bi['f']."' and g='".$bi['g']."' and h='".$bi['h']."' and i='".$bi['i']."' and j='".$bi['j']."' "
 						));**/
 						$kd_akun = $bi['m1'].'.'.$bi['m2'].'.'.$bi['m3'].'.'.genNumber($bi['m4'],2).'.'. genNumber( $bi['m5'],2 );
-						$isiakun = mysql_fetch_array(mysql_query(
+						$isiakun = sqlArray(sqlQuery(
 							" select * from ref_jurnal where ka='".$bi['m1']."' and kb='".$bi['m2']."' and kc='".$bi['m3']."' and kd='".$bi['m4']."' and ke='".$bi['m5']."' and kf='0' "
 						));
 						

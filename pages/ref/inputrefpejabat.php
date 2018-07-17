@@ -46,7 +46,7 @@ if($Act == "Simpan")
 		else
 		{
 			$CekKon = $ArIDPEJABAT[0].$ArIDPEJABAT[1].$ArIDPEJABAT[2].$ArIDPEJABAT[3];
-			$Cek = mysql_num_rows(mysql_query("select * from ref_pejabat where concat(c,d,e,id_pejabat)='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from ref_pejabat where concat(c,d,e,id_pejabat)='$CekKon' "));
 			if($Cek && $BARU=="1")
 			{
 				$Info = "<script>alert('Kode $fmKODEPEJABAT sudah ada, data tidak disimpan');</script>";
@@ -56,11 +56,11 @@ if($Act == "Simpan")
 				//SIMPAN DATA
 				if($BARU=="1")
 				{
-					$Simpan = mysql_query("insert into ref_pejabat (c,d,e,id_pejabat,nm_pejabat,nik,jabatan,ttd1,ttd2)values('{$ArIDPEJABAT[0]}','{$ArIDPEJABAT[1]}','{$ArIDPEJABAT[2]}','{$ArIDPEJABAT[3]}','$fmNAMAPEJABAT','$fmNIKPEJABAT','$fmJABATANPEJABAT','$isiTTD1','$isiTTD2')");
+					$Simpan = sqlQuery("insert into ref_pejabat (c,d,e,id_pejabat,nm_pejabat,nik,jabatan,ttd1,ttd2)values('{$ArIDPEJABAT[0]}','{$ArIDPEJABAT[1]}','{$ArIDPEJABAT[2]}','{$ArIDPEJABAT[3]}','$fmNAMAPEJABAT','$fmNIKPEJABAT','$fmJABATANPEJABAT','$isiTTD1','$isiTTD2')");
 				}
 				if($BARU=="0")
 				{
-					$Simpan = mysql_query("update ref_pejabat set nm_pejabat='$fmNAMAPEJABAT',nik='$fmNIKPEJABAT',jabatan='$fmJABATANPEJABAT',ttd1='$isiTTD1',ttd2='$isiTTD2' where concat(c,d,e,id_pejabat)='$CekKon' limit 1");
+					$Simpan = sqlQuery("update ref_pejabat set nm_pejabat='$fmNAMAPEJABAT',nik='$fmNIKPEJABAT',jabatan='$fmJABATANPEJABAT',ttd1='$isiTTD1',ttd2='$isiTTD2' where concat(c,d,e,id_pejabat)='$CekKon' limit 1");
 				}
 				if($Simpan)
 				{
@@ -81,7 +81,7 @@ if($Act == "Hapus")
 {
 	$fmID = $cidSKPD[0];
 	$Kondisi = "concat(c,'.',d,'.',e,'.',id_pejabat)='$fmID'";
-	$Hapus = mysql_query("delete from ref_pejabat where $Kondisi");
+	$Hapus = sqlQuery("delete from ref_pejabat where $Kondisi");
 	if($Hapus)
 	{
 		$Info = "<script>alert('Data sudah dihapus');</script>";
@@ -100,8 +100,8 @@ if($Act == "Edit")
 	{
 		$fmID = $cidSKPD[0];
 		$Kondisi = "concat(c,'.',d,'.',e,'.',id_pejabat)='$fmID'";
-		$Qry = mysql_query("select * from ref_pejabat where $Kondisi limit 1");
-		while($isi=mysql_fetch_array($Qry))
+		$Qry = sqlQuery("select * from ref_pejabat where $Kondisi limit 1");
+		while($isi=sqlArray($Qry))
 		{
 			$fmKODEPEJABAT = $isi['c'].".".$isi['d'].".".$isi['e'].".".$isi['id_pejabat'];
 			$fmNAMAPEJABAT = $isi['nm_pejabat'];
@@ -168,15 +168,15 @@ $ListSUBUNIT = cmbQuery1("fmSUBUNIT",$fmSUBUNIT,"select e,nm_skpd from ref_skpd 
 
 
 $NmHEAD = "NAMA PEJABAT";
-$Qry = mysql_query("select * from ref_pejabat where $Kondisi order by c,d,e,id_pejabat");
-$jmlDataSKPD = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from ref_pejabat where $Kondisi order by c,d,e,id_pejabat $LimitHalPEJABAT ");
+$Qry = sqlQuery("select * from ref_pejabat where $Kondisi order by c,d,e,id_pejabat");
+$jmlDataSKPD = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from ref_pejabat where $Kondisi order by c,d,e,id_pejabat $LimitHalPEJABAT ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalPEJABAT*1) - 1);
 $cb=0;
 $jmlTampilSKPD = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilSKPD++;

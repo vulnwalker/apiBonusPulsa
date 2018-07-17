@@ -120,14 +120,14 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 					
 					if($err==''){
 						$aqry = "insert into penghapusan_usul_det (id_bukuinduk,tgl_update,uid,ket_usul,tgl_ket_usul)"."values('$id_bukuinduk',now(),'$uid','$keterangan','$tgl_ket_usul')";	$cek .= $aqry;	
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 					
 				}else{
-					$old = mysql_fetch_array(mysql_query("select * from penghapusan_usul where Id='$idplh'"));
+					$old = sqlArray(sqlQuery("select * from penghapusan_usul where Id='$idplh'"));
 					if( $err=='' ){
 						if($no_usulan!=$old['no_usulan'] ){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"select count(*) as cnt from penghapusan_usul where no_usulan='$no_usulan' "
 							));
 							if($get['cnt']>0 ) $err='No Usulan Sudah Ada!';
@@ -156,7 +156,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 											 ket_usul='$keterangan'".
 									// "where Id='".$idplh."' and id_bukuinduk";	$cek .= $sql;
 									 "where Id='".$Id."' and sesi='".$sesi."' and id_bukuinduk='".$id_bukuinduk."' ";	$cek .= $sql; 
-							$query = mysql_query($sql);
+							$query = sqlQuery($sql);
 							
 							//*****************************************
 							
@@ -207,19 +207,19 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		if($err==''){
 	  	   $aqry = "INSERT into penghapusan_usul_det(ket_ba,tgl_ket_ba,tindak_lanjut,status,kondisi)"."
 		  		    values('$ket_ba','$tgl_ket_ba','$tindak_lanjut','$status','$konBrg')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 		 }
 	 }else{
-		$old = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id='$idplh'"));
+		$old = sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id='$idplh'"));
 		if( $err=='' ){
 			if($no_usulan!=$old['no_usulan'] ){
-				$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_usulan='$no_usulan' "));
+				$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_usulan='$no_usulan' "));
 					if($get['cnt']>0 ) $err='No Usulan Sudah Ada!';
 			}
 		}
 		//cek tgl ba > tglusul
 	 	//$aqry = "select * from penghapusan_usul where id=''";
-	 	//$old = mysql_fetch_array(mysql_query($aqry));
+	 	//$old = sqlArray(sqlQuery($aqry));
 		//if($err=='' && $old['tgl_usul'] > $tgl_ket_ba ) $err = "Tanggal pengecekan tidak lebih kecil dari tanggal usulan! ";
 	
 		if($err==''){
@@ -234,7 +234,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 				$sesi = $arr[1];
 				$id_bukuinduk = $arr[2];
 				//get data usulan
-				$usul = mysql_fetch_array(mysql_query("select * from penghapusan_usul where id='$Id'"));
+				$usul = sqlArray(sqlQuery("select * from penghapusan_usul where id='$Id'"));
 				//cek tgl pengecekan > tglusul ------------------------------------------
 				if($err=='' && $usul['tgl_usul'] > $tgl_ket_ba ) $err = "Tanggal pengecekan tidak lebih kecil dari tanggal usulan!";
 				//cek barang rusak berat tidak boleh dipindahtangankan ------------------
@@ -251,7 +251,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 									   kondisi = '$konBrg' ". //kondisi di tabel penghapusan_usul_det
 											// "where Id='".$idplh."' and id_bukuinduk";	$cek .= $sql;
 							"where Id='".$Id."' and sesi='".$sesi."' and id_bukuinduk='".$id_bukuinduk."' ";	$cek .= $sql; 
-					$query = mysql_query($sql);	
+					$query = sqlQuery($sql);	
 				}else{
 					break;
 				}
@@ -288,11 +288,11 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 			$valuearr[]= "('$idusul','".$ids[$i]."','$sesi', '$uid', now())";
 			//cek id buku induk sudah ada!
 			$aqry = "select count(*) as cnt from penghapusan_usul_det where Id='$idusul' and sesi='$sesi' and id_bukuinduk='".$ids[$i]."' "; $cek.= $aqry;
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				$aqry
 			));
 			if($get['cnt']>0){
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select concat(a1,'.',a,'.',b,'.',c,'.',d,'.',substring(thn_perolehan,3,2),'.', e,'.', e1,'.',f,'.',g,'.',h,'.',i,'.',j,'.',noreg) as barcode from buku_induk where Id='".$ids[$i]."' "
 				));				
 				$err = 'Barang dengan kode '.$bi['barcode'].' sudah ada!';
@@ -305,14 +305,14 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		if($err==''){
 			$aqry= "replace into penghapusan_usul_det (Id,id_bukuinduk,sesi, uid, tgl_update) values ".$valuestr; $cek .= $aqry;
 			//$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi; $cek.=$aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if ($qry==FALSE){
 				$err = 'Gagal Simpan Data';
 			}
 			
 			//delete waktu dan sesi lebih dari 3 hari
 			$aqry = "delete  from penghapusan_usul_det where Id=0 and (sesi IS not null and sesi <>'') and tgl_update  < DATE_SUB(CURDATE(), INTERVAL 2 DAY) ;"; $cek .= $aqry;
-			$del = mysql_query($aqry);										
+			$del = sqlQuery($aqry);										
 					
 		}
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -413,7 +413,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 			case 'getdata':{
 				$id = $_REQUEST['id'];
 				$aqry = "select * from ref_pegawai where id='$id' "; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('nip'=>$get['nip'],'nama'=>$get['nama'],'jabatan'=>$get['jabatan']);
 				break;
@@ -486,7 +486,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from penghapusan_usul_det where Id ='".$Id."' and sesi = '".$sesi."' and id_bukuinduk='".$id_bukuinduk."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		if($dt['tgl_ket_ba']=='') $dt['tgl_ket_ba'] =  date('Y-m-d');
@@ -512,7 +512,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		//get data 
 		$aqry = "select * from penghapusan_usul_det where Id ='".$Id."' and sesi = '".$sesi."' and id_bukuinduk='".$id_bukuinduk."' "; $cek.=$aqry;
 		
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 			
 		//set form
 		$fm = $this->setForm($dt);
@@ -540,17 +540,17 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."'"));
 		$seksi = $get['nm_skpd'];		
 						
 		//ambil data a1,a,b,c,d,e,f,g,h,i,j,thn_perolehan,no_reg di tabel buku induk
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 								"SELECT a1,a,b,c,d,e,e1,f,g,h,i,j,noreg,thn_perolehan from buku_induk 
 								 WHERE Id ='".$dt['id_bukuinduk']."'"));
 								 
@@ -562,7 +562,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		$thnPer = substr($thn_perolehan,2,2);
 		
 		//ambil data di ref barang
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 						   "SELECT*from ref_barang WHERE f='".$kodef."' 
 						   							 AND g='".$kodeg."'
 													 AND h='".$kodeh."'
@@ -661,17 +661,17 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='$kdSubUnit0' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='$kdSubUnit0' "));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$dt['e1']."' "));
 		$subunit = $get['nm_skpd'];		
 						
 		//ambil data a1,a,b,c,d,e,f,g,h,i,j,thn_perolehan,no_reg di tabel buku induk
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 								"SELECT a1,a,b,c,d,e,e1,f,g,h,i,j,noreg,thn_perolehan from buku_induk 
 								 WHERE Id ='".$dt['id_bukuinduk']."'"));
 								 
@@ -683,7 +683,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		$thnPer = substr($thn_perolehan,2,2);
 		
 		//ambil data di ref barang
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 						   "SELECT*from ref_barang WHERE f='".$kodef."' 
 						   							 AND g='".$kodeg."'
 													 AND h='".$kodeh."'
@@ -862,15 +862,15 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		$e=''.$isi['e'];		
 		$e1=''.$isi['e1'];		
 		$nmopdarr=array();				
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from v_bidang where c='".$c."' "
 		));		
 		if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from v_opd where c='".$c."' and d='".$d."' "
 		));		
 		if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."'"
 		));		
 		if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
@@ -880,8 +880,8 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		 $id = ''.$isi['id_bukuinduk'];		
 		 
 		//ambil data no reg,thn_perolehan,jml_harga,kondisi dari tabel buku induk berdasarkan Id dari Id tabel penghapusan_usul_det
-		$bi = mysql_fetch_array
-				(mysql_query("SELECT * from buku_induk WHERE Id ='".$id."'"));
+		$bi = sqlArray
+				(sqlQuery("SELECT * from buku_induk WHERE Id ='".$id."'"));
 		
 		//thn perolehan ini khusus untuk di pakai di kode barang
 		  $thnPER =substr($bi['thn_perolehan'],2,2) ;
@@ -895,7 +895,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		/*ambil data nama barang di tabel ref_barang berdasarkan f,g,h,i,j = f,g,h,i,j di tabel buku induk
 		  dan Id di tabel buku induk= Id buku induk di penghapusan_usul_det	
 		*/
-		$brng =mysql_fetch_array(mysql_query("SELECT* FROM ref_barang
+		$brng =sqlArray(sqlQuery("SELECT* FROM ref_barang
 											    WHERE   f = '".$bi['f']."'
 												    AND g = '".$bi['g']."'
 											      	AND h = '".$bi['h']."'
@@ -910,7 +910,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		{
 		case '01':{
 		 #ambil kib a berdasarkan f di buku induk jika f=01
-		 $getkiba = mysql_fetch_array(mysql_query("SELECT sertifikat_no from kib_a
+		 $getkiba = sqlArray(sqlQuery("SELECT sertifikat_no from kib_a
 		                                          WHERE a1 = '".$bi['a1']."' 
 		                                            AND a = '".$bi['a']."' 
 		                                            AND b = '".$bi['b']."' 
@@ -932,7 +932,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		  }
 		case '02':{
 		 #ambil kib b berdasarkan f di buku induk jika f=02
-		$getkibb = mysql_fetch_array(mysql_query("SELECT merk,no_pabrik,bahan,no_mesin from kib_b
+		$getkibb = sqlArray(sqlQuery("SELECT merk,no_pabrik,bahan,no_mesin from kib_b
 		                                          WHERE a1 = '".$bi['a1']."' 
 		                                            AND a = '".$bi['a']."' 
 		                                            AND b = '".$bi['b']."' 
@@ -960,7 +960,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		}
 		case '03':{
 		 #ambil kib c berdasarkan f di buku induk jika f=03
-		$getkibc = mysql_fetch_array(mysql_query("SELECT dokumen_no from kib_c
+		$getkibc = sqlArray(sqlQuery("SELECT dokumen_no from kib_c
 		                                          WHERE a1 = '".$bi['a1']."' 
 		                                            AND a = '".$bi['a']."' 
 		                                            AND b = '".$bi['b']."' 
@@ -982,7 +982,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		}
 		case '04':{
 		 #ambil kib d berdasarkan f di buku induk jika f=04
-		$getkibd = mysql_fetch_array(mysql_query("SELECT dokumen_no from kib_d
+		$getkibd = sqlArray(sqlQuery("SELECT dokumen_no from kib_d
 		                                          WHERE a1 = '".$bi['a1']."' 
 		                                            AND a = '".$bi['a']."' 
 		                                            AND b = '".$bi['b']."' 
@@ -1004,7 +1004,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		}
 		case '05':{
 		 #ambil kib e berdasarkan f di buku induk jika f=05
-		$getkibe = mysql_fetch_array(mysql_query("SELECT * from kib_e
+		$getkibe = sqlArray(sqlQuery("SELECT * from kib_e
 		                                          WHERE a1 = '".$bi['a1']."' 
 		                                            AND a = '".$bi['a']."' 
 		                                            AND b = '".$bi['b']."' 
@@ -1026,7 +1026,7 @@ class UsulanHapusbadetailObj  extends DaftarObj2{
 		}
 		 
 		default:{
-			$getkibf = mysql_fetch_array(mysql_query("SELECT dokumen_no from kib_f
+			$getkibf = sqlArray(sqlQuery("SELECT dokumen_no from kib_f
 		                                          WHERE a1 = '".$bi['a1']."' 
 		                                            AND a = '".$bi['a']."' 
 		                                            AND b = '".$bi['b']."' 

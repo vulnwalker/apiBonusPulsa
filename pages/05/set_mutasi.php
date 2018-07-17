@@ -156,7 +156,7 @@ $fmSTATUSASET = cekPOST('fmSTATUSASET');
 if($Act=='Simpan' && $fmIDLama != ''){
 	$Info ='';
 	
-	$old = mysql_fetch_array(mysql_query("select * from penghapusan where id_bukuinduk =  $fmIDLama  "));
+	$old = sqlArray(sqlQuery("select * from penghapusan where id_bukuinduk =  $fmIDLama  "));
 	
 	if($old['sudahmutasi']==1) $Info = "Barang sudah mutasi !";
 	
@@ -167,7 +167,7 @@ if($Act=='Simpan' && $fmIDLama != ''){
 			//Dok_CopyByIdBI($fmIDLama)
 			//salin data Penyusutan
 			/***
-			$binew = mysql_fetch_array(mysql_query("select * from buku_induk where id_lama='$fmIDLama'"));
+			$binew = sqlArray(sqlQuery("select * from buku_induk where id_lama='$fmIDLama'"));
 			
 			$aqry = " insert into penyusutan ".
 					" (tgl,tahun,sem,bulan,idbi,idbi_awal,harga,uid,tgl_update,thn_perolehan,hrg_perolehan,hrg_rehab,masa_manfaat,residu,akum_nilai_buku, ".
@@ -178,13 +178,13 @@ if($Act=='Simpan' && $fmIDLama != ''){
 					" nilai_buku_stlh_susut,akum_susut,akum_masa_manfaat,thn_ke,sisa_masa_manfaat,masa_manfaat_rehab,sisa_masa_manfaat_thn,stat,bulan_awl, staset, ".
 					" c,d,e,e1,f,g,h,i,j,ket,15 ,id_koreksi,tgl_create,uid_create,id_koreksi_tambah ".
 					" from penyusutan where idbi = $fmIDLama ";
-			$ins = mysql_query($aqry);
+			$ins = sqlQuery($aqry);
 			//$err = mysql_error();
 			
 			//salin data penyusutan di buku_induk id lama
 			
 			if($ins){
-				$bi_old = mysql_fetch_array(mysql_query("select masa_manfaat,nilai_sisa,thn_susut_aw,thn_susut_ak,
+				$bi_old = sqlArray(sqlQuery("select masa_manfaat,nilai_sisa,thn_susut_aw,thn_susut_ak,
 									bln_susut_aw,bln_susut_ak,masa_manfaat_tot,stop_susut
 									from buku_induk where id='$fmIDLama'"));
 				//salin data penyusutan buku_induk lama ke baru
@@ -197,14 +197,14 @@ if($Act=='Simpan' && $fmIDLama != ''){
 						where id='".$binew['id']."'
 						";
 						
-				$qry2=mysql_query($qqry);
+				$qry2=sqlQuery($qqry);
 				
 				if($qry2){
 			
 					//update sudah mutasi -------
 					$sqry = "update penghapusan set sudahmutasi=1 where id_bukuinduk =  $fmIDLama ";
 					//echo '<br>qry update penghapusan= '.$sqry;
-					$qry = mysql_query($sqry);
+					$qry = sqlQuery($sqry);
 					if ($qry==FALSE) $Info = "<script>alert('Gagal update sudah mutasi ')</script>";
 				}else{
 					

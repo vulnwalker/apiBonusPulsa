@@ -39,7 +39,7 @@ $con = mysql_connect($Main->DB_Hostname, $Main->DB_User, $Main->DB_Pass) or
 die("Could not connect: " . mysql_error());
 mysql_select_db($Main->DB_Databasename);
 
-$getSettingPerencanaan = mysql_fetch_array(mysql_query("select * from settingperencanaan"));
+$getSettingPerencanaan = sqlArray(sqlQuery("select * from settingperencanaan"));
 if($getSettingPerencanaan['bypass_jadwal'] == '1'){
 	$Main->bypassJadwal = TRUE;
 }else{

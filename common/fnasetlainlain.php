@@ -62,9 +62,9 @@ class AsetLainLainObj  extends DaftarObj2{
 		$kondisi = $_REQUEST['kondisi'];
 		$kondisi_baru = $_REQUEST['kondisi_baru'];
 		
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id = '$idbi' "));
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id = '$idbi' "));
 		$idbi_awal = $bi['idawal'];
-		$old = mysql_fetch_array(mysql_query("select * from t_asetlainlain where Id='$Id' "));
+		$old = sqlArray(sqlQuery("select * from t_asetlainlain where Id='$Id' "));
 				
 		//if($err=='' && $staset_baru == '') $err = "Status Aset belum dipilih!";
 		//if($err=='' && $staset_baru == $staset) $err = "Status Aset harus beda!";
@@ -81,7 +81,7 @@ class AsetLainLainObj  extends DaftarObj2{
 		//tgl >=tgl_buku
 		if(compareTanggal($bi['tgl_buku'],$tgl)==2) $err = 'Tanggal tidak kecil dari Tanggal Buku Barang !';				
 		$tgl_closing=getTglClosing($bi['c'],$bi['d'],$bi['e'],$bi['e1']); 
-		$tgl_susutAkhir = mysql_fetch_array(mysql_query("select tgl from penyusutan where idbi_awal='$idbi' order by tgl desc limit 1"));
+		$tgl_susutAkhir = sqlArray(sqlQuery("select tgl from penyusutan where idbi_awal='$idbi' order by tgl desc limit 1"));
 				
 		$nilai_buku = getNilaiBuku($idbi,$tgl,0);
 		$nilai_susut = getAkumPenyusutan($idbi,$tgl);	
@@ -89,10 +89,10 @@ class AsetLainLainObj  extends DaftarObj2{
 			case 0 : { //baru
 				//- tanggal >= tgl terakhir transaski u/ barang ini
 				if($err=='' && $old['tgl'] <> $tgl ){ 			
-					/**$get = mysql_fetch_array(mysql_query(
+					/**$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_asetlainlain where idbi_awal ='$idbi_awal'  "
 					));**/
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_history_aset where idbi_awal ='$idbi_awal'  "
 					));
 					if( compareTanggal( $tgl, $get['maxtgl'] )==0  ) $err = "Tanggal tidak lebih kecil dari transaksi sebelumnya!";
@@ -101,7 +101,7 @@ class AsetLainLainObj  extends DaftarObj2{
 				if($err=='' && $tgl<=$tgl_susutAkhir['tgl'])$err ='Sudah ada penyusutan !';
 				
 				if($err==''){
-					$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='$idbi'"));
+					$bi = sqlArray(sqlQuery("select * from buku_induk where id='$idbi'"));
 					
 					$staset = $bi['staset'];
 					if($staset == 9){
@@ -113,15 +113,15 @@ class AsetLainLainObj  extends DaftarObj2{
 					
 					$aqry = "insert into t_asetlainlain (tgl,idbi,uid,tgl_update,staset,staset_baru,ket, kondisi,kondisi_baru,idbi_awal,nilai_buku,nilai_susut) ".
 						" values('$tgl','$idbi','$uid',now(),'$staset','$staset_baru','$ket', '$kondisi','$kondisi_baru','".$bi['idawal']."','$nilai_buku','$nilai_susut') "; $cek .= $aqry;
-					$qry = mysql_query($aqry);		
+					$qry = sqlQuery($aqry);		
 					$newid= mysql_insert_id();
 					if($qry){
-						mysql_query("update buku_induk set staset = '$staset_baru' where  id='$idbi' ");	
+						sqlQuery("update buku_induk set staset = '$staset_baru' where  id='$idbi' ");	
 						//jurnal
 						$jur = jurnalAsetLainLain($bi, $idbi,$uid,$tgl,1, FALSE, $newid);
 						$cek .= $jur['cek']; $err .=$jur['err'];
 						//history Aset
-						mysql_query(
+						sqlQuery(
 							"insert into t_history_aset ".
 							"(tgl,idbi,uid,tgl_update,staset,staset_baru,div_staset,idbi_awal,jns,refid) ".
 							" values ".
@@ -137,14 +137,14 @@ class AsetLainLainObj  extends DaftarObj2{
 					if($old['tgl'] <> $tgl){
 						//$query = "select Id from t_asetlainlain where idbi_awal='$idbi_awal'  order by tgl desc, Id desc limit 0,1";
 						$query = "select * from t_history_aset where idbi_awal='$idbi_awal'  order by tgl desc, Id desc limit 0,1";
-						$check = mysql_fetch_array(mysql_query($query));					
+						$check = sqlArray(sqlQuery($query));					
 						$cek .= $query;
 						if($check['refid'] != $Id && $check['jns']!=2  ) $err = "Hanya status aset terakhir yang dapat di edit!\nKecuali Keterangan"; //hanya transaksi terkahir yg boleh diedit 						
 					}
 				}				
 				if($err=='' && $old['tgl'] <> $tgl ){ 			
 					//- tanggal >= tgl terakhir transaski u/ barang ini
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_kapitalisasi where idbi_awal ='$idbi_awal'  and Id<>'$Id'  "
 					));
 					if( compareTanggal( $tgl, $get['maxtgl'] )==0  ) $err = "Tanggal tidak lebih kecil dari transaksi sebelumnya!";
@@ -155,7 +155,7 @@ class AsetLainLainObj  extends DaftarObj2{
 				
 				/*
 				if($errmsg=='' && $fmST!=1){ //cek tahun pelihara baru <= thn closing edit
-					$old = mysql_fetch_array(mysql_query(
+					$old = sqlArray(sqlQuery(
 							"select * from pemeliharaan where id = '$idplh';"
 						));
 					$arrtgl = explode('-',$old['tgl_pemeliharaan']);
@@ -177,9 +177,9 @@ class AsetLainLainObj  extends DaftarObj2{
 							ket='$ket' 
 							WHERE Id='".$Id."'";	
 							$cek .= $aqry;
-					$qry = mysql_query($aqry) or die(mysql_error());
+					$qry = sqlQuery($aqry) or die(mysql_error());
 					if($qry){
-						mysql_query(
+						sqlQuery(
 							"update t_history_aset set tgl='$tgl', uid='$uid', tgl_update=now() where jns=2 and refid='$Id'"
 						);
 					}
@@ -252,26 +252,26 @@ class AsetLainLainObj  extends DaftarObj2{
 		 $err=''; $cek='';
 		for($i = 0; $i<count($ids); $i++)	{
 			//cek id terakhir
-			$old=mysql_fetch_array(mysql_query("select * from t_asetlainlain where Id='".$ids[$i]."' "));
+			$old=sqlArray(sqlQuery("select * from t_asetlainlain where Id='".$ids[$i]."' "));
 			//$aqry = "select Id from t_asetlainlain where idbi_awal='".$old['idbi_awal']."' order by tgl desc, Id desc limit 0,1";
 			$aqry = "select * from t_history_aset where idbi_awal='".$old['idbi_awal']."'  order by tgl desc, Id desc limit 0,1";
-			$get = mysql_fetch_array(mysql_query($aqry));
+			$get = sqlArray(sqlQuery($aqry));
 			$cek .= $aqry;
 			//if($err == '' && $get['refid'] != $old['Id'] && $get['jns']==2) $err = "Hanya status aset terakhir yang bisa dihapus!";
 			if($err == '' && $get['jns']!=2) $err = "Hanya status aset terakhir yang bisa dihapus !";
 			if($err == '' && $get['jns']==2 && $get['refid'] != $old['Id']) $err = "Hanya status aset terakhir yang bisa dihapus!";
 			$aqry = "select count(*) as cnt from t_history_aset where idbi_awal='".$old['idbi_awal']."' ";
-			$get = mysql_fetch_array(mysql_query($aqry));
+			$get = sqlArray(sqlQuery($aqry));
 			if($err == '' && $get['cnt']==1) $err = "Status perolehan tidak boleh dihapus!";
 			 
 			if($err == ''){
 				$aqry2 = "delete from t_asetlainlain where Id='".$old['Id']."' "; $cek = $aqry2;
-				$qry = mysql_query($aqry2);
+				$qry = sqlQuery($aqry2);
 				if($qry){
 					$aqry = "update buku_induk set staset = '".$old['staset']."' where id='".$old['idbi']."' "; $cek .= $aqry;
-					mysql_query($aqry);
+					sqlQuery($aqry);
 					$aqry = "delete from t_history_aset where jns=2 and refid='".$ids[$i]."' ";
-					mysql_query($aqry);
+					sqlQuery($aqry);
 				}
 			}
 			
@@ -297,7 +297,7 @@ class AsetLainLainObj  extends DaftarObj2{
 		$cidBI = $_REQUEST['cidBI'];
 		$idbi = $cidBI[0];// 735615;
 		$aqry = "select * from buku_induk where id ='$idbi'"; $cek .= $aqry;
-		$bi = mysql_fetch_array(mysql_query($aqry));
+		$bi = sqlArray(sqlQuery($aqry));
 		
 		$dt['idbi']= $idbi;
 		$dt['staset'] =  $bi['staset'];
@@ -326,7 +326,7 @@ class AsetLainLainObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from t_asetlainlain where id ='".$this->form_idplh."'  "; 
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		
 		
 		$cek.=$aqry;
@@ -344,7 +344,7 @@ class AsetLainLainObj  extends DaftarObj2{
 		$this->form_width = 400;
 		$this->form_height = $Main->STASET_OTOMATIS? 170: 150;
 		$idbi = $dt['idbi'];
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id = '$idbi' "));
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id = '$idbi' "));
 		
 		if($err=='' && !( $bi['staset']==9 || $bi['staset']==3 || $bi['staset']==8) ){
 			$err = $Main->StatusAsetView[$bi['staset']-1][1]." tidak bisa reklas ke Aset Lain-Lain! ";

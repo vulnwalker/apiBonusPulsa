@@ -71,21 +71,21 @@ class KotaKecObj  extends DaftarObj2{
 				if($fmST == 0){
 					//cek 
 					if( $err=='' ){
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"select count(*) as cnt from $this->TblName where kd_kota='$kd_kota' and kd_kec='$kd_kec' "
 						));
 						if($get['cnt']>0 ) $err="Kode Kota/Kecamatan Sudah Ada!  ";
 					}
 					if($err==''){
 						$aqry = "insert into $this->TblName (kd_kota,kd_kec,nm_wilayah,koordinat_gps,koord_bidang,zoom)"."values('$kd_kota','$kd_kec','$nm_wilayah','$koord_gps','$koord_bidang','$zoom')";	$cek .= $aqry;	
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 					
 				}else{
-					$old = mysql_fetch_array(mysql_query("select * from $this->TblName where kd_kota='$kdkotaplh' and kd_kec='$kdkecplh'"));
+					$old = sqlArray(sqlQuery("select * from $this->TblName where kd_kota='$kdkotaplh' and kd_kec='$kdkecplh'"));
 					if( $err=='' ){
 						if($kd_kota!=$old['kd_kota'] && $kd_kec!=$old['kd_kec'] ){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"select count(*) as cnt from $this->TblName where kd_kota='$kd_kota' and kd_kec='$kd_kec' "
 							));
 							if($get['cnt']>0 ) $err='Kode Kota/Kecamatan Sudah Ada!';
@@ -102,7 +102,7 @@ class KotaKecObj  extends DaftarObj2{
 							" kd_kota='$kd_kota', kd_kec='$kd_kec', nm_wilayah='$nm_wilayah',".
 							"koordinat_gps='$koord_gps',koord_bidang='$koord_bidang',zoom='$zoom'".
 							"where kd_kota='".$old['kd_kota']."' and kd_kec='".$old['kd_kec']."' ";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 				}
 				
@@ -151,7 +151,7 @@ class KotaKecObj  extends DaftarObj2{
 				$kd_kota = $_REQUEST['kd_kota'];
 				$kd_kec = $_REQUEST['kd_kec'];
 				$aqry = "select * from $TblName where kd_kota='$kd_kota' and kd_kec='$kd_kec'  "; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('kd_kota'=>$get['kd_kota'],'kd_kec'=>$get['kd_kec'],
 				'nm_wilayah'=>$get['nm_wilayah'],'koordinat_gps'=>$get['koordinat_gps'],
@@ -207,7 +207,7 @@ class KotaKecObj  extends DaftarObj2{
 		//get data 
 		//$aqry = "select * from ref_ruang where c='$c' and d='$d' and e='$e' and p ='".$kode[0]."' and q='".$kode[1]."' "; $cek.=$aqry;
 		$aqry = "select * from $this->TblName where kd_kota ='".$kode[0]."' and kd_kec ='".$kode[1]."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 				//set form
 		$fm = $this->setForm($dt);
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);

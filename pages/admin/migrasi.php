@@ -106,7 +106,7 @@ class migrasiObj  extends DaftarObj2{
 				case '06':$qry1 = "delete from bi_kib_f_tmp $kondisi";$cek.=$qry1;break;
 				case '07':$qry1 = "delete from bi_kib_g_tmp $kondisi";$cek.=$qry1;break;
 				}
-			$qry = mysql_query($qry1);
+			$qry = sqlQuery($qry1);
 			if($qry==FALSE) $err="Gagal hapus data".mysql_error();	
 		}
 		
@@ -130,7 +130,7 @@ class migrasiObj  extends DaftarObj2{
 					$qry1 = "delete from bi_kib_g_tmp $kondisi";$cek.=$qry1;
 				}
 			
-				$qry = mysql_query($qry1);
+				$qry = sqlQuery($qry1);
 				if($qry==FALSE) $err="Gagal hapus data".mysql_error();		
 			}
 		}
@@ -171,7 +171,7 @@ class migrasiObj  extends DaftarObj2{
 			
 		
 			$aqry= "delete from ".$tblName_hapus.' '.$Kondisi; $cek.=$aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if ($qry==FALSE){
 			$err = 'Gagal Hapus Data';
 			}
@@ -328,8 +328,8 @@ class migrasiObj  extends DaftarObj2{
 				$ket_cek.='- Jumlah Barang tidak sesuai';
 			}
 		//cek Simbol di pada sebuah baris
-			$ceksimbol=mysql_query($aqrycek);
-			$cekjmlsimbol=mysql_num_rows($ceksimbol);
+			$ceksimbol=sqlQuery($aqrycek);
+			$cekjmlsimbol=sqlNumRow($ceksimbol);
 			if ($cekjmlsimbol>=1){
 				$ket_cek.='- Terdapat simbol di data ini';
 			}
@@ -347,10 +347,10 @@ class migrasiObj  extends DaftarObj2{
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_a_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_a_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 		}
 		elseif ($PILKIB=='02'){
@@ -358,10 +358,10 @@ class migrasiObj  extends DaftarObj2{
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_b_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_b_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 			
 		}elseif ($PILKIB=='03'){
@@ -369,10 +369,10 @@ class migrasiObj  extends DaftarObj2{
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_c_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_c_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 			
 		}elseif ($PILKIB=='04'){
@@ -380,20 +380,20 @@ class migrasiObj  extends DaftarObj2{
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_d_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_d_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 		}elseif ($PILKIB=='05'){
 			$ket_cek= $this->cekdata_validasi($isi,$id,$tabel,$PILKIB,$xlock_f,$xlock_c,$xlock_d,$xlock_e,$xlock_e1);
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_e_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_e_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 			
 		}elseif ($PILKIB=='06'){
@@ -401,20 +401,20 @@ class migrasiObj  extends DaftarObj2{
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_f_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_f_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 		}else{
 			$ket_cek= $this->cekdata_validasi($isi,$id,$tabel,$PILKIB,$xlock_f,$xlock_c,$xlock_d,$xlock_e,$xlock_e1);
 			$sql2='';
 			if ($ket_cek==''){
 				$sql2="update bi_kib_g_tmp set stcheck=1, ket_cek='' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}else{
 				$sql2="update bi_kib_g_tmp set stcheck=2, ket_cek='".$ket_cek."' where id='".$id."'";
-				$qry=mysql_query($sql2);
+				$qry=sqlQuery($sql2);
 			}
 		}
 		
@@ -442,10 +442,10 @@ class migrasiObj  extends DaftarObj2{
 				case '07':$aqry = "select * from v_bi_kib_g_tmp";$tabel="bi_kib_g_tmp";break;
 			}
 			
-			$qry=mysql_query($aqry);
-			$jml_record=mysql_num_rows($qry);
+			$qry=sqlQuery($aqry);
+			$jml_record=sqlNumRow($qry);
 			if ($jml_record>=1){
-			while ($isi=mysql_fetch_array($qry)){
+			while ($isi=sqlArray($qry)){
 			$id=$isi['id'];
 				$this->cekdata1($isi,$id,$tabel,$PILKIB,$xlock_f,$xlock_c,$xlock_d,$xlock_e,$xlock_e1);
 			}
@@ -530,14 +530,14 @@ class migrasiObj  extends DaftarObj2{
 		"','".$newisi['asal_usul']."','".$newisi['kondisi']."','".$newisi['status_barang'].
 		"','".$newisi['thn_perolehan']."','".$newisi['tgl_buku']."','99')";
 		
-		$qry1=mysql_query($ins_bi);
-		$qry2=mysql_query($ins_kib);
+		$qry1=sqlQuery($ins_bi);
+		$qry2=sqlQuery($ins_kib);
 				
 	}
 	
 	function update_idbi_idlama($xlock_f){
 		$upd_bi="update buku_induk set id_lama=id,idawal=id where id_lama is null";
-		$qry1=mysql_query($upd_bi);
+		$qry1=sqlQuery($upd_bi);
 		if ($xlock_f=='01')
 		{
 		$upd_kib="UPDATE
@@ -623,7 +623,7 @@ class migrasiObj  extends DaftarObj2{
 		where `a`.`f`='$xlock_f' and `a`.`idbi` is null ";	
 		}
 		
-		$qry1=mysql_query($upd_kib);
+		$qry1=sqlQuery($upd_kib);
 		
 	}
 
@@ -645,7 +645,7 @@ class migrasiObj  extends DaftarObj2{
 
 
 		$sql1="select max(noreg) as maxnoreg from buku_induk where $kondisix ";
-		$qry = mysql_fetch_array(mysql_query($sql1));
+		$qry = sqlArray(sqlQuery($sql1));
 		$x=$qry['maxnoreg']+1;
 		$xnew=$x+10000;
 		$xxnew=substr($xnew, -4);
@@ -687,7 +687,7 @@ class migrasiObj  extends DaftarObj2{
 
 	$sql="select * from buku_induk where $kondisi ";
 	
-	$jmlData= mysql_num_rows(mysql_query($sql));
+	$jmlData= sqlNumRow(sqlQuery($sql));
 	
 	return $jmlData;
 	}
@@ -708,7 +708,7 @@ class migrasiObj  extends DaftarObj2{
 		}else if($xlock_f==7){
 			$upd_tmp="update bi_kib_g_tmp set stmigrasi='1' where id='".$isi['id']."'";
 		}
-	$qry1=mysql_query($upd_tmp);
+	$qry1=sqlQuery($upd_tmp);
 	
 	}		
 	
@@ -779,9 +779,9 @@ class migrasiObj  extends DaftarObj2{
 			if ($tablename!='' && $xlock_f!=''){
 				$no = 0;
 				$sqry="select * from ".$tablename." where stcheck=1 and stmigrasi=0 order by id";$cek=$sqry;
-				$qry=mysql_query($sqry);
+				$qry=sqlQuery($sqry);
 				if($qry==FALSE) $err="Gagal isi data".mysql_error();
-				while($isi=mysql_fetch_array($qry)){
+				while($isi=sqlArray($qry)){
 					$no++;
 					$jmlharga=$isi['jml_harga'];
 					$jmlbarang=$isi['jml_barang'];
@@ -819,7 +819,7 @@ class migrasiObj  extends DaftarObj2{
 						
 					}//if ($isi['c']!='' && $isi['e1']!='' && $isi['f']!='' && $isi['j']!='' && $xlock_f!='')
 					$this->update_stmigrasi_kib_tmp($isi,$xlock_f);
-				}//while($isi=mysql_fetch_array($qry)){
+				}//while($isi=sqlArray($qry)){
 				
 			if ($no>0){
 					$this->update_idbi_idlama($xlock_f);	
@@ -838,33 +838,33 @@ class migrasiObj  extends DaftarObj2{
 		$sum="sum(jml_barang) as total_data";
 		
 		//Kib A
-		$rekapkiba=mysql_fetch_array(mysql_query("select $sum from bi_kib_a_tmp "));
-		$rekapkibacek=mysql_fetch_array(mysql_query("select $sum from bi_kib_a_tmp $kondisicek"));
-		$rekapkibamigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_a_tmp $kondisimigrasi"));
+		$rekapkiba=sqlArray(sqlQuery("select $sum from bi_kib_a_tmp "));
+		$rekapkibacek=sqlArray(sqlQuery("select $sum from bi_kib_a_tmp $kondisicek"));
+		$rekapkibamigrasi=sqlArray(sqlQuery("select $sum from bi_kib_a_tmp $kondisimigrasi"));
 	//Kib B	
-		$rekapkibb=mysql_fetch_array(mysql_query("select $sum from bi_kib_b_tmp "));
-		$rekapkibbcek=mysql_fetch_array(mysql_query("select $sum from bi_kib_b_tmp $kondisicek"));
-		$rekapkibbmigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_b_tmp $kondisimigrasi"));
+		$rekapkibb=sqlArray(sqlQuery("select $sum from bi_kib_b_tmp "));
+		$rekapkibbcek=sqlArray(sqlQuery("select $sum from bi_kib_b_tmp $kondisicek"));
+		$rekapkibbmigrasi=sqlArray(sqlQuery("select $sum from bi_kib_b_tmp $kondisimigrasi"));
 	//Kib C	
-		$rekapkibc=mysql_fetch_array(mysql_query("select $sum from bi_kib_c_tmp "));
-		$rekapkibccek=mysql_fetch_array(mysql_query("select $sum from bi_kib_c_tmp $kondisicek"));
-		$rekapkibcmigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_c_tmp $kondisimigrasi"));
+		$rekapkibc=sqlArray(sqlQuery("select $sum from bi_kib_c_tmp "));
+		$rekapkibccek=sqlArray(sqlQuery("select $sum from bi_kib_c_tmp $kondisicek"));
+		$rekapkibcmigrasi=sqlArray(sqlQuery("select $sum from bi_kib_c_tmp $kondisimigrasi"));
 	//Kib D	
-		$rekapkibd=mysql_fetch_array(mysql_query("select $sum from bi_kib_d_tmp "));
-		$rekapkibdcek=mysql_fetch_array(mysql_query("select $sum from bi_kib_d_tmp $kondisicek"));
-		$rekapkibdmigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_d_tmp $kondisimigrasi"));
+		$rekapkibd=sqlArray(sqlQuery("select $sum from bi_kib_d_tmp "));
+		$rekapkibdcek=sqlArray(sqlQuery("select $sum from bi_kib_d_tmp $kondisicek"));
+		$rekapkibdmigrasi=sqlArray(sqlQuery("select $sum from bi_kib_d_tmp $kondisimigrasi"));
 	//Kib E	
-		$rekapkibe=mysql_fetch_array(mysql_query("select $sum from bi_kib_e_tmp "));
-		$rekapkibecek=mysql_fetch_array(mysql_query("select $sum from bi_kib_e_tmp $kondisicek"));
-		$rekapkibemigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_e_tmp $kondisimigrasi"));
+		$rekapkibe=sqlArray(sqlQuery("select $sum from bi_kib_e_tmp "));
+		$rekapkibecek=sqlArray(sqlQuery("select $sum from bi_kib_e_tmp $kondisicek"));
+		$rekapkibemigrasi=sqlArray(sqlQuery("select $sum from bi_kib_e_tmp $kondisimigrasi"));
 	//Kib F	
-		$rekapkibf=mysql_fetch_array(mysql_query("select $sum from bi_kib_f_tmp "));
-		$rekapkibfcek=mysql_fetch_array(mysql_query("select $sum from bi_kib_f_tmp $kondisicek"));
-		$rekapkibfmigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_f_tmp $kondisimigrasi"));
+		$rekapkibf=sqlArray(sqlQuery("select $sum from bi_kib_f_tmp "));
+		$rekapkibfcek=sqlArray(sqlQuery("select $sum from bi_kib_f_tmp $kondisicek"));
+		$rekapkibfmigrasi=sqlArray(sqlQuery("select $sum from bi_kib_f_tmp $kondisimigrasi"));
 	//Kib G	
-		$rekapkibg=mysql_fetch_array(mysql_query("select $sum from bi_kib_g_tmp "));
-		$rekapkibgcek=mysql_fetch_array(mysql_query("select $sum from bi_kib_g_tmp $kondisicek"));
-		$rekapkibgmigrasi=mysql_fetch_array(mysql_query("select $sum from bi_kib_g_tmp $kondisimigrasi"));
+		$rekapkibg=sqlArray(sqlQuery("select $sum from bi_kib_g_tmp "));
+		$rekapkibgcek=sqlArray(sqlQuery("select $sum from bi_kib_g_tmp $kondisicek"));
+		$rekapkibgmigrasi=sqlArray(sqlQuery("select $sum from bi_kib_g_tmp $kondisimigrasi"));
 		
 	//total 
 		$totdata=$rekapkiba['total_data']+$rekapkibb['total_data']+$rekapkibc['total_data']+$rekapkibd['total_data']+$rekapkibe['total_data']+$rekapkibf['total_data']+$rekapkibg['total_data'];
@@ -980,7 +980,7 @@ class migrasiObj  extends DaftarObj2{
 					kota = '$ekota', 
 					status_hak = '$estatus_hak'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB A ".mysql_error();
 		}elseif($lockedit=='02'){
 			$aqry = "
@@ -1006,7 +1006,7 @@ class migrasiObj  extends DaftarObj2{
 					no_bpkb = '$eno_bpkb', 
 					bahan = '$ebahan'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB B ".mysql_error();
 		}elseif($lockedit=='03'){
 			$aqry = "
@@ -1032,7 +1032,7 @@ class migrasiObj  extends DaftarObj2{
 					luas = '$eluas', 
 					status_tanah = '$estatus_tanah'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB C ".mysql_error();
 		}elseif($lockedit=='04'){
 			$aqry = "
@@ -1059,7 +1059,7 @@ class migrasiObj  extends DaftarObj2{
 					status_tanah = '$estatus_tanah',
 					kode_tanah = '$ekode_tanah'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB D ".mysql_error();
 		}elseif($lockedit=='05'){
 			$aqry = "
@@ -1085,7 +1085,7 @@ class migrasiObj  extends DaftarObj2{
 					hewan_jenis = '$ehewan_jenis', 
 					hewan_ukuran = '$ehewan_ukuran'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB E ".mysql_error();
 		}elseif($lockedit=='06'){
 			$aqry = "
@@ -1110,7 +1110,7 @@ class migrasiObj  extends DaftarObj2{
 					luas = '$eluas', 
 					kota = '$ekota'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB F ".mysql_error();
 		}elseif($lockedit=='07'){
 			$aqry = "
@@ -1134,7 +1134,7 @@ class migrasiObj  extends DaftarObj2{
 					pencipta='$epencipta',
 					kerjasama_nama = '$ekerjasama_nama'
 					where id = '$idplh'";	$cek.= "$aqry; ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry==FALSE) $err="Gagal edit data KIB G ".mysql_error();
 		}
 		if($qry==FALSE) $err="Gagal edit data ".mysql_error();
@@ -1286,7 +1286,7 @@ class migrasiObj  extends DaftarObj2{
 					  $lockedit='07';break;
 			default:$aqry = "select * from bi_kib_a_tmp where Id='".$this->form_idplh."'"; $cek.=$aqry;$lockedit='01';break;
 		}	
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm1($dt,$lockedit);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);

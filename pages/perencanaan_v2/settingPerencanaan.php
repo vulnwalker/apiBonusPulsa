@@ -85,12 +85,12 @@ class settingPerencanaanObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama)values('$nama')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_satuan set nama='$nama' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -114,7 +114,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 		
 		if($err == ''){
 			$qry = "UPDATE ".$this->TblName." SET 	bypass_jadwal = '$bypassJadwal', wajib_validasi = '$wajibValidasi', provinsi = '$provinsi' , kota='$kota' , pejabat = '$pejabat' , pengelola ='$pengelola' , pengurus ='$pengurus' ";$cek.=$qry;
-			$aqry = mysql_query($qry);
+			$aqry = sqlQuery($qry);
 		}
 		
 	 return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -234,7 +234,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_satuan WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -256,7 +256,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -349,13 +349,13 @@ class settingPerencanaanObj  extends DaftarObj2{
 	$pengelola = $daqry['pengelola'];
 	$pengurus = $daqry['pengurus'];
 	
-	$getPengelola = mysql_fetch_array(mysql_query("select * from tandatanganpengelolabarang_v3 where id = '$pengelola'"));
+	$getPengelola = sqlArray(sqlQuery("select * from tandatanganpengelolabarang_v3 where id = '$pengelola'"));
 	$pengelolaBarang = $getPengelola['nama'];
 	
-	$getPejabat = mysql_fetch_array(mysql_query("select * from tandatanganpengelolabarang_v3 where id = '$pejabat'"));
+	$getPejabat = sqlArray(sqlQuery("select * from tandatanganpengelolabarang_v3 where id = '$pejabat'"));
 	$pejabatPengelolaBarang = $getPejabat['nama'];
 	
-	$getPengurus = mysql_fetch_array(mysql_query("select * from tandatanganpengelolabarang_v3 where id = '$pengurus'"));
+	$getPengurus = sqlArray(sqlQuery("select * from tandatanganpengelolabarang_v3 where id = '$pengurus'"));
 	$pengurusBarangPengelola = $getPengurus['nama'];
 	$TampilOpt =
 			//<table width=\"100%\" class=\"adminform\">
@@ -587,9 +587,9 @@ class settingPerencanaanObj  extends DaftarObj2{
 	function DataOption(){
 		global $Main, $HTTP_COOKIE_VARS;
 		$qry = "SELECT * FROM $this->TblName ";
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		
-		$data = mysql_fetch_array($aqry);
+		$data = sqlArray($aqry);
 		
 		return $data;
 	}
@@ -730,16 +730,16 @@ class settingPerencanaanObj  extends DaftarObj2{
 	
 	function QyrTmpl1Brs($tablenya, $field='*',$where = '') {
 		$qry = "SELECT $field FROM $tablenya $where";
-		$aqry = mysql_query($qry);
-		$hasil = mysql_fetch_array($aqry);
+		$aqry = sqlQuery($qry);
+		$hasil = sqlArray($aqry);
 				
 		return array('hasil'=>$hasil, 'cek'=>$qry);
 	}
 	
 	function QryHitungData($tablenya, $where = ''){
 		$qry = "SELECT * FROM $tablenya $where";
-		$aqry = mysql_query($qry);
-		$hasil = mysql_num_rows($aqry);
+		$aqry = sqlQuery($qry);
+		$hasil = sqlNumRow($aqry);
 				
 		return array('hasil'=>$hasil, 'cek'=>$qry);
 	}
@@ -759,7 +759,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 		}		
 		
 		$qry = "INSERT INTO $tbl ($field) values ($isifield)";$cek.=$qry;
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		
 		if(!$aqry)$errmsg = mysql_error();
 		
@@ -777,7 +777,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 		}
 		
 		$qry = "UPDATE $tbl SET $isifield $where ";$cek.=$qry;
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		
 		if(!$aqry)$errmsg = mysql_error();
 		
@@ -829,8 +829,8 @@ class settingPerencanaanObj  extends DaftarObj2{
 	function AmbilUraianBarang($IdBI){
 		
 		$qry = "SELECT * FROM buku_induk WHERE id='$IdBI'";
-		$daqry = mysql_query($qry);
-		$dt=mysql_fetch_array($daqry);
+		$daqry = sqlQuery($qry);
+		$dt=sqlArray($daqry);
 		
 		$wherenya = "WHERE idbi='$IdBI' ";
 		$content = $qry;
@@ -842,7 +842,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 		switch($dt['f']){
 			case "01":
 				$data_kib = "SELECT * FROM view_kib_a $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$alm = '';
 				$alm .= ifempty($qry_data_kib['alamat'],'-');
@@ -854,7 +854,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 			break;
 			case "02":
 				$data_kib = "SELECT * FROM view_kib_b $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$qry_data_kib = array_map('utf8_encode', $qry_data_kib);
 				$alm = $qry_data_kib['merk'];
@@ -863,7 +863,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 			break;
 			case "03":
 				$data_kib = "SELECT * FROM view_kib_c $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$alm = '';
 				$alm .= ifempty($qry_data_kib['alamat'],'-');		
@@ -875,7 +875,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 			break;
 			case "04":
 				$data_kib = "SELECT * FROM view_kib_d $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$alm = '';
 				$alm .= ifempty($qry_data_kib['alamat'],'-');
@@ -886,7 +886,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 			break;
 			case "05":
 				$data_kib = "SELECT * FROM view_kib_e $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$alm = $qry_data_kib['ket'] != ''? $qry_data_kib['ket'] : '-';
 				
@@ -894,7 +894,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 			break;
 			case "06":
 				$data_kib = "SELECT * FROM view_kib_f $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$alm = '';
 				$alm .= ifempty($qry_data_kib['alamat'],'-');
@@ -906,7 +906,7 @@ class settingPerencanaanObj  extends DaftarObj2{
 			break;
 			case "07":
 				$data_kib = "SELECT * FROM view_kib_g $wherenya ";
-				$qry_data_kib = mysql_fetch_array(mysql_query($data_kib));
+				$qry_data_kib = sqlArray(sqlQuery($data_kib));
 				
 				$alm = $qry_data_kib['ket'] != ''? $qry_data_kib['ket'] : '-';
 			break;

@@ -278,7 +278,7 @@ if($SPg == 'KIR'){
 	$fmPILRUANG = $_REQUEST['fmPILRUANG'];
 	if ($fmPILGEDUNG != ''){
 		$arr = explode(' ',$fmPILGEDUNG);		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from ref_ruang where c='{$arr[0]}' and d='{$arr[1]}' and e='{$arr[2]}'  and e1='{$arr[3]}' and p='{$arr[4]}' and q='0000'"
 		)) ;
 		$gedung = $get['nm_ruang'];
@@ -286,14 +286,14 @@ if($SPg == 'KIR'){
 	if ($fmPILRUANG != ''){
 		$arr = explode(' ',$fmPILRUANG);
 		$id_pegawai='';		
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from ref_ruang where c='{$arr[0]}' and d='{$arr[1]}' and e='{$arr[2]}'  and e1='{$arr[3]}' and p='{$arr[4]}' and q='{$arr[5]}'"
 		)) ;
 		$ruang = $get['nm_ruang'];
 		$id_pegawai = $get['ref_idpegawai'];
 	}
 	if ($id_pegawai!=''){
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select * from ref_pegawai where id='{$id_pegawai}' "
 		)) ;
 		

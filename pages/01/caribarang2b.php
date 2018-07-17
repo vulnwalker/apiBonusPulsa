@@ -9,15 +9,15 @@ $objID = isset($HTTP_GET_VARS['objID'])?$HTTP_GET_VARS['objID']:"";
 $objNM = isset($HTTP_GET_VARS['objNM'])?$HTTP_GET_VARS['objNM']:"";
  
 $Cari1 = isset($HTTP_GET_VARS['Cari1'])?$HTTP_GET_VARS['Cari1']:"";
-$Qry = mysql_query("select * from ref_barang where nm_barang like '$Cari1%' and j <> '00' and j <> '000'  order by f,g,h,i,j limit 0,100 ");
-$numRow = mysql_num_rows($Qry);
+$Qry = sqlQuery("select * from ref_barang where nm_barang like '$Cari1%' and j <> '00' and j <> '000'  order by f,g,h,i,j limit 0,100 ");
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry)){
-	$nmF = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and (j='00' or j='000')"));
-	$nmG = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and (j='00' or j='000')"));
-	$nmH = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and (j='00' or j='000')"));
-	$nmI = mysql_fetch_array(mysql_query("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and (j='00' or j='000')"));
+while($isi=sqlArray($Qry)){
+	$nmF = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='00' and h='00' and i='00' and (j='00' or j='000')"));
+	$nmG = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='00' and i='00' and (j='00' or j='000')"));
+	$nmH = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='00' and (j='00' or j='000')"));
+	$nmI = sqlArray(sqlQuery("select nm_barang from ref_barang where f='{$isi['f']}' and g='{$isi['g']}' and h='{$isi['h']}' and i='{$isi['i']}' and (j='00' or j='000')"));
 	$no++;
 	$Isi1 = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 	$Isi2 = $isi['nm_barang'];

@@ -57,12 +57,12 @@ class cariTemplateObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama)values('$nama')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_satuan set nama='$nama' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -165,7 +165,7 @@ class cariTemplateObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_satuan WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -187,7 +187,7 @@ class cariTemplateObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -412,8 +412,8 @@ class cariTemplateObj  extends DaftarObj2{
 		$idTerima_tmplt = $_REQUEST['idTerima_tmplt'];
 		
 		$qry_pendet = "SELECT * FROM t_penerimaan_barang_det WHERE Id='$idTerima_det_tmplt' ";
-		$aqry_pendet = mysql_query($qry_pendet);
-		$dt_pendet = mysql_fetch_array($aqry_pendet);
+		$aqry_pendet = sqlQuery($qry_pendet);
+		$dt_pendet = sqlArray($aqry_pendet);
 		
 		$c1 = $dt_pendet['c1'];
 		$c = $dt_pendet['c'];
@@ -423,17 +423,17 @@ class cariTemplateObj  extends DaftarObj2{
 		
 		//UPDATE t_distribusi
 		$qry_upd_dstr = "UPDATE t_distribusi SET status='2' WHERE refid_penerimaan_det='$idTerima_det_tmplt' AND refid_terima='$idTerima_tmplt' AND status='1' ";
-		$aqry_upd_dstr = mysql_query($qry_upd_dstr);
+		$aqry_upd_dstr = sqlQuery($qry_upd_dstr);
 		
 			
 		$qry = "SELECT * FROM ref_rincian_template WHERE refid_template='$idnya' AND jumlah > 0";
-		$aqry = mysql_query($qry);
-		while($dt = mysql_fetch_array($aqry)){
+		$aqry = sqlQuery($qry);
+		while($dt = sqlArray($aqry)){
 			//$cek.= $dt['jumlah']." | ";
 			//INSERY t_distribusi
 			$qry_ins_dstr = "INSERT INTO t_distribusi (c1,c,d,e,e1,f1,f2,f,g,h,i,j,jumlah, refid_terima, refid_penerimaan_det, status, sttemp, uid,tahun) values ('$c1', '$c', '$d', '".$dt['e']."', '".$dt['e1']."', '".$dt_pendet['f1']."', '".$dt_pendet['f2']."', '".$dt_pendet['f']."', '".$dt_pendet['g']."', '".$dt_pendet['h']."', '".$dt_pendet['i']."', '".$dt_pendet['j']."', '".$dt['jumlah']."', '$idTerima_tmplt', '$idTerima_det_tmplt', '1', '1', '$uid', '$thn_anggaran')";
 			
-			$daqry_ins_dstr = mysql_query($qry_ins_dstr);			
+			$daqry_ins_dstr = sqlQuery($qry_ins_dstr);			
 		}
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);

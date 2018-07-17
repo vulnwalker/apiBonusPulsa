@@ -109,18 +109,18 @@ class t_pegawaiObj  extends DaftarObj2{
 	$nama = $_REQUEST['nama'];
 	
 		if($fmST == 0){
-		/*$ck1=mysql_fetch_array(mysql_query("Select * from ref_sumber_dana where nama='$nama'"));
+		/*$ck1=sqlArray(sqlQuery("Select * from ref_sumber_dana where nama='$nama'"));
 		if ($ck1>=1)$err= 'Gagal Simpan'.mysql_error();
 		if($err=='')
 		{
 			$aqry = "INSERT into ref_sumber_dana (nama) values('$nama')";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}
 		}else{						
 		if($err=='')
 		{
 			$aqry = "UPDATE ref_sumber_dana SET nama='$nama' WHERE nama='".$idplh."'";	$cek .= $aqry;
-			$qry = mysql_query($aqry) or die(mysql_error());
+			$qry = sqlQuery($aqry) or die(mysql_error());
 		}
 		*/
 		} //end else
@@ -190,8 +190,8 @@ class t_pegawaiObj  extends DaftarObj2{
 		$name_startsWith = $_REQUEST['name_startsWith'];
 		$maxRows = $_REQUEST['maxRows'];
 		$sql = "SELECT * from ref_pegawai WHERE jabatan like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs))
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs))
 		{
 			//$label =;			
 			$a_json_row["id"] = $row['Id'];
@@ -220,7 +220,7 @@ class t_pegawaiObj  extends DaftarObj2{
 			$idpangkat = $_REQUEST['pangkatakhir'];
 		}
 		$query = "select concat(gol,'/',ruang)as nama FROM ref_pangkat WHERE id='$idpangkat'" ;
-		$get=mysql_fetch_array(mysql_query($query));//$cek.=$query;
+		$get=sqlArray(sqlQuery($query));//$cek.=$query;
 		$content=$get['nama'];
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content, 'json'=>$json);
 	}
@@ -265,7 +265,7 @@ class t_pegawaiObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  $this->TblName WHERE nama= '".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
 	}
@@ -294,11 +294,11 @@ class t_pegawaiObj  extends DaftarObj2{
 		$queryd = "select UCASE(nm_skpd)as nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ;
 		$querye = "select UCASE(nm_skpd)as nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d = '$d' and e='$e' and e1='000'" ;
 		$querye1 = "select UCASE(nm_skpd)as nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d = '$d' and e='$e' and e1='$e1'" ;
-		$getc1=mysql_fetch_array(mysql_query($queryc1));
-		$getc=mysql_fetch_array(mysql_query($queryc));
-		$getd=mysql_fetch_array(mysql_query($queryd));
-		$gete=mysql_fetch_array(mysql_query($querye));
-		$gete1=mysql_fetch_array(mysql_query($querye1));
+		$getc1=sqlArray(sqlQuery($queryc1));
+		$getc=sqlArray(sqlQuery($queryc));
+		$getd=sqlArray(sqlQuery($queryd));
+		$gete=sqlArray(sqlQuery($querye));
+		$gete1=sqlArray(sqlQuery($querye1));
 		$urusan = $getc1['nm_skpd'];
 		$bidang = $getc['nm_skpd'];
 		$skpd = $getd['nm_skpd'];

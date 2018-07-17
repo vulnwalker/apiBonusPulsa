@@ -106,8 +106,8 @@ class SensusObj extends DaftarObj2{
 			" where (error is null or error ='') and (sesi is null or sesi ='') and f is not null  ) and ".
 			$getKond['Kondisi'].';';$cek .= $aqry;
 		**/
-		$qry = mysql_query($aqry);
-		if ($isi= mysql_fetch_array($qry)){	
+		$qry = sqlQuery($aqry);
+		if ($isi= sqlArray($qry)){	
 			$jmlData = $isi['cnt'];
 			
 			$jmlTotal += $isi['harga'];
@@ -116,29 +116,29 @@ class SensusObj extends DaftarObj2{
 		//$k1= $kondTglAkhir==''? '': "and tgl_pemeliharaan <='$kondTglAkhir' ";
 		$aqry = "select sum(coalesce(biaya_pemeliharaan,0)) as tot from pemeliharaan where tambah_aset=1 ".
 			" and idbi_awal in( select idawal from $TblName $Kondisi  );"; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$jmlTotal += $get['tot'];
 		//pengaman ----------------------------------------------
 		//$k1= $kondTglAkhir==''? '': "and tgl_pengamanan <='$kondTglAkhir' ";
 		$aqry = "select sum(coalesce(biaya_pengamanan,0)) as tot from pengamanan where tambah_aset=1  ".
 			" and idbi_awal in(select idawal from $TblName $Kondisi ) ; "; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$jmlTotal += $get['tot'];
 		//penghapusan_sebagian ----------------------------------------------
 		//$k1= $kondTglAkhir==''? '': "and tgl_penghapusan <='$kondTglAkhir' ";
 		$aqry = "select sum(coalesce(harga_hapus,0)) as tot from penghapusan_sebagian where 1=1  ".
 			" and idbi_awal in(select idawal from $TblName $Kondisi  ) ; "; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$jmlTotal -= $get['tot'];
 		//koreksi ----------------------------------------------
 		$aqry = "select sum(harga_baru - harga) as tot from t_koreksi ".
 			" where idbi_awal in(select idawal from $TblName $Kondisi );"; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$jmlTotal += $get['tot'];
 		//penilaian ---------------------------------------------		
 		$aqry = "select sum(nilai_barang - nilai_barang_asal) as tot from penilaian ".
 			" where idbi_awal in(select idawal from $TblName $Kondisi );"; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$jmlTotal += $get['tot'];
 		
 		
@@ -419,8 +419,8 @@ class SensusObj extends DaftarObj2{
 			tahun = '{$isi['tahun']}' ";
 		}
 		if ($isi['f'] == "01") {//KIB A
-			$QryKIB_A = mysql_query("select * from kib_a $KondisiKIB limit 0,1");
-			while ($isiKIB_A = mysql_fetch_array($QryKIB_A)) {
+			$QryKIB_A = sqlQuery("select * from kib_a $KondisiKIB limit 0,1");
+			while ($isiKIB_A = sqlArray($QryKIB_A)) {
 				$alm = '';
 				$alm .= ifempty($isiKIB_A['alamat'],'-');		
 				$alm .= $isiKIB_A['alamat_kel'] != ''? '<br>Kel. '.$isiKIB_A['alamat_kel'] : '';
@@ -433,8 +433,8 @@ class SensusObj extends DaftarObj2{
 			}
 		}
 		if ($isi['f'] == "02") {//KIB B;
-			$QryKIB_B = mysql_query("select * from kib_b  $KondisiKIB limit 0,1");
-			while ($isiKIB_B = mysql_fetch_array($QryKIB_B)) {
+			$QryKIB_B = sqlQuery("select * from kib_b  $KondisiKIB limit 0,1");
+			while ($isiKIB_B = sqlArray($QryKIB_B)) {
 				$ISI5 = "{$isiKIB_B['merk']}";
 				$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
 				$ISI7 = "{$isiKIB_B['bahan']}";							
@@ -442,8 +442,8 @@ class SensusObj extends DaftarObj2{
 			}
 		}
 		if ($isi['f'] == "03") {//KIB C;
-			$QryKIB_C = mysql_query("select * from kib_c  $KondisiKIB limit 0,1");
-			while ($isiKIB_C = mysql_fetch_array($QryKIB_C)) {
+			$QryKIB_C = sqlQuery("select * from kib_c  $KondisiKIB limit 0,1");
+			while ($isiKIB_C = sqlArray($QryKIB_C)) {
 				$alm = '';
 				$alm .= ifempty($isiKIB_C['alamat'],'-');		
 				$alm .= $isiKIB_C['alamat_kel'] != ''? '<br>Kel. '.$isiKIB_C['alamat_kel'] : '';
@@ -457,8 +457,8 @@ class SensusObj extends DaftarObj2{
 			}
 		}
 		if ($isi['f'] == "04") {//KIB D;
-			$QryKIB_D = mysql_query("select * from kib_d  $KondisiKIB limit 0,1");
-			while ($isiKIB_D = mysql_fetch_array($QryKIB_D)) {
+			$QryKIB_D = sqlQuery("select * from kib_d  $KondisiKIB limit 0,1");
+			while ($isiKIB_D = sqlArray($QryKIB_D)) {
 				$alm = '';
 				$alm .= ifempty($isiKIB_D['alamat'],'-');		
 				$alm .= $isiKIB_D['alamat_kel'] != ''? '<br>Kel. '.$isiKIB_D['alamat_kel'] : '';
@@ -470,17 +470,17 @@ class SensusObj extends DaftarObj2{
 			}
 		}
 		if ($isi['f'] == "05") {//KIB E;
-			$QryKIB_E = mysql_query("select * from kib_e  $KondisiKIB limit 0,1");
-			while ($isiKIB_E = mysql_fetch_array($QryKIB_E)) {
+			$QryKIB_E = sqlQuery("select * from kib_e  $KondisiKIB limit 0,1");
+			while ($isiKIB_E = sqlArray($QryKIB_E)) {
 				$ISI7 = "{$isiKIB_E['seni_bahan']}";
 				$ISI15 = "{$isiKIB_E['ket']}";
 			}
 		}
 		if ($isi['f'] == "06") {//KIB F;
 			$sQryKIB_F = "select * from kib_f  $KondisiKIB limit 0,1";
-			$QryKIB_F = mysql_query($sQryKIB_F);
+			$QryKIB_F = sqlQuery($sQryKIB_F);
 			//echo "<br>qrykibf= $sQryKIB_F";
-			while ($isiKIB_F = mysql_fetch_array($QryKIB_F)) {
+			while ($isiKIB_F = sqlArray($QryKIB_F)) {
 				$alm = '';
 				$alm .= ifempty($isiKIB_F['alamat'],'-');		
 				$alm .= $isiKIB_F['alamat_kel'] != ''? '<br>Kel. '.$isiKIB_F['alamat_kel'] : '';
@@ -1015,7 +1015,7 @@ class SensusObj extends DaftarObj2{
 		
 		//ambil data sensus scan
 		$aqry = "select * from sensus_scan where id ='$this->form_idplh' ";
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//$FormContent = "<div style='height:5px'>".$SensusTmp->genDaftarInitial($fmSKPD, $fmUNIT, $fmSUBUNIT)."</div>";
 		$FormContent = "<div style='height:5px'>".$SensusTmp->genDaftarInitial($dt['c'], $dt['d'], $dt['e'], $dt['tahun_sensus'], $dt['tgl'],$dt['e1'])."</div>";
@@ -1070,7 +1070,7 @@ class SensusObj extends DaftarObj2{
 		$form_name = $this->Prefix.'_form';
 		//$this->row_params = ' valign=top';
 		
-		$old = mysql_fetch_array(mysql_query(
+		$old = sqlArray(sqlQuery(
 			"select * from view2_sensus where id='".$cbid[0]."' "
 		)); 
 		
@@ -1087,16 +1087,16 @@ class SensusObj extends DaftarObj2{
 		$subunit = $old['nmunit'];//$get['nm_skpd'];		
 		$seksi = $old['nmseksi'];//$get['nm_skpd'];		
 		
-		$pemegang2 = mysql_fetch_array(mysql_query(
+		$pemegang2 = sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='".$old['ref_idpemegang2']."'"
 		));
 		
-		$pemegang = mysql_fetch_array(mysql_query(
+		$pemegang = sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='".$old['ref_idpemegang']."'"
 		));
 		//$cek .= "select * from ref_pegawai where Id='".$old['ref_idpemegang']."'";
 		//$cek .= 'pegang='.$pemegang['nama'];
-		$penanggung = mysql_fetch_array(mysql_query(
+		$penanggung = sqlArray(sqlQuery(
 			"select * from ref_pegawai where Id='".$old['ref_idpenanggung']."'"
 		));
 		
@@ -1248,14 +1248,14 @@ class SensusObj extends DaftarObj2{
 		//$kondisi = $_REQUEST['kondisi'];		
 		
 		//cek ada/tidak sudah diisi --------------------
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 			"select count(*) as cnt from sensus where sesi='$sesi' and (error='' or error is null) and (ada <>1 and ada <>2)"
 		));
 		if($err=='' && $get['cnt']>0)$err = 'Ada/Tidak Ada Barang Belum Diisi!';				
 		
 		//cek kondisi sudah diisi ----------------------
 		if($err==''){
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				//"select count(*) as cnt from sensus where sesi='$sesi' and (error='' or error is null) and (kondisi is null or kondisi='')"
 				"select count(*) as cnt from sensus where sesi='$sesi' and (error='' or error is null) and (kondisi is null or kondisi='') and ada=1 "
 			));		
@@ -1264,49 +1264,49 @@ class SensusObj extends DaftarObj2{
 		
 		if($err==''){
 			//cek lagi data scan ----------------------------------
-			$old = mysql_query( 
+			$old = sqlQuery( 
 				"select * from sensus where sesi='$sesi' and (error is null or error='')"
 			);
 			$cek .= "select * from sensus where sesi='$sesi' and (error is null or error='');";
-			while ($row = mysql_fetch_array($old) ){
+			while ($row = sqlArray($old) ){
 				/* //cek lg sudah discan
-				mysql_fetch_array( mysql_query(
+				sqlArray( sqlQuery(
 					"select sesi,count(*)as cnt from sensus where idbi = '".$row['idbi']."' 
 					and year(tgl)=year('$tgl_sensus') and sesi=''"
 				));*/
 				//cek ruang 
-				$ruang = mysql_fetch_array( mysql_query(
+				$ruang = sqlArray( sqlQuery(
 					"select * from ref_ruang where id='".$old['ref_idruang']."'"
 				)) ;			
 				$cek .= "select * from ruang where id='".$old['ref_idruang']."';";			
 				if($err=='' && $ruang['q']== '0000') $err = "Gagal Simpan Barcode '".$row['kode']."', Ruangan salah!";
 				//cek tahun sensus
-				$cekthnsensus = mysql_fetch_array(mysql_query(					
+				$cekthnsensus = sqlArray(sqlQuery(					
 					"select count(*) as cnt from sensus where sesi='' and idbi='".$row['idbi']."' and tahun_sensus= '$tahun_sensus' "
 				));
 				$cek .= "select count(*) as cnt from sensus where sesi='' and idbi='".$row['idbi']."' and tahun_sensus= '$tahun_sensus' ;";
 				if($err=='' && $cekthnsensus['cnt']>0 ) $err = " Gagal Simpan Barcode '".$row['kode']."', Barang sudah disensus pada tahun yang sama!";
 								
 			};
-			if ($err=='' && mysql_num_rows($old)==0) $err = 'Data tidak ada!';
+			if ($err=='' && sqlNumRow($old)==0) $err = 'Data tidak ada!';
 			
 			if($err==''){	
 				//delete error
 				$aqry = "delete from sensus where sesi ='$sesi' and error<>'' "; $cek .= $aqry;
-				$qry = mysql_query($aqry) ;
+				$qry = sqlQuery($aqry) ;
 				if ($qry){	
 					$aqry3 = "insert into sensus_scan (tgl,tahun_sensus,a1,a,b,c,d,e,e1)values ".
 						"('$tgl_sensus','$tahun_sensus','$Main->DEF_KEPEMILIKAN','$Main->DEF_PROPINSI','$Main->DEF_WILAYAH','$c','$d','$e','$e1') "; $cek .=$aqry3;
-					$qry3 = mysql_query($aqry3);
+					$qry3 = sqlQuery($aqry3);
 					$ref_idsensusscan = mysql_insert_id();
 					
 					
 					//update sensus ------------------------------------------------------------------------
 					$aqry = "select * from sensus where sesi='$sesi' and (error is null or error='')"; $cek .= $aqry;
-					$old = mysql_query( $aqry );					
-					while ($row = mysql_fetch_array($old) ){
+					$old = sqlQuery( $aqry );					
+					while ($row = sqlArray($old) ){
 						//ambil data bi --------------------------------
-						$bi = mysql_fetch_array( mysql_query(
+						$bi = sqlArray( sqlQuery(
 							"select * from buku_induk where id='".$row['idbi']."' "
 						));	
 						$cek .= "select * from buku_induk where id='".$row['idbi']."' ;";
@@ -1327,7 +1327,7 @@ class SensusObj extends DaftarObj2{
 							ref_idpemegang2_lama='".$bi['ref_idpemegang2']."',
 							ref_idruang_lama='".$bi['ref_idruang']."'".
 							" where id='".$row['Id']."'"; $cek .= $aqry2;							
-						$qry2 = mysql_query( $aqry2);		
+						$qry2 = sqlQuery( $aqry2);		
 						if($qry2 == FALSE) {						
 							$err = 'Gagal simpan data!';							
 						}else{												
@@ -1346,7 +1346,7 @@ class SensusObj extends DaftarObj2{
 								$upd_stpenguasaan.
 								" kondisi='".$row['kondisi']."' ".
 								" where id='".$row['idbi']."'"; $cek .= $aqry2;
-							$qry2 = mysql_query( $aqry2);	
+							$qry2 = sqlQuery( $aqry2);	
 							if($qry2 == FALSE) {						
 								$err = 'Gagal simpan data!';								
 							}
@@ -1372,7 +1372,7 @@ class SensusObj extends DaftarObj2{
 		$UID = $_COOKIE['coID'];
 		$id = $_REQUEST[$this->Prefix."_idplh"];
 		
-		$old= mysql_fetch_array(mysql_query(
+		$old= sqlArray(sqlQuery(
 			" select * from  sensus where  id='$id'  "
 		));
 		
@@ -1400,7 +1400,7 @@ class SensusObj extends DaftarObj2{
 			" status_penguasaan=$status_penguasaan_, ".
 			" petugas='$petugas'".
 			" where id='$id' "; $cek .= $aqry;
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		if($qry==FALSE) {
 			$err= 'Gagal simpan!';
 		} else {
@@ -1410,7 +1410,7 @@ class SensusObj extends DaftarObj2{
 				ref_idpenanggung='".$ref_idpenanggung."',".
 				" status_penguasaan=$status_penguasaan_ ".  
 				" where id='".$old['idbi']."' "; $cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content, 'json'=>$json);			
@@ -1614,7 +1614,7 @@ class SensusObj extends DaftarObj2{
 			" select count(*) as cnt from $tblkib where a1='$Main->DEF_KEPEMILIKAN' and a='$Main->DEF_PROPINSI' and b='$Main->DEF_WILAYAH' $kondSKPD and status_barang <> 3 and status_barang <> 4 and status_barang <> 5 
 				and tgl_buku<='2012-12-31' 
 				order by a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg limit 0, 10";
-		$get = mysql_fetch_array( mysql_query($aqry) );
+		$get = sqlArray( sqlQuery($aqry) );
 		$content->jmldata = $get['cnt'];
 		$content->vjmldata = number_format($get['cnt'],0,',','.');
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content, 'json'=>$json);
@@ -1676,7 +1676,7 @@ class SensusObj extends DaftarObj2{
 				$sesi = $_REQUEST['sesi'];
 				if ($sesi != ''){
 					$aqry = "delete from sensus where sesi='$sesi'";
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 				break;
 			}
@@ -1889,7 +1889,7 @@ class SensusObj extends DaftarObj2{
 			if($err ==''){
 				//update uid yg hapus
 				$aqry = "update  sensus set uid='$uiddelete' where id='".$ids[$i]."' ";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				$get = $this->Hapus_Data($ids[$i]);
 				$err = $get['err'];
 				$cek.= $get['cek'];
@@ -1974,7 +1974,7 @@ class SensusTmpObj extends DaftarObj2{
 			
 			//if ($isi[])
 			$aqry2 = "select * from ref_ruang where id='".$isi['ref_idruang']."'" ; $cek .=$aqry2;
-			$get = mysql_fetch_array(mysql_query( 	$aqry2	));
+			$get = sqlArray(sqlQuery( 	$aqry2	));
 			$ruang = $get['nm_ruang']; //'Ruang';
 			//$ruang = $aqry2; 
 			$aqry2 = 
@@ -1982,7 +1982,7 @@ class SensusTmpObj extends DaftarObj2{
 				"' and c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' and e1='".$get['e1'].
 				"' and p='".$get['p']."' and q='0000'"; //$cek .= $aqry2;
 			
-			$get = mysql_fetch_array(mysql_query( $aqry2	));
+			$get = sqlArray(sqlQuery( $aqry2	));
 			//$Gedung = $get['nm_ruang']; // 'gedung';
 			$gedung = $get['nm_ruang']; //$cek; 
 			
@@ -2087,13 +2087,13 @@ class SensusTmpObj extends DaftarObj2{
 		$fmSUBUNIT = $_REQUEST[$this->Prefix."SkpdfmSUBUNIT"];//$_COOKIE['cofmSUBUNIT'];
 		$fmSEKSI = $_REQUEST[$this->Prefix."SkpdfmSEKSI"];//$_COOKIE['cofmSEKSI'];
 		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$fmSKPD."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$fmSKPD."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$fmSKPD."' and d='".$fmUNIT."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$fmSKPD."' and d='".$fmUNIT."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$fmSKPD."' and d='".$fmUNIT."' and e='".$fmSUBUNIT."' and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$fmSKPD."' and d='".$fmUNIT."' and e='".$fmSUBUNIT."' and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$fmSKPD."' and d='".$fmUNIT."' and e='".$fmSUBUNIT."' and e1='".$fmSEKSI."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$fmSKPD."' and d='".$fmUNIT."' and e='".$fmSUBUNIT."' and e1='".$fmSEKSI."' "));
 		$seksi = $get['nm_skpd'];		
 		
 		//--- tahun sensus
@@ -2276,14 +2276,14 @@ class SensusTmpObj extends DaftarObj2{
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
 				$aqry = "update sensus set ref_idruang='$idruang' where id='".$ids[$i]."'"; $cek .= $aqry; 
-				$qry=mysql_query($aqry);
+				$qry=sqlQuery($aqry);
 				if ($qry){
 					if($Sensus_idplh != '') {	
-						$old = mysql_fetch_array(mysql_query("select * from sensus where id='".$ids[$i]."'"));
+						$old = sqlArray(sqlQuery("select * from sensus where id='".$ids[$i]."'"));
 						$aqry = "update buku_induk set ".							
 							" ref_idruang='$idruang' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 						
 					}
 				}
@@ -2292,31 +2292,31 @@ class SensusTmpObj extends DaftarObj2{
 			$aqry = $Sensus_idplh==''?
 				"select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				"select * from sensus where ref_idsensusscan='$Sensus_idplh' and (error='' or error is null) ";
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 			
 				$aqry2 = "update sensus set ref_idruang='$idruang', ref_idruang_lama='".$bi['ref_idruang']."'  where id='".$isi['Id']."'"; $cek .= $aqry2; 
-				$qry2=mysql_query($aqry2);				
+				$qry2=sqlQuery($aqry2);				
 				if ($qry2){
 					if($Sensus_idplh != '') {						
 						$aqry = "update buku_induk set ".							
 							" ref_idruang='$idruang' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry2 = mysql_query($aqry);
+						$qry2 = sqlQuery($aqry);
 					}
 				}
 			}
 			/*
 			$aqry = "update sensus set ref_idruang='$idruang' where sesi='$sesi' and (error='' or error is null)";
-			$qry = mysql_query($aqry);	
+			$qry = sqlQuery($aqry);	
 			if ($qry){
 				if($Sensus_idplh != '') {						
 					$aqry = "update buku_induk set ".							
 						" ref_idruang='$idruang' ".							
 						" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					
 				}
 			}*/
@@ -2332,14 +2332,14 @@ class SensusTmpObj extends DaftarObj2{
 		$Sensus_idplh = $_REQUEST['Sensus_idplh'];
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select * from sensus where id='".$ids[$i]."'"
 				));
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$old['idbi']."'"
 				)); 			
 				$aqry = "update sensus set kondisi='$kondisi', kondisi_awal='".$bi['kondisi']."'  where id='".$ids[$i]."'"; $cek .= $aqry; 
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				//update buku induk jika mode edit
 				if ($qry){
 					if($Sensus_idplh != '') {
@@ -2347,7 +2347,7 @@ class SensusTmpObj extends DaftarObj2{
 						$aqry = "update buku_induk set ".							
 							" kondisi='$kondisi' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 						
 					}
 				}
@@ -2356,20 +2356,20 @@ class SensusTmpObj extends DaftarObj2{
 			$aqry = $Sensus_idplh==''?
 				 "select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				 "select * from sensus where ref_idsensusscan='$Sensus_idplh' and (error='' or error is null)"; $cek .= $aqry;
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 			
 				$aqry2 = "update sensus set kondisi='$kondisi', kondisi_awal='".$bi['kondisi']."'  where id='".$isi['Id']."'"; $cek .= $aqry2; 
-				$qry2 = mysql_query($aqry2);	
+				$qry2 = sqlQuery($aqry2);	
 				if ($qry2){
 					if($Sensus_idplh != '') {
 						
 						$aqry = "update buku_induk set ".							
 							" kondisi='$kondisi' ".							
 							" where id ='".$isi['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry2 = mysql_query($aqry);
+						$qry2 = sqlQuery($aqry);
 						
 					}
 				}			
@@ -2386,26 +2386,26 @@ class SensusTmpObj extends DaftarObj2{
 		$Sensus_idplh = $_REQUEST['Sensus_idplh'];
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select * from sensus where id='".$ids[$i]."'"
 				));
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$old['idbi']."'"
 				)); 			
 				$aqry = "update sensus set catatan='$catatan' where id='".$ids[$i]."'"; $cek .= $aqry; 
-				mysql_query($aqry);
+				sqlQuery($aqry);
 			}
 		}else{
 			$aqry = $Sensus_idplh==''?
 				"select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				"select * from sensus where ref_idsensusscan='$Sensus_idplh' ";
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 			
 				$aqry2 = "update sensus set catatan='$catatan' where id='".$isi['Id']."'"; $cek .= $aqry2; 
-				mysql_query($aqry2);				
+				sqlQuery($aqry2);				
 			}
 		}
 		return array('err'=>$err,'cek'=>$cek);
@@ -2629,10 +2629,10 @@ class SensusTmpObj extends DaftarObj2{
 		
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select * from sensus where id='".$ids[$i]."'"
 				));
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$old['idbi']."'"
 				)); 
 				if($bi['f']=='01' || $bi['f']=='03' || $bi['f']=='04'){
@@ -2657,7 +2657,7 @@ class SensusTmpObj extends DaftarObj2{
 					"petugas='".$petugas."' ".									
 					"where id='".$ids[$i]."'"; $cek .= ' update sensus='.$aqry; 
 				//kondisi,ref_idpemegang2,ref_idpemegang ,ref_idpenanggung,catatan,ada
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				
 				//update buku induk jika mode edit
 				if ($qry){
@@ -2672,7 +2672,7 @@ class SensusTmpObj extends DaftarObj2{
 							" status_penguasaan=$stpenguasa_, ".//" status_penguasaan='$status_penguasaan', ".
 							" ref_idpenanggung='$ref_idpenanggung' ".
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 						
 					}
 				}
@@ -2681,9 +2681,9 @@ class SensusTmpObj extends DaftarObj2{
 			$aqry = $Sensus_idplh ==''? 
 				"select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				"select * from sensus where ref_idsensusscan='$Sensus_idplh' and (error='' or error is null) "; $cek .= $aqry; 
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 		
 				if($bi['f']=='01' || $bi['f']=='03' || $bi['f']=='04'){
@@ -2708,7 +2708,7 @@ class SensusTmpObj extends DaftarObj2{
 					"status_penguasaan=$stpenguasa_, ".//$stpenguasa_.	//"status_penguasaan='$status_penguasaan', ".		
 					"petugas='".$petugas."' ".									
 					"where id='".$isi['Id']."'"; $cek .= ' update sensus='.$aqry2; 
-				$qry2 = mysql_query($aqry2);
+				$qry2 = sqlQuery($aqry2);
 				
 				if ($qry2){
 					if($Sensus_idplh != '') {
@@ -2723,7 +2723,7 @@ class SensusTmpObj extends DaftarObj2{
 							" status_penguasaan=$stpenguasa_, ".//" status_penguasaan='$status_penguasaan', ".
 							" ref_idpenanggung='$ref_idpenanggung' ".
 							" where id ='".$old['idbi']."'"; $cek .= ' update bi='.$aqry2; 
-						$qry2 = mysql_query($aqry2);
+						$qry2 = sqlQuery($aqry2);
 					}
 				}				
 			}
@@ -2742,20 +2742,20 @@ class SensusTmpObj extends DaftarObj2{
 				
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select * from sensus where id='".$ids[$i]."'"
 				));
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$old['idbi']."'"
 				)); 			
 				$aqry = "update sensus set ref_idpemegang='$idpegawai', ref_idpemegang_lama='".$bi['ref_idpemegang']."'  where id='".$ids[$i]."'"; $cek .= $aqry; 
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if ($qry){
 					if($Sensus_idplh != '') {						
 						$aqry = "update buku_induk set ".							
 							" ref_idpemegang='$idpegawai' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry = mysql_query($aqry);						
+						$qry = sqlQuery($aqry);						
 					}
 				}
 			}
@@ -2763,19 +2763,19 @@ class SensusTmpObj extends DaftarObj2{
 			$aqry = $Sensus_idplh==''?
 				"select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				"select * from sensus where ref_idsensusscan='$Sensus_idplh'  and (error='' or error is null) ";
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 			
 				$aqry2 = "update sensus set ref_idpemegang='$idpegawai', ref_idpemegang_lama='".$bi['ref_idpemegang']."'  where id='".$isi['Id']."'"; $cek .= $aqry2; 
-				$qry2 = mysql_query($aqry2);
+				$qry2 = sqlQuery($aqry2);
 				if ($qry2){
 					if($Sensus_idplh != '') {						
 						$aqry = "update buku_induk set ".							
 							" ref_idpemegang='$idpegawai' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry2 = mysql_query($aqry);
+						$qry2 = sqlQuery($aqry);
 						
 					}
 				}				
@@ -2792,20 +2792,20 @@ class SensusTmpObj extends DaftarObj2{
 		$Sensus_idplh = $_REQUEST['Sensus_idplh'];
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select * from sensus where id='".$ids[$i]."'"
 				));
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$old['idbi']."'"
 				)); 			
 				$aqry = "update sensus set ref_idpemegang2='$idpegawai', ref_idpemegang2_lama='".$bi['ref_idpemegang2']."'  where id='".$ids[$i]."'"; $cek .= $aqry; 
-				$qry=mysql_query($aqry);
+				$qry=sqlQuery($aqry);
 				if ($qry){
 					if($Sensus_idplh != ''){						
 						$aqry = "update buku_induk set ".							
 							" ref_idpemegang2='$idpegawai' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry = mysql_query($aqry);						
+						$qry = sqlQuery($aqry);						
 					}
 				}
 			}
@@ -2813,19 +2813,19 @@ class SensusTmpObj extends DaftarObj2{
 			$aqry = $Sensus_idplh==''?
 				"select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				"select * from sensus where ref_idsensusscan='$Sensus_idplh' and (error='' or error is null)";
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 			
 				$aqry2 = "update sensus set ref_idpemegang2='$idpegawai', ref_idpemegang2_lama='".$bi['ref_idpemegang2']."'  where id='".$isi['Id']."'"; $cek .= $aqry2; 
-				$qry2 = mysql_query($aqry2);				
+				$qry2 = sqlQuery($aqry2);				
 				if ($qry2){
 					if($Sensus_idplh != ''){						
 						$aqry = "update buku_induk set ".							
 							" ref_idpemegang2='$idpegawai' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry2 = mysql_query($aqry);
+						$qry2 = sqlQuery($aqry);
 						
 					}
 				}
@@ -2842,20 +2842,20 @@ class SensusTmpObj extends DaftarObj2{
 		$Sensus_idplh = $_REQUEST['Sensus_idplh'];
 		if($semua == ''){
 			for($i = 0; $i<count($ids); $i++){
-				$old = mysql_fetch_array(mysql_query(
+				$old = sqlArray(sqlQuery(
 					"select * from sensus where id='".$ids[$i]."'"
 				));
-				$bi = mysql_fetch_array(mysql_query(
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$old['idbi']."'"
 				)); 			
 				$aqry = "update sensus set ref_idpenanggung='$idpegawai', ref_idpenanggung_lama='".$bi['ref_idpenanggung']."'  where id='".$ids[$i]."'"; $cek .= $aqry; 
-				$qry=mysql_query($aqry);
+				$qry=sqlQuery($aqry);
 				if ($qry){
 					if($Sensus_idplh != '') {						
 						$aqry = "update buku_induk set ".							
 							" ref_idpenanggung='$idpegawai' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 				}
 			}
@@ -2863,19 +2863,19 @@ class SensusTmpObj extends DaftarObj2{
 			$aqry = $Sensus_idplh==''?
 				"select * from sensus where sesi='$sesi' and (error='' or error is null)":
 				"select * from sensus where ref_idsensusscan='$Sensus_idplh'  and (error='' or error is null) ";
-			$qry = mysql_query($aqry);
-			while($isi = mysql_fetch_array($qry)){
-				$bi = mysql_fetch_array(mysql_query(
+			$qry = sqlQuery($aqry);
+			while($isi = sqlArray($qry)){
+				$bi = sqlArray(sqlQuery(
 					"select * from buku_induk where id='".$isi['idbi']."'"
 				)); 			
 				$aqry2 = "update sensus set ref_idpenanggung='$idpegawai', ref_idpenanggung_lama='".$bi['ref_idpenanggung']."'  where id='".$isi['Id']."'"; $cek .= $aqry2; 
-				$qry2=mysql_query($aqry2);				
+				$qry2=sqlQuery($aqry2);				
 				if ($qry2){
 					if($Sensus_idplh != '') {						
 						$aqry = "update buku_induk set ".							
 							" ref_idpenanggung='$idpegawai' ".							
 							" where id ='".$old['idbi']."'";  $cek .= ' update bi='.$aqry; 
-						$qry2 = mysql_query($aqry);
+						$qry2 = sqlQuery($aqry);
 					}
 				}
 			}
@@ -2897,7 +2897,7 @@ class SensusTmpObj extends DaftarObj2{
 				
 		//get id bi 
 		$aqry = "select  year(tgl_buku) as thn_buku, buku_induk.* from buku_induk where idall2 = '$kode'"; $cek.=$aqry;
-		$bi = mysql_fetch_array (mysql_query( 
+		$bi = sqlArray (sqlQuery( 
 			$aqry
 		));
 		$idbi = $bi['id'];
@@ -2914,13 +2914,13 @@ class SensusTmpObj extends DaftarObj2{
 		//$aqry = "select count(*)as cnt from sensus where idbi = '$idbi' and year(tgl)=year(now()) and sesi=''"; $cek.=$aqry;
 		$aqry = "select count(*)as cnt from sensus where idbi = '$idbi' 			
 			and tahun_sensus='".$tahun_sensus."' and sesi=''"; $cek.=$aqry;
-		$get2 = mysql_fetch_array (mysql_query( $aqry ));
+		$get2 = sqlArray (sqlQuery( $aqry ));
 		if($err=='' && $get2['cnt'] > 0) $err = "Barang sudah disensus pada tahun yang sama! ";//.$get2['cnt'];
 		
 		//cek sedang discan 
 		$aqry = "select sesi,count(*)as cnt from sensus where idbi = '$idbi' 
 			and sesi = '$sesi'"; $cek.=$aqry;
-		$get2 = mysql_fetch_array (mysql_query( $aqry ));
+		$get2 = sqlArray (sqlQuery( $aqry ));
 		if($err=='' && $get2['cnt'] > 0) {
 			$err = "Barang sudah di scan! ";
 			/*if($get2['sesi'] == $sesi ){
@@ -2947,7 +2947,7 @@ class SensusTmpObj extends DaftarObj2{
 				$aqry = "insert into sensus (ref_idsensusscan, ada, kondisi, tgl, idbi,  uid, kondisi_awal, kode, tgl_update) values ('$Sensus_idplh', 1, '$kondisi_awal' , now(),'$idbi','$UID','$kondisi_awal', '$kode', now() )"; $cek.= $aqry;
 			}
 			
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry==FALSE) $err = "Gagal simpan ke daftar Sensus!";
 		}else{
 			if($Sensus_idplh==''){//baru
@@ -2955,7 +2955,7 @@ class SensusTmpObj extends DaftarObj2{
 			}else{//edit
 				$aqry = "insert into sensus ( ref_idsensusscan, tgl, kode, error, uid, kondisi_awal, tgl_update) values ('$Sensus_idplh', now(),'$kode','$err','$UID','$kondisi_awal', now() )"; $cek.= $aqry;
 			}
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}
 		
 		return array('err'=>$err,'cek'=>$cek);	
@@ -3112,7 +3112,7 @@ function insertSensusManual(){
 			$aqry="select * from sensus_scan where tahun_sensus='$tahun_sensus' and 
 			a1='".$Main->DEF_KEPEMILIKAN."' and a='".$Main->DEF_PROPINSI."' and b='".$Main->DEF_WILAYAH.
 			"' and c='".$fmSKPD."' and d='".$fmUNIT."'  and e='".$fmSUBUNIT."' and e1='".$fmSEKSI."' ";
-		$dtscan = mysql_fetch_array (mysql_query( 
+		$dtscan = sqlArray (sqlQuery( 
 			$aqry
 		));
 		$idscan = $dtscan['Id'];
@@ -3122,11 +3122,11 @@ function insertSensusManual(){
 		'$tgl_sensus','$tahun_sensus','".$Main->DEF_KEPEMILIKAN."','".$Main->DEF_PROPINSI.
 		"','".$Main->DEF_WILAYAH."','".$fmSKPD."','".$fmUNIT."','".$fmSUBUNIT."','".$fmSEKSI."'
 		)";
-		mysql_query($iqry);
+		sqlQuery($iqry);
 			$aqry1="select * from sensus_scan where tahun_sensus='$tahun_sensus' and 
 			a1='".$Main->DEF_KEPEMILIKAN."' and a='".$Main->DEF_PROPINSI."' and b='".$Main->DEF_WILAYAH.
 			"' and c='".$fmSKPD."' and d='".$fmUNIT."'  and e='".$fmSUBUNIT."' and e1='".$fmSEKSI."' ";
-		$dtscan = mysql_fetch_array (mysql_query($aqry1));
+		$dtscan = sqlArray (sqlQuery($aqry1));
 		$idscan = $dtscan['Id'];
 		if 	($idscan==''){
 			$err='Tambah barang sensus gagal'.$aqry.' '.$iqry;
@@ -3143,12 +3143,12 @@ function insertSensusManual(){
 		{
 		
 		$sqry=" select count(*) as cnt from sensus where idbi='".$cidBI[$i]."' and tahun_sensus='$tahun_sensus'";
-		$dtsensus = mysql_fetch_array (mysql_query($sqry));
+		$dtsensus = sqlArray (sqlQuery($sqry));
 		$cnt=$dtsensus['cnt'];
 		if ($cnt<=0)
 		{
 		$iqry=" select * from buku_induk where id='".$cidBI[$i]."'  ";
-		$dtbi = mysql_fetch_array (mysql_query($iqry));
+		$dtbi = sqlArray (sqlQuery($iqry));
 		$idbi_sensus=$dtbi['id'];
 		$kondisi_awal=$dtbi['kondisi'];
 		$ref_idpemegang_lama=$dtbi['ref_idpemegang'];
@@ -3161,8 +3161,8 @@ function insertSensusManual(){
 		$isqry="insert into sensus (tgl,idbi,uid,kondisi_awal,tgl_lama,ref_idpemegang_lama,ref_idpenanggung_lama,ref_idruang_lama,tahun_sensus_lama,ref_idpemegang2_lama,ref_idsensusscan,tahun_sensus) values ('$tgl_sensus_full','$idbi_sensus','$UID',
 		'$kondisi_awal','$tgl_lama','$ref_idpemegang_lama','$ref_idpenanggung_lama','$ref_idruang_lama',
 		'$tahun_sensus_lama','$ref_idpemegang2_lama','$idscan','$tahun_sensus')";	
-		mysql_query($isqry);
-		$uqry="update buku_induk set tahun_sensus='$tahun_sensus',tgl_sensus='$tgl_sensus_full' where id='".$cidBI[$i]."'";				mysql_query($uqry);
+		sqlQuery($isqry);
+		$uqry="update buku_induk set tahun_sensus='$tahun_sensus',tgl_sensus='$tgl_sensus_full' where id='".$cidBI[$i]."'";				sqlQuery($uqry);
 		}
 		}
 		}

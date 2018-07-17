@@ -80,24 +80,24 @@ class popupRekeningObj  extends DaftarObj2{
 			for($j=0;$j<5;$j++){
 	//urutan kode skpd 	
 		if($j==0){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_rekening where k!='0' and l ='0' and m ='0' and n ='00' and o ='00' Order By k DESC limit 1"));
+			$ck=sqlArray(sqlQuery("Select * from ref_rekening where k!='0' and l ='0' and m ='0' and n ='00' and o ='00' Order By k DESC limit 1"));
 			if($kode1=='0') {$err= 'Format Kode Akun salah';}
 			elseif($kode1!=5){ $err= 'Format Kode Akun salah';}
 				
 		}elseif($j==1){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_rekening where k='".$kode1."' and l !='0' and m ='0' and n ='00' and o ='00' Order By l DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_rekening where k='".$kode1."' and l !='0' and m ='0' and n ='00' and o ='00' Order By l DESC limit 1"));	
 			if ($kode2>sprintf("%02s",$ck['l']+1)) {$err= 'Format Kode Kelompok Belanja Harus berurutan';}		
 			
 		}elseif($j==2){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_rekening where k='".$kode1."' and l ='".$kode2."' and m !='0' and n ='00' and o ='00' Order By m DESC limit 1"));			
+			$ck=sqlArray(sqlQuery("Select * from ref_rekening where k='".$kode1."' and l ='".$kode2."' and m !='0' and n ='00' and o ='00' Order By m DESC limit 1"));			
 			if ($kode3>sprintf("%02s",$ck['m']+1)) {$err= 'Format Kode Jenis Belanja Salah';}		
 				
 		}elseif($j==3){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_rekening where k='".$kode1."' and l ='".$kode2."' and m ='".$kode3."' and n!='00' and o='00' Order By n DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_rekening where k='".$kode1."' and l ='".$kode2."' and m ='".$kode3."' and n!='00' and o='00' Order By n DESC limit 1"));	
 			if ($kode4>sprintf("%02s",$ck['n']+1)) {$err= 'Format Kode Objek Belanja Harus berurutan';}
 		
 		}elseif($j==4){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_rekening where k='".$kode1."' and l ='".$kode2."' and m ='".$kode3."' and n ='".$kode4."' and o!='00' Order By o DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_rekening where k='".$kode1."' and l ='".$kode2."' and m ='".$kode3."' and n ='".$kode4."' and o!='00' Order By o DESC limit 1"));	
 			if ($kode5>sprintf("%02s",$ck['o']+1)) {$err= 'Format Kode SubObjek Belanja Harus berurutan';}
 				
 				
@@ -107,16 +107,16 @@ class popupRekeningObj  extends DaftarObj2{
 			
 			
 			if($fmST == 0){
-			$ck1=mysql_fetch_array(mysql_query("Select * from ref_rekening where k='$kode1' and l ='$kode2' and m ='$kode3' and n='$kode4' and o='$kode5'"));
+			$ck1=sqlArray(sqlQuery("Select * from ref_rekening where k='$kode1' and l ='$kode2' and m ='$kode3' and n='$kode4' and o='$kode5'"));
 			if ($ck1>=1)$err= 'Gagal Simpan'.mysql_error();
 				if($err==''){
 					$aqry = "INSERT into ref_rekening (k,l,m,n,o,nm_rekening) values('$kode1','$kode2','$kode3','$kode4','$kode5','$nama_rekening')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_rekening SET nm_rekening='$nama_rekening' WHERE k='$kode1' and l='$kode2' and m='$kode3' and n='$kode4' and o='$kode5'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 						
 					}
 			} //end else
@@ -166,7 +166,7 @@ class popupRekeningObj  extends DaftarObj2{
 				  $$key = $value; 
 		}
 		$ref_pilihrekening = $_REQUEST['id'];
-		$getRekening = mysql_fetch_array(mysql_query("select concat(k,'.',l,'.',m,'.',n,'.',o) as kode_rekening, nm_rekening from ref_rekening where concat(k,'.',l,'.',m,'.',n,'.',o)  = '$ref_pilihrekening' "));
+		$getRekening = sqlArray(sqlQuery("select concat(k,'.',l,'.',m,'.',n,'.',o) as kode_rekening, nm_rekening from ref_rekening where concat(k,'.',l,'.',m,'.',n,'.',o)  = '$ref_pilihrekening' "));
 		$kode_rekening = $getRekening['kode_rekening'];	
 		$nama_rekening = $getRekening['nm_rekening'];
 		
@@ -223,7 +223,7 @@ class popupRekeningObj  extends DaftarObj2{
 		$kf=$kode_rekening[5];
 		
 		$quricoy="select count(*) as cnt from ref_barang where ka='$ka' and kb='$kb' and kc='$kc' and kd='$kd' and ke='$ke' and kf='$kf'";
-		$dt3 = mysql_fetch_array(mysql_query($quricoy));
+		$dt3 = sqlArray(sqlQuery($quricoy));
 		$korong = $dt3 ['cnt'];
 		
 		if($korong>0){
@@ -233,7 +233,7 @@ class popupRekeningObj  extends DaftarObj2{
 		}
 		
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where ka='$ka' and kb='$kb' and kc='$kc' and kd='$kd' and ke='$ke' and kf='$kf' ")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! KODE AKUN Sudah ada di Buku Induk!';}
@@ -262,7 +262,7 @@ class popupRekeningObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_rekening WHERE k='$k' and l='$l' and m='$m' and n='$n' and o='$o' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -285,7 +285,7 @@ class popupRekeningObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		$kode1=genNumber($dt['k'],1);
 		$kode2=genNumber($dt['l'],1);
 		$kode3=genNumber($dt['m'],1);

@@ -163,8 +163,8 @@ $fmIdAwal = $_POST['fmIdAwal'];
 $Act="Edit";
 if($Act=="Edit"){			
 	$sqry = "select * from buku_induk where id='$fmIDLama'"; $cek .= '<br> qry edit= '.$sqry;
-	$Qry = mysql_query($sqry);
-	$isi = mysql_fetch_array($Qry);	
+	$Qry = sqlQuery($sqry);
+	$isi = sqlArray($Qry);	
 	if ($isi['status_barang'] != 3){			
 		Penatausahaan_GetData( $fmIDLama  ,TRUE); //echo "<br>fmUID=$fmUID";		
 		$status_penguasaan_ = $isi['status_penguasaan'];		

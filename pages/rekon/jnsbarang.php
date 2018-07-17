@@ -68,12 +68,12 @@ class JnsBarangObj  extends DaftarObj2{
 			/*if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_statusbarang2 (nama) values('$stbarang')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}elseif($fmST == 1){				
 				if($err==''){
 					$aqry = "UPDATE ref_statusbarang2 set nama='$stbarang' WHERE Id='".$idplh."'";	$cek .= $aqry;
-					$qry = mysql_query($aqry) or die(mysql_error());
+					$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			}else{*/
 			if($err==''){
@@ -81,7 +81,7 @@ class JnsBarangObj  extends DaftarObj2{
 				for($i=0;$i<count($bi);$i++){
 					$aqry= "UPDATE buku_induk set jns_ekstra='$stbarang' WHERE id='".$bi[$i]."'";						
 					$cek .= $aqry;
-					$qry = mysql_query($aqry) or die(mysql_error());
+					$qry = sqlQuery($aqry) or die(mysql_error());
 				}	
 			}
 			//} //end else									
@@ -106,7 +106,7 @@ class JnsBarangObj  extends DaftarObj2{
 			for($i=0;$i<count($bi);$i++){
 				$aqry= "UPDATE buku_induk set jns_lain='$stbarang' WHERE id='".$bi[$i]."'";						
 				$cek .= $aqry;
-				$qry = mysql_query($aqry) or die(mysql_error());
+				$qry = sqlQuery($aqry) or die(mysql_error());
 			}
 		}
 		
@@ -122,8 +122,8 @@ class JnsBarangObj  extends DaftarObj2{
 		$maxRows = $_REQUEST['maxRows'];
 		//echo $name_startsWith
 		$sql = "select Id,nama from ref_statusbarang2 where nama like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;		
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 				$a_json_row["id"] = $row['Id'];
 				$a_json_row["value"] = $row['nama'];//.' '.$row['uraian'];
 				$a_json_row["label"] =  $row['nama'];
@@ -146,8 +146,8 @@ class JnsBarangObj  extends DaftarObj2{
 		$maxRows = $_REQUEST['maxRows'];
 		//echo $name_startsWith
 		$sql = "select Id,nama from ref_statusbarang2 where nama like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;		
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 				$a_json_row["id"] = $row['Id'];
 				$a_json_row["value"] = $row['nama'];//.' '.$row['uraian'];
 				$a_json_row["label"] =  $row['nama'];
@@ -304,8 +304,8 @@ class JnsBarangObj  extends DaftarObj2{
 				//$kode=explode(' ',$ref_pilihkodeaset);
 				//$kode_aset=$kode[0].$kode[1].$kode[2].$kode[3].$kode[4].$kode[5];
 				//query ambil data ref_aset
-				$get = mysql_fetch_array( mysql_query("select * from ref_statusbarang2 where Id='$ref_pilih'"));
-				//$ns=mysql_fetch_array(mysql_query("select * from ref_satuan where Id='".$get['ref_idsatuan']."'"));
+				$get = sqlArray( sqlQuery("select * from ref_statusbarang2 where Id='$ref_pilih'"));
+				//$ns=sqlArray(sqlQuery("select * from ref_satuan where Id='".$get['ref_idsatuan']."'"));
 				$content = array('el_id_status_brg_temp'=>$get['Id'],
 								 'el_nm_status_brg_temp'=>$get['nama']);
 								// 'el_nm_barang_temp'=>$get['nama'],
@@ -432,7 +432,7 @@ class JnsBarangObj  extends DaftarObj2{
 	
 
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -477,7 +477,7 @@ class JnsBarangObj  extends DaftarObj2{
 	
 
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -536,7 +536,7 @@ class JnsBarangObj  extends DaftarObj2{
 		$this->form_fmST = 1;						
 		//get data 
 		$aqry = "SELECT * FROM  ref_statusbarang2 WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -580,7 +580,7 @@ class JnsBarangObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -614,7 +614,7 @@ class JnsBarangObj  extends DaftarObj2{
 		$this->form_caption = 'Status Recon';
 
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(

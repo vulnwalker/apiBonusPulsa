@@ -50,8 +50,8 @@ class UsulanHapusObj  extends DaftarObj2{
 		
 		$fsum = join(',',$fsum_);		
 		$aqry = "select count(*) as cnt from penghapusan_usul $Kondisi" ; $cek .= $aqry;
-		$qry = mysql_query($aqry); 
-		if ($isi= mysql_fetch_array($qry)){			
+		$qry = sqlQuery($aqry); 
+		if ($isi= sqlArray($qry)){			
 			$jmlData = $isi['cnt'];			
 			foreach($this->FieldSum as &$value){
 				$SumArr[] = $isi["sum_$value"];				
@@ -63,13 +63,13 @@ class UsulanHapusObj  extends DaftarObj2{
 		for($i=0;$i<6;$i++) {
 			$Kondisi2 = $Kondisi != '' ?  $Kondisi . " and f='0".($i+1)."'"  : " where f='0".($i+1)."'" ;
 			$aqry = "select count(*) as cnt, sum(jml_harga) as jml_harga from v2_penghapusan_usul $Kondisi2 "; $cek.= $aqry;
-			$get = mysql_fetch_array(mysql_query($aqry));
+			$get = sqlArray(sqlQuery($aqry));
 			$vSum[$i*2] = number_format($get['cnt'],0,',','.');
 			$vSum[$i*2+1] = number_format($get['jml_harga'],2,',','.');				
 		}
 		$Kondisi2 = $Kondisi != '' ?  $Kondisi . " and id_bukuinduk !=''"  : " where id_bukuinduk !=''";			
 		$aqry = "select count(*) as cnt, sum(jml_harga) as jml_harga from v2_penghapusan_usul $Kondisi2 "; $cek.= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$vSum[12] = number_format($get['cnt'],0,',','.');
 		$vSum[13] = number_format($get['jml_harga'],2,',','.');
 		
@@ -246,13 +246,13 @@ class UsulanHapusObj  extends DaftarObj2{
 		$kuasa_pengguna= $_REQUEST['id_kuasaP']; //kuasa Pengguna Barang
 		
 		//Pengurus Barang
-		$get = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$pejabat_pengadaan."'"));
+		$get = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$pejabat_pengadaan."'"));
 				$nama = $get['nama'];
 				$nip = $get['nip'];
 				$jabatan = $get['jabatan'];
 				
 		//kuasa Barang
-		$candakData = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$kuasa_pengguna."'"));
+		$candakData = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$kuasa_pengguna."'"));
 				$nama = $candakData['nama'];
 				$nip = $candakData['nip'];
 				$jabatan = $candakData['jabatan'];
@@ -264,16 +264,16 @@ class UsulanHapusObj  extends DaftarObj2{
 		if($fmST == 0){ //baru
 			//-- cek apakah no suuslan sudah ada
 			if( $err=='' ){
-				$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_usulan='$no_usulan' "));
+				$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_usulan='$no_usulan' "));
 				if($get['cnt']>0 ) $err='No Usulan Sudah Ada!';
 			}
 			//-- cek barang sudah diusulkan
 			if( $err=='' ){
 				$aqry = "select * from penghapusan_usul_det where sesi='$sesi'  " ; $cek.=' '.$aqry;
-				$det = mysql_query( $aqry);
-				while($row_det = mysql_fetch_array($det)){
+				$det = sqlQuery( $aqry);
+				while($row_det = sqlArray($det)){
 					$aqry = "select count(*) as cnt from penghapusan_usul_det where id_bukuinduk='".$row_det['id_bukuinduk']."' and (sesi='' or sesi is null) " ; $cek.=' '.$aqry;
-					$cnt = mysql_fetch_array(mysql_query($aqry));
+					$cnt = sqlArray(sqlQuery($aqry));
 					if($cnt['cnt']>0){
 						$err="Gagal Simpan! Barang ".getKodeBarang($row_det['id_bukuinduk'],'.') ." Sudah Diusulkan";
 						break;
@@ -284,27 +284,27 @@ class UsulanHapusObj  extends DaftarObj2{
 			if($err==''){
 				$aqry = "INSERT into penghapusan_usul(a1,a,b,c,d,e,e1,no_usulan,tgl_usul,tgl_update,uid,ref_idpegawai_usul,
 				sesi,ref_idpegawai_usul2,tempat)"."values('$a1','$a','$b','$c','$d','$e','$e1','$no_usulan','$tgl_usul',now(),'$uid','$pejabat_pengadaan','$sesi','$kuasa_pengguna','$tempat')";	$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				
 				//ambil id master
 				$aqry = "SELECT* FROM penghapusan_usul WHERE sesi ='$sesi'";
-				$get = mysql_fetch_array(mysql_query($aqry));
+				$get = sqlArray(sqlQuery($aqry));
 				$idmaster = $get['Id'];
 				
 				//update detail : sesi ganti id master
 				$aqry = "UPDATE penghapusan_usul_det 
 						 SET sesi = null, Id= '$idmaster'
 						 WHERE sesi='$sesi'";
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				
 				//hapus sesi master
-				mysql_query("UPDATE penghapusan_usul SET sesi=NULL WHERE sesi='".$sesi."'"); 
+				sqlQuery("UPDATE penghapusan_usul SET sesi=NULL WHERE sesi='".$sesi."'"); 
 			}
 		}else{ //edit
-			$old = mysql_fetch_array(mysql_query("SELECT * FROM penghapusan_usul WHERE Id='$idplh'"));
+			$old = sqlArray(sqlQuery("SELECT * FROM penghapusan_usul WHERE Id='$idplh'"));
 			if( $err=='' ){
 				if($no_usulan!=$old['no_usulan'] ){
-					$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_usulan='$no_usulan' "));
+					$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_usulan='$no_usulan' "));
 					if($get['cnt']>0 ) $err='No Usulan Sudah Ada!';
 				}
 			}
@@ -327,7 +327,7 @@ class UsulanHapusObj  extends DaftarObj2{
 								 ref_idpegawai_usul2 = '$kuasa_pengguna'
 								 ".
 						 "WHERE Id='".$idplh."'";	$cek .= $aqry;
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 			}
 		}
 		
@@ -356,7 +356,7 @@ function simpanBA(){
 				
 				$pejabat_pengadaan= $_REQUEST['ref_idpengadaan'];
 				
-				$get = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$pejabat_pengadaan."'"));
+				$get = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$pejabat_pengadaan."'"));
 						$nama = $get['nama'];
 						$nip = $get['nip'];
 						$jabatan = $get['jabatan'];
@@ -368,7 +368,7 @@ function simpanBA(){
 				if($fmST == 0){
 					//cek 
 					if( $err=='' ){
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"SELECT count(*) as cnt FROM penghapusan_usul WHERE no_ba='$no_ba' "
 						));
 						if($get['cnt']>0 ) $err='No BA Sudah Ada!';
@@ -378,14 +378,14 @@ function simpanBA(){
 						$aqry = "INSERT into penghapusan_usul (no_ba,tgl_ba,tgl_update,uid,ref_idpegawai_ba)
 								"."values('$no_ba','$tgl_ba',now(),'$uid','$pejabat_pengadaan')";	$cek .= $aqry;
 									
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 					
 				}else{
-					$old = mysql_fetch_array(mysql_query("SELECT * FROM penghapusan_usul WHERE Id='$idplh'"));
+					$old = sqlArray(sqlQuery("SELECT * FROM penghapusan_usul WHERE Id='$idplh'"));
 					if( $err=='' ){
 						if($no_ba!=$old['no_ba'] ){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"SELECT count(*) as cnt FROM penghapusan_usul WHERE no_ba='$no_ba' "
 							));
 							if($get['cnt']>0 ) $err='No BA Sudah Ada!';
@@ -400,7 +400,7 @@ function simpanBA(){
 								     	ref_idpegawai_ba = '$pejabat_pengadaan'".
 								 "WHERE Id='".$idplh."'";	$cek .= $aqry;
 								 
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 				}
 				
@@ -433,19 +433,19 @@ function simpanBA(){
 	 if($fmST == 0){
 		//cek 
 		if( $err=='' ){
-			$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_tterima='$no_tterima' "));
+			$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_tterima='$no_tterima' "));
 						if($get['cnt']>0 ) $err='No Tanda Terima Sudah Ada!';
 		}
 		if($err==''){
 			$aqry = "INSERT into penghapusan_usul(no_ba,tgl_ba,tgl_update,uid,ref_idpegawai_ba,no_tterima,tgl_tterima,ref_idtterima)
 					 "."values('$no_ba','$tgl_ba',now(),'$uid','$pejabat_pengadaan','$no_tterima','$tgl_tterima','$petugas_tterima')";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}
 	 }else{
-		$old = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id='$idplh'"));
+		$old = sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id='$idplh'"));
 			if( $err=='' ){
 				if($no_tterima!=$old['no_tterima'] ){
-		  		  $get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_tterima='$no_tterima' "));
+		  		  $get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usul WHERE no_tterima='$no_tterima' "));
 							if($get['cnt']>0 ) $err='No Tanda Terima Sudah Ada!';
 				  }
 			}
@@ -457,7 +457,7 @@ function simpanBA(){
 						 uid ='$uid',
 						 ref_idtterima = '$petugas_tterima'".
 						 "WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 			}
 	 }//end else
 				
@@ -466,7 +466,7 @@ function simpanBA(){
 	/**
 	function hitungPanitia_($idplh){
 	$cek = ''; $err=''; $content='';
-		$get = mysql_fetch_array(mysql_query(
+		$get = sqlArray(sqlQuery(
 								"SELECT count(*) as cnt FROM panitia_pemeriksa WHERE ref_idusulan='".$idplh."' "
 								
 							));
@@ -518,7 +518,7 @@ function simpanBA(){
 		//tambahkan ke detail tmp
 		for($i = 0; $i<count($cbid); $i++)	{
 			//cari id bi dari id sensus
-			$sensus = mysql_fetch_array(mysql_query("select * from sensus where id = '".$cbid[$i]."'"));
+			$sensus = sqlArray(sqlQuery("select * from sensus where id = '".$cbid[$i]."'"));
 			
 			
 			//simpan ke uslhapusdetail
@@ -527,7 +527,7 @@ function simpanBA(){
 				//values ".$valuestr; 
 			$cek .= $aqry;
 			//$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi; $cek.=$aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if ($qry==FALSE){
 				$err = 'Gagal Simpan Data';
 			}
@@ -555,14 +555,14 @@ function simpanBA(){
 		//cek --------------------------------------------
 		for($i = 0; $i<count($cbid); $i++)	{
 			//-- cari id bi dari id sensus
-			$sensus = mysql_fetch_array(mysql_query("select * from sensus where id = '".$cbid[$i]."'"));
+			$sensus = sqlArray(sqlQuery("select * from sensus where id = '".$cbid[$i]."'"));
 			//-- cek kondisi harus kb/rb
 			if(!($sensus['kondisi'] == 2 || $sensus['kondisi']==3) ) {
 				$err = 'Gagal Usulan Hapus! Kondisi barang masih baik';
 				break;
 			}	
 			//-- cek sudah diusulkan/belum
-			$sudahusul = mysql_fetch_array(mysql_query(
+			$sudahusul = sqlArray(sqlQuery(
 				"select count(*) as cnt from penghapusan_usul_det where id_bukuinduk = '".$sensus['idbi']."' and (sesi ='' or sesi is null )"
 			));
 			if( $sudahusul['cnt'] > 0 ) {
@@ -579,14 +579,14 @@ function simpanBA(){
 			//tambahkan ke detail tmp
 			for($i = 0; $i<count($cbid); $i++)	{
 				//cari id bi dari id sensus
-				$sensus = mysql_fetch_array(mysql_query("select * from sensus where id = '".$cbid[$i]."'"));
+				$sensus = sqlArray(sqlQuery("select * from sensus where id = '".$cbid[$i]."'"));
 								
 				//simpan ke uslhapusdetail
 				$aqry= "insert into penghapusan_usul_det (Id, id_bukuinduk, sesi, uid, tgl_update) ".
 					" values ('','".$sensus['idbi']."','".$dt['sesi']."', '$UID', now() ) ";
 					//values ".$valuestr; 
 				$cek .= $aqry;	//$aqry= "delete from ".$this->TblName_Hapus.' '.$Kondisi; $cek.=$aqry;
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if ($qry==FALSE){
 					$err = 'Gagal Simpan Data';
 				}
@@ -615,7 +615,7 @@ function simpanBA(){
 				
 		//get id bi 
 		$aqry = "select * from buku_induk where idall2 = '$kode'"; $cek.=$aqry;
-		$bi = mysql_fetch_array (mysql_query( 
+		$bi = sqlArray (sqlQuery( 
 			$aqry
 		));
 		$idbi = $bi['id'];
@@ -792,7 +792,7 @@ function simpanBA(){
 			case 'getdata':{
 				$id = $_REQUEST['id'];
 				$aqry = "select * from ref_pegawai where id='$id' "; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('nip'=>$get['nip'],'nama'=>$get['nama'],'jabatan'=>$get['jabatan']);
 				break;
@@ -837,7 +837,7 @@ function simpanBA(){
 	function Hapus_Validasi($id){
 		$errmsg ='';
 		// ambil data BA di tabel Penghapusan_usul
-		$get = mysql_fetch_array(mysql_query("select* from penghapusan_usul where Id='".$id."'"));
+		$get = sqlArray(sqlQuery("select* from penghapusan_usul where Id='".$id."'"));
 		
 		if($get['no_ba'] !=''){
 			$errmsg = 'No BA Sudah sudah ada,Tidak Boleh di hapus !';
@@ -908,7 +908,7 @@ function simpanBA(){
 		//get data 
 		$aqry = "select * from penghapusan_usul where Id ='".$this->form_idplh."'  "; $cek.=$aqry;
 		
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		//cek apakah NO BA atau tanda terima  sudah ada,jika kosong boleh edit,jika sudah ada no ba tampilkan pesan
@@ -938,7 +938,7 @@ function simpanBA(){
 		
 		//get data 
 		$aqry = "select * from penghapusan_usul where Id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//jika sudah ada surat BA dianggap sudah ada surat Tanda terima
 		if($dt['no_ba'] !=''){
@@ -965,7 +965,7 @@ function simpanBA(){
 		
 		//get data 
 		$aqry = "select * from penghapusan_usul where Id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['tgl_ba'] = date("Y-m-d"); //set waktu sekarang
 		$fm = $this->setFormBA($dt);	
 		//cek apakah NO BA sudah ada,jika kosong boleh edit,jika sudah ada no ba tampilkan pesan
@@ -980,7 +980,7 @@ function simpanBA(){
 		//}
 		
 		//cek no ba yang sudah di usulkan SK tidak Boleh di cek barang
-		$get =mysql_fetch_array(mysql_query("SELECT count(*) AS cnt FROM penghapusan_usulsk_det WHERE ref_idusulan='".$this->form_idplh."' "));
+		$get =sqlArray(sqlQuery("SELECT count(*) AS cnt FROM penghapusan_usulsk_det WHERE ref_idusulan='".$this->form_idplh."' "));
 		
 		if($get['cnt'] == 0){
 			//set form
@@ -1016,11 +1016,11 @@ function simpanBA(){
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 						
 		//Hitung Panitia
@@ -1139,10 +1139,10 @@ function simpanBA(){
 		
 		//jika Id di penghapusan_usul dihapus maka Id di penghapusan_usul_detail dan di panitia_pemeriksa harus terhapus
 		$qy = "DELETE FROM penghapusan_usul_det WHERE Id = '".$id."' ";	   
-		$query = mysql_query($qy);
+		$query = sqlQuery($qy);
 		
 		$qy1 = "DELETE FROM panitia_pemeriksa WHERE ref_idusulan = '".$id."' ";	   
-		$query1 = mysql_query($qy1);
+		$query1 = sqlQuery($qy1);
 		
 		return array('err'=>$err, 'content'=>$content, 'cek'=>$cek);
 	}
@@ -1154,7 +1154,7 @@ function simpanBA(){
 		
 		//jika Id di penghapusan_usul dihapus maka Id di penghapusan_usul_detail dan di panitia_pemeriksa harus terhapus
 		$qy = "delete from penghapusan_usul_det where Id ='".$id."'";
-		$query = mysql_query($qy);
+		$query = sqlQuery($qy);
 		
 		return array('err'=>$err, 'content'=>$content, 'cek'=>$cek);
 	}
@@ -1180,20 +1180,20 @@ function simpanBA(){
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."'  and e1='".$kdSubUnit0."'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."'"));
 		$seksi = $get['nm_skpd'];		
 				
 		//ambil pegawai Pengurus Barang
-		$read = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpegawai_usul']."'"));
+		$read = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpegawai_usul']."'"));
 					
 		//ambil pegawai Kuasa Barang
-		$select = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpegawai_usul2']."'"));
+		$select = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idpegawai_usul2']."'"));
 					
 		$this->form_fields = array(				
 			'bidang' => array(  'label'=>'BIDANG', 'value'=> $bidang, 'labelWidth'=>150, 'type'=>'' ,'row_params'=>"style='height:21'"),
@@ -1252,7 +1252,7 @@ function simpanBA(){
 		);
 		//Update 12 Juni 2013
 		//Jika No tanda terima dan BA ada Maka Tombol Edit,Hapus,Simpan,Ditampilkan
-		$result =mysql_fetch_array(mysql_query("SELECT no_tterima,no_ba FROM penghapusan_usul WHERE Id ='".$dt['Id']."' "));
+		$result =sqlArray(sqlQuery("SELECT no_tterima,no_ba FROM penghapusan_usul WHERE Id ='".$dt['Id']."' "));
 		//Edit
 		if($result['no_tterima'] !=''){
 			$Edit = '';//"<input type='button' value='Edit' onclick ='UsulanHapusdetail.Edit()' title='Edit Barang' style='visibility:hidden'>";
@@ -1316,17 +1316,17 @@ function simpanBA(){
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."'"));
 		$subunit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."'"));
 		$seksi = $get['nm_skpd'];				
 				
 		//ambil petugas penerima surat usulan
-		$get = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idtterima']."'"));
+		$get = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$dt['ref_idtterima']."'"));
 					
 		$this->form_fields = array(				
 			'bidang' => array(  'label'=>'BIDANG', 'value'=> $bidang, 'labelWidth'=>120, 'type'=>'' ,'row_params'=>"style='height:21'"),
@@ -1550,7 +1550,7 @@ function simpanBA(){
 		$query ="select count(*) AS jml , sum(ifnull(jml_harga,0)+ ifnull(tot_pelihara,0)+ ifnull(tot_pengaman,0) ) AS harga 								 
 				 from v1_penghapusan_usul_det_bi
 				 where Id='".$Id."' and f='".$kib."'";
-		$rs = mysql_fetch_array(mysql_query($query));
+		$rs = sqlArray(sqlQuery($query));
 		$hsl->jml = $rs['jml'];
 		$hsl->harga = $rs['harga'];		
 			
@@ -1574,7 +1574,7 @@ function simpanBA(){
 	 $e = $_REQUEST['e'];
 	 $e1 = $_REQUEST['e1'];
 	 //pengecekan No ba,Apakah no ba sudah di usulkan sk
-	 $getBA = mysql_fetch_array(mysql_query("select no_ba  from penghapusan_usul where Id = '".$idplh."'"));
+	 $getBA = sqlArray(sqlQuery("select no_ba  from penghapusan_usul where Id = '".$idplh."'"));
 		if($getBA['no_ba'] !=""){
 		   $err = "No Tandaterima  tidak bisa dibatalkan,no ini sudah ada Berita Acara";
 		}
@@ -1587,7 +1587,7 @@ function simpanBA(){
 						 	    uid ='$uid',
 						     	ref_idtterima =NULL".
 						 " where Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 			}
 		}
 				
@@ -1611,23 +1611,23 @@ function simpanBA(){
 		
 		$nmopdarr=array();
 		//=================== ambil Bidang ================================================			
-		$get = mysql_fetch_array(mysql_query("select * from v_bidang where c='".$c."' "));		
+		$get = sqlArray(sqlQuery("select * from v_bidang where c='".$c."' "));		
 			if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 	    //=================================================================================
 		
 		//================= ambil SKPD ================================================================
-		$get = mysql_fetch_array(mysql_query("select * from v_opd where c='".$c."' and d='".$d."' "));		
+		$get = sqlArray(sqlQuery("select * from v_opd where c='".$c."' and d='".$d."' "));		
 			if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];	
 		//============================================================================================
 
 		//================= ambil UNIT ================================================================
-		$get = mysql_fetch_array(mysql_query("select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."' "));		
+		$get = sqlArray(sqlQuery("select * from v_unit where c='".$c."' and d='".$d."' and e='".$e."' "));		
 			if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];	
 		//============================================================================================
 
 		
 		//================= ambil  SUB UNIT gabungkan ================================================================================		
-		$get = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' "));		
+		$get = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c='".$c."' and d='".$d."' and e='".$e."' and e1='".$e1."' "));		
 			if($get['nm_skpd']<>'') $nmopdarr[] = $get['nm_skpd'];		
 		$nmopd = join(' <br/> ', $nmopdarr );
 		//=============================================================================================================
@@ -1635,13 +1635,13 @@ function simpanBA(){
 		  
 		//=============== get Pegawai Kuasa Barang ===========================================================
 		$ks_barang = ''.$isi['ref_idpegawai_usul2']; 
-		$tampil =	mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE id='".$ks_barang."'"));	
+		$tampil =	sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE id='".$ks_barang."'"));	
 		$nmkuasabarang = $tampil['nama'];
 		//====================================================================================================
 				
 		//=============== get Pegawai Pengurus Barang ========================================================
 		$ref_idpegawai_usul=''.$isi['ref_idpegawai_usul'];
-		$get = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE id='".$ref_idpegawai_usul."' "));
+		$get = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE id='".$ref_idpegawai_usul."' "));
 		$nmpengurus = $get['nama'];
 		//====================================================================================================
 								
@@ -1942,7 +1942,7 @@ function simpanBA(){
 				
 		$this->form_idplh = $cbid[0];
 		
-		$get = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id ='".$this->form_idplh."' "));
+		$get = sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id ='".$this->form_idplh."' "));
 		$no_usulan = $get["no_usulan"];	
 		$tgl_usulan = JuyTgl1($get["tgl_usul"]);
 		$tgl_terima =explode('-',$get["tgl_tterima"]);
@@ -2000,33 +2000,33 @@ function simpanBA(){
 		
 		$nmopdarr=array();	
 		//================== ambil Bidang ========================================================
-		$read = mysql_fetch_array(mysql_query("SELECT * from v_bidang where c='".$get['c']."' "));	
+		$read = sqlArray(sqlQuery("SELECT * from v_bidang where c='".$get['c']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $read['nmbidang'];
 			$nm_bidang=$read['nmbidang'];
 		//========================================================================================
 		
 		//================== ambil SKPD =================================================================================
-		$select = mysql_fetch_array(mysql_query("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
+		$select = sqlArray(sqlQuery("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
 			if($select['nmopd']<>'') $nmopdarr[] = $select['nmopd'];
 			$nm_skpd=$select['nmopd'];
 		//==============================================================================================================
 
 		//================== ambil UNIT =================================================================================
-		$select = mysql_fetch_array(mysql_query("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."'  "));	
+		$select = sqlArray(sqlQuery("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."'  "));	
 			if($select['nmunit']<>'') $nmopdarr[] = $select['nmunit'];
 			$nm_unit= $select['nmunit'];
 		//==============================================================================================================
 
 		
 		//================== ambil SUB UNIT ============================================================================================
-		$getAll = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' and e1='".$get['e1']."' "));		
+		$getAll = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' and e1='".$get['e1']."' "));		
 			if($getAll['nm_skpd']<>'') $nmopdarr[] = $getAll['nm_skpd'];		
 			   $nmopd = join(' <br/> ', $nmopdarr );
 			   $nm_subunit=$getAll['nm_skpd'];
 		//====================================================================================================================================
 							
 		//get table penghapusan_usul
-		$get = mysql_fetch_array(mysql_query("SELECT no_tterima,tgl_tterima 
+		$get = sqlArray(sqlQuery("SELECT no_tterima,tgl_tterima 
 											  FROM penghapusan_usul  
 											  WHERE Id ='".$this->form_idplh."' "));
 		
@@ -2215,27 +2215,27 @@ function genCetak_usulan($xls= FALSE, $Mode=''){
 		/*================================================================
 		  Untuk Tabel ambil TANAH,PERALATAN DAN MESIN.DLL
 		=================================================================*/
-		$get =mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id ='".$this->form_idplh ."' "));
+		$get =sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id ='".$this->form_idplh ."' "));
 		//echo 'ID usul ini ='.$get['Id'];
 		
-		$select =mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usul_det WHERE Id ='".$get['Id'] ."' "));
+		$select =sqlArray(sqlQuery("SELECT* FROM penghapusan_usul_det WHERE Id ='".$get['Id'] ."' "));
 		//echo '<br/>ID usul detail ini ='.$get['Id'];
 		
-		$read =mysql_fetch_array(mysql_query("SELECT* FROM buku_induk WHERE id ='".$select['id_bukuinduk'] ."' "));
+		$read =sqlArray(sqlQuery("SELECT* FROM buku_induk WHERE id ='".$select['id_bukuinduk'] ."' "));
 		//echo '<br/>ID buku INDUK ini = '.$read['id'];
 		
-		$getA =mysql_fetch_array(mysql_query("SELECT* FROM kib_a WHERE f ='".$read['f'] ."' "));
+		$getA =sqlArray(sqlQuery("SELECT* FROM kib_a WHERE f ='".$read['f'] ."' "));
 		//echo "<br>SELECT* FROM kib_a WHERE f ='".$read['f'] ."' "; 			
 		//echo '<br/>f ini = '.$getA['f']=$read['f'] ; 			
 		
 		$nmopdarr=array(); //inisialisasi
 		//============================= ambil Bidang ============================================			
-		$read = mysql_fetch_array(mysql_query("SELECT * from v_bidang where c='".$get['c']."' "));	
+		$read = sqlArray(sqlQuery("SELECT * from v_bidang where c='".$get['c']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $read['nmbidang'];
 		//=======================================================================================
 		
 		//============================== ambil OPD =================================================================
-		$opd = mysql_fetch_array(mysql_query("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
+		$opd = sqlArray(sqlQuery("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
 			if($opd['nmopd']<>'') $nmopdarr[] = $opd['nmopd'];
 		//==========================================================================================================
 		
@@ -2486,7 +2486,7 @@ function PrintTTDterima($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3=
 	$fmKEPEMILIKAN, $Main, $HTTP_COOKIE_VARS, $NAMASKPD, $JABATANSKPD, 
 	$NIPSKPD, $NAMASKPD1, $JABATANSKPD1, $NIPSKPD1, $TITIMANGSA;
 	
-	$get = mysql_fetch_array(mysql_query("SELECT no_tterima,tgl_tterima 
+	$get = sqlArray(sqlQuery("SELECT no_tterima,tgl_tterima 
 											  FROM penghapusan_usul  
 											  WHERE Id ='".$this->form_idplh."' "));
 	
@@ -2502,16 +2502,16 @@ function PrintTTDterima($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3=
 	$this->form_idplh = $cbid[0];
 	
 	//Ambil data di tabel Penghapusan_usul
-	$get= mysql_fetch_Array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id = '".$this->form_idplh ."' "));
+	$get= sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id = '".$this->form_idplh ."' "));
 	
 	//ambil data di tabel ref_pegawai berdasarkan ref_idtterima di tabel penghapusan_usul
-	$read = mysql_fetch_Array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idtterima']."' "));
+	$read = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idtterima']."' "));
     $NIPSKPD1 = $read['nip'];
     $NAMASKPD1 = $read['nama'];
     $JABATANSKPD1 = $read['jabatan'];
     
-    $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
-    while ($isi = mysql_fetch_array($Qry)) {
+    $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD2 = $isi['nik'];
         $NAMASKPD2 = $isi['nm_pejabat'];
        $JABATANSKPD2 = $isi['jabatan'];
@@ -2519,19 +2519,19 @@ function PrintTTDterima($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3=
 	
 	$nmopdarr=array();	
 		//================== ambil Bidang ========================================================
-		$read = mysql_fetch_array(mysql_query("SELECT * from v_bidang where c='".$get['c']."' "));	
+		$read = sqlArray(sqlQuery("SELECT * from v_bidang where c='".$get['c']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $read['nmbidang'];
 			$bidang =$read['nmbidang'];
 		//========================================================================================
 		
 		//================== ambil OPD =================================================================================
-		$select = mysql_fetch_array(mysql_query("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
+		$select = sqlArray(sqlQuery("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
 			if($select['nmopd']<>'') $nmopdarr[] = $select['nmopd'];
 			$opd = $select['nmopd'];
 		//==============================================================================================================
 		
 		//================== ambil Biro /UPTD / B ============================================================================================
-		$getAll = mysql_fetch_array(mysql_query("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' "));		
+		$getAll = sqlArray(sqlQuery("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' "));		
 			if($getAll['nmunit']<>'') $nmopdarr[] = $getAll['nmunit'];		
 			   $nmopd = join(' <br/> ', $nmopdarr );
 			  $biro = $getAll['nmunit'];		
@@ -2603,7 +2603,7 @@ function PrintTTDterima($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3=
 function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $cp4='', $cp5='' ) {
     global $fmWIL, $fmSKPD, $fmUNIT, $fmSUBUNIT, $fmTAHUNANGGARAN, $fmKEPEMILIKAN, $Main, $HTTP_COOKIE_VARS, $NAMASKPD, $JABATANSKPD, $NIPSKPD, $NAMASKPD1, $JABATANSKPD1, $NIPSKPD1, $TITIMANGSA;
 	
-	$get = mysql_fetch_array(mysql_query("SELECT no_tterima,tgl_tterima 
+	$get = sqlArray(sqlQuery("SELECT no_tterima,tgl_tterima 
 											  FROM penghapusan_usul  
 											  WHERE Id ='".$this->form_idplh."' "));
 	
@@ -2619,22 +2619,22 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 	$this->form_idplh = $cbid[0];
 	
 	//Ambil data di tabel Penghapusan_usul
-	$get= mysql_fetch_Array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id = '".$this->form_idplh ."' "));
+	$get= sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id = '".$this->form_idplh ."' "));
 	
 	//ambil data di tabel ref_pegawai berdasarkan ref_idtterima di tabel penghapusan_usul
-	$read = mysql_fetch_Array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idpegawai_usul2']."' "));
+	$read = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idpegawai_usul2']."' "));
     $NIPSKPD1 = $read['nip'];
     $NAMASKPD1 = $read['nama'];
     $JABATANSKPD1 = $read['jabatan'];
     
 	//ambil data di tabel ref_pegawai berdasarkan ref_idtterima di tabel penghapusan_usul
-	$candak = mysql_fetch_Array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idpegawai_usul']."' "));
+	$candak = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idpegawai_usul']."' "));
     $NIPSKPD2 = $candak['nip'];
     $NAMASKPD2 = $candak['nama'];
     $JABATANSKPD2 = $candak['jabatan'];
         
-	/** old $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
-    while ($isi = mysql_fetch_array($Qry)) {
+	/** old $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD2 = $isi['nik'];
         $NAMASKPD2 = $isi['nm_pejabat'];
        $JABATANSKPD2 = $isi['jabatan'];
@@ -2642,19 +2642,19 @@ function PrintTTD($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $c
 	
 	$nmopdarr=array();	
 		//================== ambil Bidang ========================================================
-		$read = mysql_fetch_array(mysql_query("SELECT * from v_bidang where c='".$get['c']."' "));	
+		$read = sqlArray(sqlQuery("SELECT * from v_bidang where c='".$get['c']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $read['nmbidang'];
 			$bidang =$read['nmbidang'];
 		//========================================================================================
 		
 		//================== ambil OPD =================================================================================
-		$select = mysql_fetch_array(mysql_query("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
+		$select = sqlArray(sqlQuery("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $select['nmopd'];
 			$opd = $select['nmopd'];
 		//==============================================================================================================
 		
 		//================== ambil Biro /UPTD / B ============================================================================================
-		$getAll = mysql_fetch_array(mysql_query("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' "));		
+		$getAll = sqlArray(sqlQuery("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' "));		
 			if($getAll['nmunit']<>'') $nmopdarr[] = $getAll['nmunit'];		
 			   $nmopd = join(' <br/> ', $nmopdarr );
 			  $biro = $getAll['nmunit'];		
@@ -2734,15 +2734,15 @@ function PrintTTD2($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $
     $JABATANSKPD = "";
     $TITIMANGSA = "Bandung, " . JuyTgl1(date("Y-m-d"));
    
-   	$get= mysql_fetch_Array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id = '".$this->form_idplh ."' "));
+   	$get= sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id = '".$this->form_idplh ."' "));
 	
-	$read = mysql_fetch_Array(mysql_query("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idpegawai_usul2']."' "));
+	$read = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE Id = '".$get['ref_idpegawai_usul2']."' "));
     $NIPSKPD1 = $read['nip'];
     $NAMASKPD1 = $read['nama'];
     $JABATANSKPD1 = $read['jabatan'];
 	
-    $Qry = mysql_query("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
-    while ($isi = mysql_fetch_array($Qry)) {
+    $Qry = sqlQuery("select * from ref_pejabat where c = '$fmSKPD' and d = '$fmUNIT' and e = '$fmSUBUNIT' and ttd2 = '1' ");
+    while ($isi = sqlArray($Qry)) {
         $NIPSKPD2 = $isi['nik'];
         $NAMASKPD2 = $isi['nm_pejabat'];
         $JABATANSKPD2 = $isi['jabatan'];
@@ -2754,19 +2754,19 @@ function PrintTTD2($pagewidth = '30cm', $xls=FALSE, $cp1='', $cp2='', $cp3='', $
 	
 	$nmopdarr=array();	
 		//================== ambil Bidang ========================================================
-		$read = mysql_fetch_array(mysql_query("SELECT * from v_bidang where c='".$get['c']."' "));	
+		$read = sqlArray(sqlQuery("SELECT * from v_bidang where c='".$get['c']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $read['nmbidang'];
 			$bidang =$read['nmbidang'];
 		//========================================================================================
 		
 		//================== ambil OPD =================================================================================
-		$select = mysql_fetch_array(mysql_query("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
+		$select = sqlArray(sqlQuery("select * from v_opd where c='".$get['c']."' and d='".$get['d']."' "));	
 			if($read['nmbidang']<>'') $nmopdarr[] = $select['nmopd'];
 			$opd = $select['nmopd'];
 		//==============================================================================================================
 		
 		//================== ambil Biro /UPTD / B ============================================================================================
-		$getAll = mysql_fetch_array(mysql_query("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' "));		
+		$getAll = sqlArray(sqlQuery("select * from v_unit where c='".$get['c']."' and d='".$get['d']."' and e='".$get['e']."' "));		
 			if($getAll['nmunit']<>'') $nmopdarr[] = $getAll['nmunit'];		
 			   $nmopd = join(' <br/> ', $nmopdarr );
 			  $biro = $getAll['nmunit'];		

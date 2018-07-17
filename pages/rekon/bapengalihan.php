@@ -316,7 +316,7 @@ class BaPengalihanObj extends DaftarObj2{
 
 		//kdBarang & $nmBarang
 		$kdBarang = $isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
-		$brg=mysql_fetch_array(mysql_query("SELECT
+		$brg=sqlArray(sqlQuery("SELECT
 			  `dd`.`nm_barang`, `ref_jurnal`.`nm_account`, `dd`.`ka`, `dd`.`kb`, `dd`.`kc`,
 			  `dd`.`kd`, `dd`.`ke`
 			FROM
@@ -333,14 +333,14 @@ class BaPengalihanObj extends DaftarObj2{
 		
 		//$kdSKPD & $nmSKPD
 		$kdSKPD = $isi['c'].'.'.$isi['d'].'.'.$isi['e'].'.'.$isi['e1'];
-		$bidang = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='00' and e='00' and e1='000'"));
-		$skpd = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='00' and e1='000'"));
-		$unit = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='000'"));
-		$subunit = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"));
+		$bidang = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='00' and e='00' and e1='000'"));
+		$skpd = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='00' and e1='000'"));
+		$unit = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='000'"));
+		$subunit = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"));
 		$nmSKPD = $bidang['nm_skpd'].'<br>'.$skpd['nm_skpd'].'<br>'.$unit['nm_skpd'].'<br>'.$subunit['nm_skpd'];
 		
 		//harga perolehan
-		$bi=mysql_fetch_array(mysql_query("select jml_harga from buku_induk where Id='".$isi['idbi']."' "));
+		$bi=sqlArray(sqlQuery("select jml_harga from buku_induk where Id='".$isi['idbi']."' "));
 		$jml_harga = $bi['jml_harga'];
 				
 			$Koloms[] = array('align="center" width="20"', $no.'.' );
@@ -690,19 +690,19 @@ class BaPengalihanObj extends DaftarObj2{
 		$dt['e'] = $_REQUEST[$this->Prefix.'SkpdfmSUBUNIT'];
 		$dt['e1'] = $_REQUEST[$this->Prefix.'SkpdfmSEKSI'];*/
 		$aqry = "select * from t_kip where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$aqry2 = "select f,g,h,i,j from buku_induk where id ='".$dt['idbi']."'";
-		$row = mysql_fetch_array(mysql_query($aqry2));
+		$row = sqlArray(sqlQuery($aqry2));
 		$dt['kd_barang'] = $row['f'].'.'.$row['g'].'.'.$row['h'].'.'.$row['i'].'.'.$row['j'];
 		$kd = str_replace('.','',$dt['kd_barang']);
 		
 		$aqry3 = "select nm_barang from ref_barang where concat(f,g,h,i,j) = '$kd'";
-		$rows = mysql_fetch_array(mysql_query($aqry3));
+		$rows = sqlArray(sqlQuery($aqry3));
 		$dt['nm_barang'] = $rows['nm_barang'];
 		
 		$aqry4 = "select * from ref_pegawai where Id='".$dt['ref_idpegawai']."'";
-		$peg = mysql_fetch_array(mysql_query($aqry4));
+		$peg = sqlArray(sqlQuery($aqry4));
 		$dt['nip']=$peg['nip'];
 		$dt['nm_pegawai']=$peg['nama'];
 		
@@ -918,10 +918,10 @@ class BaPengalihanObj extends DaftarObj2{
 		$ids = $_REQUEST['cidBI'];//735477
 		
 		//if($err=='' && $ids[0] == '') $err = 'Barang belum dipilih!';
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$ids[0]."'")) ;
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$ids[0]."'")) ;
 		$kdbrg = $bi['f'].'.'.$bi['g'].'.'.$bi['h'].'.'.$bi['i'].'.'.$bi['j'];
 		$kd_barang = str_replace('.','',$kdbrg);
-		$br = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j) = '$kd_barang'"));
+		$br = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j) = '$kd_barang'"));
 		$content = array('id_bukuinduk'=>$bi['id'],
 						 'kd_barang'=>$kdbrg,
 						 'nm_barang'=>$br['nm_barang'],
@@ -980,12 +980,12 @@ class BaPengalihanObj extends DaftarObj2{
 										thn_perolehan,noreg,uid,tgl_update)
 							VALUES ('$idbi','$idbi_awal','$ref_idpegawai','$tgl','$a1','$a','$b','$c','$d','$e','$e1','$f','$g','$h','$i','$j',
 									'$thn_perolehan','$noreg','$uid',now())";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					
 				}	
 			}elseif($fmST == 1){
 			
-			$old = mysql_fetch_array(mysql_query("select * from t_kip where Id='".$idplh."' "));
+			$old = sqlArray(sqlQuery("select * from t_kip where Id='".$idplh."' "));
 			$old_idbi=$old['idbi'];
 									
 				if($err==''){
@@ -997,7 +997,7 @@ class BaPengalihanObj extends DaftarObj2{
 							 uid = '$uid',
 							 tgl_update = now()".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry2;	
-					$qry2 = mysql_query($aqry2);
+					$qry2 = sqlQuery($aqry2);
 					
 				}
 			} //end else
@@ -1015,15 +1015,15 @@ class BaPengalihanObj extends DaftarObj2{
 	 $idplh = $cbid[0];
 	 
 	 $kueri = "select * from t_kip where id='$idplh'"; $cek .= $kueri;
-	 $idcek = mysql_fetch_array(mysql_query($kueri));
+	 $idcek = sqlArray(sqlQuery($kueri));
 	 
 	 $query = "select * from t_kip where idbi='".$idcek['idbi']."' order by tgl desc, id desc limit 0,1"; $cek .= $query;
-	 $ck=mysql_fetch_array(mysql_query($query));
+	 $ck=sqlArray(sqlQuery($query));
 	 if($ck['Id']!=$idplh) $err="Hanya data terakhir yang bisa dihapus!";
 
 		if($err==''){ 
 			$aqry = "DELETE FROM t_kip WHERE Id='".$idplh."'";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			//if($qry==FALSE) $err="Gagal Batal Penggunaan";
 		}
 			

@@ -81,21 +81,21 @@ class GudangObj  extends DaftarObj2{
 				if($fmST == 0){
 					//cek 
 					if( $err=='' ){
-						$get = mysql_fetch_array(mysql_query(
+						$get = sqlArray(sqlQuery(
 							"select count(*) as cnt from $this->TblName where c='".$c."' and d='".$d."' and e='".$e."'  and e1='".$e1."' and id_gudang='".$id_gudang."'  "
 						));
 						if($get['cnt']>0 ) $err='Gudang Sudah Ada!';
 					}
 					if($err==''){
 						$aqry = "insert into $this->TblName_Edit (c,d,e,e1,id_gudang,nm_gudang)"."values('$c','$d','$e','$e1','$id_gudang','$nm_gudang')";	$cek .= $aqry;	
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 					
 				}else{
-					$old = mysql_fetch_array(mysql_query("select * from $this->TblName where c='".$kode[0]."' and d='".$kode[1]."' and e='".$kode[2]."'  and e1='".$kode[3]."'  and id_gudang='".$kode[4]."' "));
+					$old = sqlArray(sqlQuery("select * from $this->TblName where c='".$kode[0]."' and d='".$kode[1]."' and e='".$kode[2]."'  and e1='".$kode[3]."'  and id_gudang='".$kode[4]."' "));
 					if( $err=='' ){
 						if($id_gudang!=$old['id_gudang'] ){
-							$get = mysql_fetch_array(mysql_query(
+							$get = sqlArray(sqlQuery(
 								"select count(*) as cnt from $this->TblName where c='".$kode[0]."' and d='".$kode[1]."' and e='".$kode[2]."'  and e1='".$kode[3]."' and id_gudang='".$id_gudang."' "
 							));
 							if($get['cnt']>0 ) $err='Gudang Sudah Ada!';
@@ -106,7 +106,7 @@ class GudangObj  extends DaftarObj2{
 							" c='$c',d='$d',e='$e',e1='$e1',
 							id_gudang='$id_gudang',nm_gudang='$nm_gudang'".
 							"where c='".$kode[0]."' and d='".$kode[1]."' and e='".$kode[2]."' and e1='".$kode[3]."' and id_gudang='".$kode[4]."' ";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 				}
 				
@@ -186,7 +186,7 @@ class GudangObj  extends DaftarObj2{
 				$kd = explode(' ',$id);
 				$aqry = "select * from $this->TblName  ".
 					" where c='".$kd[0]."' and d='".$kd[1]."' and e='".$kd[2]."'  and e1='".$kd[3]."' and id_gudang='".$kd[4]."'"; $cek .= $aqry;
-				$get = mysql_fetch_array( mysql_query($aqry));
+				$get = sqlArray( sqlQuery($aqry));
 				if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('id_gudang'=>$get['id_gudang'],'nm_gudang'=>$get['nm_gudang']);
 				break;
@@ -237,7 +237,7 @@ class GudangObj  extends DaftarObj2{
 		//get data 
 		//$aqry = "select * from ref_ruang where c='$c' and d='$d' and e='$e' and p ='".$kode[0]."' and q='".$kode[1]."' "; $cek.=$aqry;
 		$aqry = "select * from $this->TblName_Edit where c='".$kode[0]."' and d='".$kode[1]."' and e='".$kode[2]."'  and e1='".$kode[3]."' and id_gudang='".$kode[4]."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		$fm = $this->setForm($dt);
@@ -266,13 +266,13 @@ class GudangObj  extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='$kdSubUnit0'"));
 		$subunit = $get['nm_skpd'];		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];	
 		
 		

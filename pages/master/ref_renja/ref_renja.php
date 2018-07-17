@@ -80,35 +80,35 @@ class renjaObj  extends DaftarObj2{
 					$kueSKPD = $_COOKIE['cofmUNIT'];
 					
 					//cari nama bidang dan SKPD
-					$getBidang = mysql_fetch_array( mysql_query("SELECT nm_skpd as vnama FROM ref_skpd where c='$kueBidang' and  d = '00' and e = '00' and e1='000'"));
+					$getBidang = sqlArray( sqlQuery("SELECT nm_skpd as vnama FROM ref_skpd where c='$kueBidang' and  d = '00' and e = '00' and e1='000'"));
 					$nama_bidang = $getBidang['vnama'];
-					$getSKPD = mysql_fetch_array( mysql_query("SELECT nm_skpd as vnama FROM ref_skpd where c='$kueBidang' and  d = '$kueSKPD' and e = '00' and e1='000'"));
+					$getSKPD = sqlArray( sqlQuery("SELECT nm_skpd as vnama FROM ref_skpd where c='$kueBidang' and  d = '$kueSKPD' and e = '00' and e1='000'"));
 					$nama_skpd = $getBidang['vnama'];
 					
 					//seleksi pertama  (cek nama urusan) 
-					$cekPertama = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '' and q = '' "));
+					$cekPertama = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '' and q = '' "));
 					if(sizeof($cekPertama) == 0){
 						$aqry = "insert into samsak_renja (r,nama_urusan,tahun) values ('$r','$nama_urusan','$tahunAnggaran')";
-				$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+				$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					//seleksi kedua (cek nama_program )
-					$cekKedua = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '$Pnya' and q = '00' "));
+					$cekKedua = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '$Pnya' and q = '00' "));
 					if(sizeof($cekKedua) == 0){
-					$aqry = "insert into samsak_renja (r,p,q,nama_program_kegiatan,tahun) values ('$r','$Pnya','00','$nama_program','$tahunAnggaran')"; 					$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+					$aqry = "insert into samsak_renja (r,p,q,nama_program_kegiatan,tahun) values ('$r','$Pnya','00','$nama_program','$tahunAnggaran')"; 					$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					//seleksi ketiga (cek  nama bidang )
-					$cekKetiga = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$kueBidang' and d = '00' and p = '$Pnya' and q = '00' "));
+					$cekKetiga = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$kueBidang' and d = '00' and p = '$Pnya' and q = '00' "));
 					if(sizeof($cekKetiga) == 0){
 					$aqry = "insert into samsak_renja (r,c,d,p,q,nama_bidang,tahun) values ('$r','$kueBidang','00','$Pnya','00','$nama_bidang','$tahunAnggaran')";
-					$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+					$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					//seleksi keempat (cek  nama SKPD )
-					$cekKeempat = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$kueBidang' and d = '$kueSKPD' and p = '$Pnya' and q <> '00' "));
+					$cekKeempat = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$kueBidang' and d = '$kueSKPD' and p = '$Pnya' and q <> '00' "));
 					if(sizeof($cekKeempat) == 0){
 					$aqry = "insert into samsak_renja (r,c,d,p,q,nama_skpd,tahun,belanja_pegawai,belanja_barang_jasa,belanja_modal,nama_program_kegiatan) values ('$r','$kueBidang','$kueSKPD',$Pnya','$cmbKegiatan','$nama_skpd','$tahunAnggaran','$belanjaPegawai','$belanjaBarangJasa','$belanjaModal','$nama_kegiatan')"; 					
-				$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+				$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}else{
-					$aqry = "insert into samsak_renja (r,c,d,p,q,tahun,belanja_pegawai,belanja_barang_jasa,belanja_modal,nama_program_kegiatan) values ('$r','$kueBidang','$kueSKPD',$Pnya','$cmbKegiatan','$nama_skpd','$tahunAnggaran','$belanjaPegawai','$belanjaBarangJasa','$belanjaModal','$nama_kegiatan')"; 							$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+					$aqry = "insert into samsak_renja (r,c,d,p,q,tahun,belanja_pegawai,belanja_barang_jasa,belanja_modal,nama_program_kegiatan) values ('$r','$kueBidang','$kueSKPD',$Pnya','$cmbKegiatan','$nama_skpd','$tahunAnggaran','$belanjaPegawai','$belanjaBarangJasa','$belanjaModal','$nama_kegiatan')"; 							$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					
 					
@@ -116,35 +116,35 @@ class renjaObj  extends DaftarObj2{
 					
 					
 					//cari nama bidang dan SKPD
-					$getBidang = mysql_fetch_array( mysql_query("SELECT nm_skpd as vnama FROM ref_skpd where c='$cmbBidangForm' and  d = '00' and e = '00' and e1='000'"));
+					$getBidang = sqlArray( sqlQuery("SELECT nm_skpd as vnama FROM ref_skpd where c='$cmbBidangForm' and  d = '00' and e = '00' and e1='000'"));
 					$nama_bidang = $getBidang['vnama'];
-					$getSKPD = mysql_fetch_array( mysql_query("SELECT nm_skpd as vnama FROM ref_skpd where c='$cmbBidangForm' and  d = '$cmbSKPDForm' and e = '00' and e1='000'"));
+					$getSKPD = sqlArray( sqlQuery("SELECT nm_skpd as vnama FROM ref_skpd where c='$cmbBidangForm' and  d = '$cmbSKPDForm' and e = '00' and e1='000'"));
 					$nama_skpd = $getBidang['vnama'];
 					
 					//seleksi pertama  (cek nama urusan) 
-					$cekPertama = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '' and q = '' "));
+					$cekPertama = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '' and q = '' "));
 					if(sizeof($cekPertama) == 0){
 						$aqry = "insert into samsak_renja (r,nama_urusan,tahun) values ('$r','$nama_urusan','$tahunAnggaran')";
-				$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+				$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					//seleksi kedua (cek nama_program )
-					$cekKedua = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '$Pnya' and q = '00' "));
+					$cekKedua = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '' and d = '' and p = '$Pnya' and q = '00' "));
 					if(sizeof($cekKedua) == 0){
-					$aqry = "insert into samsak_renja (r,p,q,nama_program_kegiatan,tahun) values ('$r','$Pnya','00','$nama_program','$tahunAnggaran')"; 					$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+					$aqry = "insert into samsak_renja (r,p,q,nama_program_kegiatan,tahun) values ('$r','$Pnya','00','$nama_program','$tahunAnggaran')"; 					$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					//seleksi ketiga (cek  nama bidang )
-					$cekKetiga = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$cmbBidangForm' and d = '00' and p = '$Pnya' and q = '00' "));
+					$cekKetiga = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$cmbBidangForm' and d = '00' and p = '$Pnya' and q = '00' "));
 					if(sizeof($cekKetiga) == 0){
 					$aqry = "insert into samsak_renja (r,c,d,p,q,nama_bidang,tahun) values ('$r','$cmbBidangForm','00','$Pnya','00','$nama_bidang','$tahunAnggaran')"; 				
-				$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+				$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 					//seleksi keempat (cek  nama SKPD )
-					$cekKeempat = mysql_fetch_array( mysql_query("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$cmbBidangForm' and d = '$cmbSKPDForm' and p = '$Pnya' and q <> '00' "));
+					$cekKeempat = sqlArray( sqlQuery("select r,c,d,p,q from samsak_renja where r = '$r' and c = '$cmbBidangForm' and d = '$cmbSKPDForm' and p = '$Pnya' and q <> '00' "));
 					if(sizeof($cekKeempat) == 0){
 					$aqry = "insert into samsak_renja (r,c,d,p,q,nama_skpd,tahun,belanja_pegawai,belanja_barang_jasa,belanja_modal,nama_program_kegiatan) values ('$r','$cmbBidangForm','$cmbSKPDForm',$Pnya','$cmbKegiatan','$nama_skpd','$tahunAnggaran','$belanjaPegawai','$belanjaBarangJasa','$belanjaModal','$nama_kegiatan')"; 					
-					 				$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+					 				$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}else{
-					$aqry = "insert into samsak_renja (r,c,d,p,q,tahun,belanja_pegawai,belanja_barang_jasa,belanja_modal,nama_program_kegiatan) values ('$r','$cmbBidangForm','$cmbSKPDForm',$Pnya','$cmbKegiatan','$nama_skpd','$tahunAnggaran','$belanjaPegawai','$belanjaBarangJasa','$belanjaModal','$nama_kegiatan')"; 										$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());
+					$aqry = "insert into samsak_renja (r,c,d,p,q,tahun,belanja_pegawai,belanja_barang_jasa,belanja_modal,nama_program_kegiatan) values ('$r','$cmbBidangForm','$cmbSKPDForm',$Pnya','$cmbKegiatan','$nama_skpd','$tahunAnggaran','$belanjaPegawai','$belanjaBarangJasa','$belanjaModal','$nama_kegiatan')"; 										$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());
 					}
 
 					
@@ -155,7 +155,7 @@ class renjaObj  extends DaftarObj2{
 
 
 				$aqry = "UPDATE ref_renja set  belanja_pegawai = '$belanjaPegawai', belanja_barangjasa = '$belanjaBarangJasa', belanja_modal = '$belanjaModal', p = '$Pnya',q = '$cmbKegiatan', r = '$r'  WHERE id='".$idplh."'";	
-				$cek .= $aqry; $qry = mysql_query($aqry) or die(mysql_error());		
+				$cek .= $aqry; $qry = sqlQuery($aqry) or die(mysql_error());		
 					}
 			} //end else
 					
@@ -200,14 +200,14 @@ class renjaObj  extends DaftarObj2{
 	    }
 		 case 'getNamaUrusan':{
 				$R = $_REQUEST['r'];
-				$get = mysql_fetch_array( mysql_query("select * from ref_urusan_renja where r='$R'"));
+				$get = sqlArray( sqlQuery("select * from ref_urusan_renja where r='$R'"));
 				$content = array('nama_urusan' => $get['nama_urusan'] );
 		break;
 		}
 		case 'getNamaKegiatan':{
 				$P = $_REQUEST['p'];
 				$Q = $_REQUEST['q'];
-				$get = mysql_fetch_array( mysql_query("select * from ref_programkegiatan where p='$P' and q='$Q' "));
+				$get = sqlArray( sqlQuery("select * from ref_programkegiatan where p='$P' and q='$Q' "));
 				$content = array('nama_kegiatan' => $get['nama_program_kegiatan'] );
 		break;
 		}
@@ -286,7 +286,7 @@ class renjaObj  extends DaftarObj2{
 		if($cnt['cnt'] > 0) $err = "renja Tidak Bisa Diubah ! Sudah Digunakan Di Ref Barang.";
 		if($err == ''){
 			$aqry = "SELECT ref_renja.id, ref_skpd.nm_skpd, ref_programkegiatan.nama_program_kegiatan, ref_skpd.c , ref_urusan_renja.r, ref_urusan_renja.nama_urusan, ref_skpd.d, ref_programkegiatan.p, ref_programkegiatan.q, ref_renja.belanja_pegawai, ref_renja.belanja_barangjasa, ref_renja.belanja_modal FROM ref_renja inner join ref_skpd on ref_renja.c = ref_skpd.c and ref_renja.d = ref_skpd.d inner join ref_programkegiatan on ref_renja.p = ref_programkegiatan.p and ref_renja.q = ref_programkegiatan.q inner join ref_urusan_renja on ref_urusan_renja.r = ref_renja.r  WHERE ref_renja.id='".$this->form_idplh."' group by concat(ref_skpd.c,'.',ref_skpd.d,'.',ref_renja.p,'.',ref_renja.q)  "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -336,7 +336,7 @@ function setForm($dt){
 		$refUrusanRencanaKerja = "select r, nama_urusan from ref_urusan_renja";
 		
 	  	$query = "select * from ref_skpd " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 
 
@@ -479,7 +479,7 @@ if ($cmbRo == 'disabled'){
 
 		 
 		 $sumPerUrusan= "select sum(belanja_pegawai) as totalPerUrusanPegawai, sum(belanja_barang_jasa) as totalPerUrusanBarangJasa, sum(belanja_modal) as totalPerUrusanModal  from samsak_renja where r = '$R' and c <> '00' and d <> '00' and p <> '00' and q <> '00'";
-		 $get = mysql_fetch_array( mysql_query($sumPerUrusan));
+		 $get = sqlArray( sqlQuery($sumPerUrusan));
 		 
 		 
 		 $Koloms[] = array('align="right"',number_format($get['totalPerUrusanPegawai'],2,",","."));
@@ -493,7 +493,7 @@ if ($cmbRo == 'disabled'){
 		 $Koloms[] = array('align="left" '.$bold.' ',"<span $margin>".$isi['nama_program_kegiatan']."</span>");
 		 
 		 $sumPerProgram= "select sum(belanja_pegawai) as totalPerProgramPegawai, sum(belanja_barang_jasa) as totalPerProgramBarangJasa, sum(belanja_modal) as totalPerProgramModal  from samsak_renja where r = '$R' and c <> '00' and d <> '00' and p = '$P' and q <> '00'";
-		 $get = mysql_fetch_array( mysql_query($sumPerProgram));
+		 $get = sqlArray( sqlQuery($sumPerProgram));
 		 
 		 $Koloms[] = array('align="right"',number_format($get['totalPerProgramPegawai'],2,",","."));
 		 $Koloms[] = array('align="right"',number_format($get['totalPerProgramBarangJasa'],2,",","."));
@@ -507,7 +507,7 @@ if ($cmbRo == 'disabled'){
 				 $Koloms[] = array('align="center"',$isi['q']);
 				 $Koloms[] = array('align="left" '.$bold.' ',"<span $margin>".$isi['nama_program_kegiatan']."</span>");
 				 $sumPerBidang= "select sum(belanja_pegawai) as totalPerBidangPegawai, sum(belanja_barang_jasa) as totalPerBidangBarangJasa, sum(belanja_modal) as totalPerBidangModal  from samsak_renja where r = '$R' and c = '$C' and d <> '00' and p = '$P' and q <> '00'";
-				 $get = mysql_fetch_array( mysql_query($sumPerBidang));
+				 $get = sqlArray( sqlQuery($sumPerBidang));
 				 
 				 $Koloms[] = array('align="right"',number_format($get['totalPerBidangPegawai'],2,",","."));
 				 $Koloms[] = array('align="right"',number_format($get['totalPerBidangBarangJasa'],2,",","."));
@@ -668,9 +668,9 @@ if ($cmbRo == 'disabled'){
 		$fmSKPDBidang = cekPOST('fmSKPDBidang');
 	 $aqry="select * from ref_skpd where c!='00' and d='00'  GROUP by c";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDBidang='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['c'] ==  $value ? "selected" : "";
 				if ($nmSKPDBidang=='' ) $nmSKPDBidang =  $value == $Hasil['c'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[c]}'>{$Hasil['c']}. {$Hasil[nm_skpd]}";
@@ -692,9 +692,9 @@ if ($cmbRo == 'disabled'){
 		setcookie('cofmUNIT',$fmSKPDskpd);*/
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d!='00' and e='00' GROUP by d";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDskpd='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['d'] ==  $value ? "selected" : "";
 				if ($nmSKPDskpd=='' ) $nmSKPDskpd =  $value == $Hasil['d'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[d]}'>{$Hasil[d]}. {$Hasil[nm_skpd]}";
@@ -711,7 +711,7 @@ if ($cmbRo == 'disabled'){
 		
 
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 		
 		}
 		return array('err'=>$err,'cek'=>$cek);

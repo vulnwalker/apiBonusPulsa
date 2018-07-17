@@ -73,7 +73,7 @@ class ref_skpdObj  extends DaftarObj2{
 			if($err==''){
 				$aqry = "INSERT into ref_skpd (c1,c,d,e,e1,nm_skpd,nm_barcode) values('$dtc1','00','00','00','000','$nama','-')";	
 				$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				$content=$dtc1;	
 				}
 			}
@@ -98,7 +98,7 @@ class ref_skpdObj  extends DaftarObj2{
 			if($err==''){
 				$aqry = "INSERT into ref_skpd (c1,c,d,e,e1,nm_skpd,nm_barcode) values('$dtc1','$dtc','00','00','000','$nama','-')";	
 				$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				$content=$dtc;	
 				}
 			}
@@ -124,7 +124,7 @@ class ref_skpdObj  extends DaftarObj2{
 			if($err==''){
 				$aqry = "INSERT into ref_skpd (c1,c,d,e,e1,nm_skpd,nm_barcode) values('$dtc1','$dtc','$dtd','00','000','$nama','-')";	
 				$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				$content=$dtd;	
 				}
 			}
@@ -151,7 +151,7 @@ class ref_skpdObj  extends DaftarObj2{
 			if($err==''){
 				$aqrykd = "INSERT into ref_skpd (c1,c,d,e,e1,nm_skpd,nm_barcode) values('$dtc1','$dtc','$dtd','$dte','000','$nama','-')";	
 				$cek .= $aqrykd;	
-				$qry = mysql_query($aqrykd);
+				$qry = sqlQuery($aqrykd);
 				$content=$dte;	
 				}
 			
@@ -183,7 +183,7 @@ class ref_skpdObj  extends DaftarObj2{
 	if($err==''){						
 		
 	$aqry = "UPDATE ref_skpd set c1='$dk',c='$dl',d='$dm',e='$dn',e1='$do',nm_skpd='$nama',nm_barcode='$barcode' where concat (c1,' ',c,' ',d,' ',e,' ',e1)='".$idplh."'";$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 				}
 								
 			return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -219,16 +219,16 @@ class ref_skpdObj  extends DaftarObj2{
 	
 	 
 			if($fmST == 0){
-			$ck1=mysql_fetch_array(mysql_query("Select * from ref_skpd where c1= '$kode0' and c='$kode1' and d ='$kode2' and e ='$kode3' and e1='$kode4'"));
+			$ck1=sqlArray(sqlQuery("Select * from ref_skpd where c1= '$kode0' and c='$kode1' and d ='$kode2' and e ='$kode3' and e1='$kode4'"));
 			if ($ck1>=1)$err= 'Gagal Simpan'.mysql_error();
 				if($err==''){
 					$aqry = "INSERT into ref_skpd (c1,c,d,e,e1,nm_skpd,nm_barcode) values('$kode0','$kode1','$kode2','$kode3','$kode4','$nama_skpd','$nama_barcode')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_skpd SET nm_skpd='$nama_skpd', nm_barcode='$nama_barcode' WHERE c1='$kode0' and c='$kode1' and d='$kode2' and e='$kode3' and e1='$kode4'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 			
 					}
 			
@@ -542,14 +542,14 @@ class ref_skpdObj  extends DaftarObj2{
 		}
 	//	$err='tes';
 		if ($data_e1=='000'){
-			$qrycek=mysql_query($sk1);$cek.=$sk1;
-			if(mysql_num_rows($qrycek)>0)$err='data tidak bisa di hapus';
+			$qrycek=sqlQuery($sk1);$cek.=$sk1;
+			if(sqlNumRow($qrycek)>0)$err='data tidak bisa di hapus';
 		}
 		
 		
 		if($err=='' ){
 					$qy = "DELETE FROM ref_skpd WHERE c1='$data_c1' and c='$data_c' and d='$data_d'  and  e='$data_e' and e1='$data_e1' and  concat (c1,' ',c,' ',d,' ',e,' ',e1) ='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					
 			}else{
 				break;
@@ -574,12 +574,12 @@ class ref_skpdObj  extends DaftarObj2{
 	 
 	 	$aqry5="SELECT MAX(e1) AS maxno FROM ref_skpd WHERE c1='$ka02' and c='$kb02' and d='$kc02' and e='$kd02'";
 	 //	$cek.="SELECT MAX(o) AS maxno FROM ref_rekening WHERE k='$ka02' and l='$kb02' and m='$kc02' and n='$kd02'";
-		$get=mysql_fetch_array(mysql_query($aqry5));
+		$get=sqlArray(sqlQuery($aqry5));
 		$newke=$get['maxno'] + 1;
 		$newke1 = sprintf("%03s", $newke);
 		$content->e1=$newke1;	
 	
-	/* $get1=mysql_fetch_array(mysql_query($aqry5));
+	/* $get1=sqlArray(sqlQuery($aqry5));
 		$lastkode1=$get1['maxno'];
 		$kode1 = (int) substr($lastkode1, 1, 3);
 		$kode1++;
@@ -647,7 +647,7 @@ class ref_skpdObj  extends DaftarObj2{
 		$e=$kode_skpd[2];	
 		$e1=$kode_skpd[3];
 		if($errmsg=='' && 
-				mysql_num_rows(mysql_query(
+				sqlNumRow(sqlQuery(
 					"select Id from buku_induk where c='$c' and d='$d' and e='$e' and e1='$e1' ")
 				) >0 )
 			{ $errmsg = 'Gagal Hapus! SKPD Sudah ada di Buku Induk!';}
@@ -704,7 +704,7 @@ class ref_skpdObj  extends DaftarObj2{
 		$cek = ''; $err=''; $content=''; $json=TRUE;
 	 
 		$queryKE="SELECT max(e1) as e1, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d = '$d' and e='$e'" ;$cek.=$queryKE;
-		$get=mysql_fetch_array(mysql_query($queryKE));
+		$get=sqlArray(sqlQuery($queryKE));
 		$lastkode=$get['e1'] + 1;	
 		$kode_e1 = sprintf("%03s", $lastkode);
 		$content->e1=$kode_e1;
@@ -727,14 +727,14 @@ class ref_skpdObj  extends DaftarObj2{
 			
 		$aqry2="SELECT MAX(c1) AS maxno FROM ref_skpd where c='00' and d='00' and e='00' and e1='000'";
 		$cek.="SELECT MAX(c1) AS maxno FROM ref_skpd where c='00' and d='00' and e='00' and e1='000'";
-		$get=mysql_fetch_array(mysql_query($aqry2));
+		$get=sqlArray(sqlQuery($aqry2));
 		$newc=$get['maxno'] + 1;	
-		$queryc1=mysql_fetch_array(mysql_query("SELECT c1, nm_skpd FROM ref_skpd where c=00 and d=00 and e=00 and e1=000")); 
+		$queryc1=sqlArray(sqlQuery("SELECT c1, nm_skpd FROM ref_skpd where c=00 and d=00 and e=00 and e1=000")); 
 		$datak1=$queryc1['c1'].".".$queryc1['nm_skpd'];
 		
 	  }
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 	 //items ----------------------
@@ -824,17 +824,17 @@ class ref_skpdObj  extends DaftarObj2{
 			
 		$aqry2="SELECT MAX(c) AS maxno FROM ref_skpd WHERE c1='$C1' and d='00' and e='00' and e1='000'";
 	//	$cek.="SELECT MAX(c) AS maxno FROM ref_skpd WHERE c1='$C1' and d='00' and e='00' and e1='000'";
-		$get=mysql_fetch_array(mysql_query($aqry2));
+		$get=sqlArray(sqlQuery($aqry2));
 		$newc=$get['maxno'] + 1;
 		
 		$newdtc1 = sprintf("%02s", $newc);
-		$queryc1=mysql_fetch_array(mysql_query("SELECT c1, nm_skpd FROM ref_skpd where c1='$C1' and c=00 and d=00 and e=00 and e1=000")); 
+		$queryc1=sqlArray(sqlQuery("SELECT c1, nm_skpd FROM ref_skpd where c1='$C1' and c=00 and d=00 and e=00 and e1=000")); 
 		$datak1=$queryc1['c1'].".".$queryc1['nm_skpd'];
 		
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 	 //items ----------------------
@@ -934,19 +934,19 @@ class ref_skpdObj  extends DaftarObj2{
 			
 		$aqry2="SELECT MAX(d) AS maxno FROM ref_skpd WHERE c1='$C1' and c='$C'";
 		$cek.="SELECT MAX(c) AS maxno FROM ref_skpd WHERE c1='$C1'";
-		$get=mysql_fetch_array(mysql_query($aqry2));
+		$get=sqlArray(sqlQuery($aqry2));
 		$newd=$get['maxno'] + 1;
 		
 		$newdtd = sprintf("%02s", $newd);
-		$queryc1=mysql_fetch_array(mysql_query("SELECT c1, nm_skpd FROM ref_skpd where c1='$C1' and c=00 and d=00 and e=00 and e1=000")); 
-		$queryc=mysql_fetch_array(mysql_query("SELECT c, nm_skpd FROM ref_skpd where c1='$C1' and c='$C' and d=00 and e=00 and e1=000")); 
+		$queryc1=sqlArray(sqlQuery("SELECT c1, nm_skpd FROM ref_skpd where c1='$C1' and c=00 and d=00 and e=00 and e1=000")); 
+		$queryc=sqlArray(sqlQuery("SELECT c, nm_skpd FROM ref_skpd where c1='$C1' and c='$C' and d=00 and e=00 and e1=000")); 
 		$datak1=$queryc1['c1'].".".$queryc1['nm_skpd'];
 		$datac=$queryc['c'].".".$queryc['nm_skpd'];
 		
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 	 //items ----------------------
@@ -1059,13 +1059,13 @@ class ref_skpdObj  extends DaftarObj2{
 	
 		$aqry4="SELECT MAX(e) AS maxno FROM ref_skpd WHERE c1='$KA1' and c='$KB1' and d='$KC1'";
 	//	$cek.="SELECT MAX(n) AS maxno FROM ref_rekening WHERE k='$KA1' and l='$KB1' and m='$KC1'";
-		$get=mysql_fetch_array(mysql_query($aqry4));
+		$get=sqlArray(sqlQuery($aqry4));
 
 		$newkm=$get['maxno'] + 1;
 		$newkm1 = sprintf("%02s", $newkm);
-		$queryKA1=mysql_fetch_array(mysql_query("SELECT c1, nm_skpd FROM ref_skpd where c1='$KA1' and c=00 and d=00 and e=00 and e1=000"));  
-		$queryKB1=mysql_fetch_array(mysql_query("SELECT c, nm_skpd FROM ref_skpd where c1='$KA1' and c='$KB1' and d=00 and e=00 and e1=000"));  
-		$queryKC1=mysql_fetch_array(mysql_query("SELECT d, nm_skpd FROM ref_skpd where c1='$KA1' and c='$KB1' and d='$KC1' and e=00 and e1=000"));  
+		$queryKA1=sqlArray(sqlQuery("SELECT c1, nm_skpd FROM ref_skpd where c1='$KA1' and c=00 and d=00 and e=00 and e1=000"));  
+		$queryKB1=sqlArray(sqlQuery("SELECT c, nm_skpd FROM ref_skpd where c1='$KA1' and c='$KB1' and d=00 and e=00 and e1=000"));  
+		$queryKC1=sqlArray(sqlQuery("SELECT d, nm_skpd FROM ref_skpd where c1='$KA1' and c='$KB1' and d='$KC1' and e=00 and e1=000"));  
 	//	$cek.="SELECT m, nm_rekening FROM ref_rekening where k='$KA1' and l='$KB1' and m='$KC1' and n=00 and o=00";
 //		
 		$datak1=$queryKA1['c1'].".".$queryKA1['nm_skpd'];
@@ -1075,7 +1075,7 @@ class ref_skpdObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 	 //items ----------------------
@@ -1214,7 +1214,7 @@ class ref_skpdObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_skpd WHERE c1= '$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setFormEditdata($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -1244,11 +1244,11 @@ class ref_skpdObj  extends DaftarObj2{
 		
 		
 		
-		$queryKAedit=mysql_fetch_array(mysql_query("SELECT c1, nm_skpd FROM ref_skpd WHERE c1='$c1' and c = '00' and d='00' and e='00' and e1='000'")) ;
-		$queryKBedit=mysql_fetch_array(mysql_query("SELECT c, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d= '00' and e='00' and e1='000'")) ;
-		$queryKCedit=mysql_fetch_array(mysql_query("SELECT d, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d='$d' and e='00' and e1='000'")) ;
-		$queryKDedit=mysql_fetch_array(mysql_query("SELECT e, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d='$d' and e='$e' and e1='000'")) ;
-		$queryKEedit=mysql_fetch_array(mysql_query("SELECT e1, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'")) ;
+		$queryKAedit=sqlArray(sqlQuery("SELECT c1, nm_skpd FROM ref_skpd WHERE c1='$c1' and c = '00' and d='00' and e='00' and e1='000'")) ;
+		$queryKBedit=sqlArray(sqlQuery("SELECT c, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d= '00' and e='00' and e1='000'")) ;
+		$queryKCedit=sqlArray(sqlQuery("SELECT d, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d='$d' and e='00' and e1='000'")) ;
+		$queryKDedit=sqlArray(sqlQuery("SELECT e, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d='$d' and e='$e' and e1='000'")) ;
+		$queryKEedit=sqlArray(sqlQuery("SELECT e1, nm_skpd FROM ref_skpd WHERE c1='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1'")) ;
 		
 		$datka=$queryKAedit['c1'].".  ".$queryKAedit['nm_skpd'];
 		$datkb=$queryKBedit['c'].". ".$queryKBedit['nm_skpd'];
@@ -1349,7 +1349,7 @@ class ref_skpdObj  extends DaftarObj2{
 		
 		
 		/*$queryc1="SELECT * FROM ref_skpd where c=00 and d=00 and e=00 and e1=000";
-		$lvl1_1=mysql_query("SELECT count(*) as cnt, c1 , c , d , e, e1 FROM ref_skpd WHERE c1='$data_c1' and c='$data_c' and d='$data_d' and e='$data_e' and e1='$data_e1'");*/
+		$lvl1_1=sqlQuery("SELECT count(*) as cnt, c1 , c , d , e, e1 FROM ref_skpd WHERE c1='$data_c1' and c='$data_c' and d='$data_d' and e='$data_e' and e1='$data_e1'");*/
 		
        //items ----------------------
 		  $this->form_fields = array(

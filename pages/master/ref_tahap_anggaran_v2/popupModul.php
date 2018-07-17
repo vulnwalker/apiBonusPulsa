@@ -83,14 +83,14 @@ class popupModulObj  extends DaftarObj2{
 			  $$key = $value; 
 			 }
 			/*$id_modul = $_REQUEST['id'];
-			$get = mysql_fetch_array( mysql_query("select * from ref_barang where id='$id_modul'"));*/
+			$get = sqlArray( sqlQuery("select * from ref_barang where id='$id_modul'"));*/
 			$idModul = "";
 			$namaModul = "";
 			$arrayJenisForm = array();
 			
 			for ($i = 0 ; $i <= sizeof($popupModul_cb); $i ++) {
 			 	$jsonID =  $popupModul_cb[$i];
-				$get = mysql_fetch_array(mysql_query("select * from ref_modul where id_modul = '$jsonID'"));
+				$get = sqlArray(sqlQuery("select * from ref_modul where id_modul = '$jsonID'"));
 				if($namaModul == ""){
 					$pemisah = "";
 					$pisah = "";

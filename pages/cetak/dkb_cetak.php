@@ -20,9 +20,9 @@ $fmCariComboField = cekPOST("fmCariComboField");
 
 $Info = "";
 
-$Qry = mysql_query("select * from ref_wilayah where b<>'00' order by nm_wilayah");
+$Qry = sqlQuery("select * from ref_wilayah where b<>'00' order by nm_wilayah");
 $Ops = "";
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$sel = $fmWIL == $isi['b'] ? "selected":"";
 	$Ops .= "<option $sel value='{$isi['b']}'>{$isi['nm_wilayah']}</option>\n";
@@ -43,9 +43,9 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from dkb where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from dkb where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -56,18 +56,18 @@ else
 $jmlTotalHargaDisplay = 0;
 $ListData = "";
 $cb=0;
-$Qry = mysql_query("select * from view_dkb where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
-$jmlData = mysql_num_rows($Qry);
+$Qry = sqlQuery("select * from view_dkb where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
+$jmlData = sqlNumRow($Qry);
 
-$Qry = mysql_query("select * from view_dkb where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHal");
+$Qry = sqlQuery("select * from view_dkb where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHal");
 
 $no=$Main->PagePerHal * (($HalDefault*1) - 1);
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$no++;
 	$jmlTotalHargaDisplay += $isi['jml_harga'];
 	$clRow = $no % 2 == 0 ?"row1":"row0";

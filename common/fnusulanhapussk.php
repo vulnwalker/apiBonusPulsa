@@ -78,10 +78,10 @@ class UsulanHapusskObj  extends DaftarObj2{
 		$cek = ''; $err=''; $content=''; $json=TRUE;
 		$idusulSK = $_REQUEST['idsk'];
 		$aqry = "select * from penghapusan_usulsk_det where Id='$idusulSK'";
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		//get id usulan
 		$ids=array();
-		while($isi = mysql_fetch_array($qry)){
+		while($isi = sqlArray($qry)){
 			$ids[] = $isi['ref_idusulan'];
 		}
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$ids);	
@@ -115,9 +115,9 @@ class UsulanHapusskObj  extends DaftarObj2{
 		//get data
 		$idusul = $_REQUEST['id'];
 		$aqry = "select * from penghapusan_usul where id='$idusul'";
-		$usul = mysql_fetch_array(mysql_query($aqry));
+		$usul = sqlArray(sqlQuery($aqry));
 				
-		$biro = mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$usul['c']."' and d='".$usul['d']."' and e='".$usul['e']."' and e1='".$usul['e1']."' "));
+		$biro = sqlArray(sqlQuery("select * from ref_skpd where c='".$usul['c']."' and d='".$usul['d']."' and e='".$usul['e']."' and e1='".$usul['e1']."' "));
 		$nmbiro = strtoupper( $biro['nm_skpd'] );//"BADAN PERENCANAAN PEMBANGUNAN DAERAH  PROVINSI JAWA BARAT";
 		$nousul = $usul['no_usulan'];//'028/2091/KEPEGUM';
 		$tglusul = JuyTgl1( $usul['tgl_usul']);//'22 November 2012';
@@ -126,7 +126,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 		
 		//get jml perolehan
 		$aqry = "select sum(harga) as sumjml from v1_penghapusan_usul_det_bi where Id='$idusul' and (sesi='' or sesi is null) and tindak_lanjut<>1  and status<>2 ";
-		$getJml = mysql_fetch_array(mysql_query($aqry));
+		$getJml = sqlArray(sqlQuery($aqry));
 		$jml = number_format($getJml['sumjml'],0,'.',',').',-';//'456.475.300,-';
 		$jmlbilang = bilang($getJml['sumjml']);//'empat ratus lima puluh enam juta empat ratus tujuh puluh lima ribu tiga ratus rupiah';
 				
@@ -333,8 +333,8 @@ class UsulanHapusskObj  extends DaftarObj2{
 		$id= $_REQUEST['id'];
 		//ambil data jika ada 
 		$aqry = "select * from penghapusan_usulsk where Id='$id'";
-		$qry = mysql_query($aqry);
-		while ($isi=mysql_fetch_array($qry)){
+		$qry = sqlQuery($aqry);
+		while ($isi=sqlArray($qry)){
 			if ($isi['draft_isi_surat'] != NULL) $data = json_decode($isi['draft_isi_surat'],TRUE);			
 		}
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
@@ -342,27 +342,27 @@ class UsulanHapusskObj  extends DaftarObj2{
 		//ambil data biro , opd
 		$d1='';
 		$aqry = "select * from penghapusan_usulsk_det where Id='$id' ";
-		$qrdetsk = mysql_query($aqry);
+		$qrdetsk = sqlQuery($aqry);
 		$daftar1 =''; $daftar2='';
-		$jmldata = mysql_num_rows($qrdetsk); $i2=0;		
-		while($detsk = mysql_fetch_array($qrdetsk)){
+		$jmldata = sqlNumRow($qrdetsk); $i2=0;		
+		while($detsk = sqlArray($qrdetsk)){
 			//ambil usulan hapus
 			$aqryusul = "select c,d,e,e1, sum(harga) as jmlharga from v1_penghapusan_usul_det_bi where id = '".$detsk['ref_idusulan']."' and (sesi='' or sesi is null) and tindak_lanjut<>1  and status<>2  group by c,d,e,e1 "; 
-			$usul = mysql_fetch_array(mysql_query($aqryusul));
+			$usul = sqlArray(sqlQuery($aqryusul));
 			//get sub unit
 			$aqryopd = "select * from ref_skpd where c='{$usul['c']}' and d='{$usul['d']}' and e='{$usul['e']}' and e1='{$usul['e1']}'"; 
-			$qropd = mysql_fetch_array(mysql_query($aqryopd));
+			$qropd = sqlArray(sqlQuery($aqryopd));
 			$nmseksi = $qropd['nm_skpd'];
 
 			//get opd / unit
 			$aqryopd = "select * from ref_skpd where c='{$usul['c']}' and d='{$usul['d']}' and e='{$usul['e']}' and e1='{$kdSubUnit0}'"; 
 			// echo  $aqryopd;
-			$qropd = mysql_fetch_array(mysql_query($aqryopd));
+			$qropd = sqlArray(sqlQuery($aqryopd));
 			$nmbiro = $qropd['nm_skpd'];
 			//get biro
 			
 			$aqryopd = "select * from ref_skpd where c='{$usul['c']}' and d='{$usul['d']}' and e='00'";
-			$qropd = mysql_fetch_array(mysql_query($aqryopd));
+			$qropd = sqlArray(sqlQuery($aqryopd));
 			$nmopd = $qropd['nm_skpd'];
 			if ($i2==0){
 				$d1 .=  $nmseksi.' pada '.$nmbiro.'/'.$nmopd;	
@@ -548,7 +548,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 			if($fmST == 0){
 				//cek 
 				if( $err=='' ){
-					$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_usulan_sk='$no_usulan_sk' "));
+					$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_usulan_sk='$no_usulan_sk' "));
 						if($get['cnt']>0 ) $err='No Usulan SK Sudah Ada!';
 				}
 					
@@ -556,27 +556,27 @@ class UsulanHapusskObj  extends DaftarObj2{
 					$aqry = "INSERT into penghapusan_usulsk (no_usulan_sk,tgl_usul_sk,tgl_update,uid,no_sk,tgl_sk,
 					         ref_idpegawai_usulsk,sesi)"."values('$no_usulan_sk','$tgl_usul_sk',now(),'$uid','$no_sk',
 						    '$tgl_sk','$petugas_usulsk','$sesi')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 						
 					//cari ID usul berdasarkan sesi tabel master
-					$get =mysql_fetch_array(mysql_query("SELECT Id FROM penghapusan_usulsk WHERE sesi ='".$sesi."'"));
+					$get =sqlArray(sqlQuery("SELECT Id FROM penghapusan_usulsk WHERE sesi ='".$sesi."'"));
 					$carID = $get['Id'];
 					$cek .='cariID ='.$carID;
 						
 					//update detail set id = id usul by sesi 
-					$upd = mysql_query("UPDATE penghapusan_usulsk_det SET Id='".$carID."' WHERE sesi='".$sesi."'"); 
+					$upd = sqlQuery("UPDATE penghapusan_usulsk_det SET Id='".$carID."' WHERE sesi='".$sesi."'"); 
 					
 					//hapus sesi
-					mysql_query("UPDATE penghapusan_usulsk_det SET sesi=NULL WHERE sesi='".$sesi."'"); 
+					sqlQuery("UPDATE penghapusan_usulsk_det SET sesi=NULL WHERE sesi='".$sesi."'"); 
 						
 					//hapus sesi master
-					mysql_query("UPDATE penghapusan_usulsk SET sesi=NULL WHERE sesi='".$sesi."'"); 
+					sqlQuery("UPDATE penghapusan_usulsk SET sesi=NULL WHERE sesi='".$sesi."'"); 
 					}
 			}else{
-			 $old = mysql_fetch_array(mysql_query("SELECT * FROM penghapusan_usulsk WHERE Id='$idplh'"));
+			 $old = sqlArray(sqlQuery("SELECT * FROM penghapusan_usulsk WHERE Id='$idplh'"));
 				if( $err=='' ){
 					if($no_usulan_sk!=$old['no_usulan_sk'] ){
-				       $get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_usulan_sk='$no_usulan_sk' "));
+				       $get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_usulan_sk='$no_usulan_sk' "));
 					   if($get['cnt']>0 ) $err='No Usulan SK Sudah Ada!';
 					}
 				 }
@@ -591,7 +591,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 						 tgl_sk = '$tgl_sk',
 						 ref_idpegawai_usulsk = '$petugas_usulsk'".
 						 "WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 					}
 			} //end else
 					
@@ -627,23 +627,23 @@ class UsulanHapusskObj  extends DaftarObj2{
 		if($fmST == 0){//baru
 	       //cek 
 		  if( $err=='' ){
-		      $get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_sk='$no_sk' "));
+		      $get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_sk='$no_sk' "));
 			  if($get['cnt']>0 ) $err='No SK Sudah Ada!';
 		  }
 					
 		  if($err==''){
 		   	  $aqry = "INSERT into penghapusan_usulsk (no_sk,tgl_sk,tgl_update,uid,ref_idpegawai_usulsk_pejabat)".
 					  "values('$no_sk','$tgl_sk',now(),'$uid','$pejabat_pengadaan')";	$cek .= $aqry;	
-			  $qry = mysql_query($aqry);
+			  $qry = sqlQuery($aqry);
 		  }
 		  
 	  }else{
-		 $old = mysql_fetch_array(mysql_query("SELECT * FROM penghapusan_usulsk WHERE Id='$idplh'"));
+		 $old = sqlArray(sqlQuery("SELECT * FROM penghapusan_usulsk WHERE Id='$idplh'"));
 			if( $err=='' ){
 				if($no_sk!=$old['no_sk'] ){
 					$aqry = "SELECT count(*) as cnt FROM penghapusan_usulsk WHERE no_sk='$no_sk' ";
 					//$cek .= $aqry;
-					$get = mysql_fetch_array(mysql_query($aqry));
+					$get = sqlArray(sqlQuery($aqry));
 					if($get['cnt']>0 ) $err='No SK Sudah Ada!';
 				 }
 			}
@@ -656,22 +656,22 @@ class UsulanHapusskObj  extends DaftarObj2{
 							uid='$uid',
 							ref_idpegawai_usulsk_pejabat='$pejabat_pengadaan'".
 							"WHERE Id='".$idplh."'";	$cek .= $aqry;
-			  $qry = mysql_query($aqry);
+			  $qry = sqlQuery($aqry);
 			}
 			
 			//===========insert data Ke tabel penghapusan/pemindahtangan=======================================================
 		 	//get det usulsk
 			if($err==''){
 				$aqry = "select * from penghapusan_usulsk_det where Id ='".$idplh."' "; $cek .='usulskdet ='.$aqry;
-				$qrusulskdet = mysql_query($aqry);
+				$qrusulskdet = sqlQuery($aqry);
 				
 				//get idusulan dari usukskdet
-				while( $rowusulskdet = mysql_fetch_array($qrusulskdet) ){
+				while( $rowusulskdet = sqlArray($qrusulskdet) ){
 					$idusul = $rowusulskdet['ref_idusulan'];
 					//get usuldet dari usulan
 					$aqry = "select * from penghapusan_usul_det where Id='$idusul' "; $cek .='usuldet ='.$aqry;
-					$qrusuldet = mysql_query($aqry);
-					while ($rowusuldet = mysql_fetch_array($qrusuldet)){
+					$qrusuldet = sqlQuery($aqry);
+					while ($rowusuldet = sqlArray($qrusuldet)){
 						$tindak_lanjut = $rowusuldet['tindak_lanjut'];
 						$kondisi = $rowusuldet['kondisi'];
 						
@@ -680,13 +680,13 @@ class UsulanHapusskObj  extends DaftarObj2{
 						//get data bi
 						$qy = "SELECT id,a1,a,b,c,d,e,e1,f,g,h,i,j,noreg,thn_perolehan FROM buku_induk 
 									WHERE id = '".$idbi."'";$cek .=$qy;							
-						$result = mysql_query($qy);
-						$bi = mysql_fetch_array($result);
+						$result = sqlQuery($qy);
+						$bi = sqlArray($result);
 						
 						if($tindak_lanjut==2) {//2 adalah tindak lanjut dimusnahkan
 							//cek jika sudah dihapus 
 							$aqry = "select count(*) as cnt from penghapusan where id_bukuinduk='{$bi['id']}' "; $cek .=' hapus ada='.$aqry;
-							$hps= mysql_fetch_array(mysql_query($aqry));
+							$hps= sqlArray(sqlQuery($aqry));
 							
 							if($hps['cnt'] == 0 ){
 								//======INSERT DATA KE TABEL PENGHAPUSAN============
@@ -713,19 +713,19 @@ class UsulanHapusskObj  extends DaftarObj2{
 										$cek .='hapus='.$query;
 							}
 							
-							$result = mysql_query($query);
+							$result = sqlQuery($query);
 							  
 							//============UPDATE DATA status_barang =3 di tabel buku induk sesuai id=========
 							$qy = "UPDATE buku_induk
 							  		  SET status_barang ='3'
 									  WHERE id ='".$bi['id']."'
 							  		 ";$cek .=$qy;
-							$res = mysql_query($qy);
+							$res = sqlQuery($qy);
 						}
 						
 						if($tindak_lanjut==3){ //dipindahtangankan
 							$aqry = "select count(*) as cnt from penghapusan where id_bukuinduk='{$bi['id']}' "; $cek .=' hapus ada='.$aqry;
-							$hps= mysql_fetch_array(mysql_query($aqry));
+							$hps= sqlArray(sqlQuery($aqry));
 							
 							if($hps['cnt'] == 0 ){
 							//===========INSERT DATA KE TABEL PEMINDAHTANGAN=====
@@ -749,13 +749,13 @@ class UsulanHapusskObj  extends DaftarObj2{
 									where id_bukuinduk = '$bi[id]'";
 								$cek.='pindah='.$qins;										
 							}
-							$resq = mysql_query($qins);
+							$resq = sqlQuery($qins);
 							 //============UPDATE DATA status_barang =3 di tabel buku induk sesuai id=========
 							$qy = "UPDATE buku_induk
 						  		  SET status_barang ='4'
 								  WHERE id ='".$bi['id']."'
 						  		 ";$cek .=$qy;
-							$res = mysql_query($qy);
+							$res = sqlQuery($qy);
 						}//end tindak lanjut pemindahtangan	
 						
 					}
@@ -766,48 +766,48 @@ class UsulanHapusskObj  extends DaftarObj2{
 			}
 			/*
 			if($err == ''){
-		     $read = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usulsk_det WHERE Id = '".$idplh."'")); //Tpenghapusan_usulsk
-		  	 $getSK = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usulsk WHERE Id = '".$read['Id']."'"));
+		     $read = sqlArray(sqlQuery("SELECT* FROM penghapusan_usulsk_det WHERE Id = '".$idplh."'")); //Tpenghapusan_usulsk
+		  	 $getSK = sqlArray(sqlQuery("SELECT* FROM penghapusan_usulsk WHERE Id = '".$read['Id']."'"));
 			 $sql = "SELECT* FROM penghapusan_usul_det WHERE Id = '".$read['ref_idusulan']."' ";$cek .=$sql;
-			 $rs = mysql_query($sql);
-			  while($row = mysql_fetch_array($rs)){//Tpenghapusan_usul_det
+			 $rs = sqlQuery($sql);
+			  while($row = sqlArray($rs)){//Tpenghapusan_usul_det
 			 	 $tindak_lanjut = $row['tindak_lanjut'];
 			     $idBi = $row['id_bukuinduk'];
 			    if($tindak_lanjut==2) {//2 adalah tindak lanjut dimusnahkan
 			 	  $qy = "SELECT id,a1,a,b,c,d,e,f,g,h,i,j,noreg,thn_perolehan FROM buku_induk WHERE id = '".$idBi."'";$cek .=$qy;
-				  $result = mysql_query($qy);
-				  $bi = mysql_fetch_array($result);
+				  $result = sqlQuery($qy);
+				  $bi = sqlArray($result);
 				  
 				  //======INSERT DATA KE TABEL PENGHAPUSAN============
 				   $query ="INSERT INTO penghapusan(id,id_bukuinduk,a1,a,b,c,d,e,f,g,h,i,j,noreg,thn_perolehan,tgl_penghapusan,tahun,mutasi,sudahmutasi,kondisi_akhir,nosk,tglsk,tgl_update)
 				    		VALUES('','$bi[id]','$bi[a1]','$bi[a]','$bi[b]','$bi[c]','$bi[d]','$bi[e]','$bi[f]','$bi[g]','$bi[h]','$bi[i]','$bi[j]',
 							'$bi[noreg]','$bi[thn_perolehan]','$getSK[tgl_sk]','$bi[thn_perolehan]','0','0','$row[kondisi]','$getSK[no_sk]','$getSK[tgl_sk]',now())";$cek .=$query;
-				   $result = mysql_query($query);
+				   $result = sqlQuery($query);
 				  
 				  //============UPDATE DATA status_barang =3 di tabel buku induk sesuai id=========
 				   $qy = "UPDATE buku_induk
 				  		  SET status_barang ='3'
 						  WHERE id ='".$bi['id']."'
 				  		 ";$cek .=$qy;
-				   $res = mysql_query($qy);
+				   $res = sqlQuery($qy);
 			    } //end if
 				
 				if($tindak_lanjut==3){ //dipindahtangankan
 					$sq = "SELECT id,a1,a,b,c,d,e,f,g,h,i,j,noreg,thn_perolehan FROM buku_induk WHERE id = '".$idBi."'";$cek .=$sq;
-				    $resq = mysql_query($sq);
-				    $bi = mysql_fetch_array($resq);	//untuk pemindahtanganan
+				    $resq = sqlQuery($sq);
+				    $bi = sqlArray($resq);	//untuk pemindahtanganan
 					
 					//===========INSERT DATA KE TABEL PEMINDAHTANGAN=====
 					$qins = "INSERT INTO pemindahtanganan(id,id_bukuinduk,a1,a,b,c,d,e,f,g,h,i,j,noreg,thn_perolehan)
 							 VALUES('','$bi[id]','$bi[a1]','$bi[a]','$bi[b]','$bi[c]','$bi[d]','$bi[e]','$bi[f]','$bi[g]','$bi[h]','$bi[i]','$bi[j]','$bi[noreg]','$bi[thn_perolehan]')";$cek.=$qins;	
-					$resq = mysql_query($qins);
+					$resq = sqlQuery($qins);
 					
 					 //============UPDATE DATA status_barang =3 di tabel buku induk sesuai id=========
 				   $qy = "UPDATE buku_induk
 				  		  SET status_barang ='4'
 						  WHERE id ='".$bi['id']."'
 				  		 ";$cek .=$qy;
-				   $res = mysql_query($qy);
+				   $res = sqlQuery($qy);
 				}//end if	
 				*/
 			//} //end while
@@ -855,8 +855,8 @@ class UsulanHapusskObj  extends DaftarObj2{
 			
 		 	//Data Barang pada no ba harus sudah di ada status pengecekan ----------		  	   		  
 		   	$ss ="select count(*) AS jum from penghapusan_usul_det where Id='".$query_values[$i]."' and (tindak_lanjut IS NULL || tindak_lanjut='') ";$cek.=$ss;
-		   	$ddd = mysql_query($ss);
-		   	$gg = mysql_fetch_array($ddd);
+		   	$ddd = sqlQuery($ss);
+		   	$gg = sqlArray($ddd);
 			if($gg['jum']>0){
 		   	    $err ="Ada Barang  yang Statusnya belum pengecekan";
 				break;
@@ -864,23 +864,23 @@ class UsulanHapusskObj  extends DaftarObj2{
 		   
 		   
 		 	//cek apakah sudah ada di list usul detail,kalau ada munculkan pesan:data udah ada di list -----
-		  	$get = mysql_fetch_array(mysql_query(
+		  	$get = sqlArray(sqlQuery(
 		        "SELECT count(*) as cnt  
 				FROM penghapusan_usulsk_det 
 				WHERE Id='".$Idf."' and sesi ='".$sesi."' and ref_idusulan='".$query_values[$i]."'"));
 			if($get['cnt']>0 ){
-		  	 	$get = mysql_fetch_array(mysql_query("SELECT*FROM penghapusan_usul WHERE Id='".$query_values[$i]."'"));
+		  	 	$get = sqlArray(sqlQuery("SELECT*FROM penghapusan_usul WHERE Id='".$query_values[$i]."'"));
 			   	$noba = $get['no_ba'];
 			   	$err='Nomor BA "'.$noba.'" Sudah Ada!';
 				break;
 			}
 	 		
 			//cek apakah NO BA ini sudah digunakan di SURAT USULAN LAIN cat:NO BA harus 1 untuk surat USULAN SK
-		  	$read = mysql_fetch_array(mysql_query("SELECT count(*) as hit FROM penghapusan_usulsk_det WHERE ref_idusulan ='".$query_values[$i]."' "));
+		  	$read = sqlArray(sqlQuery("SELECT count(*) as hit FROM penghapusan_usulsk_det WHERE ref_idusulan ='".$query_values[$i]."' "));
 		   	if($err=='' && $read['hit'] > 0){
-				$result = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usulsk_det WHERE ref_idusulan='".$query_values[$i]."' "));
+				$result = sqlArray(sqlQuery("SELECT* FROM penghapusan_usulsk_det WHERE ref_idusulan='".$query_values[$i]."' "));
 			 	//untuk keperluan Ba
-			 	$select = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usul WHERE Id='".$query_values[$i]."'"));
+			 	$select = sqlArray(sqlQuery("SELECT* FROM penghapusan_usul WHERE Id='".$query_values[$i]."'"));
 			 	$err='Nomor BA '.$select['no_ba'].' Sudah digunakan';
 		  	}
 			/*
@@ -888,7 +888,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 			if ($err=='' ){
 				$idusul = $query_values[$i];//
 				$aqry = "select count(*) as cnt from penghapusan_usul_det where id='$idusul' and tindak_lanjut=1 ";
-				$get = mysql_fetch_array(mysql_query( $aqry ));
+				$get = sqlArray(sqlQuery( $aqry ));
 				if ($get['cnt'] > 0 ) $err = "Berita Acara ini tidak dapat diusulkan, karena ada barang yang ditolak! ";
 			}
 			*/
@@ -898,10 +898,10 @@ class UsulanHapusskObj  extends DaftarObj2{
 		//ID kosong
 		 if($Idm=='') { //id master 
 		    $aqry = "replace into penghapusan_usulsk_det (Id,ref_idusulan,sesi,tgl_update)values $c ";	$cek .= $aqry;	
-		    $qry = mysql_query($aqry);
+		    $qry = sqlQuery($aqry);
 		 }else{ //id master ada
 		    $query = "replace into penghapusan_usulsk_det (Id,ref_idusulan,sesi,tgl_update)values $c ";	$cek .= $query;	
-		    $result = mysql_query($query);	
+		    $result = sqlQuery($query);	
 		 }
 	  }
 								
@@ -915,7 +915,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 	 $cek = ''; $err=''; $content=''; $json=TRUE;
 	 $fmST = $_REQUEST[$this->Prefix.'_fmST'];
 		
-	 $batal = mysql_query("DELETE FROM penghapusan_usulsk_det WHERE Id=0 and (sesi IS not null and sesi !='')");
+	 $batal = sqlQuery("DELETE FROM penghapusan_usulsk_det WHERE Id=0 and (sesi IS not null and sesi !='')");
 	 $cek .=$batal; 										
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -955,35 +955,35 @@ class UsulanHapusskObj  extends DaftarObj2{
 						  tgl_update=now(),
 						  uid='$uid'
 					  WHERE Id = '".$this->form_idplh."' ";$cek .=$query;
-			$result =mysql_query($query);
+			$result =sqlQuery($query);
 			
 			//ambil usulan di detail sk ---------------------------
 			$aqry = "select * from penghapusan_usulsk_det where id='".$this->form_idplh."'"; $cek.=' detsk = '.$aqry;
-			$qrskdet = mysql_query($aqry);
-			while($skdet = mysql_fetch_array($qrskdet)){
+			$qrskdet = sqlQuery($aqry);
+			while($skdet = sqlArray($qrskdet)){
 				$idusulan = $skdet['ref_idusulan'];
 				//ambil data usulan detail
 				$aqry = "select * from penghapusan_usul_det where Id='$idusulan'";
-				$qrusuldet = mysql_query($aqry);
-				while( $usuldet = mysql_fetch_array($qrusuldet) ){
+				$qrusuldet = sqlQuery($aqry);
+				while( $usuldet = sqlArray($qrusuldet) ){
 					$tindaklanjut = $usuldet['tindak_lanjut'];
 					$idbi = $usuldet['id_bukuinduk'];
 					if($tindaklanjut==2){
 						//TABEL PENGHAPUSAN
 						$qy = "DELETE FROM penghapusan 
 					   		WHERE id_bukuinduk = '".$idbi."' ";$cek .=$qy;
-						$rs = mysql_query($qy);
+						$rs = sqlQuery($qy);
 					}else if($tindaklanjut==3){
 						//TABEL pemindahtanganan
 						$qye = "DELETE FROM pemindahtanganan 
 							   WHERE id_bukuinduk = '".$idbi."' ";$cek .=$qye;
-						$rsw = mysql_query($qye);
+						$rsw = sqlQuery($qye);
 					}
 									
 					//UPDATE data status_barang menjadi 1 di tabel buku_induk berdasarkan Id
 					$aqry = "UPDATE buku_induk SET status_barang = '1' 
 							 WHERE id = '".$idBI."' ";$cek .=$aqry;
-					$res = mysql_query($aqry);
+					$res = sqlQuery($aqry);
 				}
 				
 				
@@ -997,20 +997,20 @@ class UsulanHapusskObj  extends DaftarObj2{
 			$que = "SELECT* FROM penghapusan_usul_det 
 				    WHERE id = '".$this->form_idplh ."' 
 					AND   tindak_lanjut='2' ";$cek .=$que;
-			$res = mysql_query($que);
-			while($row = mysql_fetch_array($res)){
+			$res = sqlQuery($que);
+			while($row = sqlArray($res)){
 				  $idBI = $row['id_bukuinduk'];
 				
 				//TABEL PENGHAPUSAN
 				$qy = "DELETE FROM penghapusan 
 					   WHERE id_bukuinduk = '".$idBI."' ";$cek .=$qy;
-				$rs = mysql_query($qy);
+				$rs = sqlQuery($qy);
 				
 				//UPDATE data status_barang menjadi 1 di tabel buku_induk berdasarkan Id
 				$aqry = "UPDATE buku_induk 
 						 SET status_barang = '1' 
 						 WHERE id = '".$idBI."' ";$cek .=$aqry;
-				$rse = mysql_query($aqry);
+				$rse = sqlQuery($aqry);
 			} //end while
 			*/
 			/*
@@ -1018,20 +1018,20 @@ class UsulanHapusskObj  extends DaftarObj2{
 			$quer = "SELECT* FROM penghapusan_usul_det 
 				    WHERE id = '".$this->form_idplh ."' 
 					AND   tindak_lanjut='3' ";$cek .=$quer;
-			$resq = mysql_query($quer);
-			while($rowe = mysql_fetch_array($resq)){
+			$resq = sqlQuery($quer);
+			while($rowe = sqlArray($resq)){
 				  $idBIe = $rowe['id_bukuinduk'];
 				
 				//TABEL pemindahtanganan
 				$qye = "DELETE FROM pemindahtanganan 
 					   WHERE id_bukuinduk = '".$idBIe."' ";$cek .=$qye;
-				$rsw = mysql_query($qye);
+				$rsw = sqlQuery($qye);
 				
 				//UPDATE data status_barang menjadi 1 di tabel buku_induk berdasarkan Id
 				$qyr = "UPDATE buku_induk 
 						 SET status_barang = '1' 
 						 WHERE id = '".$idBIe."' ";$cek .=$qyr;
-				$rse = mysql_query($qyr);
+				$rse = sqlQuery($qyr);
 			} //end while
 			*/
 		}//end if
@@ -1049,7 +1049,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 		$id = $_REQUEST['id'];
 		$draft_isi_surat = json_encode( $data );
 		$aqry = "update penghapusan_usulsk set draft_isi_surat ='$draft_isi_surat' where Id='$id'";
-		mysql_query($aqry);
+		sqlQuery($aqry);
 				
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);
 	}
@@ -1191,7 +1191,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 	   case 'getdata':{
 			$id = $_REQUEST['id'];
 			$aqry = "select * from ref_pegawai where id='$id' "; $cek .= $aqry;
-			$get = mysql_fetch_array( mysql_query($aqry));
+			$get = sqlArray( sqlQuery($aqry));
 	 		 if($get==FALSE) $err= "Gagal ambil data!"; 
 				$content = array('nip'=>$get['nip'],'nama'=>$get['nama'],'jabatan'=>$get['jabatan']);
 				break;
@@ -1269,7 +1269,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "SELECT * FROM penghapusan_usulsk WHERE Id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		//cek  NO SK sudah ADA
 		/**if($dt['no_sk']==''){
@@ -1296,7 +1296,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "SELECT * FROM penghapusan_usulsk WHERE Id ='".$this->form_idplh."'  "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//set form
 		//$dt['tgl_sk'] =date("Y-m-d"); //set waktu sekarang;
@@ -1326,20 +1326,20 @@ class UsulanHapusskObj  extends DaftarObj2{
 		
 		$kdSubUnit0 = genNumber(0, $Main->SUBUNIT_DIGIT );
 		//items ----------------------
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
 		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
 		
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$kdSubUnit0."' "));
 		$subunit = $get['nm_skpd'];		
 
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' and e1='".$dt['e1']."' "));
 		$seksi = $get['nm_skpd'];		
 		
 		//ambil pegawai
-		$got = mysql_fetch_array(mysql_query("SELECT * FROM ref_pegawai WHERE Id = '".$dt['ref_idpegawai_usul']."'"));
+		$got = sqlArray(sqlQuery("SELECT * FROM ref_pegawai WHERE Id = '".$dt['ref_idpegawai_usul']."'"));
 			$nama = $got['nama'];
 			$nip = $got['nip'];
 			$jabatan = $got['jabatan'];
@@ -1407,7 +1407,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 	 $err = ''; $content=''; $cek='';
 	 //jika Id di penghapusan_usulsk dihapus maka Id di penghapusan_usulsk_det harus terhapus
 	 $qy = "DELETE from penghapusan_usulsk_det WHERE Id ='".$id."'";
-	 $query = mysql_query($qy);
+	 $query = sqlQuery($qy);
 	 
 	return array('err'=>$err, 'content'=>$content, 'cek'=>$cek);
    }
@@ -1416,7 +1416,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 	 //usulan yang sudah jadi SK tidak boleh di hapus
 	 $errmsg ='';
 	 // ambil data SK di tabel Penghapusan_usulsk
-	 $get = mysql_fetch_array(mysql_query("SELECT* FROM penghapusan_usulsk WHERE Id='".$id."'"));
+	 $get = sqlArray(sqlQuery("SELECT* FROM penghapusan_usulsk WHERE Id='".$id."'"));
 	  if($get['no_sk']!=''){ //jika no sk ada
    	     $errmsg = 'No USulan sudah jadi SK tidak boleh dihapus !';
 	  }
@@ -1442,7 +1442,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 	  }
 	 //items ----------------------
 	 //ambil pegawai
-	 $get = mysql_fetch_array(mysql_query("select*from ref_pegawai where Id = '".$dt['ref_idpegawai_usulsk']."'"));
+	 $get = sqlArray(sqlQuery("select*from ref_pegawai where Id = '".$dt['ref_idpegawai_usulsk']."'"));
 	 $this->form_fields = array(	
 			'no_usulan_sk' => array( 
 						'label'=>'No. Usulan SK', 
@@ -1477,10 +1477,10 @@ class UsulanHapusskObj  extends DaftarObj2{
 		/*Update 13 Juni 2013*/
 		//Cek  No SK jika ada No sk maka cari,simpan,batalcari di hidden
 		$quey = "SELECT Id FROM penghapusan_usulsk_det WHERE ref_idusulan = '".$dt['Id']."' "; $cek .=$quey;
-		$res = mysql_fetch_array(mysql_query($quey));	
+		$res = sqlArray(sqlQuery($quey));	
 		
 		$qy = "SELECT no_sk FROM penghapusan_usulsk WHERE Id = '".$dt['Id']."' ";
-		$rs = mysql_fetch_array(mysql_query($qy));
+		$rs = sqlArray(sqlQuery($qy));
 		
 		if($rs['no_sk'] !=''){
 			$Hapus = "<a href='javascript:UsulanHapusskdet.Hapus()'><input type='button' value='Hapus' style='visibility:hidden'></a>";
@@ -1581,7 +1581,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 		
 	 //items ----------------------
 	 //ambil pegawai
-	 $got = mysql_fetch_array(mysql_query("select*from ref_pegawai where Id = '".$dt['ref_idpegawai_usulsk_pejabat']."'"));
+	 $got = sqlArray(sqlQuery("select*from ref_pegawai where Id = '".$dt['ref_idpegawai_usulsk_pejabat']."'"));
 	 $nama = $got['nama'];
 	 $nip = $got['nip'];
 	 $jabatan = $got['jabatan'];
@@ -1650,7 +1650,7 @@ class UsulanHapusskObj  extends DaftarObj2{
 		$query ="select count(*) AS jml , sum(ifnull(jml_harga,0)+ ifnull(tot_pelihara,0)+ ifnull(tot_pengaman,0) ) AS harga 								 
 				 from v1_penghapusan_usul_det_bi
 				 where Id='".$Id."' and f='".$kib."'";
-		$rs = mysql_fetch_array(mysql_query($query));
+		$rs = sqlArray(sqlQuery($query));
 		$hsl->jml = $rs['jml'];
 		$hsl->harga = $rs['harga'];			
 		return $hsl;
@@ -1700,19 +1700,19 @@ class UsulanHapusskObj  extends DaftarObj2{
 		
 	 $nmopdarr=array();	
 			//if($fmSKPD == '00'){
-	 $get = mysql_fetch_array(mysql_query("SELECT* FROM v_bidang WHERE c='".$c."' "));		
+	 $get = sqlArray(sqlQuery("SELECT* FROM v_bidang WHERE c='".$c."' "));		
 	  if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 			//}
 			//if($fmUNIT == '00'){//$nmopdarr[] = "select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' ";
-	 $get = mysql_fetch_array(mysql_query("SELECT* FROM v_opd WHERE c='".$c."' and d='".$d."' "	));		
+	 $get = sqlArray(sqlQuery("SELECT* FROM v_opd WHERE c='".$c."' and d='".$d."' "	));		
 	  if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 			//}
 			//if($fmSUBUNIT == '00'){
-	 $get = mysql_fetch_array(mysql_query("SELECT* FROM v_unit WHERE c='".$c."' and d='".$d."' and e='".$e."'"));		
+	 $get = sqlArray(sqlQuery("SELECT* FROM v_unit WHERE c='".$c."' and d='".$d."' and e='".$e."'"));		
 	  if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 			//}
 			//if($fmSUBUNIT == '00'){
-	 $get = mysql_fetch_array(mysql_query("SELECT* FROM ref_skpd WHERE c='".$c."' and d='".$d."' and e='".$e."'  and e1='".$e1."'"));		
+	 $get = sqlArray(sqlQuery("SELECT* FROM ref_skpd WHERE c='".$c."' and d='".$d."' and e='".$e."'  and e1='".$e1."'"));		
 	  if($get['nm_skpd']<>'') $nmopdarr[] = $get['nm_skpd'];
 
 
@@ -1722,59 +1722,59 @@ class UsulanHapusskObj  extends DaftarObj2{
 		//}
 		
 	 //get Pegawai untuk petugas USUL
-	 $getPET = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE id='".$petugas_usul."'"));
+	 $getPET = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE id='".$petugas_usul."'"));
 				
 	//get Pegawai untuk Pejabat SK
-	$getPEJ = mysql_fetch_array(mysql_query("SELECT* FROM ref_pegawai WHERE id='".$pejabatsk."'"));
+	$getPEJ = sqlArray(sqlQuery("SELECT* FROM ref_pegawai WHERE id='".$pejabatsk."'"));
 	
-	 $mayadesi =mysql_fetch_array(mysql_query("SELECT ref_idusulan FROM penghapusan_usulsk_det WHERE Id = '".$Id."' "));
+	 $mayadesi =sqlArray(sqlQuery("SELECT ref_idusulan FROM penghapusan_usulsk_det WHERE Id = '".$Id."' "));
 	 $ref_idusulan = $mayadesi['ref_idusulan'];
 	 
 	 /** Jumlah harga yang ditampilkan hanya status tindak lanjut 2 dan 3 **/
 	 //kib A 
 	 $totalduitkiba=  "SELECT SUM(harga) AS hargakiba FROM v1_penghapusan_usul_det_bi WHERE Id ='".$ref_idusulan ."' AND f='01' AND tindak_lanjut!='1' ";
-	 $resskiba = mysql_query($totalduitkiba);
-	 while($row =mysql_fetch_array($resskiba)) {
+	 $resskiba = sqlQuery($totalduitkiba);
+	 while($row =sqlArray($resskiba)) {
 				$totetotkiba = $row['hargakiba'];
 	 }
 	 $totetotkiba =$totetotkiba==0?'0':$totetotkiba;
 	 
 	 //kib b 
 	 $totalduitkibb=  "SELECT SUM(harga) AS hargakibb FROM v1_penghapusan_usul_det_bi WHERE Id ='".$ref_idusulan ."' AND f='02' AND tindak_lanjut!='1' ";
-	 $resskibb = mysql_query($totalduitkibb);
-	 while($row =mysql_fetch_array($resskibb)) {
+	 $resskibb = sqlQuery($totalduitkibb);
+	 while($row =sqlArray($resskibb)) {
 				$totetotkibb = $row['hargakibb'];
 	 }
 	 $totetotkibb =$totetotkibb==0?'0':$totetotkibb;
 	
 	//kib c 
 	 $totalduitkibc=  "SELECT SUM(harga) AS hargakibc FROM v1_penghapusan_usul_det_bi WHERE Id ='".$ref_idusulan ."' AND f='03' AND tindak_lanjut!='1' ";
-	 $resskibc = mysql_query($totalduitkibc);
-	 while($row =mysql_fetch_array($resskibc)) {
+	 $resskibc = sqlQuery($totalduitkibc);
+	 while($row =sqlArray($resskibc)) {
 				$totetotkibc = $row['hargakibc'];
 	 }
 	 $totetotkibc =$totetotkibc==0?'0':$totetotkibc;
 	
 	//kib d 
 	 $totalduitkibd=  "SELECT SUM(harga) AS hargakibd FROM v1_penghapusan_usul_det_bi WHERE Id ='".$ref_idusulan ."' AND f='04' AND tindak_lanjut!='1' ";
-	 $resskibd = mysql_query($totalduitkibd);
-	 while($row =mysql_fetch_array($resskibd)) {
+	 $resskibd = sqlQuery($totalduitkibd);
+	 while($row =sqlArray($resskibd)) {
 				$totetotkibd = $row['hargakibd'];
 	 }
 	 $totetotkibd =$totetotkibd==0?'0':$totetotkibd;
 	 
 	//kib e
 	 $totalduitkibe=  "SELECT SUM(harga) AS hargakibe FROM v1_penghapusan_usul_det_bi WHERE Id ='".$ref_idusulan ."' AND f='05' AND tindak_lanjut!='1' ";
-	 $resskibe = mysql_query($totalduitkibe);
-	 while($row =mysql_fetch_array($resskibe)) {
+	 $resskibe = sqlQuery($totalduitkibe);
+	 while($row =sqlArray($resskibe)) {
 				$totetotkibe = $row['hargakibe'];
 	 }
 	 $totetotkibe =$totetotkibe==0?'0':$totetotkibe;
 	
 	//kib f
 	 $totalduitkibf=  "SELECT SUM(harga) AS hargakibf FROM v1_penghapusan_usul_det_bi WHERE Id ='".$ref_idusulan ."' AND f='06' AND tindak_lanjut!='1' ";
-	 $resskibf = mysql_query($totalduitkibf);
-	 while($row =mysql_fetch_array($resskibf)) {
+	 $resskibf = sqlQuery($totalduitkibf);
+	 while($row =sqlArray($resskibf)) {
 				$totetotkibf = $row['hargakibf'];
 	 }
 	 $totetotkibf =$totetotkibf==0?'0':$totetotkibf;

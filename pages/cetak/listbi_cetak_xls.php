@@ -86,16 +86,16 @@ $Kondisi .=  ' and status_barang <> 3 ';
 
 
 $KondisiTotal = $Kondisi;
-$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from buku_induk where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from buku_induk where $KondisiTotal ");
 $sqry = "select * from view_buku_induk where $Kondisi order by $Urutkan a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg";
 
 /*
-$Qry = mysql_query($sqry);
-$jmlData = mysql_num_rows($Qry);
+$Qry = sqlQuery($sqry);
+$jmlData = sqlNumRow($Qry);
 */
 $jmlData=0;
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -123,8 +123,8 @@ $bufftmp=$ListData;
 $sqry="select c,d,e,e1 from buku_induk where ".$Kondisi.
 " group by c,d,e,e1 ".
 " order by c,d,e,e1 ";
-$QrySKPD = mysql_query($sqry);
-while ($isiSKPD = mysql_fetch_array($QrySKPD))
+$QrySKPD = sqlQuery($sqry);
+while ($isiSKPD = sqlArray($QrySKPD))
 {
 $hitung=0;
 $kodeD="00";
@@ -158,41 +158,41 @@ $Kondisi .= empty($fmTglBuku)? "": " and tgl_buku ='$fmTglBuku' ";//echo $Kondis
 $Kondisi .=  ' and status_barang <> 3 ';
 
 
-$QryKIB_A = mysql_query("select * from view_kib_a where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
-$jmlDataKIB_A = mysql_num_rows($QryKIB_A);
-$QryKIB_A = mysql_query("select * from view_kib_a where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
+$QryKIB_A = sqlQuery("select * from view_kib_a where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
+$jmlDataKIB_A = sqlNumRow($QryKIB_A);
+$QryKIB_A = sqlQuery("select * from view_kib_a where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
 
 
 
-$QryKIB_B = mysql_query("select * from view_kib_b where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
-$jmlDataKIB_B = mysql_num_rows($QryKIB_B);
-$QryKIB_B = mysql_query("select * from view_kib_b where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
+$QryKIB_B = sqlQuery("select * from view_kib_b where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
+$jmlDataKIB_B = sqlNumRow($QryKIB_B);
+$QryKIB_B = sqlQuery("select * from view_kib_b where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
 
 
-$QryKIB_C = mysql_query("select * from view_kib_c where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
-$jmlDataKIB_C = mysql_num_rows($QryKIB_C);
-$QryKIB_C = mysql_query("select * from view_kib_c where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
+$QryKIB_C = sqlQuery("select * from view_kib_c where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
+$jmlDataKIB_C = sqlNumRow($QryKIB_C);
+$QryKIB_C = sqlQuery("select * from view_kib_c where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
 
 
 
-$QryKIB_D = mysql_query("select * from view_kib_d where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
-$jmlDataKIB_D = mysql_num_rows($QryKIB_D);
-$QryKIB_D = mysql_query("select * from view_kib_d where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
+$QryKIB_D = sqlQuery("select * from view_kib_d where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
+$jmlDataKIB_D = sqlNumRow($QryKIB_D);
+$QryKIB_D = sqlQuery("select * from view_kib_d where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
 
 
-$QryKIB_E = mysql_query("select * from view_kib_e where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
-$jmlDataKIB_E = mysql_num_rows($QryKIB_E);
-$QryKIB_E = mysql_query("select * from view_kib_e where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
+$QryKIB_E = sqlQuery("select * from view_kib_e where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
+$jmlDataKIB_E = sqlNumRow($QryKIB_E);
+$QryKIB_E = sqlQuery("select * from view_kib_e where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
 
 
-$QryKIB_F = mysql_query("select * from view_kib_f where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
-$jmlDataKIB_F = mysql_num_rows($QryKIB_F);
-$QryKIB_F = mysql_query("select * from view_kib_f where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
+$QryKIB_F = sqlQuery("select * from view_kib_f where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg ");
+$jmlDataKIB_F = sqlNumRow($QryKIB_F);
+$QryKIB_F = sqlQuery("select * from view_kib_f where $Kondisi order by $Urutkan a1,a,b,c,d,e,e1,f,g,h,i,j,tahun,noreg  ");
 
 
 
 if (($jmlDataKIB_A > 0) and ($hitung==1)){
-while ($isi = mysql_fetch_array($QryKIB_A))
+while ($isi = sqlArray($QryKIB_A))
 {
 	$no++;
 	$ISI1=$no;	// no
@@ -233,7 +233,7 @@ while ($isi = mysql_fetch_array($QryKIB_A))
 }
 
 if (($jmlDataKIB_B > 0) and ($hitung==1)){
-while ($isi = mysql_fetch_array($QryKIB_B))
+while ($isi = sqlArray($QryKIB_B))
 {
 	$no++;
 	$ISI1=$no;	// no
@@ -274,7 +274,7 @@ while ($isi = mysql_fetch_array($QryKIB_B))
 }
 
 if (($jmlDataKIB_C > 0) and ($hitung==1)) {
-while ($isi = mysql_fetch_array($QryKIB_C))
+while ($isi = sqlArray($QryKIB_C))
 {
 	$no++;
 	$ISI1=$no;	// no
@@ -318,7 +318,7 @@ while ($isi = mysql_fetch_array($QryKIB_C))
 }
 
 if (($jmlDataKIB_D > 0) and ($hitung==1)){
-while ($isi = mysql_fetch_array($QryKIB_D))
+while ($isi = sqlArray($QryKIB_D))
 {
 	$no++;
 	$ISI1=$no;	// no
@@ -360,7 +360,7 @@ while ($isi = mysql_fetch_array($QryKIB_D))
 }
 
 if (($jmlDataKIB_E > 0) and ($hitung==1)){
-while ($isi = mysql_fetch_array($QryKIB_E))
+while ($isi = sqlArray($QryKIB_E))
 {
 	$no++;
 	$ISI1=$no;	// no
@@ -413,7 +413,7 @@ while ($isi = mysql_fetch_array($QryKIB_E))
 }
 
 if (($jmlDataKIB_F > 0) and ($hitung==1)){
-while ($isi = mysql_fetch_array($QryKIB_F))
+while ($isi = sqlArray($QryKIB_F))
 {
 	$no++;
 	$ISI1=$no;	// no

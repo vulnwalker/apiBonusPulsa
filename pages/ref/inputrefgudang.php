@@ -39,7 +39,7 @@ if($Act == "Simpan")
 		else
 		{
 			$CekKon = $ArIDGUDANG[0].$ArIDGUDANG[1].$ArIDGUDANG[2].$ArIDGUDANG[3];
-			$Cek = mysql_num_rows(mysql_query("select * from ref_gudang where concat(c,d,e,id_gudang)='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from ref_gudang where concat(c,d,e,id_gudang)='$CekKon' "));
 			if($Cek && $BARU=="1")
 			{
 				$Info = "<script>alert('Kode $fmKODEGUDANG sudah ada, data tidak disimpan');</script>";
@@ -49,11 +49,11 @@ if($Act == "Simpan")
 				//SIMPAN DATA
 				if($BARU=="1")
 				{
-					$Simpan = mysql_query("insert into ref_gudang (c,d,e,id_gudang,nm_gudang)values('{$ArIDGUDANG[0]}','{$ArIDGUDANG[1]}','{$ArIDGUDANG[2]}','{$ArIDGUDANG[3]}','$fmNAMAGUDANG')");
+					$Simpan = sqlQuery("insert into ref_gudang (c,d,e,id_gudang,nm_gudang)values('{$ArIDGUDANG[0]}','{$ArIDGUDANG[1]}','{$ArIDGUDANG[2]}','{$ArIDGUDANG[3]}','$fmNAMAGUDANG')");
 				}
 				if($BARU=="0")
 				{
-					$Simpan = mysql_query("update ref_gudang set nm_gudang='$fmNAMAGUDANG' where concat(c,d,e,id_gudang)='$CekKon' limit 1");
+					$Simpan = sqlQuery("update ref_gudang set nm_gudang='$fmNAMAGUDANG' where concat(c,d,e,id_gudang)='$CekKon' limit 1");
 				}
 				if($Simpan)
 				{
@@ -74,7 +74,7 @@ if($Act == "Hapus")
 {
 	$fmID = $cidSKPD[0];
 	$Kondisi = "concat(c,'.',d,'.',e,'.',id_gudang)='$fmID'";
-	$Hapus = mysql_query("delete from ref_gudang where $Kondisi");
+	$Hapus = sqlQuery("delete from ref_gudang where $Kondisi");
 	if($Hapus)
 	{
 		$Info = "<script>alert('Data sudah dihapus');</script>";
@@ -93,8 +93,8 @@ if($Act == "Edit")
 	{
 		$fmID = $cidSKPD[0];
 		$Kondisi = "concat(c,'.',d,'.',e,'.',id_gudang)='$fmID'";
-		$Qry = mysql_query("select * from ref_gudang where $Kondisi limit 1");
-		while($isi=mysql_fetch_array($Qry))
+		$Qry = sqlQuery("select * from ref_gudang where $Kondisi limit 1");
+		while($isi=sqlArray($Qry))
 		{
 			$fmKODEGUDANG = $isi['c'].".".$isi['d'].".".$isi['e'].".".$isi['id_gudang'];
 			$fmNAMAGUDANG = $isi['nm_gudang'];
@@ -154,15 +154,15 @@ $ListSUBUNIT = cmbQuery1("fmSUBUNIT",$fmSUBUNIT,"select e,nm_skpd from ref_skpd 
 
 
 
-$Qry = mysql_query("select * from ref_gudang where $Kondisi order by c,d,e,id_gudang");
-$jmlDataSKPD = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from ref_gudang where $Kondisi order by c,d,e,id_gudang $LimitHalGUDANG ");
+$Qry = sqlQuery("select * from ref_gudang where $Kondisi order by c,d,e,id_gudang");
+$jmlDataSKPD = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from ref_gudang where $Kondisi order by c,d,e,id_gudang $LimitHalGUDANG ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalGUDANG*1) - 1);
 $cb=0;
 $jmlTampilSKPD = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilSKPD++;

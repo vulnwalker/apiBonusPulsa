@@ -84,8 +84,8 @@ class gantirugibayarObj  extends DaftarObj2{
 			if ($f=='' && $g=='' && $h=='' && $i=='' && $j=='' && $err==''){
 				$err="Kode Barang Tidak Boleh Kosong!";
 				}
-		//$dtTGR=mysql_fetch_array(mysql_query("select * from v_gantirugi where id='".$ref_idgantirugi."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select harga,tgl_sk from gantirugi where id='".$ref_idgantirugi."'"));
+		//$dtTGR=sqlArray(sqlQuery("select * from v_gantirugi where id='".$ref_idgantirugi."'"));
+			$dtTGR=sqlArray(sqlQuery("select harga,tgl_sk from gantirugi where id='".$ref_idgantirugi."'"));
 			$harga_SK=$dtTGR['harga'];
 			if (compareTanggal($tgl,$dtTGR['tgl_sk']) == 0){
 				$err="Tanggal bayar harus lebih besar dari tanggal sk !";
@@ -95,7 +95,7 @@ class gantirugibayarObj  extends DaftarObj2{
 			}	
 		if($err=='' && $fmST == 0){
 			$bayar=$_REQUEST['bayar'];
-			$dtTGR=mysql_fetch_array(mysql_query("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
+			$dtTGR=sqlArray(sqlQuery("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
 			$sudah_bayar=$dtTGR['sudah_bayar'];
 			
 			$sisa=$harga_SK-($sudah_bayar+$bayar);
@@ -105,7 +105,7 @@ class gantirugibayarObj  extends DaftarObj2{
 			if ($err==''){
 			$aqry="insert into $tabel (ref_idgantirugi,id_bukuinduk,a1,a,b,c,d,e,e1,tgl,dari_nama,harga,tgl_pembukuan,ket,uid,tgl_update) values
 						('$ref_idgantirugi','$id_bukuinduk','".$Main->DEF_KEPEMILIKAN."','".$Main->DEF_PROPINSI."','".$Main->DEF_WILAYAH."','$c','$d','$e','$e1','$tgl','$dari_nama','$bayar','$tgl_pembukuan','$ket','$uid','$tgl')";$cek.=$aqry;
-			$qry=mysql_query($aqry);
+			$qry=sqlQuery($aqry);
 			if($qry==FALSE) $err="Gagal Simpan data ".mysql_error();
 			/* $aqry1="Update buku_induk set
 			        staset='6',
@@ -113,18 +113,18 @@ class gantirugibayarObj  extends DaftarObj2{
 					status_barang='5'
 					where id='$id_bukuinduk';					
 					";$cek.=$aqry1;
-		$qry1=mysql_query($aqry1);
+		$qry1=sqlQuery($aqry1);
 		if($qry1==FALSE) $err="Gagal Simpan data ".mysql_error();*/
 			}
 		}else{
 			$bayar=$_REQUEST['bayar'];
 			
-			//$dtTGR=mysql_fetch_array(mysql_query("select * from v_gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select harga from gantirugi where id='".$ref_idgantirugi."'"));
+			//$dtTGR=sqlArray(sqlQuery("select * from v_gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
+			$dtTGR=sqlArray(sqlQuery("select harga from gantirugi where id='".$ref_idgantirugi."'"));
 			$harga_SK=$dtTGR['harga'];
 			
-			//$dtTGRB=mysql_fetch_array(mysql_query("select * from gantirugi_bayar where id='".$dtTGR['id']."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select sum(harga)as bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'  and  id<>'".$idplh."'"));
+			//$dtTGRB=sqlArray(sqlQuery("select * from gantirugi_bayar where id='".$dtTGR['id']."'"));
+			$dtTGR=sqlArray(sqlQuery("select sum(harga)as bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'  and  id<>'".$idplh."'"));
 			
 			$sudah_bayar=$dtTGR['jml_bayar'];
 			$sisa=$harga_SK-($sudah_bayar+$bayar);
@@ -142,7 +142,7 @@ class gantirugibayarObj  extends DaftarObj2{
 				tgl_pembukuan='$tgl_pembukuan',
 				tgl_update='$tgl'
 			where id='$idplh'";$cek.=$aqry;
-		$qry=mysql_query($aqry);
+		$qry=sqlQuery($aqry);
 		if($qry==FALSE) $err="Gagal Simpan data ".mysql_error();}
 	}
 			
@@ -161,12 +161,12 @@ class gantirugibayarObj  extends DaftarObj2{
 		if($fmST == 0){//baru
 			$bayar=$_REQUEST['bayar'];
 			
-			//$dtTGR=mysql_fetch_array(mysql_query("select * from v_gantirugi where id='".$ref_idgantirugi."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select harga from gantirugi where id='".$ref_idgantirugi."'"));
+			//$dtTGR=sqlArray(sqlQuery("select * from v_gantirugi where id='".$ref_idgantirugi."'"));
+			$dtTGR=sqlArray(sqlQuery("select harga from gantirugi where id='".$ref_idgantirugi."'"));
 			$harga_SK=$dtTGR['harga'];
 			
 			
-			$dtTGR=mysql_fetch_array(mysql_query("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
+			$dtTGR=sqlArray(sqlQuery("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
 			$sudah_bayar=$dtTGR['sudah_bayar'];
 			
 			$sisa=$harga_SK-($sudah_bayar+$bayar);
@@ -175,13 +175,13 @@ class gantirugibayarObj  extends DaftarObj2{
 			$err="Harga Bayar Melebihi Sisa !";
 			}
 		}else{
-			//$dtTGR=mysql_fetch_array(mysql_query("select * from v_gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$ref_idgantirugi."'"));
+			//$dtTGR=sqlArray(sqlQuery("select * from v_gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
+			$dtTGR=sqlArray(sqlQuery("select * from gantirugi where id='".$ref_idgantirugi."'"));
 			$harga_SK=$dtTGR['harga'];
-			//$dtTGR=mysql_fetch_array(mysql_query("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'  and  id<>'".$idpilih."'"));
-			$dtTGR=mysql_fetch_array(mysql_query("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
+			//$dtTGR=sqlArray(sqlQuery("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'  and  id<>'".$idpilih."'"));
+			$dtTGR=sqlArray(sqlQuery("select sum(harga)as sudah_bayar from gantirugi_bayar where ref_idgantirugi='".$ref_idgantirugi."'"));
 			$bayar=$_REQUEST['bayar'];
-			//$dtTGRB=mysql_fetch_array(mysql_query("select * from gantirugi_bayar where id='".$dtTGR['id']."'"));
+			//$dtTGRB=sqlArray(sqlQuery("select * from gantirugi_bayar where id='".$dtTGR['id']."'"));
 			$sudah_bayar=$dtTGR['sudah_bayar'];
 			$sisa=$harga_SK-($sudah_bayar+$bayar);
 			if($sisa<0){
@@ -203,8 +203,8 @@ class gantirugibayarObj  extends DaftarObj2{
 		
 		if($err=='' && $ids[0] == '') $err = 'Barang belum dipilih!';
 		if($err==''){
-			$tgr = mysql_fetch_array(mysql_query("select stat from gantirugi where id='".$ids[0]."'")) ;
-			$tgr1=mysql_fetch_array(mysql_query("select * from v_gantirugi where id='".$ids[0]."'")) ;
+			$tgr = sqlArray(sqlQuery("select stat from gantirugi where id='".$ids[0]."'")) ;
+			$tgr1=sqlArray(sqlQuery("select * from v_gantirugi where id='".$ids[0]."'")) ;
 			$sisa=$tgr1['harga_sk']-$tgr1['jml_bayar'];
 			if ($sisa==0 && $tgr['stat']==1){
 				$err = 'Barang yang dipilih Sudah Lunas! ';
@@ -217,8 +217,8 @@ class gantirugibayarObj  extends DaftarObj2{
 			}
 		}	
 		if($err==''){
-			$tgr = mysql_fetch_array(mysql_query("select stat from gantirugi where id='".$ids[0]."'")) ;
-			$tgr1=mysql_fetch_array(mysql_query("select * from v_gantirugi where id='".$ids[0]."'")) ;
+			$tgr = sqlArray(sqlQuery("select stat from gantirugi where id='".$ids[0]."'")) ;
+			$tgr1=sqlArray(sqlQuery("select * from v_gantirugi where id='".$ids[0]."'")) ;
 			$sisa=$tgr1['harga_sk']-$tgr1['jml_bayar'];
 			/*if ($sisa==0 && $tgr['stat']==1){
 				$err = 'Barang yang dipilih Sudah Lunas! ';
@@ -231,9 +231,9 @@ class gantirugibayarObj  extends DaftarObj2{
 			}*/
 		}	
 		if($err==''){
-			$tgr = mysql_fetch_array(mysql_query("select * from gantirugi where id='".$ids[0]."'")) ;
-			$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$tgr['f'].$tgr['g'].$tgr['h'].$tgr['i'].$tgr['j']."'")) ;
-			$tgr1= mysql_fetch_array(mysql_query("select * from v_gantirugi where id='".$ids[0]."'")) ;
+			$tgr = sqlArray(sqlQuery("select * from gantirugi where id='".$ids[0]."'")) ;
+			$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$tgr['f'].$tgr['g'].$tgr['h'].$tgr['i'].$tgr['j']."'")) ;
+			$tgr1= sqlArray(sqlQuery("select * from v_gantirugi where id='".$ids[0]."'")) ;
 			$tgl_sk=explode('-',$tgr['tgl_sk']);
 			$tgl_sk_thn=$tgl_sk[0];
 			$tgl_sk_tgl=$tgl_sk[2];
@@ -454,8 +454,8 @@ class gantirugibayarObj  extends DaftarObj2{
 		$this->form_idplh = $cbid[0];
 		$this->form_fmST = 1;
 		$aqry = "select * from ".$this->TblName." where id='".$this->form_idplh."'"; $cek.=$aqry;
-		$qry=mysql_query($aqry);
-		$dt=mysql_fetch_array($qry);
+		$qry=sqlQuery($aqry);
+		$dt=sqlArray($qry);
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -475,14 +475,14 @@ class gantirugibayarObj  extends DaftarObj2{
 	  }else{
 	  	$this->form_caption = 'EDIT';
 		$aqry1 = "select * from gantirugi where id='".$dt['ref_idgantirugi']."'"; $cek.=$aqry1;
-		$qry1=mysql_query($aqry1);
-		$dt1=mysql_fetch_array($qry1);
+		$qry1=sqlQuery($aqry1);
+		$dt1=sqlArray($qry1);
 		
-		$dtpembayaran=mysql_fetch_array(mysql_query("select * from gantirugi_bayar where id='".$dt['id']."'"));
+		$dtpembayaran=sqlArray(sqlQuery("select * from gantirugi_bayar where id='".$dt['id']."'"));
 		  $kode_skpd = $dt1['f'].'.'.$dt1['g'].'.'.$dt1['h'].'.'.$dt1['i'].'.'.$dt1['j'] ;
 		  $qrbrg = "select * from ref_barang where concat(f,'.',g,'.',h,'.',i,'.',j)='". $dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j']."'";
-		  $brg = mysql_fetch_array(mysql_query( $qrbrg  ));
-		  $get = mysql_fetch_array(mysql_query(
+		  $brg = sqlArray(sqlQuery( $qrbrg  ));
+		  $get = sqlArray(sqlQuery(
 		     //"select sum(harga) as sudahbayar from gantirugi_bayar where id<>'".$dt['id']."' "
 		     "select sum(harga) as sudahbayar from gantirugi_bayar where ref_idgantirugi='".$dt['ref_idgantirugi']."' "
 		  ));
@@ -637,9 +637,9 @@ class gantirugibayarObj  extends DaftarObj2{
 	function setKolomData($no, $isi, $Mode, $TampilCheckBox){
 	 global $Ref;
 	 global $Main;
-	   	$dt1=mysql_fetch_array(mysql_query("select * from gantirugi where id='".$isi['ref_idgantirugi']."'"));
-		$dtpembayaran=mysql_fetch_array(mysql_query("select * from gantirugi_bayar where id='".$isi['id']."'"));
-		$dt2=mysql_fetch_array(mysql_query("select * from ref_barang where f='".$dt1['f']."' 
+	   	$dt1=sqlArray(sqlQuery("select * from gantirugi where id='".$isi['ref_idgantirugi']."'"));
+		$dtpembayaran=sqlArray(sqlQuery("select * from gantirugi_bayar where id='".$isi['id']."'"));
+		$dt2=sqlArray(sqlQuery("select * from ref_barang where f='".$dt1['f']."' 
 		        and g='".$dt1['g']."' and h='".$dt1['h']."' and i='".$dt1['i']."' and j='".$dt1['j']."'"));
 	if($Main->VERSI_NAME=='JABAR'){
 	 	 $harga_perolehan = number_format($isi['harga_perolehan'], 2, ',' , '.');

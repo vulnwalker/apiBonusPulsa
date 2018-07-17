@@ -239,11 +239,11 @@ table.cetak input {
 
 			
 			where aa.kint='01' and aa.ka='01' and aa.g='00' and aa.f<>'00'"; //echo $qry;
-		$get_qry = mysql_query($qry);
+		$get_qry = sqlQuery($qry);
 		$jml_saldoawal=0; $jml_debet = 0; $jml_kredit=0; $jml_saldoakhir=0;
 		$jml_saldoawal2=0; $jml_debet2 = 0; $jml_kredit2=0; $jml_saldoakhir2=0;
 		$jml_saldoawal3=0; $jml_debet3 = 0; $jml_kredit3=0; $jml_saldoakhir3=0;
-		while($row = mysql_fetch_array($get_qry)){
+		while($row = sqlArray($get_qry)){
 			$rowheader .= "<th class='th01' align='center' width='170'>".$row['nm_barang']."</th>";
 			$saldoawal .= "<td align='right'>".number_format($row['saldoawal'],2,',','.')."</td>";
 			$totSaldoAwal_ +=$row['saldoawal'];

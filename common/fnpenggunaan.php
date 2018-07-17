@@ -329,15 +329,15 @@ class PenggunaanObj extends DaftarObj2{
 		//$tampilCheckbox = $cetak ? "":"<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>"; //<td class=\"$clGaris\" align=center><input type=\"checkbox\" $Checked  id=\"cb$cb\" name=\"cidBI[]\" value=\"{$isi['id']}\" onClick=\"isChecked(this.checked);\" /></td>
 		
 		//------------------------------ get SKPD ----------------------------------------//
-		 $c=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$isi['c']." and d=00 and e=00"));
-		 $d=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$isi['c']." and d=".$isi['d']." and e=00"));
-		 $e=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$isi['c']." and d=".$isi['d']." and e=".$isi['e'].""));
+		 $c=sqlArray(sqlQuery("select * from ref_skpd where c=".$isi['c']." and d=00 and e=00"));
+		 $d=sqlArray(sqlQuery("select * from ref_skpd where c=".$isi['c']." and d=".$isi['d']." and e=00"));
+		 $e=sqlArray(sqlQuery("select * from ref_skpd where c=".$isi['c']." and d=".$isi['d']." and e=".$isi['e'].""));
 		 $skpd=$c['nm_skpd'].'/<br>'.$d['nm_skpd'].'/<br>'.$e['nm_skpd'];
 		//--------------------------------------------------------------------------------//
 		//mendapatkan  jumlah dan harga barang
-		 $jml=mysql_fetch_array(mysql_query("select sum(jml_barang) as jml_barang, sum(jml_harga) as harga_perolehan from penggunaan_det where ref_idpenggunaan='".$isi['Id']."'"));		
+		 $jml=sqlArray(sqlQuery("select sum(jml_barang) as jml_barang, sum(jml_harga) as harga_perolehan from penggunaan_det where ref_idpenggunaan='".$isi['Id']."'"));		
 		//mendapatkan SK Gubernur
-		 $sk=mysql_fetch_array(mysql_query("select * from penggunaan_ketetapan where Id='".$isi['ref_idketetapan']."'"));
+		 $sk=sqlArray(sqlQuery("select * from penggunaan_ketetapan where Id='".$isi['ref_idketetapan']."'"));
 		//$cekAsetTetap='';
 		//$cek_bawahkap = '';
 		$Koloms[] = array('align=right', $no.'.' );	
@@ -366,8 +366,8 @@ class PenggunaanObj extends DaftarObj2{
 		$ptgs= $_REQUEST['ptgs'];
 		$ptgs2= $_REQUEST['ptgs_tahui'];
 		$tgl_ind=TglInd($tgl);
-		$qry1=mysql_fetch_array(mysql_query("SELECT nama FROM ref_petugas WHERE Id='$ptgs' and jns='1'"));
-		$qry2=mysql_fetch_array(mysql_query("SELECT nama FROM ref_petugas WHERE Id='$ptgs2' and jns='1'"));
+		$qry1=sqlArray(sqlQuery("SELECT nama FROM ref_petugas WHERE Id='$ptgs' and jns='1'"));
+		$qry2=sqlArray(sqlQuery("SELECT nama FROM ref_petugas WHERE Id='$ptgs2' and jns='1'"));
 		$totalhari=cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);*/ 
 	if($xls){
 			header("Content-type: application/msexcel");
@@ -605,11 +605,11 @@ class PenggunaanObj extends DaftarObj2{
 		        		 set "." sttemp_ketetapan = '1',
 						 ref_idketetapan='$ipk'".
 				 		 "WHERE Id='".$ref_pilihbarang."'";	$cek .= $aqry2;
-				$qry = mysql_query($aqry2);	
+				$qry = sqlQuery($aqry2);	
 				
 				/*if($qry==TRUE){
 					$aqry3 = "delete from penggunaan_ketetapan where sttemp=1";	$cek .= $aqry3;
-					$qry2 = mysql_query($aqry3);	
+					$qry2 = sqlQuery($aqry3);	
 				}*/
 	
 			break;
@@ -680,7 +680,7 @@ class PenggunaanObj extends DaftarObj2{
 		$dt['tahun']=date('Y');
 		$query="INSERT into penggunaan (c,d,e,UID,tgl_update,sttemp)
 							"."values('".$dt['c']."','".$dt['d']."','".$dt['e']."','$uid',now(),1)"; $cek.=$query;
-		$result=mysql_query($query);					
+		$result=sqlQuery($query);					
 		$this->form_idplh =mysql_insert_id();
 		$dt['id_penggunaan'] = $this->form_idplh;
 	
@@ -700,9 +700,9 @@ class PenggunaanObj extends DaftarObj2{
 		$dt['d'] = $_REQUEST[$this->Prefix.'SkpdfmUNIT'];
 		$dt['e'] = $_REQUEST[$this->Prefix.'SkpdfmSUBUNIT'];
 		$aqry = "select * from penggunaan where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['id_penggunaan'] = $this->form_idplh;
-    	$ck=mysql_fetch_array(mysql_query("select * from penggunaan where Id='".$this->form_idplh."'"));
+    	$ck=sqlArray(sqlQuery("select * from penggunaan where Id='".$this->form_idplh."'"));
 
 		$this->form_fmST = 1;
 		if($ck['ref_idketetapan']!=NULL) {
@@ -784,11 +784,11 @@ class PenggunaanObj extends DaftarObj2{
 		//items ----------------------
 		//$sesi = gen_table_session('sensus','uid');
 		//style='width: 318px;text-transform: uppercase;'
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='00' "));
 		$bidang = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='00' "));
 		$unit = $get['nm_skpd'];
-		$get=mysql_fetch_array(mysql_query("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
+		$get=sqlArray(sqlQuery("select * from ref_skpd where c='".$dt['c']."' and d='".$dt['d']."' and e='".$dt['e']."' "));
 		$subunit = $get['nm_skpd'];		
 			
 		$this->form_fields = array(									 
@@ -928,16 +928,16 @@ class PenggunaanObj extends DaftarObj2{
 		
 		if($err=='' && $ids[0] == '') $err = 'Barang belum dipilih!';
 		//cek buku_induk sudah usulan
-		$cbi = mysql_fetch_array(mysql_query("select * from penggunaan_det where ref_idbi='".$ids[0]."'")) ; 
-		$ct = mysql_fetch_array(mysql_query("select * from penggunaan where tahun='".$tahun_anggaran."'")) ;
+		$cbi = sqlArray(sqlQuery("select * from penggunaan_det where ref_idbi='".$ids[0]."'")) ; 
+		$ct = sqlArray(sqlQuery("select * from penggunaan where tahun='".$tahun_anggaran."'")) ;
 		//if($err=='' && $cbi == TRUE && $ct == TRUE) $err = 'Barang pada tahun ini sudah usulan!';		
 								
 		if($err==''){
-			$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$ids[0]."'")) ;
-			//$brg = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='".$bi['f'].$bi['g'].$bi['h'].$bi['i'].$bi['j']."'")) ;
+			$bi = sqlArray(sqlQuery("select * from buku_induk where id='".$ids[0]."'")) ;
+			//$brg = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='".$bi['f'].$bi['g'].$bi['h'].$bi['i'].$bi['j']."'")) ;
 			$query="INSERT into penggunaan_det (ref_idpenggunaan,ref_idbi,tahun,jml_barang,jml_harga,kondisi,ket)
 							"."values('".$id_penggunaan."','".$bi['id']."','".$bi['tahun']."','".$bi['jml_barang']."','".$bi['jml_harga']."','".$bi['kondisi']."','".$bi['dokumen_ket']."')"; $cek.=$query;
-			$result=mysql_query($query);						
+			$result=sqlQuery($query);						
 		}
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);
@@ -982,12 +982,12 @@ class PenggunaanObj extends DaftarObj2{
 							 ket = '$keterangan',
 							 sttemp='0'".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					if($qry==TRUE){
 						$aqry2 = "Delete from penggunaan where sttemp=1";	$cek .= $aqry2;	
-						$qry2 = mysql_query($aqry2);
+						$qry2 = sqlQuery($aqry2);
 						$aqry3 = "Delete from penggunaan_det where ref_idpenggunaan NOT IN(select Id from penggunaan)";	$cek .= $aqry3;	
-						$qry3 = mysql_query($aqry3);
+						$qry3 = sqlQuery($aqry3);
 					}else{
 						$err="Gagal menyimpan Penggunaan";
 					}
@@ -1002,7 +1002,7 @@ class PenggunaanObj extends DaftarObj2{
 							 tgl_update = now(),
 							 ket = '$keterangan' ".
 					 		 "WHERE Id='".$idplh."'";	$cek .= $aqry2;	
-					$qry2 = mysql_query($aqry2);
+					$qry2 = sqlQuery($aqry2);
 					if($qry2==FALSE) {
 						$err="Gagal Edit Penggunaan";							
 					}else{
@@ -1026,14 +1026,14 @@ class PenggunaanObj extends DaftarObj2{
 	 //get data -----------------
 	 $cbid = $_REQUEST[$this->Prefix.'_cb'];
 	 $idplh = $cbid[0];
-	 $ck=mysql_fetch_array(mysql_query("select * from penggunaan where Id='$idplh'"));
+	 $ck=sqlArray(sqlQuery("select * from penggunaan where Id='$idplh'"));
 	 if($ck['ref_idketetapan']!=NULL) $err="Data ini tidak bisa dibatalkan!";
 
 		if($err==''){ 
 			$aqry = "UPDATE penggunaan
 	        		 set "." stbatal = '1'".
 			 		 "WHERE Id='".$idplh."'";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 			if($qry==FALSE) $err="Gagal Batal Penggunaan";	
 		}
 					

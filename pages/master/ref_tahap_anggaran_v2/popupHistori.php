@@ -84,12 +84,12 @@ class popupHistoriObj  extends DaftarObj2{
 			  $$key = $value; 
 			 }
 			/*$id_Histori = $_REQUEST['id'];
-			$get = mysql_fetch_array( mysql_query("select * from ref_barang where id='$id_Histori'"));*/
+			$get = sqlArray( sqlQuery("select * from ref_barang where id='$id_Histori'"));*/
 			$idHistori = "";
 			$namaHistori = "";
 			for ($i = 0 ; $i <= sizeof($popupHistori_cb); $i ++) {
 			 	$jsonID =  $popupHistori_cb[$i];
-				$get = mysql_fetch_array(mysql_query("select * from ref_Histori where id_Histori = '$jsonID'"));
+				$get = sqlArray(sqlQuery("select * from ref_Histori where id_Histori = '$jsonID'"));
 				if($namaHistori == ""){
 					$pemisah = "";
 					$pisah = "";
@@ -219,8 +219,8 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	 
 	 $arrayID = array();
 	 $query = "select  * from histori_tahap where id_tahap ='$id_tahap'";
-	 $execute = mysql_query($query);
-	 while ($rows = mysql_fetch_array($execute)){
+	 $execute = sqlQuery($query);
+	 while ($rows = sqlArray($execute)){
 			array_push($arrayID,$rows['id']);
 	 }
 	 $berapa = array_search($isi['id'], $arrayID);
@@ -247,7 +247,7 @@ function setKolomHeader($Mode=1, $Checkbox=''){
 	function genDaftarOpsi(){
 	 global $Ref, $Main;
 	 $idTahap = $_REQUEST['idHistori'];
-	 $namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$idTahap' "));
+	 $namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$idTahap' "));
 	 $namaTahap = $namaTahap['nama_tahap'];
 	 
 	 $TampilOpt =  "<table style='width:100%;'> <td>".$namaTahap."</td>";

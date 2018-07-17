@@ -109,7 +109,7 @@ class Pemeliharaan_Tambah_ManfaatObj  extends DaftarObj2{
 	 $kode = $isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];		
 	
 	 $query = "SELECT count(*)as jml,sum(biaya_pemeliharaan)as jml_biaya  FROM $this->TblName aa JOIN buku_induk bb ON aa.id_bukuinduk=bb.id $Arrkondisi GROUP BY `aa`.`id`";
-	 $get_jml = mysql_fetch_array(mysql_query($query));	
+	 $get_jml = sqlArray(sqlQuery($query));	
 	 $jml_pemeliharaan =  $get_jml['jml'];
 	 $biaya_pemeliharaan =  $get_jml['jml_biaya'];
 	 $Koloms = array();

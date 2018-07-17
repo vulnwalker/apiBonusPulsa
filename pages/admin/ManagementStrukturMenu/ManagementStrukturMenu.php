@@ -81,35 +81,35 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 
 	 	$fmST = $_REQUEST[$this->Prefix.'_fmST'];
 	 	$idplh = $_REQUEST[$this->Prefix.'_idplh'];
-		$temp1=mysql_fetch_array(mysql_query("select Id from gambar_uploadmenu_aktif where mnu_id = '$idplh' and stat='0'"));
-		$temp2=mysql_fetch_array(mysql_query("select Id from gambar_uploadmenu_pasif where mnu_id = '$idplh' and stat='0'"));
+		$temp1=sqlArray(sqlQuery("select Id from gambar_uploadmenu_aktif where mnu_id = '$idplh' and stat='0'"));
+		$temp2=sqlArray(sqlQuery("select Id from gambar_uploadmenu_pasif where mnu_id = '$idplh' and stat='0'"));
 		
 		$aq = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='2'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/menu/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='2'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		
 		$aq1 = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='3'";$cek .=$aq;
-		$qry1 = mysql_query($aq1);
-		while($del2 = mysql_fetch_array($qry1)){
+		$qry1 = sqlQuery($aq1);
+		while($del2 = sqlArray($qry1)){
 			unlink("Media/menu/".$del2['nmfile']);
 		}
 		$hapus1 = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat = '2' and jns_upload='3'"; $cek .= ' || '.$hapus;
-		$hps1 = mysql_query($hapus1);
+		$hps1 = sqlQuery($hapus1);
 		
 		$upd = "UPDATE gambar_upload SET stat = '0' , stat2 = '0' , tgl_create = NOW() WHERE jns_upload='2' and id_upload = '$idplh'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		$upd2 ="UPDATE gambar_upload SET stat = '0' , stat2 = '0' , tgl_create = NOW() WHERE jns_upload='3' and id_upload = '$idplh'";$cek .= ' ||'. $upd;
-		$qryupd2 = mysql_query($upd2);
-		$temp1=mysql_fetch_array(mysql_query("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='2'"));
-		$temp2=mysql_fetch_array(mysql_query("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='3'"));
+		$qryupd2 = sqlQuery($upd2);
+		$temp1=sqlArray(sqlQuery("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='2'"));
+		$temp2=sqlArray(sqlQuery("select Id from gambar_upload where id_upload = '$idplh' and stat='0' and jns_upload='3'"));
 	//	$cek.="select Id from gambar_upload where mnu_id = '$idplh' and stat='0'";
 		$upd3 = "UPDATE system_menu SET file_imagesaktif ='".$temp1['Id']."'  , file_imagespasif ='".$temp2['Id']."'  WHERE Id_menu = '$idplh'";
-		$qryupd3 = mysql_query($upd3);
+		$qryupd3 = sqlQuery($upd3);
 		$cek.="UPDATE system_menu SET file_imagesaktif ='".$temp1['Id']."'  , file_imagespasif ='".$temp2['Id']."'  WHERE Id_menu = '$idplh' and jns_update='3'";
 		
 		
@@ -152,8 +152,8 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	$tgl_update = explode("-",$tgl_update);
 	$tgl_update2 = $tgl_update[2].'-'.$tgl_update[1].'-'.$tgl_update[0];
 	 
-	 $oldy=mysql_fetch_array(
-	 	mysql_query(
+	 $oldy=sqlArray(
+	 	sqlQuery(
 	 		"select count(*) as cnt from system_menu where kode='$kode'"
 		));
 		
@@ -164,7 +164,7 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 if( $err=='' && $nm_system =='' ) $err= 'Data System Belum Di Isi !!';
 	 if( $err=='' && $nm_modul =='' ) $err= 'Nama Modul Belum Di Isi !!';
 	 if( $err=='' && $status =='' ) $err= 'Status Belum Di Pilih !!';
-	$ck=mysql_fetch_array(mysql_query("Select kode from system_menu "));
+	$ck=sqlArray(sqlQuery("Select kode from system_menu "));
 	
 	
 	 
@@ -173,19 +173,19 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 			if($err==''){
 				
 					$aqry = "INSERT into system_menu (Id_modul,no_urut,kode,level,title,alamat_url,hint,type_link,jenis,posisi,file_imagesaktif,file_imagespasif,status_menu,tgl_update,uid,Id_system) values('$id_modul','$nourut','$kode','$level','$title','$alamat_url','$hint','$typelink','$jenis','$posisi','','','$status','$tgl_update2','$username','$id_system')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{	
 			//if($err=='' && $oldy['cnt']>0) $err="Kode Menu System '$kode' Sudah Ada";					
 				if($err==''){
-				$updetshort=mysql_fetch_array(mysql_query("select alamat_url from system_shortcut where Id_menu='".$idplh."'"));
+				$updetshort=sqlArray(sqlQuery("select alamat_url from system_shortcut where Id_menu='".$idplh."'"));
 				$updetshort2="system_shortcut set alamat='$updetshort'"; 
 				$cek.="select alamat_url from system_shortcut where Id_menu='".$idplh."";
-				$qry = mysql_query($updetshort2);
+				$qry = sqlQuery($updetshort2);
 				
 				$aqry = "UPDATE system_menu SET no_urut='$nourut',kode='$kode',level='$level',title='$title',alamat_url='$alamat_url',hint='$hint',type_link='$typelink',jenis='$jenis',posisi='$posisi',file_imagesaktif='',file_imagespasif='',status_menu='$status',Id_system='$id_system',Id_modul='$id_modul'  where Id_menu='".$idplh."'";	$cek .= $aqry;
 			
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 						
 						
 				}
@@ -297,24 +297,24 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 		if($err=='' ){
 		
 		$aq = "SELECT * FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='2'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/menu/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='2'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		
 		$aq1 = "SELECT * FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='3'";$cek .=$aq;
-		$qry1 = mysql_query($aq1);
-		while($del2 = mysql_fetch_array($qry1)){
+		$qry1 = sqlQuery($aq1);
+		while($del2 = sqlArray($qry1)){
 			unlink("Media/menu/".$del2['nmfile']);
 		}
 		$hapus1 = "DELETE FROM gambar_upload WHERE id_upload = '".$ids[$i]."' and jns_upload='3'"; $cek .= ' || '.$hapus;
-		$hps1 = mysql_query($hapus1);
+		$hps1 = sqlQuery($hapus1);
 					
 					$qy = "DELETE FROM system_menu WHERE Id_menu='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					
 			}else{
 				break;
@@ -372,15 +372,15 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system_menu WHERE Id_menu='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		$file = "SELECT * FROM gambar_upload WHERE jns_upload='2' and id_upload='$this->form_idplh'LIMIT 0,1";$cek=$qry;
 	//	$file = "SELECT * FROM gambar_uploadmenu_aktif WHERE mnu_id='$this->form_idplh'LIMIT 0,1";$cek=$qry;
-		$aqfile = mysql_query($file);
-		$qryfile = mysql_fetch_array($aqfile);
+		$aqfile = sqlQuery($file);
+		$qryfile = sqlArray($aqfile);
 		
-		if(mysql_num_rows($aqfile) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile);
+		if(sqlNumRow($aqfile) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile);
 			$dt['idfile'] = $qryfile['Id'];
 			$dt['nmfile'] = $qryfile['nmfile'];
 			$dt['nmfile_asli'] = $qryfile['nmfile_asli'];
@@ -389,11 +389,11 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 		}
 		
 		$file2 = "SELECT * FROM gambar_upload WHERE jns_upload='3' and id_upload='$this->form_idplh'LIMIT 0,1";$cek=$qry;
-		$aqfile2 = mysql_query($file2);
-		$qryfile2 = mysql_fetch_array($aqfile2);
+		$aqfile2 = sqlQuery($file2);
+		$qryfile2 = sqlArray($aqfile2);
 		
-		if(mysql_num_rows($aqfile2) > 0) {
-			$dt['isifile'] = mysql_num_rows($aqfile2);
+		if(sqlNumRow($aqfile2) > 0) {
+			$dt['isifile'] = sqlNumRow($aqfile2);
 			$dt['idfile'] = $qryfile2['Id'];
 			$dt['nmfile'] = $qryfile2['nmfile'];
 			$dt['nmfile_asli'] = $qryfile2['nmfile_asli'];
@@ -420,7 +420,7 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  system_menu WHERE Id_menu='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setFormeditdata($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -448,7 +448,7 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 		
 	$queryKF="SELECT max(no_urut)as nourut FROM system_menu" ;
 	
-		$get=mysql_fetch_array(mysql_query($queryKF));
+		$get=sqlArray(sqlQuery($queryKF));
 		$no_urut=$get['nourut'] + 1;
 	
 	$datalevel=1;
@@ -457,8 +457,8 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	$dataposisi=1;
 	$dataaktif=1;
 	$kdx=$dt['kode'];
-	$datasys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$dt['Id_system']."'"));
-	$datamod=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
+	$datasys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$dt['Id_system']."'"));
+	$datamod=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
 	
 				$l = substr($kdx, 0,2);
 				$m = substr($kdx, 3,2);
@@ -604,16 +604,16 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 					
 	
 	
-	$akt=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_menu']."'  and jns_upload='2'"));
-	$pas=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_menu']."'  and jns_upload='3'"));
+	$akt=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_menu']."'  and jns_upload='2'"));
+	$pas=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where id_upload='".$dt['Id_menu']."'  and jns_upload='3'"));
 	$datalevel=1;
 	$datatipe=1;
 	$datajenis=1;
 	$dataposisi=1;
 	$dataaktif=1;
 	$kdx=$dt['kode'];
-	$datasys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$dt['Id_system']."'"));
-	$datamod=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
+	$datasys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$dt['Id_system']."'"));
+	$datamod=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
 	
 				$l = substr($kdx, 0,2);
 				$m = substr($kdx, 3,2);
@@ -798,14 +798,14 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 	$posisi='FOOTER';
 	 }
 	 
-	$datasys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$dt['Id_system']."'"));
-	$datamod=mysql_fetch_array(mysql_query("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
+	$datasys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$dt['Id_system']."'"));
+	$datamod=sqlArray(sqlQuery("select nm_system,nm_modul from system_modul where Id_modul='".$dt['Id_modul']."'"));
 	
 	
-	 $datakt=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where jns_upload='2' and id_upload='".$dt['file_imagesaktif']."'"));
+	 $datakt=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where jns_upload='2' and id_upload='".$dt['file_imagesaktif']."'"));
 	 
 	 $cek.="select nmfile_asli from gambar_uploadmenu_pasif where id_upload='".$dt['file_imagespasif']."'";
-	 $datpsf=mysql_fetch_array(mysql_query("select nmfile_asli from gambar_upload where jns_upload='3' and id_upload='".$dt['file_imagespasif']."'"));
+	 $datpsf=sqlArray(sqlQuery("select nmfile_asli from gambar_upload where jns_upload='3' and id_upload='".$dt['file_imagespasif']."'"));
 	 //items ----------------------
 	  $this->form_fields = array(
 	  		
@@ -1016,7 +1016,7 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 	$posisi='Footer';
 	 }
 	 
-	 $img=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_menu` RIGHT JOIN `gambar_upload` ON `system_menu`.`Id_menu` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and gambar_upload.jns_upload='2' and Id_menu='".$isi['Id_menu']."'"));
+	 $img=sqlArray(sqlQuery("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_menu` RIGHT JOIN `gambar_upload` ON `system_menu`.`Id_menu` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and gambar_upload.jns_upload='2' and Id_menu='".$isi['Id_menu']."'"));
 	
 	 if($img != ''){
 	 	$file = "<a download='".$img['nmfile_asli']."' href='Media/menu/".$img['nmfile']."' title='".$img['nmfile_asli']."'><img width='23px' height='23px' src='images/administrator/images/download_f2.png' /> </a>";
@@ -1024,7 +1024,7 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 	$file='';
 	 }
 	 
-	  $img2=mysql_fetch_array(mysql_query("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_menu` RIGHT JOIN `gambar_upload` ON `system_menu`.`Id_menu` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and `gambar_upload`.`jns_upload` ='3' and Id_menu='".$isi['Id_menu']."'"));
+	  $img2=sqlArray(sqlQuery("SELECT `gambar_upload`.`jns_upload`,`gambar_upload`.`nmfile_asli`, `gambar_upload`.`nmfile`, `gambar_upload`.`stat` FROM `system_menu` RIGHT JOIN `gambar_upload` ON `system_menu`.`Id_menu` = `gambar_upload`.`id_upload` WHERE `gambar_upload`.`stat` = 0 and `gambar_upload`.`jns_upload` ='3' and Id_menu='".$isi['Id_menu']."'"));
 	
 	 if($img2 != ''){
 	 	$file2 = "<a download='".$img2['nmfile_asli']."' href='Media/menu/".$img2['nmfile']."' title='".$img2['nmfile_asli']."'><img width='23px' height='23px' src='images/administrator/images/download_f2.png' /> </a>";
@@ -1032,8 +1032,8 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 	$file2='';
 	 }
 	 
-	  $datsys=mysql_fetch_array(mysql_query("select nm_system from system where Id_system='".$isi['Id_system']."'"));
-	  $datmenu=mysql_fetch_array(mysql_query("select nm_modul from system_modul where Id_modul='".$isi['Id_modul']."'"));
+	  $datsys=sqlArray(sqlQuery("select nm_system from system where Id_system='".$isi['Id_system']."'"));
+	  $datmenu=sqlArray(sqlQuery("select nm_modul from system_modul where Id_modul='".$isi['Id_modul']."'"));
 	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
 	  if ($Mode == 1) $Koloms[] = array(" align='center' ", $TampilCheckBox);
@@ -1184,27 +1184,27 @@ class ManagementStrukturMenuObj  extends DaftarObj2{
 	 $idplh = $_REQUEST[$this->Prefix.'_idplh'];
 	  
 	 	$aq = "SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='2'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/menu/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='2'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd ="UPDATE gambar_upload SET stat = '0' WHERE id_upload = '$idplh' AND stat2 = '0' and jns_upload='2'";$cek .= ' ||'. $upd;
-		$qryupd = mysql_query($upd);
+		$qryupd = sqlQuery($upd);
 		
 		//------------------pasif----------------------------------
 		$aq ="SELECT * FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='3'";$cek .=$aq;
-		$qry = mysql_query($aq);
-		while($del = mysql_fetch_array($qry)){
+		$qry = sqlQuery($aq);
+		while($del = sqlArray($qry)){
 			unlink("Media/menu/".$del['nmfile']);
 		}
 		$hapus = "DELETE FROM gambar_upload WHERE id_upload = '$idplh' AND stat2='1' and jns_upload='3'"; $cek .= ' || '.$hapus;
-		$hps = mysql_query($hapus);
+		$hps = sqlQuery($hapus);
 		
 		$upd2 = "UPDATE gambar_upload SET stat = '0' WHERE id_upload = '$idplh' AND stat2 = '0' and jns_upload='3'";$cek .= ' ||'. $upd2;
-		$qryupd = mysql_query($upd2);
+		$qryupd = sqlQuery($upd2);
 	
 					
 	return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	

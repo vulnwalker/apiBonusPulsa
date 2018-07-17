@@ -402,10 +402,10 @@ function balikKoord($Koord){
 //xtoolpro
 function genKML($aqry='', $fieldName='', $fieldDesk='', $fieldKoord='', $isPoint=TRUE ){
 	$no=0;
-	$qry = mysql_query($aqry);
+	$qry = sqlQuery($aqry);
 	
 	$KMLPlacemark='';
-	while($isi=mysql_fetch_array($qry)){
+	while($isi=sqlArray($qry)){
 	
 		$no++;
 		//ambil data ---------------------------------------------
@@ -503,10 +503,10 @@ class MapObj{
 		$cek = ''; $content=''; $err='';
 		$id= $_REQUEST['id'];
 		$aqry = "select * from buku_induk where id='$id'";
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		
 		$rows= array();
-		while ($isi = mysql_fetch_assoc($qry)){
+		while ($isi = sqlArray($qry)){
 			$rows[] = $isi;
 		}
 		$content->rows = $rows;
@@ -657,9 +657,9 @@ class MapObj{
 		//daftar ----------------------------------------------------------------------------------
 		
 		$aqry = "select * from $tbl $Kondisi $Limit"; $cek.=$aqry;
-		$qry=mysql_query($aqry);
+		$qry=sqlQuery($aqry);
 //		$cek=$aqry;
-		while($isi=mysql_fetch_array($qry)){
+		while($isi=sqlArray($qry)){
 			$color=null;
 			$jnskonstruksi = 0;	
 			switch ( $isi['f']){
@@ -709,7 +709,7 @@ class MapObj{
 		}
 		
 		$content->rows = $rows;
-		$get = mysql_fetch_array( mysql_query("select count(*) as cnt from $tbl $Kondisi") );
+		$get = sqlArray( sqlQuery("select count(*) as cnt from $tbl $Kondisi") );
 		$content->jmldata = $get['cnt'];
 		
 		return array('cek'=>$cek, 'err'=>$err, 'content'=>$content);

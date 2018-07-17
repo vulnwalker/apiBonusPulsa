@@ -36,7 +36,7 @@ if($Act == "Simpan")
 		else
 		{
 			$CekKon = $ArIDRUANG[0].$ArIDRUANG[1];
-			$Cek = mysql_num_rows(mysql_query("select * from ref_ruang where concat(p,q)='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from ref_ruang where concat(p,q)='$CekKon' "));
 			if($Cek && $BARU=="1")
 			{
 				$Info = "<script>alert('Kode $fmKODERUANG sudah ada, data tidak disimpan');</script>";
@@ -46,11 +46,11 @@ if($Act == "Simpan")
 				//SIMPAN DATA
 				if($BARU=="1")
 				{
-					$Simpan = mysql_query("insert into ref_ruang (p,q,nm_ruang)values('{$ArIDRUANG[0]}','{$ArIDRUANG[1]}','$fmNAMARUANG')");
+					$Simpan = sqlQuery("insert into ref_ruang (p,q,nm_ruang)values('{$ArIDRUANG[0]}','{$ArIDRUANG[1]}','$fmNAMARUANG')");
 				}
 				if($BARU=="0")
 				{
-					$Simpan = mysql_query("update ref_ruang set nm_ruang='$fmNAMARUANG' where concat(p,q)='$CekKon' limit 1");
+					$Simpan = sqlQuery("update ref_ruang set nm_ruang='$fmNAMARUANG' where concat(p,q)='$CekKon' limit 1");
 				}
 				if($Simpan)
 				{
@@ -71,7 +71,7 @@ if($Act == "Hapus")
 {
 	$fmID = $cidRUANG[0];
 	$Kondisi = "concat(p,'.',q)='$fmID'";
-	$Hapus = mysql_query("delete from ref_ruang where $Kondisi");
+	$Hapus = sqlQuery("delete from ref_ruang where $Kondisi");
 	if($Hapus)
 	{
 		$Info = "<script>alert('Data sudah dihapus');</script>";
@@ -90,8 +90,8 @@ if($Act == "Edit")
 	{
 		$fmID = $cidRUANG[0];
 		$Kondisi = "concat(p,'.',q)='$fmID'";
-		$Qry = mysql_query("select * from ref_ruang where $Kondisi limit 1");
-		while($isi=mysql_fetch_array($Qry))
+		$Qry = sqlQuery("select * from ref_ruang where $Kondisi limit 1");
+		while($isi=sqlArray($Qry))
 		{
 			$fmKODERUANG = $isi['p'].".".$isi['q'];
 			$fmNAMARUANG = $isi['nm_ruang'];
@@ -130,15 +130,15 @@ if(empty($fmGEDUNG))
 $ListGEDUNG = cmbQuery1("fmGEDUNG",$fmGEDUNG,"select p,nm_ruang from ref_ruang where p!='000' and q ='000' order by p,q","onChange=\"adminForm.submit()\" ",'Pilih','');
 $ListRUANG = cmbQuery1("fmRUANG",$fmRUANG,"select q,nm_ruang from ref_ruang where p='$fmGEDUNG' and p !='000' and q != '000'  order by p,q ","onChange=\"adminForm.submit()\" ",'Pilih','');
 
-$Qry = mysql_query("select * from ref_ruang where $Kondisi order by p,q");
-$jmlDataRUANG = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from ref_ruang where $Kondisi order by p,q $LimitHalRUANG ");
+$Qry = sqlQuery("select * from ref_ruang where $Kondisi order by p,q");
+$jmlDataRUANG = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from ref_ruang where $Kondisi order by p,q $LimitHalRUANG ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalRUANG*1) - 1);
 $cb=0;
 $jmlTampilRUANG = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilRUANG++;

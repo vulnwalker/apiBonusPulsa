@@ -42,9 +42,9 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and buku_induk.thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(buku_induk.jml_harga) as total  from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(buku_induk.jml_harga) as total  from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -52,9 +52,9 @@ else
 {$jmlTotalHarga=0;}
 
 
-$Qry = mysql_query("select buku_induk.*,ref_barang.nm_barang from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg");
-$jmlDataBI = mysql_num_rows($Qry);
-$Qry = mysql_query("select buku_induk.*,ref_barang.nm_barang from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg $LimitHalBI");
+$Qry = sqlQuery("select buku_induk.*,ref_barang.nm_barang from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg");
+$jmlDataBI = sqlNumRow($Qry);
+$Qry = sqlQuery("select buku_induk.*,ref_barang.nm_barang from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j,noreg $LimitHalBI");
 
 
 $ListBarang = "";
@@ -62,7 +62,7 @@ $JmlTotalHargaListBI = 0;
 $no=$Main->PagePerHal * (($HalBI*1) - 1);
 $cb=0;
 $jmlTampilBI = 0;
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilBI++;
 	$JmlTotalHargaListBI += $isi['jml_harga'];
@@ -70,8 +70,8 @@ while ($isi = mysql_fetch_array($Qry))
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarang .= "
 	
@@ -114,11 +114,11 @@ $cidBI = cekPOST("cidBI");
 
 $Kondisi = "where id = '{$cidBI[0]}'";
 
-$Qry = mysql_query("select * from buku_induk $Kondisi");
-$isi = mysql_fetch_array($Qry);
+$Qry = sqlQuery("select * from buku_induk $Kondisi");
+$isi = sqlArray($Qry);
 
 $kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
-$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
 
 
 $KodeBarang = "{$isi['f']}.{$isi['g']}.{$isi['h']}.{$isi['i']}.{$isi['j']}";
@@ -128,25 +128,25 @@ $KodeLokasi = "{$isi['c']}.{$isi['d']}.{$isi['e']}";
 $Tahun = $isi['tahun'];
 $CekBarang = 
 $KonKib = " where concat(f,g,h,i,j,noreg,tahun) ='".$kdBarang . $isi['noreg'] . $isi['tahun']."' ";
-if($isi['f']=="01"){$Qry=mysql_query("select concat('Alamat : ',alamat,'\nNomor Sertifikat : ',sertifikat_no,' Tanggal :',mid(sertifikat_tgl,8,2),'-',mid(sertifikat_tgl,6,2),'-',mid(sertifikat_tgl,1,4),'\nPenggunaan : ',penggunaan,'\n',ket) as spesifikasi from kib_a $KonKib ");}
-if($isi['f']=="03"){$Qry=mysql_query("select concat('Alamat : ',alamat,'\nNomor Dokumen : ',dokumen_no,' Tanggal :',mid(dokumen_tgl,8,2),'-',mid(dokumen_tgl,6,2),'-',mid(dokumen_tgl,1,4),'\n',ket) as spesifikasi from kib_c $KonKib ");}
-if($isi['f']=="02"){$Qry=mysql_query("select concat('Merk : ',merk,', Ukuran : ',ukuran,', Bahan : ',bahan,'\n',ket) as spesifikasi from kib_b $KonKib ");}
-if($isi['f']=="04"){$Qry=mysql_query("select concat('Alamat : ',alamat,', Kontruksi : ',konstruksi,', Panjang  : ',panjang,', Lebar  : ',lebar,'\n',ket) as spesifikasi from kib_d $KonKib ");}
-if($isi['f']=="05"){$Qry=mysql_query("select concat(buku_judul,'\n',buku_spesifikasi) as spesifikasi from kib_e $KonKib ");}
-if($isi['f']=="06"){$Qry=mysql_query("select concat('Merk : ',merk,', Ukuran : ',ukuran,', Bahan : ',bahan,'\n',ket) as spesifikasi from kib_f $KonKib ");}
+if($isi['f']=="01"){$Qry=sqlQuery("select concat('Alamat : ',alamat,'\nNomor Sertifikat : ',sertifikat_no,' Tanggal :',mid(sertifikat_tgl,8,2),'-',mid(sertifikat_tgl,6,2),'-',mid(sertifikat_tgl,1,4),'\nPenggunaan : ',penggunaan,'\n',ket) as spesifikasi from kib_a $KonKib ");}
+if($isi['f']=="03"){$Qry=sqlQuery("select concat('Alamat : ',alamat,'\nNomor Dokumen : ',dokumen_no,' Tanggal :',mid(dokumen_tgl,8,2),'-',mid(dokumen_tgl,6,2),'-',mid(dokumen_tgl,1,4),'\n',ket) as spesifikasi from kib_c $KonKib ");}
+if($isi['f']=="02"){$Qry=sqlQuery("select concat('Merk : ',merk,', Ukuran : ',ukuran,', Bahan : ',bahan,'\n',ket) as spesifikasi from kib_b $KonKib ");}
+if($isi['f']=="04"){$Qry=sqlQuery("select concat('Alamat : ',alamat,', Kontruksi : ',konstruksi,', Panjang  : ',panjang,', Lebar  : ',lebar,'\n',ket) as spesifikasi from kib_d $KonKib ");}
+if($isi['f']=="05"){$Qry=sqlQuery("select concat(buku_judul,'\n',buku_spesifikasi) as spesifikasi from kib_e $KonKib ");}
+if($isi['f']=="06"){$Qry=sqlQuery("select concat('Merk : ',merk,', Ukuran : ',ukuran,', Bahan : ',bahan,'\n',ket) as spesifikasi from kib_f $KonKib ");}
 
 
 //echo "select concat(alamat,'\n',sertifikat_no,sertifikat_tgl,'\n',penggunaan,ket) as spesifikasi from kib_a $KonKib ";
-$isi = mysql_fetch_array($Qry);
+$isi = sqlArray($Qry);
 $Spesifikasi = $isi['spesifikasi'];
 
 
 
 $ListUraian = "";
-//$Qry = mysql_query("select tgl_pemanfaatan as tgl,'Pemanfaatan' as kejadian,concat(kepada_nama,kepada_instansi,kepada_alamat,ket) as uraian from pemanfaatan $KonKib order by tgl_pemanfaatan desc");
-$Qry = mysql_query("select * from history_barang where id_bukuinduk='{$cidBI[0]}' order by tgl_update");
+//$Qry = sqlQuery("select tgl_pemanfaatan as tgl,'Pemanfaatan' as kejadian,concat(kepada_nama,kepada_instansi,kepada_alamat,ket) as uraian from pemanfaatan $KonKib order by tgl_pemanfaatan desc");
+$Qry = sqlQuery("select * from history_barang where id_bukuinduk='{$cidBI[0]}' order by tgl_update");
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$no++;
 	$StatusBarang = !empty($isi['status_barang'])?$Main->StatusBarang[$isi['status_barang']-1][1]:$Main->StatusBarang[0][1];
@@ -156,35 +156,35 @@ while($isi=mysql_fetch_array($Qry))
 	switch($isi['kejadian'])
 	{
 	case "Entry Pemeliharaan":case "Update Pemeliharaan":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from pemeliharaan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pemeliharaan='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from pemeliharaan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pemeliharaan='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Pemanfaatan":case "Update Pemanfaatan":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from Pemanfaatan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pemanfaatan='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from Pemanfaatan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pemanfaatan='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Pengamanan":case "Update Pengamanan":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from pengamanan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pengamanan='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from pengamanan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pengamanan='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Penilaian":case "Update Penilaian":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from penilaian where id_bukuinduk={$isi['id_bukuinduk']} and tgl_penilaian='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from penilaian where id_bukuinduk={$isi['id_bukuinduk']} and tgl_penilaian='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Penghapusan":case "Update Penghapusan":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from penghapusan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_penghapusan='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from penghapusan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_penghapusan='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Pemindahtanganan":case "Update Pemindahtanganan":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from pemindahtanganan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pemindahtanganan='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from pemindahtanganan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pemindahtanganan='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Pembiayaan":case "Update Pembiayaan":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from pembiayaan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pembiayaan='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from pembiayaan where id_bukuinduk={$isi['id_bukuinduk']} and tgl_pembiayaan='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 	case "Entry Ganti Rugi":case "Update Ganti Rugi":
-		$QryEvent = mysql_fetch_array(mysql_query("select ket from gantirugi where id_bukuinduk={$isi['id_bukuinduk']} and tgl_gantirugi='{$isi['tgl_update']}'"));
+		$QryEvent = sqlArray(sqlQuery("select ket from gantirugi where id_bukuinduk={$isi['id_bukuinduk']} and tgl_gantirugi='{$isi['tgl_update']}'"));
 		$IsiEvent = $QryEvent['ket'];
 	break;
 

@@ -59,12 +59,12 @@ class aksiObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into aksi (nama_modul,status) values('$namaModul','$status')";	$cek .= $aqry;
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{
 				if($err==''){
 				$aqry = "UPDATE aksi set nama_modul='$namaModul', status = '$status' WHERE id_modul='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			}
 
@@ -113,8 +113,8 @@ class aksiObj  extends DaftarObj2{
 				foreach ($_REQUEST as $key => $value) {
 					$$key = $value;
 				}
-				mysql_query("delete from order_detail where id_order = '$id'");
-				mysql_query("delete from order_produk where id_order = '$id'");
+				sqlQuery("delete from order_detail where id_order = '$id'");
+				sqlQuery("delete from order_produk where id_order = '$id'");
 			break;
 		    }
 
@@ -123,7 +123,7 @@ class aksiObj  extends DaftarObj2{
 					$$key = $value;
 				}
 
-					mysql_query("update produk set stok = stok + $jumlah where id = '$id'");
+					sqlQuery("update produk set stok = stok + $jumlah where id = '$id'");
 					$cek = "update produk set stok = stok + $jumlah where id = '$id'";
 						break;
 		    }
@@ -132,7 +132,7 @@ class aksiObj  extends DaftarObj2{
 				foreach ($_REQUEST as $key => $value) {
 					$$key = $value;
 				}
-				mysql_query("delete from produk where id = '$id'");
+				sqlQuery("delete from produk where id = '$id'");
 			break;
 		    }
 			case 'addProduk':{
@@ -152,7 +152,7 @@ class aksiObj  extends DaftarObj2{
 												'foto' => $tempatBase,
 												'tgl_add' => date('Y-m-d')
 					);
-					mysql_query(VulnWalkerInsert("produk",$data));
+					sqlQuery(VulnWalkerInsert("produk",$data));
 
 
 					$cek = VulnWalkerInsert("produk",$data);
@@ -189,7 +189,7 @@ class aksiObj  extends DaftarObj2{
 						}
 
 
-						mysql_query(VulnWalkerUpdate("produk",$data,"id= '$id'"));
+						sqlQuery(VulnWalkerUpdate("produk",$data,"id= '$id'"));
 
 
 						$cek  =VulnWalkerUpdate("produk",$data,"id= '$id'");
@@ -210,7 +210,7 @@ class aksiObj  extends DaftarObj2{
 													'alamat' => $alamat,
 													'tlp' => $telepon,
 					);
-					mysql_query(VulnWalkerUpdate("user",$data,"username = '$username'"));
+					sqlQuery(VulnWalkerUpdate("user",$data,"username = '$username'"));
 
 			break;
 		    }
@@ -253,9 +253,9 @@ class aksiObj  extends DaftarObj2{
 
 
 
-					$produk = mysql_fetch_array(mysql_query("select * from produk where id = '$id'"));
+					$produk = sqlArray(sqlQuery("select * from produk where id = '$id'"));
 
-					$cekJumlahCart = mysql_num_rows(mysql_query("select * from order_session where id_produk = '$id' and session_id = '".session_id()."'"));
+					$cekJumlahCart = sqlNumRow(sqlQuery("select * from order_session where id_produk = '$id' and session_id = '".session_id()."'"));
 					if($cekJumlahCart < 1){
 							$data = array(
 														'id_produk' => $id,
@@ -265,19 +265,19 @@ class aksiObj  extends DaftarObj2{
 							);
 						  $query = VulnWalkerInsert('order_session',$data);
 							$cek = $query;
-							mysql_query($query);
+							sqlQuery($query);
 
 							$session_id = session_id();
-							$sql = mysql_fetch_array(mysql_query("SELECT SUM(jumlah) as item FROM order_session where session_id = '$session_id' "));
+							$sql = sqlArray(sqlQuery("SELECT SUM(jumlah) as item FROM order_session where session_id = '$session_id' "));
 							$jumlahBeli = $sql['item'];
 					}else{
 							if($cekJumlahCart['jumlah'] > $produk['stok']) {
 									$err = ' Maaf Stok hanya tersedia '.$produk['stok'];
 
 							}else {
-									mysql_query("UPDATE order_session set jumlah = jumlah+1 WHERE id_produk='$id' AND session_id ='".session_id()."' ");
+									sqlQuery("UPDATE order_session set jumlah = jumlah+1 WHERE id_produk='$id' AND session_id ='".session_id()."' ");
 									$session_id = session_id();
-									$sql = mysql_fetch_array(mysql_query("SELECT SUM(jumlah) as item FROM order_session where session_id = '$session_id' "));
+									$sql = sqlArray(sqlQuery("SELECT SUM(jumlah) as item FROM order_session where session_id = '$session_id' "));
 									$jumlahBeli = $sql['item'];
 							}
 
@@ -340,7 +340,7 @@ class aksiObj  extends DaftarObj2{
 			 	 $err = "Silahkan isi nomor telpon";
 			 }
 			  else{
-						if(mysql_num_rows(mysql_query("select * from user where username ='$username'")) != 0){
+						if(sqlNumRow(sqlQuery("select * from user where username ='$username'")) != 0){
 						     $err = "Username sudah ada";
 					 }
 
@@ -357,7 +357,7 @@ class aksiObj  extends DaftarObj2{
 															'ip' => $_SERVER['REMOTE_HOST'],
 							);
 							$query = VulnWalkerInsert('user',$data);
-							mysql_query($query);
+							sqlQuery($query);
 
 
 							$dataLogin = array(
@@ -367,7 +367,7 @@ class aksiObj  extends DaftarObj2{
 							$_SESSION[user]=$username;
 							$_SESSION[level]='member';
 							$qry = VulnWalkerUpdate('user', $dataLogin, "username = '$username'");
-							mysql_query($qry);
+							sqlQuery($qry);
 
 
 							$cek = $qry;
@@ -425,7 +425,7 @@ class aksiObj  extends DaftarObj2{
 		$this->form_fmST = 1;
 		if($err == ''){
 			$aqry = "SELECT * FROM  aksi WHERE id_modul='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 
@@ -622,7 +622,7 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 
 			if($err=='' ){
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id_modul='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 
 			}else{
 				break;

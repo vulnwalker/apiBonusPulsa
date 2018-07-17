@@ -176,8 +176,8 @@ class cariIDBIObj  extends DaftarObj2{
 					}
 					
 					$qry = "SELECT * FROM ref_barang WHERE $where_kode = '$kodebarangambil' ";$cek.=$qry;
-					$aqry = mysql_query($qry);
-					$daqry = mysql_fetch_array($aqry);
+					$aqry = sqlQuery($qry);
+					$daqry = sqlArray($aqry);
 						
 					
 					if($htng_stringKode >= 3){
@@ -292,7 +292,7 @@ class cariIDBIObj  extends DaftarObj2{
 	  
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		$qry_jns_pemeliharaan = "SELECT jenis, jenis FROM ref_jenis_pemeliharaan";
 		

@@ -55,11 +55,11 @@ class KondisiObj  extends DaftarObj2{
 		$kondisi = $_REQUEST['kondisi'];
 		$kondisi_baru = $_REQUEST['kondisi_baru'];
 		$dif_kondisi = $_REQUEST['kondisi_baru']-$_REQUEST['kondisi'];;
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id = '$idbi' "));
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id = '$idbi' "));
 		$idbi_awal = $bi['idawal'];
 		
 		
-		$old = mysql_fetch_array(mysql_query("select * from t_kondisi where Id='$idplh' "));
+		$old = sqlArray(sqlQuery("select * from t_kondisi where Id='$idplh' "));
 		if($err=='' && sudahClosing($tgl,$bi['c'],$bi['d'],$bi['e'],$bi['e1']))$err = 'Tanggal sudah Closing !';		
 		if($err=='' && $tgl=='') $err = 'Tanggal belum diisi!';		
 		if($err=='' && !cektanggal($tgl)){	$err = "Tanggal $tgl Salah!";	}					
@@ -73,20 +73,20 @@ class KondisiObj  extends DaftarObj2{
 			case 0 : { //baru
 				//- tanggal >= tgl terakhir transaski u/ barang ini
 				if($err=='' && $old['tgl'] <> $tgl ){ 			
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_kondisi where idbi_awal ='$idbi_awal'  "
 					));
 					if( compareTanggal( $tgl, $get['maxtgl'] )==0  ) $err = "Tanggal tidak lebih kecil dari transaksi sebelumnya!";
 				}	
 				if($err==''){
-					$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='$idbi'"));
+					$bi = sqlArray(sqlQuery("select * from buku_induk where id='$idbi'"));
 					$aqry = "insert into t_kondisi (tgl,idbi,uid,tgl_update,ket, kond_awal,kond_akhir,idbi_awal,dif_kondisi) ".
 						" values('$tgl','$idbi','$uid',now(),'$ket', '$kondisi','$kondisi_baru','".$bi['idawal']."','$dif_kondisi') "; $cek .= $aqry;
-					$qry = mysql_query($aqry);		
+					$qry = sqlQuery($aqry);		
 //					$newid= mysql_insert_id();
 					if($qry){
 						$upd_bi = "update buku_induk set kondisi = '$kondisi_baru' where  id='$idbi'";$cek .= $upd_bi;
-						mysql_query($upd_bi);						
+						sqlQuery($upd_bi);						
 					}
 				}
 				break;
@@ -95,7 +95,7 @@ class KondisiObj  extends DaftarObj2{
 				if($err == '' && $old['kond_awal']==0)$err = " Tidak bisa diedit, Kondisi awal kosong!";
 				if($err==''){
 					$query = "select Id from t_kondisi where idbi_awal='$idbi_awal'  order by tgl desc, Id desc limit 0,1";
-					$check = mysql_fetch_array(mysql_query($query));	
+					$check = sqlArray(sqlQuery($query));	
 					if($check['Id'] != $idplh){						
 						//$cek .= $check['Id'];			
 						if($old['kond_akhir'] <> $kondisi_baru)$err = "Hanya kondisi terakhir yang dapat di edit! Kecuali Keterangan"; //hanya transaksi terkahir yg boleh diedit 						
@@ -103,11 +103,11 @@ class KondisiObj  extends DaftarObj2{
 				}				
 				if($err=='' && $old['tgl'] <> $tgl ){ 			
 					//- tanggal >= tgl terakhir transaski u/ barang ini
-					$get = mysql_fetch_array(mysql_query(
+					$get = sqlArray(sqlQuery(
 						"select max(tgl) as maxtgl from t_kondisi where idbi_awal ='$idbi_awal'  and Id<>'$idplh'  "
 					));
 					$query2 = "select Id from t_kondisi where idbi_awal='$idbi_awal'  order by tgl,Id  limit 0,1";
-					$check2 = mysql_fetch_array(mysql_query($query2));	
+					$check2 = sqlArray(sqlQuery($query2));	
 					if($check2['Id'] != $idplh){						
 						if( compareTanggal( $tgl,$get['maxtgl']  )==0  ) $err = "Tanggal tidak lebih kecil dari transaksi sebelumnya!";
 					}
@@ -122,10 +122,10 @@ class KondisiObj  extends DaftarObj2{
 							dif_kondisi='$dif_kondisi' 
 							WHERE Id='".$idplh."'";	
 							$cek .= $aqry;
-					$qry = mysql_query($aqry) or die(mysql_error());
+					$qry = sqlQuery($aqry) or die(mysql_error());
 					if($qry){
 						$upd_bi = "update buku_induk set kondisi = '$kondisi_baru' where  id='$idbi'";$cek .= $upd_bi;
-						mysql_query($upd_bi);						
+						sqlQuery($upd_bi);						
 					}					
 				}
 			
@@ -196,19 +196,19 @@ class KondisiObj  extends DaftarObj2{
 		 $err=''; $cek='';
 		for($i = 0; $i<count($ids); $i++){
 			//cek id terakhir
-			$old = mysql_fetch_array(mysql_query("select * from t_kondisi where Id='".$ids[$i]."' "));
-			$aqry = mysql_fetch_array(mysql_query("select Id from t_kondisi where idbi_awal='".$old['idbi_awal']."' order by tgl desc, Id desc limit 0,1"));
+			$old = sqlArray(sqlQuery("select * from t_kondisi where Id='".$ids[$i]."' "));
+			$aqry = sqlArray(sqlQuery("select Id from t_kondisi where idbi_awal='".$old['idbi_awal']."' order by tgl desc, Id desc limit 0,1"));
 			//$cek .= $aqry['Id'];
 			if($err == '' && $ids[$i] != $aqry['Id']) $err = "Hanya kondisi terakhir yang bisa dihapus!";
 			if($err == '' && $old['kond_awal']==0) $err = "Tidak bisa dihapus, Kondisi awal kosong!";
 			 
 			if($err == ''){
 				$aqry2 = "delete from t_kondisi where Id='".$old['Id']."' "; $cek = $aqry2;
-				$qry = mysql_query($aqry2);
+				$qry = sqlQuery($aqry2);
 				if($qry){
-					$aqry3 = mysql_fetch_array(mysql_query("select kond_akhir from t_kondisi where idbi_awal='".$old['idbi_awal']."' order by tgl desc, Id desc limit 0,1"));
+					$aqry3 = sqlArray(sqlQuery("select kond_akhir from t_kondisi where idbi_awal='".$old['idbi_awal']."' order by tgl desc, Id desc limit 0,1"));
 					$aqry = "update buku_induk set kondisi = '".$aqry3['kond_akhir']."' where id='".$old['idbi']."' "; $cek .= $aqry;
-					mysql_query($aqry);
+					sqlQuery($aqry);
 				}
 			}	
 		}
@@ -230,7 +230,7 @@ class KondisiObj  extends DaftarObj2{
 		$cidBI = $_REQUEST['cidBI'];
 		$idbi = $cidBI[0];// 735615;
 		$aqry = "select * from buku_induk where id ='$idbi'"; $cek .= $aqry;
-		$bi = mysql_fetch_array(mysql_query($aqry));
+		$bi = sqlArray(sqlQuery($aqry));
 		
 		$dt['idbi']= $idbi;
 		$dt['tgl'] =  Date('Y-m-d');
@@ -256,7 +256,7 @@ class KondisiObj  extends DaftarObj2{
 		
 		//get data 
 		$aqry = "select * from t_kondisi where id ='".$this->form_idplh."'  "; 
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$dt['idbi']= $get['idbi'];
 		$dt['tgl'] =  $get['tgl'];		
 		$dt['kondisi'] = $get['kond_awal'];
@@ -277,7 +277,7 @@ class KondisiObj  extends DaftarObj2{
 		$this->form_width = 420;
 		$this->form_height = $Main->STASET_OTOMATIS? 130: 150;
 		$idbi = $dt['idbi'];
-		$bi = mysql_fetch_array(mysql_query("select * from buku_induk where id = '$idbi' "));
+		$bi = sqlArray(sqlQuery("select * from buku_induk where id = '$idbi' "));
 		
 		/*if($err=='' && !( $bi['staset']==9 || $bi['staset']==3 ) ){
 			$err = $Main->StatusAsetView[$bi['staset']-1][1]." tidak bisa reklas ke Aset Lain-Lain ! ";
@@ -362,7 +362,7 @@ class KondisiObj  extends DaftarObj2{
 			$AsalUsul = $isi['asal_usul'];
 			$SPg = $SPg_ ==''? $_GET['SPg'] : $SPg_; $cek .= "SPg = $SPg";
 			//get opd
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$isi['c']."'  and d='".$isi['d']."' and e='00'"
 			));
 			$ISI5 = "";	$ISI6 = "";
@@ -386,8 +386,8 @@ class KondisiObj  extends DaftarObj2{
 					}
 					if ($isi['f'] == "01") {//KIB A
 						//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'
-						$QryKIB_A = mysql_query("select * from kib_a  $KondisiKIB  limit 0,1");
-						while ($isiKIB_A = mysql_fetch_array($QryKIB_A)) {
+						$QryKIB_A = sqlQuery("select * from kib_a  $KondisiKIB  limit 0,1");
+						while ($isiKIB_A = sqlArray($QryKIB_A)) {
 							$isiKIB_A = array_map('utf8_encode', $isiKIB_A);	
 			
 							if($SPg == 'belumsensus'){
@@ -407,8 +407,8 @@ class KondisiObj  extends DaftarObj2{
 					}
 					if ($isi['f'] == "02") {//KIB B;
 						//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'";
-						$QryKIB_B = mysql_query("select * from kib_b  $KondisiKIB limit 0,1");
-						while ($isiKIB_B = mysql_fetch_array($QryKIB_B)) {
+						$QryKIB_B = sqlQuery("select * from kib_b  $KondisiKIB limit 0,1");
+						while ($isiKIB_B = sqlArray($QryKIB_B)) {
 							$isiKIB_B = array_map('utf8_encode', $isiKIB_B);
 							$ISI5 = "{$isiKIB_B['merk']}";
 							$ISI6 = "{$isiKIB_B['no_pabrik']} /<br> {$isiKIB_B['no_rangka']} /<br> {$isiKIB_B['no_mesin']} /<br> {$isiKIB_B['no_polisi']}";
@@ -417,8 +417,8 @@ class KondisiObj  extends DaftarObj2{
 						}
 					}
 					if ($isi['f'] == "03") {//KIB C;
-						$QryKIB_C = mysql_query("select * from kib_c  $KondisiKIB limit 0,1");
-						while ($isiKIB_C = mysql_fetch_array($QryKIB_C)) {
+						$QryKIB_C = sqlQuery("select * from kib_c  $KondisiKIB limit 0,1");
+						while ($isiKIB_C = sqlArray($QryKIB_C)) {
 							$isiKIB_C = array_map('utf8_encode', $isiKIB_C);
 							if($SPg == 'belumsensus'){
 								$alm = '';
@@ -436,8 +436,8 @@ class KondisiObj  extends DaftarObj2{
 						}
 					}
 					if ($isi['f'] == "04") {//KIB D;
-						$QryKIB_D = mysql_query("select * from kib_d  $KondisiKIB limit 0,1");
-						while ($isiKIB_D = mysql_fetch_array($QryKIB_D)) {
+						$QryKIB_D = sqlQuery("select * from kib_d  $KondisiKIB limit 0,1");
+						while ($isiKIB_D = sqlArray($QryKIB_D)) {
 							$isiKIB_D = array_map('utf8_encode', $isiKIB_D);
 							if($SPg == 'belumsensus'){
 								$alm = '';
@@ -454,8 +454,8 @@ class KondisiObj  extends DaftarObj2{
 						}
 					}
 					if ($isi['f'] == "05") {//KIB E;
-						$QryKIB_E = mysql_query("select * from kib_e  $KondisiKIB limit 0,1");
-						while ($isiKIB_E = mysql_fetch_array($QryKIB_E)) {
+						$QryKIB_E = sqlQuery("select * from kib_e  $KondisiKIB limit 0,1");
+						while ($isiKIB_E = sqlArray($QryKIB_E)) {
 							$isiKIB_E = array_map('utf8_encode', $isiKIB_E);
 							$ISI7 = "{$isiKIB_E['seni_bahan']}";
 							$ISI15 = "{$isiKIB_E['ket']}";
@@ -463,9 +463,9 @@ class KondisiObj  extends DaftarObj2{
 					}
 					if ($isi['f'] == "06") {//KIB F;
 						$sQryKIB_F = "select * from kib_f  $KondisiKIB limit 0,1";
-						$QryKIB_F = mysql_query($sQryKIB_F);
+						$QryKIB_F = sqlQuery($sQryKIB_F);
 						//echo "<br>qrykibf= $sQryKIB_F";
-						while ($isiKIB_F = mysql_fetch_array($QryKIB_F)) {
+						while ($isiKIB_F = sqlArray($QryKIB_F)) {
 							$isiKIB_F = array_map('utf8_encode', $isiKIB_F);
 							if($SPg == 'belumsensus'){
 								$alm = '';
@@ -483,8 +483,8 @@ class KondisiObj  extends DaftarObj2{
 						}
 					}
 					if ($isi['f'] == "07") {//KIB E;
-						$QryKIB_E = mysql_query("select * from kib_g  $KondisiKIB limit 0,1");
-						while ($isiKIB_E = mysql_fetch_array($QryKIB_E)) {
+						$QryKIB_E = sqlQuery("select * from kib_g  $KondisiKIB limit 0,1");
+						while ($isiKIB_E = sqlArray($QryKIB_E)) {
 							$isiKIB_E = array_map('utf8_encode', $isiKIB_E);
 							$ISI7 = "{$isiKIB_E['pencipta']}";
 //							$ISI7 = "{$isiKIB_E['jenis']}";

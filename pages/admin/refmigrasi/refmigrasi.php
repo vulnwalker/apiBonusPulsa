@@ -66,7 +66,7 @@ class refmigrasiObj  extends DaftarObj2{
  	 $ck= $_REQUEST['ck']; 
  	 $dk= $_REQUEST['dk']; 	 
 	 //query cek c,d sudah ada
-	 $c_d=mysql_fetch_array(mysql_query("select * from refmigrasi where c='$c' AND d='$d'"));	 
+	 $c_d=sqlArray(sqlQuery("select * from refmigrasi where c='$c' AND d='$d'"));	 
 	  
 	 if( $err=='' && $bk =='' ) $err= 'Urusan Belum Di Isi !!';
 	 if( $err=='' && $ck =='' ) $err= 'Bidang Belum Di Isi !!';
@@ -83,7 +83,7 @@ class refmigrasiObj  extends DaftarObj2{
 							dk = '$dk'".
 							"WHERE c='".$c."' AND d='".$d."'";	$cek .= $aqry;
 					}
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}elseif($fmST == 1){				
 				if($err==''){
@@ -95,7 +95,7 @@ class refmigrasiObj  extends DaftarObj2{
 							ck = '$ck',
 							dk = '$dk'".
 							"WHERE c='".$c."' AND d='".$d."'";	$cek .= $aqry;
-					}					$qry = mysql_query($aqry);
+					}					$qry = sqlQuery($aqry);
 				}
 			}else{
 				if($err==''){
@@ -131,9 +131,9 @@ class refmigrasiObj  extends DaftarObj2{
 			$fmBidang = $_REQUEST['fmBidang'];
 
 				$query = "SELECT d,nm_skpd FROM ref_skpd WHERE c='$fmBidang' AND d!='00' AND e='00' AND e1='000'"; $cek .= $query2;
-				$hasil = mysql_query($query);
+				$hasil = sqlQuery($query);
 				$fmskpd = "<option value=''>-- PILIH SKPD--</option>";
-				while ($dt = mysql_fetch_array($hasil))
+				while ($dt = sqlArray($hasil))
 				{
 					$fmskpd.="<option value='".$dt['d']."'>".$dt['nm_skpd']."</option>";
 				}
@@ -146,9 +146,9 @@ class refmigrasiObj  extends DaftarObj2{
 			$urusan = $_REQUEST['urusan'];
 
 				$query = "SELECT ck,nm_urusan FROM ref_urusan WHERE bk='".$urusan."' AND ck!='0' AND dk='0'"; $cek .= $query;
-				$hasil = mysql_query($query);
+				$hasil = sqlQuery($query);
 				$div_bidang = "<option value=''>-- PILIH Bidang--</option>";
-				while ($dt = mysql_fetch_array($hasil))
+				while ($dt = sqlArray($hasil))
 				{
 					$div_bidang.="<option value='".$dt['ck']."'>".$dt['nm_urusan']."</option>";
 				}
@@ -162,9 +162,9 @@ class refmigrasiObj  extends DaftarObj2{
 			$bidang = $_REQUEST['bidang'];
 
 				$query = "SELECT dk,nm_urusan FROM ref_urusan WHERE bk='".$urusan."' AND ck='$bidang' AND dk!='0'"; $cek .= $query;
-				$hasil = mysql_query($query);
+				$hasil = sqlQuery($query);
 				$div_dinas = "<option value=''>-- PILIH Dinas--</option>";
-				while ($dt = mysql_fetch_array($hasil))
+				while ($dt = sqlArray($hasil))
 				{
 					$div_dinas.="<option value='".$dt['dk']."'>".$dt['nm_urusan']."</option>";
 				}
@@ -284,10 +284,10 @@ class refmigrasiObj  extends DaftarObj2{
 		$this->form_fmST = 1;						
 		//get data 
 		$aqry = "SELECT * FROM  v1_refmigrasi WHERE c='".$kode[0]."' AND d='".$kode[1]."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		//query skpd
-		$c=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=00 and e=00 and e1=00"));
-		$d=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=00 and e1=00"));
+		$c=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=00 and e=00 and e1=00"));
+		$d=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=00 and e1=00"));
 		$dt['bidang']=$c['nm_skpd'];
 		$dt['skpd']=$d['nm_skpd'];
 

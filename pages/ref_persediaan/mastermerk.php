@@ -55,7 +55,7 @@ class MasterMerkObj  extends DaftarObj2{
 	 
 	 $kode_merk = $_REQUEST['kode_merk'];
 	 $nama_merk = strtoupper($_REQUEST['nama_merk']);
-	 $h=mysql_fetch_array(mysql_query("select * from ref_merk_persediaan where nama_merk = '".$nama_merk."'"));	 	 
+	 $h=sqlArray(sqlQuery("select * from ref_merk_persediaan where nama_merk = '".$nama_merk."'"));	 	 
 	 if($h['nama_merk']!='') $err="Nama Merk sudah ada";
 	 
 			if($fmST == 0){ //input ref_merk_persediaan
@@ -68,7 +68,7 @@ class MasterMerkObj  extends DaftarObj2{
 					 $j=$kode_barang[4];	 	  
 					$aqry1 = "INSERT into ref_merk_persediaan (h,nama_merk)
 							 "."values('$kode_merk','$nama_merk')";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					$content->no=1;							
 					$content->kode_merk=mysql_insert_id();
 					$content->merk=$nama_merk;							
@@ -192,7 +192,7 @@ class MasterMerkObj  extends DaftarObj2{
 		$j=$kode[4]; 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_merk_persediaan where h='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);

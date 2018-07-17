@@ -59,12 +59,12 @@ class dokumenSumberObj  extends DaftarObj2{
 			if($fmST == 0){
 				if($err==''){
 					$aqry = "INSERT into ref_dokumensumber (nama_dokumen) values('$namaDokumenSumber')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_dokumensumber set nama_dokumen='$namaDokumenSumber' WHERE id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -151,7 +151,7 @@ class dokumenSumberObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_dokumensumber WHERE id='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -174,7 +174,7 @@ class dokumenSumberObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "select *from " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -305,14 +305,14 @@ class dokumenSumberObj  extends DaftarObj2{
 		for($i = 0; $i<count($ids); $i++)	{
 		
 			$a = "SELECT count(*) as cnt, aa.dokumenSumber_terbesar, aa.dokumenSumber_terkecil, bb.nama, aa.f, aa.g, aa.h, aa.i, aa.j FROM ref_barang aa INNER JOIN ref_dokumensumber bb ON aa.dokumenSumber_terbesar = bb.nama OR aa.dokumenSumber_terkecil = bb.nama WHERE bb.nama='".$ids[$i]."' "; $cek .= $a;
-		$aq = mysql_query($a);
-		$cnt = mysql_fetch_array($aq);
+		$aq = sqlQuery($a);
+		$cnt = sqlArray($aq);
 		
 		if($cnt['cnt'] > 0) $err = "dokumenSumber ".$ids[$i]." Tidak Bisa DiHapus ! Sudah Digunakan Di Ref Barang.";
 		
 			if($err=='' ){
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;

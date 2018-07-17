@@ -118,7 +118,7 @@ if(isset($_POST))
 		echo $page;	
 		
 		//--- Insert info into database table!
-		/*mysql_query("INSERT INTO myImageTable (ImageName, ThumbName, ImgPath)
+		/*sqlQuery("INSERT INTO myImageTable (ImageName, ThumbName, ImgPath)
 		VALUES ($DestRandImageName, $thumb_DestRandImageName, 'uploads/')");
 		*/
 		

@@ -23,8 +23,8 @@ if($Main->WITH_THN_ANGGARAN){
 	$fmThnAnggaran=  $_COOKIE['coThnAnggaran'];
 	$aqry1 = "select Max(thn_akun) as thnMax from ref_jurnal where 
 			thn_akun<='$fmThnAnggaran' ;"; $cek .= $aqry;
-			$qry1=mysql_query($aqry1);			
-			$qry_jurnal=mysql_fetch_array($qry1);
+			$qry1=sqlQuery($aqry1);			
+			$qry_jurnal=sqlArray($qry1);
 			$thn_akun=$qry_jurnal['thnMax'];
 			//$arrKondisi[] = " thn_akun = '$thn_akun'";														
 	$vthnakun = " and thn_akun=$thn_akun ";
@@ -82,19 +82,19 @@ if (!(($akun == '' ||$akun =='00') && ($kelompok == '' ||$kelompok =='00')
 
 }
 
-//$Qry = mysql_query("select * from ref_rekening where nm_rekening like '%$Cari1%' and o <> '00' limit 100");
-$Qry = mysql_query("select * from ref_jurnal where concat(ka,'.',kb,'.',kc,'.',kd,'.',ke,'.',kf) like '%$Cari2%' and nm_account like '%$Cari1%' $Kondisi $vthnakun and ke != '00' limit 0,200");
+//$Qry = sqlQuery("select * from ref_rekening where nm_rekening like '%$Cari1%' and o <> '00' limit 100");
+$Qry = sqlQuery("select * from ref_jurnal where concat(ka,'.',kb,'.',kc,'.',kd,'.',ke,'.',kf) like '%$Cari2%' and nm_account like '%$Cari1%' $Kondisi $vthnakun and ke != '00' limit 0,200");
 //echo"select * from ref_jurnal where concat(ka,'.',kb,'.',kc,'.',kd,'.',ke,'.',kf) like '%$Cari2%' and nm_account like '%$Cari1%' $Kondisi and ke != '00' limit 0,200";
-$numRow = mysql_num_rows($Qry);
+$numRow = sqlNumRow($Qry);
 $List = "";
 $no=0;
-while($isi=mysql_fetch_array($Qry))
+while($isi=sqlArray($Qry))
 {
 	$no++;
 	$Isi1 = $isi['ka'].".".$isi['kb'].".".$isi['kc'].".".$isi['kd'].".".$isi['ke'].".".$isi['kf'];
 	$Isi2 = $isi['nm_account'];
 	
-	$row=mysql_fetch_array(mysql_query("select * from ref_barang where 
+	$row=sqlArray(sqlQuery("select * from ref_barang where 
 										m1='".$isi['ka']."' and m2='".$isi['kb']."' and 
 										m3='".$isi['kc']."' and m4='".$isi['kd']."' and 
 										m5='".$isi['ke']."' and m6='".$isi['kf']."'"));

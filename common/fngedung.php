@@ -18,8 +18,8 @@ class GedungObj  extends DaftarObj2{
 				$kondisi =" where q='0000' "; 
 				$limit = '';
 				$aqry = "select * from ref_ruang $kondisi $limit ";
-				$qry = mysql_query($aqry);
-				while ($isi = mysql_fetch_array($qry) ){
+				$qry = sqlQuery($aqry);
+				while ($isi = sqlArray($qry) ){
 					$content .= "<option value='".$isi['p']."'>".$isi['nm_ruang']."</option>"	;
 				}
 				//*/

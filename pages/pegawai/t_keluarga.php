@@ -80,10 +80,10 @@ class t_keluargaObj  extends DaftarObj2{
 			
 		if($err=='' && $fmST == 0){
 			$aqry = "INSERT into ref_sumber_dana (nama) values('$nama')";	$cek .= $aqry;	
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}else{				
 			$aqry = "UPDATE ref_sumber_dana SET nama='$nama' WHERE nama='".$idplh."'";	$cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 		}
 		
 		return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -220,7 +220,7 @@ class t_keluargaObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  $this->TblName WHERE nama= '".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 	
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -239,7 +239,7 @@ class t_keluargaObj  extends DaftarObj2{
 			$this->form_caption = 'Edit';		
 		}
 		$query = "" ;$cek .=$query;
-		$res = mysql_query($query);
+		$res = sqlQuery($query);
 		
 		//items ----------------------
 		$this->form_fields = array(		

@@ -56,8 +56,8 @@ if($Act=="Simpan")
 		$JmlHARGA = $fmHARGASATUAN * $fmJUMLAH;
 		$KondisiCek = $Main->Provinsi[0].$fmWIL.$fmSKPD.$fmUNIT.$fmSUBUNIT.$ArBarang[0].$ArBarang[1].$ArBarang[2].$ArBarang[3].$ArBarang[4].$fmTAHUNANGGARAN;
 		//$CekID = false;
-		//$Qry = mysql_query("select * from rkb where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek'");
-		//$CekID = mysql_num_rows($Qry);
+		//$Qry = sqlQuery("select * from rkb where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek'");
+		//$CekID = sqlNumRow($Qry);
 		//echo $CekID;
 		//echo "select * from rkb where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek'";
 		//if($Baru=="1")
@@ -71,8 +71,8 @@ if($Act=="Simpan")
 			//Simpan Baru
 			$Qry = "insert into rkb (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,merk_barang,jml_barang,harga,satuan,jml_harga,ket,tahun)
 			values ('{$Main->Provinsi[0]}','$fmWIL','$fmSKPD','$fmUNIT','$fmSUBUNIT','{$ArBarang[0]}','{$ArBarang[1]}','{$ArBarang[2]}','{$ArBarang[3]}','{$ArBarang[4]}','{$ArRekening[0]}','{$ArRekening[1]}','{$ArRekening[2]}','{$ArRekening[3]}','{$ArRekening[4]}','$fmMEREK','$fmJUMLAH','$fmHARGASATUAN','$fmSATUAN','$JmlHARGA','$fmKET','$fmTAHUNANGGARAN')";
-			$Simpan = mysql_query($Qry);
-			$Q = mysql_fetch_array(mysql_query("select * from rkb where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek' order by id desc"));
+			$Simpan = sqlQuery($Qry);
+			$Q = sqlArray(sqlQuery("select * from rkb where concat(a,b,c,d,e,f,g,h,i,j,tahun)='$KondisiCek' order by id desc"));
 			$fmID = $Q['id'];
 		}
 		if($Baru=="0")
@@ -82,7 +82,7 @@ if($Act=="Simpan")
 			update rkb set 
 				k = '{$ArRekening[0]}',l = '{$ArRekening[1]}',m = '{$ArRekening[2]}',n = '{$ArRekening[3]}',o = '{$ArRekening[4]}',	merk_barang='$fmMEREK',jml_barang='$fmJUMLAH',harga='$fmHARGASATUAN',satuan='$fmSATUAN',jml_harga='$JmlHARGA',ket='$fmKET'
 			where $Kriteria ";
-			$Simpan = mysql_query($Qry);
+			$Simpan = sqlQuery($Qry);
 		}
 		if($Simpan)
 		{
@@ -113,13 +113,13 @@ if($Act=="Edit")
 	}
 	else
 	{
-		$Qry = mysql_query("select * from rkb where id='{$cid[0]}'");
-		$isi = mysql_fetch_array($Qry);
+		$Qry = sqlQuery("select * from rkb where id='{$cid[0]}'");
+		$isi = sqlArray($Qry);
 
 		$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 		$kdRekening = $isi['k'].$isi['l'].$isi['m'].$isi['n'].$isi['o'];
-		$nmRekening = mysql_fetch_array(mysql_query("select * from ref_rekening where concat(k,l,m,n,o)='$kdRekening'"));
-		$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+		$nmRekening = sqlArray(sqlQuery("select * from ref_rekening where concat(k,l,m,n,o)='$kdRekening'"));
+		$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
 		
 		$fmIDBARANG = $isi['f'].".".$isi['g'].".".$isi['h'].".".$isi['i'].".".$isi['j'];
 		$fmNMBARANG = "{$nmBarang['nm_barang']}";
@@ -141,7 +141,7 @@ if($Act=="Hapus" && count($cid) > 0)
 {
 	for($i = 0; $i<count($cid); $i++)
 	{
-		$Del = mysql_query("delete from rkb where id='{$cid[$i]}' limit 1");
+		$Del = sqlQuery("delete from rkb where id='{$cid[$i]}' limit 1");
 		$Info = "<script>alert('Data telah di hapus')</script>";
 	}
 }
@@ -172,10 +172,10 @@ if(!empty($fmBARANGCARI))
 	$Kondisi .= " and ref_barang.nm_barang like '%$fmBARANGCARI%' ";
 }
 
-//$jmlTotalHarga = mysql_query("select sum(jml_harga) as total from rkb where $Kondisi");
-$jmlTotalHarga = mysql_query("select sum(rkb.jml_harga) as total  from rkb inner join ref_barang on concat(rkb.f,rkb.g,rkb.h,rkb.i,rkb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi ");
+//$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total from rkb where $Kondisi");
+$jmlTotalHarga = sqlQuery("select sum(rkb.jml_harga) as total  from rkb inner join ref_barang on concat(rkb.f,rkb.g,rkb.h,rkb.i,rkb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -183,24 +183,24 @@ else
 {$jmlTotalHarga=0;}
 
 //echo "select rkb.*,ref_barang.nm_barang from rkb inner join ref_barang on concat(rkb.f,rkb.g,rkb.h,rkb.i,rkb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
-$Qry = mysql_query("select rkb.*,ref_barang.nm_barang from rkb inner join ref_barang using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
-$jmlData = mysql_num_rows($Qry);
+$Qry = sqlQuery("select rkb.*,ref_barang.nm_barang from rkb inner join ref_barang using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j");
+$jmlData = sqlNumRow($Qry);
 
-$Qry = mysql_query("select rkb.*,ref_barang.nm_barang from rkb inner join ref_barang using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHal ");
+$Qry = sqlQuery("select rkb.*,ref_barang.nm_barang from rkb inner join ref_barang using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHal ");
 //echo "select rkb.*,ref_barang.nm_barang from rkb inner join ref_barang on concat(rkb.f,rkb.g,rkb.h,rkb.i,rkb.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi $LimitHal order by a,b,c,d,e,f,g,h,i,j";
 $ListBarang = "";
 $no=$Main->PagePerHal * (($HalRKB*1) - 1);
 $JmlTotalHargaListRKB = 0;
 $JmlDataTampil=0;
 $cb=0;
-while ($isi = mysql_fetch_array($Qry)){
+while ($isi = sqlArray($Qry)){
 	$no++;
 	$JmlDataTampil++;
 	$JmlTotalHargaListRKB += $isi['jml_harga'];
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$Checked = $fmID == $isi['id'] ? "checked":"";
 	$ListBarang .= "

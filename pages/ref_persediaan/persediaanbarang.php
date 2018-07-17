@@ -228,7 +228,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 
 							$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga,satuan)
 							"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga','$satuan')";	$cek .= $aqry1;	
-							$qry = mysql_query($aqry1);
+							$qry = sqlQuery($aqry1);
 				}
 			}elseif($fmST == 1){						
 				if($err==''){
@@ -245,7 +245,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 				        	 harga = '$harga',
 							 satuan = '$satuan'". 
 						 	"WHERE concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."' and satuan='$sat'";	$cek .= $aqry2;
-							$qry = mysql_query($aqry2);
+							$qry = sqlQuery($aqry2);
 
 					}
 			}else{
@@ -258,7 +258,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 						 $j=$kode_barang[4];
 						$aqry1 = "INSERT into ref_hargabarang_persediaan (f,g,h,i,j,tahun_anggaran,harga)
 						"."values('$f','$g','$h','$i','$j','$tahun_anggaran','$harga')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);
+						$qry = sqlQuery($aqry1);
 						 
 				}
 			} //end else
@@ -288,7 +288,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 						
 	if($err==''){
 		//batal kunjungan			
-		$bk=mysql_fetch_array(mysql_query("select * from kunjungan where Id = '".$idplh."'"));				
+		$bk=sqlArray(sqlQuery("select * from kunjungan where Id = '".$idplh."'"));				
 		//if($bk['stbayar']==2){
 		//	$err='Maaf data ini sudah dibayar!';	
 		//}else{
@@ -308,7 +308,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 				$cek .=$query2;
 				$query3 = "Delete from kunjungan_ruang where ref_idkunjungan='".$idplh."' and c='".$bk['c']."' and d='".$bk['d']."'";
 				$cek .=$query3;
-				$idk=mysql_fetch_array(mysql_query("select max(kunjungan.Id) as id_kunjakhir, kunjungan.* from kunjungan where no_rm='".$bk['no_rm']."' and id < '".$idplh."' and stbatal='0'")); $cek .= $aqry;
+				$idk=sqlArray(sqlQuery("select max(kunjungan.Id) as id_kunjakhir, kunjungan.* from kunjungan where no_rm='".$bk['no_rm']."' and id < '".$idplh."' and stbatal='0'")); $cek .= $aqry;
 				if(!empty($idk))
 				{
 					$query4 = "UPDATE pasien
@@ -323,10 +323,10 @@ class PersediaanBarangObj  extends DaftarObj2{
 						 	 WHERE no_rm ='".$idk['no_rm']."'";
 					$cek .=$query4;
 				}
-				$result =mysql_query($query);	
-				$result =mysql_query($query2);	
-				$result =mysql_query($query3);	
-				$result =mysql_query($query4);	
+				$result =sqlQuery($query);	
+				$result =sqlQuery($query2);	
+				$result =sqlQuery($query3);	
+				$result =sqlQuery($query4);	
 				}	
 			else{
 				$query = "UPDATE kunjungan
@@ -337,7 +337,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 						  uid='$uid'
 						  WHERE Id = '".$idplh."' ";
 				$cek .=$query;
-				$idk=mysql_fetch_array(mysql_query("select max(kunjungan.Id) as id_kunjakhir, kunjungan.* from kunjungan where no_rm='".$bk['no_rm']."' and id < '".$idplh."' and stbatal='0'")); $cek .= $aqry;
+				$idk=sqlArray(sqlQuery("select max(kunjungan.Id) as id_kunjakhir, kunjungan.* from kunjungan where no_rm='".$bk['no_rm']."' and id < '".$idplh."' and stbatal='0'")); $cek .= $aqry;
 				if(!empty($idk))
 				{
 					$query2 = "UPDATE pasien
@@ -352,8 +352,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 						 	 WHERE no_rm ='".$idk['no_rm']."'";
 					$cek .=$query4;
 				}
-				$result =mysql_query($query);
-				$result =mysql_query($query2);
+				$result =sqlQuery($query);
+				$result =sqlQuery($query2);
 				}
 			//}
 		}//end if
@@ -433,7 +433,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 			$cbid = $_REQUEST['Id'];
 			/*$uid = $_COOKIE['coID'];*/
 			$aqry = "select * from v1_kunjungan where Id = '$cbid'"; $cek .= $aqry;
-			$get = mysql_fetch_array( mysql_query($aqry));
+			$get = sqlArray( sqlQuery($aqry));
 			
 			if($get['stbatal']==0){
 				if($_COOKIE['coLevel']==1){
@@ -453,13 +453,13 @@ class PersediaanBarangObj  extends DaftarObj2{
 		case 'CekAdmin':{
 			/*$uid = $_COOKIE['coID'];
 			$aqry = "select * from admin where uid = '$uid'"; $cek .= $aqry;
-			$get = mysql_fetch_array( mysql_query($aqry));*/
+			$get = sqlArray( sqlQuery($aqry));*/
 			$username = $_REQUEST['username'];
 			$password = $_REQUEST['password'];
 			$pswd = md5($password);
 			
 			$aqry = "select * from admin where uid = '$username' and password = '$pswd'"; $cek .= $aqry;
-			$get = mysql_fetch_array( mysql_query($aqry));
+			$get = sqlArray( sqlQuery($aqry));
 			
 			if($get['level']==1){
 			}elseif($get['level']!=1){
@@ -488,7 +488,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 		 $i=$kode_barang[3];
 		 $j=$kode_barang[4];
 
-		$get = mysql_fetch_array( mysql_query("select * from ref_barang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"));
+		$get = sqlArray( sqlQuery("select * from ref_barang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"));
 
 		$content = array('kode_barang'=>$ref_pilihbarang, 'nama_barang'=>$get['nama_barang']);	
 		break;
@@ -502,8 +502,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 			$kode_jenis="OBT";
 		}
 		 $query = "SELECT max(kode_barang) AS last_kb FROM ref_barang_persediaan WHERE kode_barang LIKE '$kode_jenis%'"; $cek .= $query;
-		 $hasil = mysql_query($query);
-		 $data  = mysql_fetch_array($hasil);
+		 $hasil = sqlQuery($query);
+		 $data  = sqlArray($hasil);
 		 $lastKodeBarang = $data['last_kb'];
 		 $lastNoUrut = substr($lastKodeBarang, 4, 7); 
 		 $nextNoUrut = $lastNoUrut + 1;
@@ -562,8 +562,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 		else{
 			$sql = "select Id,nama  from ref_klinik where sore = 1 and pagi = 1 and nama like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
 		}
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 			//$label =;
 				$a_json_row["id"] = $row['Id'];
 				$a_json_row["value"] = $row['nama'];//.' '.$row['uraian'];
@@ -607,8 +607,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 					GROUP BY
 					  v1_ruang.d, v1_ruang.c limit 0,$maxRows ";$cek.=$sql;
 		//}
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 			//$label =;
 			//if($waktu_klinik==0){ 
 				$a_json_row["id"] = $row['cd'];
@@ -645,8 +645,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 		//else{
 			$sql = "select * from ref_penjamin where nama like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
 		//}
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 			//$label =;
 			//if($waktu_klinik==0){ 
 				$a_json_row["id"] = $row['Id'];
@@ -716,8 +716,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 		else{
 			$sql = "select Id,nama  from ref_klinik where sore = 1 and pagi = 1 and nama like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
 		}*/
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 			//$label =;
 				$a_json_row["id"] = $row['Id'];
 				$a_json_row["value"] = $row['nama'];//.' '.$row['uraian'];
@@ -748,7 +748,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 		//get data 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select v1_kunjungan.*, concat(c,d) as cd from v1_kunjungan where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['readonly']='';
 		$fm = $this->setForm($dt);
 		
@@ -774,11 +774,11 @@ class PersediaanBarangObj  extends DaftarObj2{
 		$satuan=$kode[5];
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_hargabarang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."' and satuan='$satuan'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['disabled']='disabled';
 		$dt['readonly']='readonly';
-		$nb=mysql_fetch_array(mysql_query("select * from ref_barang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"));
+		$nb=sqlArray(sqlQuery("select * from ref_barang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"));
 		$dt['nama_barang']=$nb['nama_barang'];
 		$fm = $this->setForm($dt);
 		
@@ -803,7 +803,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 		$j=$kode[4]; 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_barang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm2($dt);
@@ -829,7 +829,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 		$j=$kode[4]; 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select * from ref_barang_persediaan where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm2($dt);
@@ -848,7 +848,7 @@ class PersediaanBarangObj  extends DaftarObj2{
 		//get data 
 		//$bulan=date('Y-m-')."1";
 		$aqry = "select * from pasien where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		if($dt['status_pasien']==1){
 				$fm['err']="Pasien Tidak Aktif !";
 		}else{
@@ -906,8 +906,8 @@ class PersediaanBarangObj  extends DaftarObj2{
 		//get data 
 		$bulan=date('Y-m-')."1";
 		$aqry = "select v1_kunjungan.*, concat(c,d) as cd from v1_kunjungan where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
-		$cb = mysql_fetch_array(mysql_query("select * from kunjungan where ref_idkunjungan='".$dt['Id']."'"));
+		$dt = sqlArray(sqlQuery($aqry));
+		$cb = sqlArray(sqlQuery("select * from kunjungan where ref_idkunjungan='".$dt['Id']."'"));
 		if($dt['stbayar']==2){
 			$fm['err']='Maaf data ini sudah dibayar!';	
 		}elseif($cb==TRUE){
@@ -1510,12 +1510,12 @@ class PersediaanBarangObj  extends DaftarObj2{
 		$isij=$isi['j'];	 		 	
 	 }	 	 
 
-	 $f=mysql_fetch_array(mysql_query("select f, nama_barang AS golongan from ref_barang_persediaan where f =".$isif." and g=00 and h=00 and i=00 and j=00"));
-	 $g=mysql_fetch_array(mysql_query("select g, nama_barang  from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=00 and i=00 and j=00"));
-	 $h=mysql_fetch_array(mysql_query("select h, nama_barang AS merk from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=".$isih." and i=00 and j=00"));	 
-	 $i=mysql_fetch_array(mysql_query("select i, nama_barang AS type from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=".$isih." and i=".$isii." and j=00"));
-	 $j=mysql_fetch_array(mysql_query("select j, nama_barang AS spesifikasi from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=".$isih." and i=".$isii." and j=".$isij.""));	 	 	 
-	 $satuan=mysql_fetch_array(mysql_query("select * from ref_satuan_persediaan where Id='".$isi['satuan']."'"));	 	 	 
+	 $f=sqlArray(sqlQuery("select f, nama_barang AS golongan from ref_barang_persediaan where f =".$isif." and g=00 and h=00 and i=00 and j=00"));
+	 $g=sqlArray(sqlQuery("select g, nama_barang  from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=00 and i=00 and j=00"));
+	 $h=sqlArray(sqlQuery("select h, nama_barang AS merk from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=".$isih." and i=00 and j=00"));	 
+	 $i=sqlArray(sqlQuery("select i, nama_barang AS type from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=".$isih." and i=".$isii." and j=00"));
+	 $j=sqlArray(sqlQuery("select j, nama_barang AS spesifikasi from ref_barang_persediaan where f =".$isif." and g=".$isig." and h=".$isih." and i=".$isii." and j=".$isij.""));	 	 	 
+	 $satuan=sqlArray(sqlQuery("select * from ref_satuan_persediaan where Id='".$isi['satuan']."'"));	 	 	 
 	 $kode_barang=$isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];
 	 $nama_barang=$f['golongan'].' / '.$g['nama_barang'].' / '.$h['merk'].' / '.$i['type'].' / '.$j['spesifikasi'];
 	 $Koloms = array();

@@ -65,8 +65,8 @@ class detailTemplateEditObj  extends DaftarObj2{
 		$username = $_COOKIE['coID'];
 		$arrayID = array();
 		$query = "select id from temp_detail_template where c1='$c1' and c='$c' and d='$d' and e='$e' and username = '$username' ";
-		$execute = mysql_query($query);
-		while($row = mysql_fetch_array($execute)){
+		$execute = sqlQuery($query);
+		while($row = sqlArray($execute)){
 				array_push($arrayID,array('id' => $row['id']));
 		}
 			$content = json_encode($arrayID) ;		
@@ -183,7 +183,7 @@ $baris = $_REQUEST['baris'];
 
 	$cmbUnitForm = $_REQUEST['cmbUnitForm'];
 		$username = $_COOKIE['coID'];
-	$get = mysql_fetch_array(mysql_query("select sum(jumlah) as total from temp_detail_template where username = '$username' "));
+	$get = sqlArray(sqlQuery("select sum(jumlah) as total from temp_detail_template where username = '$username' "));
 	$totalInput = number_format($get['total'],0,",",".");
 	
 	foreach ($_REQUEST as $key => $value) { 

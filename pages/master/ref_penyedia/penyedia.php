@@ -66,13 +66,13 @@ $kueSKPD = $_COOKIE['cofmUNIT'];
 					$aqry = "INSERT into ref_penyedia (c1,c,d,nama_penyedia,alamat,kota,nama_pimpinan,no_npwp,nama_bank,norek_bank,atasnama_bank) values ('$cmbUrusanForm','$cmbBidangForm','$cmbSKPDForm','$namapenyedia','$alamatLengkap','$kota','$nama_pimpinan_2','$nomorNPWP','$nama_bank','$norek_bank','$atasnama_bank')";	$cek .= $aqry;		
 					}
 
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 
 				$aqry = "UPDATE ref_penyedia set  nama_penyedia ='$namapenyedia', alamat = '$alamatLengkap', kota = '$kota', nama_pimpinan = '$nama_pimpinan_2', no_npwp = '$nomorNPWP', nama_bank = '$nama_bank', norek_bank = '$norek_bank', atasnama_bank = '$atasnama_bank'  WHERE id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());		
+						$qry = sqlQuery($aqry) or die(mysql_error());		
 					}
 			} //end else
 					
@@ -209,7 +209,7 @@ $kueSKPD = $_COOKIE['cofmUNIT'];
 		if($cnt['cnt'] > 0) $err = "penyedia Tidak Bisa Diubah ! Sudah Digunakan Di Ref Barang.";
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_penyedia WHERE id='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -260,7 +260,7 @@ $kueSKPD = $_COOKIE['cofmUNIT'];
      $cek .= $codeAndNameskpd;
 
 	  	$query = "select * from ref_skpd " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 
 $comboBoxUrusanForm = cmbQuery('cmbUrusanForm', $selectedUrusan, $codeAndNameUrusan,' '.$cmbRo.' onChange=\''.$this->Prefix.'.BidangAfterform()\'','-- Pilih Semua --');
 	
@@ -402,7 +402,7 @@ if($_COOKIE['cofmSKPD']!='00'){
 	 $c1 = $isi['c1'];
 	 $c = $isi['c'];
 	 $d = $isi['d'];
-	 $get = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c ='$c' and d='$d' ")) ;       
+	 $get = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c ='$c' and d='$d' ")) ;       
 	 $Koloms[] = array('align="left"',$get['nm_skpd']);
 	 return $Koloms;
 	}
@@ -568,14 +568,14 @@ if($_COOKIE['cofmSKPD']!='00'){
 		for($i = 0; $i<count($ids); $i++)	{
 		
 			$a = "SELECT count(*) as cnt, aa.penyedia_terbesar, aa.penyedia_terkecil, bb.nama, aa.f, aa.g, aa.h, aa.i, aa.j FROM ref_barang aa INNER JOIN ref_penyedia bb ON aa.penyedia_terbesar = bb.nama OR aa.penyedia_terkecil = bb.nama WHERE bb.nama='".$ids[$i]."' "; $cek .= $a;
-		$aq = mysql_query($a);
-		$cnt = mysql_fetch_array($aq);
+		$aq = sqlQuery($a);
+		$cnt = sqlArray($aq);
 		
 		if($cnt['cnt'] > 0) $err = "penyedia ".$ids[$i]." Tidak Bisa DiHapus ! Sudah Digunakan Di Ref Barang.";
 		
 			if($err=='' ){
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;

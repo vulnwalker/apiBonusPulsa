@@ -110,7 +110,7 @@ class plafon_v2Obj  extends DaftarObj2{
 
 				if($err==''){
 				 
-					$cekUrusan =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
+					$cekUrusan =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
 					if($cekUrusan > 0 ){
 						
 					}else{
@@ -132,10 +132,10 @@ class plafon_v2Obj  extends DaftarObj2{
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
 						$cek .= "select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'";
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 					
-					$cekBidang =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekBidang =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekBidang > 0 ){
 						
 					}else{
@@ -157,11 +157,11 @@ class plafon_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 
 					
-					$cekSKPD =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$cmbSKPDForm' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekSKPD =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$cmbSKPDForm' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekSKPD > 0 ){
 						$err = "PLAFON SUDAH ADA";
 					}else{
@@ -186,7 +186,7 @@ class plafon_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query);					
+						sqlQuery($query);					
 					}
 
 					
@@ -198,7 +198,7 @@ class plafon_v2Obj  extends DaftarObj2{
 									     'user_update' => $_COOKIE['coID'],
 										'tanggal_update' => date("Y-m-d"),);
 					$query = VulnWalkerUpdate("tabel_anggaran",$data," id_anggaran = '$idplh'");
-					mysql_query($query);
+					sqlQuery($query);
 					$content .= $query;
 				
 				}
@@ -248,7 +248,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			foreach ($_REQUEST as $key => $value) { 
 				  $$key = $value; 
 			}
-			$getData = mysql_fetch_array(mysql_query("select * from view_plafon where id_anggaran ='$plafon_v2_cb[0]'"));
+			$getData = sqlArray(sqlQuery("select * from view_plafon where id_anggaran ='$plafon_v2_cb[0]'"));
 			if($getData['status_validasi'] == '1'){
 				$err = "Data sudah di validasi !";
 			}
@@ -267,7 +267,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			foreach ($_REQUEST as $key => $value) { 
 				  $$key = $value; 
 			}
-			if(mysql_num_rows(mysql_query("select * from skpd_report_plafon where username= '$this->username'")) == 0){
+			if(sqlNumRow(sqlQuery("select * from skpd_report_plafon where username= '$this->username'")) == 0){
 					$data = array(
 								  'username' => $this->username,
 								  'c1' => $fmSKPDUrusan,
@@ -276,7 +276,7 @@ class plafon_v2Obj  extends DaftarObj2{
 								  
 								  );
 					$query = VulnWalkerInsert('skpd_report_plafon',$data);
-					mysql_query($query);
+					sqlQuery($query);
 				}else{
 					$data = array(
 								   'username' => $this->username,
@@ -287,7 +287,7 @@ class plafon_v2Obj  extends DaftarObj2{
 								  
 								  );
 					$query = VulnWalkerUpdate('skpd_report_plafon',$data,"username = '$this->username'");
-					mysql_query($query);
+					sqlQuery($query);
 				}												
 		break;
 		}
@@ -316,7 +316,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			header("Expires: 0");
 		}
 		
-		$grabSKPD = mysql_fetch_array(mysql_query("select * from skpd_report_plafon where username='$this->username'"));
+		$grabSKPD = sqlArray(sqlQuery("select * from skpd_report_plafon where username='$this->username'"));
 		foreach ($grabSKPD as $key => $value) { 
 				  $$key = $value; 
 			}
@@ -336,10 +336,10 @@ class plafon_v2Obj  extends DaftarObj2{
 		$daqry_pengaturan = $DataOption;
 		
 		if($this->jenisForm == 'PENYUSUNAN'){
-			$getAll = mysql_query("select * from view_plafon where id_tahap='$idTahap' and d = '00' and c ='00'");
-			while($rows = mysql_fetch_array($getAll)){
+			$getAll = sqlQuery("select * from view_plafon where id_tahap='$idTahap' and d = '00' and c ='00'");
+			while($rows = sqlArray($getAll)){
 				$c1 = $rows['c1'];
-				if(mysql_num_rows(mysql_query("select * from view_plafon where c1 ='$c1' and d!='00' and id_tahap = '$idTahap'")) == 0){
+				if(sqlNumRow(sqlQuery("select * from view_plafon where c1 ='$c1' and d!='00' and id_tahap = '$idTahap'")) == 0){
 					$arrKondisi[] = " c1 !='$c1' ";
 				}
 			}
@@ -348,10 +348,10 @@ class plafon_v2Obj  extends DaftarObj2{
 			$arrKondisi[] = " jenis_anggaran = '$this->jenisAnggaran'";
 		}elseif($this->jenisForm == 'KOREKSI'){
 			$nomorUrutSebelumnya = $this->nomorUrut - 1;
-			$beforeThis = mysql_fetch_array(mysql_query("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
-			$getAllTahapSebelumnya = mysql_query("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
+			$beforeThis = sqlArray(sqlQuery("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+			$getAllTahapSebelumnya = sqlQuery("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
 			$arrayID = array();
-			while($rows = mysql_fetch_array($getAllTahapSebelumnya)){
+			while($rows = sqlArray($getAllTahapSebelumnya)){
 				$id_anggaran = $rows['id_anggaran'];
 				$c1 = $rows['c1'];
 				$c = $rows['c'];
@@ -362,12 +362,12 @@ class plafon_v2Obj  extends DaftarObj2{
 						array_push($arrayID,$id_anggaran);
 						$Condition= join(' and ',$arrayID);		
 						$Condition = $Condition =='' ? '':' Where '.$Condition;
-						$resultBidang = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+						$resultBidang = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 						if($resultBidang  == 0){
 						    $concat = $c1.'.'.$c;
 							$arrKondisi[] = "concat(c1,'.',c) != '$concat' ";	
 						}else{
-							$resultUrusan = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+							$resultUrusan = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 							if($resultUrusan  == 0){
 							 	$concat = $c1;
 								$arrKondisi[] = "c1 != '$concat' ";	
@@ -383,10 +383,10 @@ class plafon_v2Obj  extends DaftarObj2{
 		}else{
 			if($this->jenisFormTerakhir == "KOREKSI"){
 				$nomorUrutSebelumnya = $this->urutTerakhir - 1;
-				$beforeThis = mysql_fetch_array(mysql_query("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
-				$getAllTahapSebelumnya = mysql_query("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
+				$beforeThis = sqlArray(sqlQuery("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+				$getAllTahapSebelumnya = sqlQuery("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
 				$arrayID = array();
-				while($rows = mysql_fetch_array($getAllTahapSebelumnya)){
+				while($rows = sqlArray($getAllTahapSebelumnya)){
 					$id_anggaran = $rows['id_anggaran'];
 					$c1 = $rows['c1'];
 					$c = $rows['c'];
@@ -397,12 +397,12 @@ class plafon_v2Obj  extends DaftarObj2{
 							array_push($arrayID,$id_anggaran);
 							$Condition= join(' and ',$arrayID);		
 							$Condition = $Condition =='' ? '':' Where '.$Condition;
-							$resultBidang = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+							$resultBidang = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 							if($resultBidang  == 0){
 							    $concat = $c1.'.'.$c;
 								$arrKondisi[] = "concat(c1,'.',c) != '$concat' ";	
 							}else{
-								$resultUrusan = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+								$resultUrusan = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 								if($resultUrusan  == 0){
 								 	$concat = $c1;
 									$arrKondisi[] = "c1 != '$concat' ";	
@@ -416,10 +416,10 @@ class plafon_v2Obj  extends DaftarObj2{
 			}elseif($this->jenisFormTerakhir == "VALIDASI"){
 				$arrKondisi[] =  "no_urut = '$this->urutTerakhir'";
 			}else{
-				$getAll = mysql_query("select * from view_plafon where no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran' and d = '00' and c ='00'");
-				while($rows = mysql_fetch_array($getAll)){
+				$getAll = sqlQuery("select * from view_plafon where no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran' and d = '00' and c ='00'");
+				while($rows = sqlArray($getAll)){
 					$c1 = $rows['c1'];
-					if(mysql_num_rows(mysql_query("select * from view_plafon where c1 ='$c1' and d!='00' and no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran'")) == 0){
+					if(sqlNumRow(sqlQuery("select * from view_plafon where c1 ='$c1' and d!='00' and no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran'")) == 0){
 						$arrKondisi[] = " c1 !='$c1' ";
 					}
 				}
@@ -431,15 +431,15 @@ class plafon_v2Obj  extends DaftarObj2{
 
 		//hidden if fucking colomn is empty			
 		$queryGetAll = "select * from view_plafon where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' ";
-		$execute = mysql_query($queryGetAll);
-		while($rows = mysql_fetch_array($execute)){
+		$execute = sqlQuery($queryGetAll);
+		while($rows = sqlArray($execute)){
 			$c1 = $rows['c1'];
 			$c = $rows['c'];
 			$d = $rows['d'];
-			$getUrusan = mysql_num_rows(mysql_query("select * from view_plafon where c1 = '$c1' and c !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+			$getUrusan = sqlNumRow(sqlQuery("select * from view_plafon where c1 = '$c1' and c !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
 			if($getUrusan > 0){
 				$queryGetBidang = "select * from tabel_anggaran where c1='$c1' and c = '$c'  and d != '00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'";
-				$getBidang = mysql_num_rows(mysql_query($queryGetBidang));
+				$getBidang = sqlNumRow(sqlQuery($queryGetBidang));
 				if($getBidang > 0){
 				}else{
 					if($c == '00'){
@@ -461,10 +461,10 @@ class plafon_v2Obj  extends DaftarObj2{
 		$arrKondisi[] = "jenis_anggaran = '$this->jenisAnggaran'";
 		$Kondisi= join(' and ',$arrKondisi);		
 		$Kondisi = $Kondisi =='' ? '':' Where '.$Kondisi;
-		$getIdTahap = mysql_fetch_array(mysql_query("select max(id_tahap) from view_plafon where jenis_anggaran ='$this->jenisAnggaran' and tahun = '$this->tahun'"));
+		$getIdTahap = sqlArray(sqlQuery("select max(id_tahap) from view_plafon where jenis_anggaran ='$this->jenisAnggaran' and tahun = '$this->tahun'"));
 		$idTahap = $getIdTahap['max(id_tahap)'];
 		$qry = "select * from view_plafon $Kondisi ";
-		$aqry = mysql_query($qry);
+		$aqry = sqlQuery($qry);
 		
 				
 		//MULAI Halaman Laporan ------------------------------------------------------------------------------------------ 
@@ -511,26 +511,26 @@ class plafon_v2Obj  extends DaftarObj2{
 		$pid = '';
 		$no_cek = 0;
 		$no = 1;
-		while($daqry = mysql_fetch_array($aqry)){
+		while($daqry = sqlArray($aqry)){
 			foreach ($daqry as $key => $value) { 
 				  $$key = $value; 
 			} 
 			if($c == '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				    $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
+				    $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
 					$nama_skpd = "<span style='font-weight:bold;'>". $get['nm_skpd'] ."</span>";
-					$getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and id_tahap = '$idTahap'"));
+					$getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and id_tahap = '$idTahap'"));
 					$jumlah = $getJumlah['jumlah'];
 					$kode = $c1;
 				 }elseif($c != '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style='font-weight:bold; margin-left:5px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and id_tahap = '$idTahap'"));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and id_tahap = '$idTahap'"));
 					$jumlah = $getJumlah['jumlah'];
 					$kode = $c1.".".$c;
 				 }elseif($c != '00' && $d !='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style=' margin-left:10px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and id_tahap = '$idTahap'"));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and id_tahap = '$idTahap'"));
 					 $jumlah = $getJumlah['jumlah'];
 					 $kode = $c1.".".$c.".".$d;
 				 }
@@ -563,7 +563,7 @@ class plafon_v2Obj  extends DaftarObj2{
 				  $$key = $value; 
 			} 
 			$queryRows = "select * from tabel_anggaran where id_anggaran = '$idAwal'";
-			$getPlafonnya = mysql_fetch_array(mysql_query($queryRows));
+			$getPlafonnya = sqlArray(sqlQuery($queryRows));
 			foreach ($getPlafonnya as $key => $value) { 
 				  $$key = $value; 
 			} 
@@ -572,7 +572,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			if($this->jenisForm !='KOREKSI'){
 				$err = "Tahap Koreksi Telah Habis";
 			}else{
-				$cekUrusan =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
+				$cekUrusan =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
 					if($cekUrusan > 0 ){
 						
 					}else{
@@ -593,10 +593,10 @@ class plafon_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= "mampir";
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 					
-					$cekBidang =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekBidang =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekBidang > 0 ){
 						
 					}else{
@@ -618,7 +618,7 @@ class plafon_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 			
 			
@@ -639,13 +639,13 @@ class plafon_v2Obj  extends DaftarObj2{
 								"nama_modul" => $this->modul
 										
  								);			
-			$cekSKPD =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+			$cekSKPD =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekSKPD > 0 ){
-						$getID = mysql_fetch_array(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+						$getID = sqlArray(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					    $idnya = $getID['id_anggaran'];
-						mysql_query("update tabel_anggaran set jumlah = '$jumlah' where id_anggaran='$idnya'");
+						sqlQuery("update tabel_anggaran set jumlah = '$jumlah' where id_anggaran='$idnya'");
 					}else{
-						mysql_query(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
+						sqlQuery(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
 						$content .=VulnWalkerInsert("tabel_anggaran", $dataSesuai);	
 					}
 			}
@@ -662,7 +662,7 @@ class plafon_v2Obj  extends DaftarObj2{
 				  $$key = $value; 
 			} 
 			$queryRows = "select * from tabel_anggaran where id_anggaran = '$idAwal'";
-			$getPlafonnya = mysql_fetch_array(mysql_query($queryRows));
+			$getPlafonnya = sqlArray(sqlQuery($queryRows));
 			foreach ($getPlafonnya as $key => $value) { 
 				  $$key = $value; 
 			} 
@@ -671,7 +671,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			 if($this->jenisForm !='KOREKSI'){
 				$err = "Tahap Koreksi Telah Habis";
 			 }else{
-			 	 $cekUrusan =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
+			 	 $cekUrusan =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='00' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0'  and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap'"));
 					if($cekUrusan > 0 ){
 						
 					}else{
@@ -692,10 +692,10 @@ class plafon_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= "mampir";
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 					
-					$cekBidang =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+					$cekBidang =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '00' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekBidang > 0 ){
 						
 					}else{
@@ -717,7 +717,7 @@ class plafon_v2Obj  extends DaftarObj2{
 										);
 						$query = VulnWalkerInsert("tabel_anggaran", $data);
 						$content .= $query;
-						mysql_query($query)	;				
+						sqlQuery($query)	;				
 					}
 			 
 			 
@@ -737,13 +737,13 @@ class plafon_v2Obj  extends DaftarObj2{
 								"nama_modul" => $this->modul
  								);			
 			
-			$cekSKPD =  mysql_num_rows(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+			$cekSKPD =  sqlNumRow(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					if($cekSKPD > 0 ){
-						$getID = mysql_fetch_array(mysql_query("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
+						$getID = sqlArray(sqlQuery("select * from tabel_anggaran where c1 = '$cmbUrusanForm' and c='$cmbBidangForm' and d = '$d' and e='00' and e1='000' and bk='0' and ck='0' and p = '0' and q='0' and p = '00' and q='00'   and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and id_tahap = '$this->idTahap' "));
 					    $idnya = $getID['id_anggaran'];
-						mysql_query("update tabel_anggaran set jumlah = '$angkaKoreksi' where id_anggaran='$idnya'");
+						sqlQuery("update tabel_anggaran set jumlah = '$angkaKoreksi' where id_anggaran='$idnya'");
 					}else{
-						mysql_query(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
+						sqlQuery(VulnWalkerInsert("tabel_anggaran", $dataSesuai));	
 						$content ="sini";
 					}
 			 }
@@ -770,7 +770,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			 				'tanggal_validasi' => date("Y-m-d")
 			 				);
 			 $query = VulnWalkerUpdate("tabel_anggaran",$data," id_anggaran = '$plafon_v2_idplh'");
-			 mysql_query($query);
+			 sqlQuery($query);
 		break;
 	    }
 		
@@ -781,7 +781,7 @@ class plafon_v2Obj  extends DaftarObj2{
 			 $data = array( "catatan" => $catatan
 			 				);
 			 $query = VulnWalkerUpdate("tabel_anggaran",$data," id_anggaran = '$id'");
-			 mysql_query($query);
+			 sqlQuery($query);
 
 			$content .= $query;
 		    break;
@@ -799,14 +799,14 @@ class plafon_v2Obj  extends DaftarObj2{
 			
 
 			$qry = "SELECT * FROM tabel_anggaran WHERE id_anggaran = '$idplh' ";$cek=$qry;
-			$aqry = mysql_query($qry);
-			$dt = mysql_fetch_array($aqry);
+			$aqry = sqlQuery($qry);
+			$dt = sqlArray($aqry);
 			$username = $_COOKIE['coID'];
 			$user_validasi = $dt['user_validasi'];
 			$user_update = $dt['user_update'];
 
 			if($username != $user_validasi && $dt['status_validasi'] == '1') {
-				$getNamaOrang = mysql_fetch_array(mysql_query("select * from admin where uid = '$user_validasi'"));
+				$getNamaOrang = sqlArray(sqlQuery("select * from admin where uid = '$user_validasi'"));
 				$err = "Data Sudah di Validasi, Perubahan Hanya Bisa Dilakukan oleh ".$getNamaOrang['nama']." !";
 			}else{
 				if($username == $user_update){
@@ -836,14 +836,14 @@ class plafon_v2Obj  extends DaftarObj2{
 			if($this->jenisForm  !='KOREKSI'){
 				$err = "Tahap Koreksi Telah Habis";
 			}else{
-				$getData = mysql_fetch_array(mysql_query("SELECT * FROM tabel_anggaran WHERE id_anggaran = '$idAwal'"));
+				$getData = sqlArray(sqlQuery("SELECT * FROM tabel_anggaran WHERE id_anggaran = '$idAwal'"));
 			foreach ($getData as $key => $value) { 
 				  $$key = $value; 
 			}
-			$getMaxID = mysql_fetch_array(mysql_query("select max(id_anggaran) as maxID from tabel_anggaran where tahun = '$tahun'  and c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and p='$p' and q='$q' and jenis_anggaran = '$jenis_anggaran'  ")); 
+			$getMaxID = sqlArray(sqlQuery("select max(id_anggaran) as maxID from tabel_anggaran where tahun = '$tahun'  and c1 ='$c1' and c='$c' and d='$d' and e='$e' and e1='$e1' and p='$p' and q='$q' and jenis_anggaran = '$jenis_anggaran'  ")); 
 			$maxID = $getMaxID['maxID'];
 			$aqry = "select * from tabel_anggaran where id_anggaran ='$maxID' ";
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			if($dt['id_tahap'] != $this->idTahap){
 				$err = "Data Belum Di Koreksi ";
 			}
@@ -886,10 +886,10 @@ class plafon_v2Obj  extends DaftarObj2{
 			"";
 	}
    function setPage_OtherScript(){
-   $angka = mysql_num_rows(mysql_query("select * from view_plafon where id_tahap='$this->idTahap'"));
+   $angka = sqlNumRow(sqlQuery("select * from view_plafon where id_tahap='$this->idTahap'"));
    if($this->jenisForm == "KOREKSI"){
    	 $noUrutKoreksi  = $this->nomorUrut - 1;
-   	 $angka = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut ='$noUrutKoreksi'"));
+   	 $angka = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut ='$noUrutKoreksi'"));
    }
 		$scriptload = 
 					"<script>
@@ -950,7 +950,7 @@ class plafon_v2Obj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		if($err == ''){
 			$aqry = "SELECT * FROM  tabel_anggaran WHERE id_anggaran='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$fm = $this->setForm($dt);
 		}
 		
@@ -994,7 +994,7 @@ class plafon_v2Obj  extends DaftarObj2{
      $cek .= $codeAndNameskpd;
 
 	  	$query = "select * from ref_skpd " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 
 $comboBoxUrusanForm = cmbQuery('cmbUrusanForm', $selectedUrusan, $codeAndNameUrusan,' '.$cmbRo.' onChange=\''.$this->Prefix.'.BidangAfterform()\'','-- Pilih Semua --');
 	
@@ -1126,21 +1126,21 @@ if($_COOKIE['cofmSKPD']!='00'){
 	 if($this->jenisForm == 'PENYUSUNAN'){
 	 
 				 if($c == '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				    $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
+				    $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
 					$nama_skpd = "<span style='font-weight:bold;'>". $get['nm_skpd'] ."</span>";
-					$getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1'"));
+					$getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1'"));
 					$jumlah = $getJumlah['jumlah'];
 					$kode = $c1;
 				 }elseif($c != '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style='font-weight:bold; margin-left:5px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c'"));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c'"));
 					$jumlah = $getJumlah['jumlah'];
 					$kode = $c1.".".$c;
 				 }elseif($c != '00' && $d !='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style=' margin-left:10px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d'"));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d'"));
 					 $jumlah = $getJumlah['jumlah'];
 					 $kode = $c1.".".$c.".".$d;
 				 }
@@ -1172,12 +1172,12 @@ if($_COOKIE['cofmSKPD']!='00'){
 	 //TAHAP PENYUSUNAN
 	 }elseif($this->jenisForm=="KOREKSI"){
 	 		 if($c == '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				    $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
+				    $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
 					$nama_skpd = "<span style='font-weight:bold;'>". $get['nm_skpd'] ."</span>";
 					$nomorUrutSebelumnya = $this->nomorUrut - 1;
-					$getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and no_urut = '$nomorUrutSebelumnya'"));
+					$getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and no_urut = '$nomorUrutSebelumnya'"));
 					$jumlah = $getJumlah['jumlah'];
-					$getKoreksi = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1'   and no_urut = '$this->nomorUrut'  "));
+					$getKoreksi = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1'   and no_urut = '$this->nomorUrut'  "));
 					$angkaKoreksi = number_format($getKoreksi['jumlah'],2,',','.');
 					$bertambahBerkurang =  $getKoreksi['jumlah'] - $jumlah ;
 					 if($bertambahBerkurang < 0){
@@ -1191,12 +1191,12 @@ if($_COOKIE['cofmSKPD']!='00'){
 					 }
 					 $kode = $c1;
 				 }elseif($c != '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style='font-weight:bold; margin-left:5px;'>". $get['nm_skpd'] ."</span>";
 					 $nomorUrutSebelumnya = $this->nomorUrut - 1;
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and no_urut = '$nomorUrutSebelumnya'  "));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and no_urut = '$nomorUrutSebelumnya'  "));
 					 $jumlah = $getJumlah['jumlah'];
-					 $getKoreksi = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c'  and no_urut = '$this->nomorUrut'  "));
+					 $getKoreksi = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c'  and no_urut = '$this->nomorUrut'  "));
 					 $angkaKoreksi = number_format($getKoreksi['jumlah'],2,',','.');
 					 $bertambahBerkurang =  $getKoreksi['jumlah'] - $jumlah ;
 					 if($bertambahBerkurang < 0){
@@ -1212,18 +1212,18 @@ if($_COOKIE['cofmSKPD']!='00'){
 				 }elseif($c != '00' && $d !='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
 				 	 
 					 $nomorUrutSebelumnya = $this->nomorUrut - 1;
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$nomorUrutSebelumnya'  "));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$nomorUrutSebelumnya'  "));
 					 $jumlah = $getJumlah['jumlah'];
-					 $getKoreksi = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->nomorUrut'  "));
+					 $getKoreksi = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->nomorUrut'  "));
 					 $angkaKoreksi = number_format($getKoreksi['jumlah'],2,',','.');
-					 $thisTahap = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->nomorUrut'  "));
+					 $thisTahap = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->nomorUrut'  "));
 					 if($thisTahap == 1){
 					 	$tanda = "";
 					 }else{
 					 	$tanda = " color : red ;";
 					 }
 					 $nama_skpd = "<span style='margin-left:10px; $tanda'>". $get['nm_skpd'] ."</span>";
-					 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
+					 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style='margin-left:10px; $tanda'>". $get['nm_skpd'] ."</span>";
 					 $bertambahBerkurang =  $getKoreksi['jumlah'] - $jumlah ;
 					 if($bertambahBerkurang < 0){
@@ -1254,11 +1254,11 @@ if($_COOKIE['cofmSKPD']!='00'){
 	 }else{
 	 	if($this->jenisFormTerakhir == "KOREKSI"){
 			if($c == '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				    $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
+				    $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
 					$nama_skpd = "<span style='font-weight:bold;'>". $get['nm_skpd'] ."</span>";
-					$getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and no_urut = '$this->urutSebelumnya'"));
+					$getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and no_urut = '$this->urutSebelumnya'"));
 					$jumlah = $getJumlah['jumlah'];
-					$getKoreksi = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1'   and no_urut = '$this->urutTerakhir'  "));
+					$getKoreksi = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1'   and no_urut = '$this->urutTerakhir'  "));
 					$angkaKoreksi = number_format($getKoreksi['jumlah'],2,',','.');
 					$bertambahBerkurang =  $getKoreksi['jumlah'] - $jumlah ;
 					 if($bertambahBerkurang < 0){
@@ -1272,11 +1272,11 @@ if($_COOKIE['cofmSKPD']!='00'){
 					 }
 					 $kode = $c1;
 				 }elseif($c != '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style='font-weight:bold; margin-left:5px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and no_urut = '$this->urutSebelumnya'  "));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and no_urut = '$this->urutSebelumnya'  "));
 					 $jumlah = $getJumlah['jumlah'];
-					 $getKoreksi = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and  no_urut = '$this->urutTerakhir'  "));
+					 $getKoreksi = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and  no_urut = '$this->urutTerakhir'  "));
 					 $angkaKoreksi = number_format($getKoreksi['jumlah'],2,',','.');
 					 $bertambahBerkurang =  $getKoreksi['jumlah'] - $jumlah ;
 					 if($bertambahBerkurang < 0){
@@ -1290,13 +1290,13 @@ if($_COOKIE['cofmSKPD']!='00'){
 					 }
 					 $kode = $c1.".".$c;
 				 }elseif($c != '00' && $d !='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->urutSebelumnya'  "));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->urutSebelumnya'  "));
 					 $jumlah = $getJumlah['jumlah'];
-					 $getKoreksi = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->urutTerakhir'  "));
+					 $getKoreksi = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->urutTerakhir'  "));
 					 $angkaKoreksi = number_format($getKoreksi['jumlah'],2,',','.');
-					 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
+					 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
 					 
-					 $thisTahap = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->urutTerakhir'  "));
+					 $thisTahap = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and no_urut = '$this->urutTerakhir'  "));
 					 if($thisTahap == 1){
 					 	$tanda = "";
 					 }else{
@@ -1325,21 +1325,21 @@ if($_COOKIE['cofmSKPD']!='00'){
 			 $Koloms[] = array('align="right"',$bertambahBerkurang);
 		}elseif($this->jenisFormTerakhir == "PENYUSUNAN"){
 				if($c == '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				    $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
+				    $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='00' and d = '00' and e='00' and e1='000'" ));
 					$nama_skpd = "<span style='font-weight:bold;'>". $get['nm_skpd'] ."</span>";
-					$getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and (no_urut = '$this->urutSebelumnya' OR no_urut = '$this->urutTerakhir')"));
+					$getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and (no_urut = '$this->urutSebelumnya' OR no_urut = '$this->urutTerakhir')"));
 					$jumlah = $getJumlah['jumlah'];
 					$kode = $c1;
 				 }elseif($c != '00' && $d =='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '00' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style='font-weight:bold; margin-left:5px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and (no_urut = '$this->urutSebelumnya' OR no_urut = '$this->urutTerakhir') "));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and (no_urut = '$this->urutSebelumnya' OR no_urut = '$this->urutTerakhir') "));
 					 $jumlah = $getJumlah['jumlah'];
 					 $kode = $c1.".".$c;
 				 }elseif($c != '00' && $d !='00' && $e=='00' && $e1=='000' && $bk == '0' && $ck =='0' && $p =='0' && $q=='0'  ){
-				 	 $get  = mysql_fetch_array(mysql_query("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
+				 	 $get  = sqlArray(sqlQuery("select nm_skpd from ref_skpd where c1='$c1' and c='$c' and d = '$d' and e='00' and e1='000'" ));
 					 $nama_skpd = "<span style=' margin-left:10px;'>". $get['nm_skpd'] ."</span>";
-					 $getJumlah = mysql_fetch_array(mysql_query("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and (no_urut = '$this->urutSebelumnya' OR no_urut = '$this->urutTerakhir') "));
+					 $getJumlah = sqlArray(sqlQuery("select sum(plafon) as jumlah from view_plafon where tahun='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and c1 ='$c1' and c='$c' and d='$d' and (no_urut = '$this->urutSebelumnya' OR no_urut = '$this->urutTerakhir') "));
 					 $jumlah = $getJumlah['jumlah'];
 					 $kode = $c1.".".$c.".".$d;
 				 }
@@ -1397,7 +1397,7 @@ if($_COOKIE['cofmSKPD']!='00'){
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -1482,9 +1482,9 @@ if($_COOKIE['cofmSKPD']!='00'){
 
 	 
 	 if($this->jenisFormTerakhir == "VALIDASI"){
-	 	$getJumlahSKPDYangMengisiPlafon = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' and status_validasi = '1' "));
+	 	$getJumlahSKPDYangMengisiPlafon = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' and status_validasi = '1' "));
 	 }else{
-	 	$getJumlahSKPDYangMengisiPlafon = mysql_num_rows(mysql_query("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' "));
+	 	$getJumlahSKPDYangMengisiPlafon = sqlNumRow(sqlQuery("select * from view_plafon where tahun='$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$this->noUrutTerakhirPlafon' and d!='00' "));
 	 }
 	 
 	 
@@ -1609,10 +1609,10 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		
 		
 		if($this->jenisForm == 'PENYUSUNAN'){
-			$getAll = mysql_query("select * from view_plafon where id_tahap='$this->idTahap' and d = '00' and c ='00'");
-			while($rows = mysql_fetch_array($getAll)){
+			$getAll = sqlQuery("select * from view_plafon where id_tahap='$this->idTahap' and d = '00' and c ='00'");
+			while($rows = sqlArray($getAll)){
 				$c1 = $rows['c1'];
-				if(mysql_num_rows(mysql_query("select * from view_plafon where c1 ='$c1' and d!='00' and id_tahap = '$this->idTahap'")) == 0){
+				if(sqlNumRow(sqlQuery("select * from view_plafon where c1 ='$c1' and d!='00' and id_tahap = '$this->idTahap'")) == 0){
 					$arrKondisi[] = " c1 !='$c1' ";
 				}
 			}
@@ -1621,10 +1621,10 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 			$arrKondisi[] = " jenis_anggaran = '$this->jenisAnggaran'";
 		}elseif($this->jenisForm == 'KOREKSI'){
 			$nomorUrutSebelumnya = $this->nomorUrut - 1;
-			$beforeThis = mysql_fetch_array(mysql_query("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
-			$getAllTahapSebelumnya = mysql_query("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
+			$beforeThis = sqlArray(sqlQuery("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+			$getAllTahapSebelumnya = sqlQuery("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
 			$arrayID = array();
-			while($rows = mysql_fetch_array($getAllTahapSebelumnya)){
+			while($rows = sqlArray($getAllTahapSebelumnya)){
 				$id_anggaran = $rows['id_anggaran'];
 				$c1 = $rows['c1'];
 				$c = $rows['c'];
@@ -1635,12 +1635,12 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 						array_push($arrayID,$id_anggaran);
 						$Condition= join(' and ',$arrayID);		
 						$Condition = $Condition =='' ? '':' Where '.$Condition;
-						$resultBidang = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+						$resultBidang = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 						if($resultBidang  == 0){
 						    $concat = $c1.'.'.$c;
 							$arrKondisi[] = "concat(c1,'.',c) != '$concat' ";	
 						}else{
-							$resultUrusan = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+							$resultUrusan = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 							if($resultUrusan  == 0){
 							 	$concat = $c1;
 								$arrKondisi[] = "c1 != '$concat' ";	
@@ -1656,10 +1656,10 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		}else{
 			if($this->jenisFormTerakhir == "KOREKSI"){
 				$nomorUrutSebelumnya = $this->urutTerakhir - 1;
-				$beforeThis = mysql_fetch_array(mysql_query("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
-				$getAllTahapSebelumnya = mysql_query("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
+				$beforeThis = sqlArray(sqlQuery("select * from view_plafon where no_urut = '$nomorUrutSebelumnya' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+				$getAllTahapSebelumnya = sqlQuery("select * from view_plafon where d !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' and no_urut ='$nomorUrutSebelumnya'   ");
 				$arrayID = array();
-				while($rows = mysql_fetch_array($getAllTahapSebelumnya)){
+				while($rows = sqlArray($getAllTahapSebelumnya)){
 					$id_anggaran = $rows['id_anggaran'];
 					$c1 = $rows['c1'];
 					$c = $rows['c'];
@@ -1670,12 +1670,12 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 							array_push($arrayID,$id_anggaran);
 							$Condition= join(' and ',$arrayID);		
 							$Condition = $Condition =='' ? '':' Where '.$Condition;
-							$resultBidang = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+							$resultBidang = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1' and c = '$c' and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 							if($resultBidang  == 0){
 							    $concat = $c1.'.'.$c;
 								$arrKondisi[] = "concat(c1,'.',c) != '$concat' ";	
 							}else{
-								$resultUrusan = mysql_num_rows(mysql_query("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
+								$resultUrusan = sqlNumRow(sqlQuery("select * from view_plafon $Condition and d !='00' and c1 ='$c1'  and tahun ='$this->tahun' and jenis_anggaran ='$this->jenisAnggaran' and no_urut = '$nomorUrutSebelumnya' "));
 								if($resultUrusan  == 0){
 								 	$concat = $c1;
 									$arrKondisi[] = "c1 != '$concat' ";	
@@ -1687,10 +1687,10 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 				
 				$arrKondisi[] =  "no_urut = '$nomorUrutSebelumnya' ";
 			}else{
-				$getAll = mysql_query("select * from view_plafon where no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran' and d = '00' and c ='00'");
-				while($rows = mysql_fetch_array($getAll)){
+				$getAll = sqlQuery("select * from view_plafon where no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran' and d = '00' and c ='00'");
+				while($rows = sqlArray($getAll)){
 					$c1 = $rows['c1'];
-					if(mysql_num_rows(mysql_query("select * from view_plafon where c1 ='$c1' and d!='00' and no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran'")) == 0){
+					if(sqlNumRow(sqlQuery("select * from view_plafon where c1 ='$c1' and d!='00' and no_urut = '$this->urutTerakhir' and tahun='$this->tahun' and jenis_anggaran='$this->jenisAnggaran'")) == 0){
 						$arrKondisi[] = " c1 !='$c1' ";
 					}
 				}
@@ -1702,15 +1702,15 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 
 		//hidden if fucking colomn is empty			
 		$queryGetAll = "select * from view_plafon where tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran' ";
-		$execute = mysql_query($queryGetAll);
-		while($rows = mysql_fetch_array($execute)){
+		$execute = sqlQuery($queryGetAll);
+		while($rows = sqlArray($execute)){
 			$c1 = $rows['c1'];
 			$c = $rows['c'];
 			$d = $rows['d'];
-			$getUrusan = mysql_num_rows(mysql_query("select * from view_plafon where c1 = '$c1' and c !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
+			$getUrusan = sqlNumRow(sqlQuery("select * from view_plafon where c1 = '$c1' and c !='00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'"));
 			if($getUrusan > 0){
 				$queryGetBidang = "select * from tabel_anggaran where c1='$c1' and c = '$c'  and d != '00' and tahun = '$this->tahun' and jenis_anggaran = '$this->jenisAnggaran'";
-				$getBidang = mysql_num_rows(mysql_query($queryGetBidang));
+				$getBidang = sqlNumRow(sqlQuery($queryGetBidang));
 				if($getBidang > 0){
 				}else{
 					if($c == '00'){
@@ -1778,12 +1778,12 @@ $fmORDER1 = $_REQUEST['fmORDER1'];
 		$cek = "";
 		$err = "";
 		for($i = 0; $i<count($ids); $i++)	{
-			$getData = mysql_fetch_array(mysql_query("select * from view_plafon where id_anggaran ='$ids[$i]' "));
+			$getData = sqlArray(sqlQuery("select * from view_plafon where id_anggaran ='$ids[$i]' "));
 			if($getData['status_validasi'] == '1'){
 				
 			}else{
 				$qy = "DELETE FROM $this->TblName_Hapus WHERE id_anggaran='".$ids[$i]."' ";
-				$qry = mysql_query($qy);
+				$qry = sqlQuery($qy);
 			}
 							
 				
@@ -1874,9 +1874,9 @@ $plafon_v2->wajibValidasi = $Main->wajibValidasi;
 
 if(empty($plafon_v2->tahun)){
     
-	$get1 = mysql_fetch_array(mysql_query("select max(id_anggaran)  from view_plafon "));
+	$get1 = sqlArray(sqlQuery("select max(id_anggaran)  from view_plafon "));
 	$maxAnggaran = $get1['max(id_anggaran)'];
-	$get2 = mysql_fetch_array(mysql_query("select * from view_plafon where id_anggaran = '$maxAnggaran'"));
+	$get2 = sqlArray(sqlQuery("select * from view_plafon where id_anggaran = '$maxAnggaran'"));
 	/*$plafon_v2->tahun = "select max(id_anggaran) as max from view_plafon where nama_modul = 'PLAFON'";*/
 	$plafon_v2->tahun  = $get2['tahun'];
 	$plafon_v2->jenisAnggaran = $get2['jenis_anggaran'];
@@ -1886,7 +1886,7 @@ if(empty($plafon_v2->tahun)){
 	
 	
 	$idtahapTerakhir = $get2['id_tahap'];
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$idtahapTerakhir'"));
 	$plafon_v2->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$plafon_v2->jenisFormTerakhir =  $namaTahap['jenis_form_modul'];
 	$plafon_v2->noUrutTerakhirPlafon = $namaTahap['no_urut'];
@@ -1899,10 +1899,10 @@ if(empty($plafon_v2->tahun)){
 	$arrayHasil =  VulnWalkerLASTTahap_v2();
 	$plafon_v2->currentTahap = $arrayHasil['currentTahap'];
 }else{
-	$getCurrenttahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$plafon_v2->idTahap'"));
+	$getCurrenttahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$plafon_v2->idTahap'"));
 	$plafon_v2->currentTahap = $getCurrenttahap['nama_tahap'];
 	
-	$namaTahap = mysql_fetch_array(mysql_query("select * from ref_tahap_anggaran where id_tahap = '$plafon_v2->idTahap'"));
+	$namaTahap = sqlArray(sqlQuery("select * from ref_tahap_anggaran where id_tahap = '$plafon_v2->idTahap'"));
 	$plafon_v2->jenisFormTerakhir =  $namaTahap['jenis_form_modul'];
 	$plafon_v2->namaTahapTerakhir = $namaTahap['nama_tahap'];
 	$plafon_v2->noUrutTerakhirPlafon = $namaTahap['no_urut'];

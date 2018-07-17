@@ -91,24 +91,24 @@ class ref_skpdObj  extends DaftarObj2{
 			for($j=0;$j<5;$j++){
 	//urutan kode skpd 	
 		if($j==0){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_skpd where b1!='00' and c ='00' and d ='00' and e ='00' and e1 ='000' Order By b1 DESC limit 1"));
+			$ck=sqlArray(sqlQuery("Select * from ref_skpd where b1!='00' and c ='00' and d ='00' and e ='00' and e1 ='000' Order By b1 DESC limit 1"));
 			if($kode1=='00') {$err= 'Format Kode urusan salah';}
 			elseif($kode1>sprintf("%02s",$ck['b1']+1)){ $err= 'Format Kode urusan Harus berurutan';}
 				
 		}elseif($j==1){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_skpd where b1='".$kode1."' and c !='00' and d ='00' and e ='00' and e1 ='000' Order By c DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_skpd where b1='".$kode1."' and c !='00' and d ='00' and e ='00' and e1 ='000' Order By c DESC limit 1"));	
 			if ($kode2>sprintf("%02s",$ck['c']+1)) {$err= 'Format Kode bidang Harus berurutan';}		
 			
 		}elseif($j==2){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_skpd where b1='".$kode1."' and c ='".$kode2."' and d !='00' and e ='00' and e1 ='000' Order By d DESC limit 1"));			
+			$ck=sqlArray(sqlQuery("Select * from ref_skpd where b1='".$kode1."' and c ='".$kode2."' and d !='00' and e ='00' and e1 ='000' Order By d DESC limit 1"));			
 			if ($kode3>sprintf("%02s",$ck['d']+1)) {$err= 'Format Kode SKPD Harus berurutan';}		
 				
 		}elseif($j==3){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_skpd where b1='".$kode1."' and c ='".$kode2."' and d ='".$kode3."' and e!='00' and e1='000' Order By e DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_skpd where b1='".$kode1."' and c ='".$kode2."' and d ='".$kode3."' and e!='00' and e1='000' Order By e DESC limit 1"));	
 			if ($kode4>sprintf("%02s",$ck['e']+1)) {$err= 'Format Kode unit Harus berurutan';}
 		
 		}elseif($j==4){
-			$ck=mysql_fetch_array(mysql_query("Select * from ref_skpd where b1='".$kode1."' and c ='".$kode2."' and d ='".$kode3."' and e ='".$kode4."' and e1!='000' Order By e1 DESC limit 1"));	
+			$ck=sqlArray(sqlQuery("Select * from ref_skpd where b1='".$kode1."' and c ='".$kode2."' and d ='".$kode3."' and e ='".$kode4."' and e1!='000' Order By e1 DESC limit 1"));	
 			if ($kode5>sprintf("%02s",$ck['e1']+1)) {$err= 'Format Kode SubUnit Harus berurutan';}
 				
 				
@@ -118,16 +118,16 @@ class ref_skpdObj  extends DaftarObj2{
 			
 			
 			if($fmST == 0){
-			$ck1=mysql_fetch_array(mysql_query("Select * from ref_skpd where b1='$kode1' and c ='$kode2' and d ='$kode3' and e='$kode4' and e1='$kode5'"));
+			$ck1=sqlArray(sqlQuery("Select * from ref_skpd where b1='$kode1' and c ='$kode2' and d ='$kode3' and e='$kode4' and e1='$kode5'"));
 			if ($ck1>=1)$err= 'Gagal Simpan'.mysql_error();
 				if($err==''){
 					$aqry = "INSERT into ref_skpd (b1,c,d,e,e1,nm_skpd) values('$kode1','$kode2','$kode3','$kode4','$kode5','$nama_skpd')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_skpd SET nm_skpd='$nama_skpd' WHERE b1='$kode1' and c='$kode2' and d='$kode3' and e='$kode4' and e1='$kode5'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 						
 					}
 			} //end else
@@ -224,7 +224,7 @@ class ref_skpdObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_skpd WHERE b1='$b1' and c='$c' and d='$d' and e='$e' and e1='$e1' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -247,7 +247,7 @@ class ref_skpdObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		$kode1=genNumber($dt['b1'],2);
 		$kode2=genNumber($dt['c'],2);
 		$kode3=genNumber($dt['d'],2);

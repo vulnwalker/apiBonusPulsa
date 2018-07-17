@@ -40,9 +40,9 @@ function NoPenetapanGub()
 {
 	global $HTTP_POST_VARS,$HTTP_GET_VARS,$fmSKGUBNO;
 	$str = "";
-	$Qry = mysql_query("select skgub_no from penetapan group by skgub_no order by skgub_no desc");
+	$Qry = sqlQuery("select skgub_no from penetapan group by skgub_no order by skgub_no desc");
 	$ops = "<option value=''>Semua No SK</option>";
-	while ($isi = mysql_fetch_array($Qry))
+	while ($isi = sqlArray($Qry))
 	{
 		$sel = $fmSKGUBNO == $isi['skgub_no'] ? "selected":""; 
 		$ops .= "<option $sel value='{$isi['skgub_no']}'>{$isi['skgub_no']}</option>\n";
@@ -67,11 +67,11 @@ if(!empty($fmSKGUBNO))
 }
 
 
-//$jmlTotalHarga = mysql_query("select sum(jml_harga) as total from penetapan where $Kondisi");
-$jmlTotalHarga = mysql_query("select sum(penetapan.jml_harga) as total from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi ");
+//$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total from penetapan where $Kondisi");
+$jmlTotalHarga = sqlQuery("select sum(penetapan.jml_harga) as total from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi ");
 
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -80,9 +80,9 @@ else
 
 //echo "select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang on concat(penetapan.f,penetapan.g,penetapan.h,penetapan.i,penetapan.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
 
-$Qry = mysql_query("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
-$jmlDataDPSB = mysql_num_rows($Qry);
-$Qry = mysql_query("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDPSB");
+$Qry = sqlQuery("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j ");
+$jmlDataDPSB = sqlNumRow($Qry);
+$Qry = sqlQuery("select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang  using(f,g,h,i,j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j $LimitHalDPSB");
 //echo "select penetapan.*,ref_barang.nm_barang from penetapan inner join ref_barang on concat(penetapan.f,penetapan.g,penetapan.h,penetapan.i,penetapan.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
 
 // copy untuk kondisi jumlah total
@@ -96,11 +96,11 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and thn_perolehan = '$fmTahunPerolehan' ";
 }
 
-$jmlTotalHarga = mysql_query("select sum(jml_harga) as total  from penetapan where $KondisiTotal ");
-$fmSKGUBTGL = mysql_fetch_array(mysql_query("select skgub_tgl from penetapan where $Kondisi "));
+$jmlTotalHarga = sqlQuery("select sum(jml_harga) as total  from penetapan where $KondisiTotal ");
+$fmSKGUBTGL = sqlArray(sqlQuery("select skgub_tgl from penetapan where $Kondisi "));
 
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -114,7 +114,7 @@ $cb=0;
 $jmlTampilDPSB = 0;
 
 $ListBarangDPSB = "";
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilDPSB++;
 	$JmlTotalHargaListDPSB += $isi['jml_harga'];
@@ -122,8 +122,8 @@ while ($isi = mysql_fetch_array($Qry))
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangDPSB .= "
 	

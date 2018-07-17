@@ -236,10 +236,10 @@ class GantiRugiObj extends DaftarObj{
 		$TotalHalRp = 0;
 		
 		//$aqry = "select * from $this->TblName $Kondisi $Order $Limit ";	//echo $aqry;
-		//$qry = mysql_query($aqry);
+		//$qry = sqlQuery($aqry);
 		$aqry = $this->setDaftar_query($Kondisi, $Order, $Limit); $cek .= $aqry;
-		$qry = mysql_query($aqry);
-		while ( $isi=mysql_fetch_array($qry)){
+		$qry = sqlQuery($aqry);
+		while ( $isi=sqlArray($qry)){
 			$no++;
 			$jmlDataPage++;
 			if($Mode == 1) $RowAtr = $no % 2 == 1? "class='row0'" : "class='row1'";
@@ -397,19 +397,19 @@ class GantiRugiObj extends DaftarObj{
 			//Validasi Hapus
 			$kueri="select * from $this->TblName_Hapus 
 					where id = '".$cbid[$i]."' "; //echo "$kueri";
-			$data=mysql_fetch_array(mysql_query($kueri));
+			$data=sqlArray(sqlQuery($kueri));
 			if($errmsg=='' && sudahClosing($data['tgl_gantirugi'],$data['c'],$data['d']))$err = "Id ".$cbid[$i].", Tanggal Sudah Closing!";
 			//cek sudah ada penyusutan / tdk untuk data baru			
 			$oldthn_gantirugi = substr($data['tgl_gantirugi'],0,4);
 			$query_susut = "select count(*)as jml_susut from penyusutan where idbi='".$data['id_bukuinduk']."' and tahun>='$oldthn_gantirugi'";
-			$get_susut = mysql_fetch_array(mysql_query($query_susut));
+			$get_susut = sqlArray(sqlQuery($query_susut));
 			/*if($get_susut['jml_susut']>0){
 				$errmsg="Id ".$cbid[$i].", Sudah ada penyusutan !";
 			}*/
 			
 			if($err ==''){
 				$aqry = "DELETE FROM $this->TblName_Hapus WHERE id='".$cbid[$i]."'";	$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				if($qry == FALSE) $err='Gagal Hapus '.mysql_error();
 				if ($err != '') break;
 			}else{
@@ -472,7 +472,7 @@ class GantiRugiObj extends DaftarObj{
 			case 'formedit':{
 				$cbid= $_POST[$this->Prefix.'_cb'];						
 				$sqry ="select * from gantirugi where id ='".$cbid[0]."'"; //$ErrMsg = $sqry;
-				$get = mysql_fetch_array(mysql_query($sqry));
+				$get = sqlArray(sqlQuery($sqry));
 				$this->form_fields = array(
 					'tgl_gantirugi' => array( 'label'=>'Tgl. Tuntutan', 'value'=>$get['tgl_gantirugi'], 'type'=>'date','labelWidth'=>150 ),					
 					'kepada' => array( 'label'=>'Kepada', 'value'=>'', 'type'=>'', 'ttkDua'=>' ' ),
@@ -497,7 +497,7 @@ class GantiRugiObj extends DaftarObj{
 				//get data lama ---------------------------
 				
 				$ID = $_POST[$this->Prefix.'_idplh'];
-				$old = mysql_fetch_array( mysql_query(
+				$old = sqlArray( sqlQuery(
 					"select * from gantirugi where id = '$ID'"
 				));				
 				
@@ -508,7 +508,7 @@ class GantiRugiObj extends DaftarObj{
 				if ($ErrMsg==''){
 					if ($_POST[$this->Prefix.'_fmST']==0){//baru
 						$idbi = $_POST['idbi'];
-						$bi =  mysql_fetch_array( mysql_query(
+						$bi =  sqlArray( sqlQuery(
 							"select * from buku_induk where id = '$idbi'"
 						));	
 						if($ErrMsg=='' && $bi['thn_perolehan']< 1900) $ErrMsg = "Tahun Perolehan tidak lebih kecil dari 1900!";
@@ -519,24 +519,24 @@ class GantiRugiObj extends DaftarObj{
 				
 				
 					}else{//edit
-						$old = mysql_fetch_array(mysql_query("select * from gantirugi where id='{$_POST[$this->Prefix.'_idplh']}'" ));
+						$old = sqlArray(sqlQuery("select * from gantirugi where id='{$_POST[$this->Prefix.'_idplh']}'" ));
 						$idbi = $old['id_bukuinduk'];
 						if ($idbi == '') $ErrMsg = "Data dengan id '{$_POST[$this->Prefix.'_idplh']}' tidak ada!";
 					}							
-					$pelihara = mysql_fetch_array( mysql_query ("select max(tgl_pemeliharaan) as maxtgl from pemeliharaan where id_bukuinduk = '$idbi'"	));
+					$pelihara = sqlArray( sqlQuery ("select max(tgl_pemeliharaan) as maxtgl from pemeliharaan where id_bukuinduk = '$idbi'"	));
 					if ($ErrMsg =='' && (compareTanggal($_POST['tgl_gantirugi'], $pelihara['maxtgl'])==0 || 	compareTanggal($_POST['tgl_gantirugi'], $pelihara['maxtgl'])==1  )  ) 
 						$ErrMsg = 'Tanggal Tuntutan harus lebih besar dari Tanggal Pemeliharaan!';
-					$pengaman = mysql_fetch_array( mysql_query ("select max(tgl_pengamanan) as maxtgl from pengamanan where id_bukuinduk = '$idbi'"	));
+					$pengaman = sqlArray( sqlQuery ("select max(tgl_pengamanan) as maxtgl from pengamanan where id_bukuinduk = '$idbi'"	));
 					if ($ErrMsg =='' && (compareTanggal($_POST['tgl_gantirugi'], $pengaman['maxtgl'])==0 || compareTanggal($_POST['tgl_gantirugi'], $pengaman['maxtgl'])==1 ) ) 
 						$ErrMsg = 'Tanggal Tuntutan harus lebih besar dari Tanggal Pengamanan!';
-					$pemanfaat = mysql_fetch_array( mysql_query ("select max(tgl_pemanfaatan) as maxtgl from pemanfaatan where id_bukuinduk = '$idbi'"	));
+					$pemanfaat = sqlArray( sqlQuery ("select max(tgl_pemanfaatan) as maxtgl from pemanfaatan where id_bukuinduk = '$idbi'"	));
 					if ($ErrMsg =='' && (compareTanggal($_POST['tgl_gantirugi'], $pemanfaat['maxtgl'])==0 || compareTanggal($_POST['tgl_gantirugi'], $pemanfaat['maxtgl'])==1 )  ) 
 						$ErrMsg = 'Tanggal Tuntutan harus lebih besar dari Tanggal Pemanfaatan!';						
-					$penatausaha = mysql_fetch_array( mysql_query ("select tgl_buku from buku_induk where id = '$idbi'"	));
+					$penatausaha = sqlArray( sqlQuery ("select tgl_buku from buku_induk where id = '$idbi'"	));
 					if ($ErrMsg=='' &&  compareTanggal($_POST['tgl_gantirugi'], $penatausaha['tgl_buku'] )==0 ) 
 						$ErrMsg = 'Tanggal Tuntutan tidak lebih kecil dari Tanggal Buku!'; 	
 						
-					$hps = mysql_fetch_array(mysql_query("select max(tgl_penghapusan) as maxtgl from penghapusan_sebagian where id_bukuinduk ='$idbi'" ));
+					$hps = sqlArray(sqlQuery("select max(tgl_penghapusan) as maxtgl from penghapusan_sebagian where id_bukuinduk ='$idbi'" ));
 					if ($ErrMsg=='' && compareTanggal($hps['maxtgl'] , $_POST['tgl_gantirugi'] )==2  ) $ErrMsg = 'Tanggal Tuntutan tidak lebih kecil dari Tanggal Penghapusan Sebagian!';
 					
 				}	
@@ -544,8 +544,8 @@ class GantiRugiObj extends DaftarObj{
 				$fmTANGGALgantirugi  = $_POST['tgl_gantirugi'];
 				$thn_gantirugi = substr($fmTANGGALgantirugi,0,4);
 				$query_susut = "select count(*)as jml_susut from penyusutan where idbi='$idbi' and tahun>='$thn_gantirugi'";
-				$get_susut = mysql_fetch_array(mysql_query($query_susut));
-				$get_cd = mysql_fetch_array(mysql_query("select c,d from buku_induk where id='$idbi'"));
+				$get_susut = sqlArray(sqlQuery($query_susut));
+				$get_cd = sqlArray(sqlQuery("select c,d from buku_induk where id='$idbi'"));
 				if ($_POST[$this->Prefix.'_fmST']==0){
 					//cek sudah ada penyusutan / tdk untuk data baru			
 					/*if($get_susut['jml_susut']>0){
@@ -558,7 +558,7 @@ class GantiRugiObj extends DaftarObj{
 				}else{
 					//cek sudah ada penyusutan / tdk untuk data edit	
 					$idplh = $_POST[$this->Prefix.'_idplh'];
-					$old_gantirugi = mysql_fetch_array(mysql_query("select * from gantirugi where id='$idplh'"));
+					$old_gantirugi = sqlArray(sqlQuery("select * from gantirugi where id='$idplh'"));
 					$oldthn_gantirugi = substr($old_gantirugi['tgl_gantirugi'],0,4);
 					/*if($get_susut['jml_susut']>0 && $oldthn_gantirugi!=$thn_gantirugi){//jika ada penyusutan dan thn_pelihara lama berubah
 						$ErrMsg='Sudah ada penyusutan, data tidak bisa dirubah !';
@@ -579,7 +579,7 @@ class GantiRugiObj extends DaftarObj{
 					 	$nilaistaset="";							
 					}
 					
-					$get = mysql_fetch_array(mysql_query("select * from buku_induk where id ='".$_POST['idbi']."'"));
+					$get = sqlArray(sqlQuery("select * from buku_induk where id ='".$_POST['idbi']."'"));
 					$idbi_awal= $get['idawal'];
 					
 					$get = $this->simpan(

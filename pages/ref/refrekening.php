@@ -13,10 +13,10 @@ $ListSubKelompok = cmbQuery("fmSUBKELOMPOK",$fmSUBKELOMPOK,"select h,nm_barang f
 $ListSubSubKelompok = cmbQuery("fmSUBSUBKELOMPOK",$fmSUBSUBKELOMPOK,"select i,nm_barang from ref_barang where f='$fmBIDANG' and g ='$fmKELOMPOK' and h = '$fmSUBKELOMPOK' and i!='00' and j='000'","onChange=\"adminForm.submit()\"",'Pilih','');
 
 $Kondisi = "concat(f,g,h,i)='$fmBIDANG$fmKELOMPOK$fmSUBKELOMPOK$fmSUBSUBKELOMPOK'";
-$Qry = mysql_query("select * from ref_barang where $Kondisi and j != '000' order by f,g,h,i,j");
+$Qry = sqlQuery("select * from ref_barang where $Kondisi and j != '000' order by f,g,h,i,j");
 $ListDATA = "";
 $no=0;
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$KODEBARANG = "{$isi['f']}.{$isi['g']}.{$isi['h']}.{$isi['i']}.{$isi['j']}";

@@ -8,7 +8,7 @@ class MenuObj{
 		$arrulr = explode('/',$url);
 		$so = sizeof($arrulr);
 		$href_ = $arrulr[$so-1];
-		$get = mysql_fetch_array(mysql_query( "select * from ref_menu where href='$href_' and aktif=1 order by level desc " ));
+		$get = sqlArray(sqlQuery( "select * from ref_menu where href='$href_' and aktif=1 order by level desc " ));
 		$kode = $get['kode'];
 				
 		//create menu
@@ -19,9 +19,9 @@ class MenuObj{
 			if($level>1 && $value <> ''){
 				//ambil menu sesuai level
 				$aqry = "select * from ref_menu where kode like '$parent%' and level = $level and aktif = 1 ";
-				$qry = mysql_query(	$aqry	);
+				$qry = sqlQuery(	$aqry	);
 				$arrMenu = array();
-				while($isi= mysql_fetch_array($qry)){
+				while($isi= sqlArray($qry)){
 					$href = $isi['href'];
 					$hint = $isi['hint'];
 					$title = $isi['title'];

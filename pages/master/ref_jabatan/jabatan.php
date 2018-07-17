@@ -88,13 +88,13 @@ class JabatanObj  extends DaftarObj2{
 				
 			if($fmST == 0){
 			
-				/*$get2=mysql_fetch_array(mysql_query("SELECT toRoman(gol) as gol,ruang FROM ref_pangkat  WHERE gol='$gol' and ruang='$ruang'"));
-				$get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM ref_pangkat WHERE gol='$gol' and ruang='$ruang'"));
+				/*$get2=sqlArray(sqlQuery("SELECT toRoman(gol) as gol,ruang FROM ref_pangkat  WHERE gol='$gol' and ruang='$ruang'"));
+				$get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM ref_pangkat WHERE gol='$gol' and ruang='$ruang'"));
 				if($get['cnt']>0 ) $err='Golongan "'.$get2['gol'].'" Ruang "'.$get2['ruang'].'" Sudah Ada !';*/
 			
 				if($err==''){
 					$aqry = "INSERT into ref_jabatan (c1,c,d,jns_jabatan,nama,jumlah,status) values('$c1','$c','$d','$jns_jbt','$nm_jbt','$jumlah','$status')";	$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{
 			
@@ -102,7 +102,7 @@ class JabatanObj  extends DaftarObj2{
 
 						if($err==''){
 						$aqry = "UPDATE ref_jabatan set c='$c1',c='$c',d='$d',jns_jabatan='$jns_jbt',nama='$ruang',nama='$nm_jbt',jumlah='$jumlah',status='$status' where Id='".$idplh."'";	$cek .= $aqry;
-								$qry = mysql_query($aqry) or die(mysql_error());
+								$qry = sqlQuery($aqry) or die(mysql_error());
 						}
 				
 			
@@ -195,7 +195,7 @@ class JabatanObj  extends DaftarObj2{
 		for($i = 0; $i<count($ids); $i++)	{
 			if($err=='' ){
 					$qy = "DELETE FROM ref_pangkat WHERE Id='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;
@@ -235,7 +235,7 @@ class JabatanObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  ref_jabatan WHERE Id='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$fm = $this->setForm($dt);
 		
 		return	array ('cek'=>$cek.$fm['cek'], 'err'=>$fm['err'], 'content'=>$fm['content']);
@@ -257,7 +257,7 @@ class JabatanObj  extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -339,7 +339,7 @@ class JabatanObj  extends DaftarObj2{
      $cek .= $codeAndNameskpd;
 
 	  	$query = "select * from ref_skpd " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 
 $comboBoxUrusanForm = cmbQuery('cmbUrusanForm', $selectedUrusan, $codeAndNameUrusan,' '.$cmbRo.' onChange=\''.$this->Prefix.'.BidangAfterform()\'','-- Pilih Semua --');
 	

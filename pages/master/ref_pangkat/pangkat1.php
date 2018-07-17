@@ -96,7 +96,7 @@ class pangkatObj  extends DaftarObj2{
 		$fmNmBrg = $_REQUEST['fmNmBrg'];
 		$fmOrder = $_REQUEST['arrOrder'];
 		
-	//	$queryBidang=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
+	//	$queryBidang=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
 	
 		//$queryKelompok="SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g <> '00' and h='00' and i='000' and j='0000'" ;
 	$queryKelompok = "SELECT g, concat(g, '. ', nama) as vnama FROM ref_barang WHERE f='$Main->f' AND g <>'00' AND h='00' AND i='000' AND j='0000'";
@@ -305,7 +305,7 @@ class pangkatObj  extends DaftarObj2{
 		$cek = ''; $err=''; $content=''; $json=TRUE;
 		
 		$queryNmBrg2="SELECT max(j) as j ,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='$fmJenis2' and j <> '0000'" ; $cek.=$queryNmBrg2;
-		$get=mysql_fetch_array(mysql_query($queryNmBrg2));
+		$get=sqlArray(sqlQuery($queryNmBrg2));
 		$lastkode=$get['j'];
 		$kode = (int) substr($lastkode, 1, 3);
 		$kode++;
@@ -425,7 +425,7 @@ class pangkatObj  extends DaftarObj2{
 		$queryJenis="SELECT i,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i <>'000' and j='0000'" ;
 		$content->unit=cmbQuery('fmJenis',$fmJenis,$queryJenis,'onchange="'.$this->Prefix.'.pilihJenis2()"','--PILIH Jenis--')."<input type='button' value='Baru' onclick ='".$this->Prefix.".BaruJenis()' title='Baru' >";
 		$aqry2="SELECT MAX(j) AS maxno FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='$fmJenis2'"; $cek.=$aqry2;
-		$get1=mysql_fetch_array(mysql_query($aqry2));
+		$get1=sqlArray(sqlQuery($aqry2));
 		$lastkode1=$get1['maxno'];
 		$kode1 = (int) substr($lastkode1, 1, 4);
 		$kode1++;
@@ -446,7 +446,7 @@ class pangkatObj  extends DaftarObj2{
 	 	$fmJenis= $_REQUEST['id_jenisBaru'];
 	 
 		$aqry2="SELECT MAX(j) AS maxno FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='$fmJenis2'"; $cek.=$aqry2;
-		$get1=mysql_fetch_array(mysql_query($aqry2));
+		$get1=sqlArray(sqlQuery($aqry2));
 		$lastkode1=$get1['maxno'];
 		$kode1 = (int) substr($lastkode1, 1, 4);
 		$kode1++;
@@ -464,7 +464,7 @@ class pangkatObj  extends DaftarObj2{
 		$fmJenis3 = $_REQUEST['fmJenis3'];
 		
 		$aqry3="SELECT MAX(j) AS maxno FROM ref_barang WHERE g='$fmKelompok3' and h='$fmObjek3' and i='$fmJenis3'";
-		$get1=mysql_fetch_array(mysql_query($aqry2));
+		$get1=sqlArray(sqlQuery($aqry2));
 		$lastkode1=$get1['maxno'];
 		$kode1 = (int) substr($lastkode1, 1, 3);
 		$kode1++;
@@ -659,11 +659,11 @@ class pangkatObj  extends DaftarObj2{
 			$this->form_idplh = $cbid[0];	
 			$pil=$this->form_idplh;
 			
-			$pil4=mysql_query("SELECT count(*) as cnt, ref_barang . f ,  ref_barang . g ,  ref_barang . h ,  ref_barang . i , ref_barang . j  FROM ref_barang  INNER JOIN  t_persediaan  ON  t_persediaan . f  =  ref_barang . f  AND  t_persediaan . g  =  ref_barang . g  AND  t_persediaan . h  =  ref_barang . h  AND  t_persediaan . i  =  ref_barang . i  AND  t_persediaan . j  =  ref_barang . j where concat (ref_barang.f,' ',ref_barang.g,' ',ref_barang.h,' ',ref_barang.i,' ',ref_barang.j)='$pil'");
-			$pil5=mysql_fetch_array($pil4);
+			$pil4=sqlQuery("SELECT count(*) as cnt, ref_barang . f ,  ref_barang . g ,  ref_barang . h ,  ref_barang . i , ref_barang . j  FROM ref_barang  INNER JOIN  t_persediaan  ON  t_persediaan . f  =  ref_barang . f  AND  t_persediaan . g  =  ref_barang . g  AND  t_persediaan . h  =  ref_barang . h  AND  t_persediaan . i  =  ref_barang . i  AND  t_persediaan . j  =  ref_barang . j where concat (ref_barang.f,' ',ref_barang.g,' ',ref_barang.h,' ',ref_barang.i,' ',ref_barang.j)='$pil'");
+			$pil5=sqlArray($pil4);
 			
-			$pil41=mysql_query("SELECT count(*) as cnt, ref_barang . f ,  ref_barang . g ,  ref_barang . h ,  ref_barang . i ,  ref_barang . j  FROM  ref_barang  left JOIN  ref_mapping_akun  ON  ref_mapping_akun . f  =  ref_barang . f  AND  ref_mapping_akun . g  =  ref_barang . g  AND  ref_mapping_akun . h  =  ref_barang . h  WHERE  ref_barang . i  = 000 AND  ref_barang . j  = 0000 and concat (ref_barang.f,' ',ref_barang.g,' ',ref_barang.h,' ',ref_barang.i,' ',ref_barang.j) ='$pil'");
-			$pil51=mysql_fetch_array($pil41);
+			$pil41=sqlQuery("SELECT count(*) as cnt, ref_barang . f ,  ref_barang . g ,  ref_barang . h ,  ref_barang . i ,  ref_barang . j  FROM  ref_barang  left JOIN  ref_mapping_akun  ON  ref_mapping_akun . f  =  ref_barang . f  AND  ref_mapping_akun . g  =  ref_barang . g  AND  ref_mapping_akun . h  =  ref_barang . h  WHERE  ref_barang . i  = 000 AND  ref_barang . j  = 0000 and concat (ref_barang.f,' ',ref_barang.g,' ',ref_barang.h,' ',ref_barang.i,' ',ref_barang.j) ='$pil'");
+			$pil51=sqlArray($pil41);
 			
 			
 			if ($pil51['cnt'] > 0 ){
@@ -874,7 +874,7 @@ class pangkatObj  extends DaftarObj2{
 				$i = substr($Id, 9,3);
 				$j = substr($Id, 13,4);
 				//query ambil data ref_pegawai
-				$get = mysql_fetch_array( mysql_query("select *, concat(f,'.',g,'.',h,'.',i,'.',j) as kodebarang  from ref_barang where f='$f' AND g='$g' AND h='$h' AND i='$i' AND j='$j'"));
+				$get = sqlArray( sqlQuery("select *, concat(f,'.',g,'.',h,'.',i,'.',j) as kodebarang  from ref_barang where f='$f' AND g='$g' AND h='$h' AND i='$i' AND j='$j'"));
 				
 				$content = array(
 					'nama' => $get['nama'], 
@@ -901,8 +901,8 @@ class pangkatObj  extends DaftarObj2{
 		
 		case 'refreshComboJenis':{
 				$sql="SELECT Id,nama FROM ref_jenis ORDER BY Id DESC";$cek.=$sql;
-				$hasil = mysql_query($sql);
-					while ($data = mysql_fetch_array($hasil)){
+				$hasil = sqlQuery($sql);
+					while ($data = sqlArray($hasil)){
 						$opsi.="<option value='".$data['Id']."'>".$data['nama']."</option>";
 					}		
 				$content = "<select name='ref_idjenis' id='ref_idjenis'><option value='".$dt['ref_idjenis']."'>--PILIH--</option>".$opsi."</select>";
@@ -911,8 +911,8 @@ class pangkatObj  extends DaftarObj2{
 		
 		case 'refreshComboSatuan':{
 				$sql="SELECT Id,nama FROM ref_satuan ORDER BY Id DESC";$cek.=$sql;
-				$hasil = mysql_query($sql);
-					while ($data = mysql_fetch_array($hasil)){
+				$hasil = sqlQuery($sql);
+					while ($data = sqlArray($hasil)){
 						$opsi.="<option value='".$data['Id']."'>".$data['nama']."</option>";
 					}		
 				$content = "<select name='ref_idsatuan' id='ref_idsatuan'><option value='".$dt['ref_idsatuan']."'>--PILIH--</option>".$opsi."</select>";
@@ -946,24 +946,24 @@ class pangkatObj  extends DaftarObj2{
 		$data_i= $idplh1[3];
 		$data_j= $idplh1[4];
 		
-		$pil4=mysql_query("SELECT count(*) as cnt,t_persediaan . f ,  t_persediaan . g ,  t_persediaan . h , t_persediaan.i, t_persediaan.j FROM t_persediaan  LEFT JOIN ref_barang  ON  ref_barang . f  =  t_persediaan . f  AND ref_barang . g  =  t_persediaan . g AND  ref_barang . h  = t_persediaan . h and ref_barang.i = t_persediaan.i and ref_barang.j = t_persediaan.j WHERE t_persediaan.f='$data_f' and t_persediaan.g='$data_g' and t_persediaan.h='$data_h' and t_persediaan.i='$data_i' and t_persediaan.j='$data_j'");
+		$pil4=sqlQuery("SELECT count(*) as cnt,t_persediaan . f ,  t_persediaan . g ,  t_persediaan . h , t_persediaan.i, t_persediaan.j FROM t_persediaan  LEFT JOIN ref_barang  ON  ref_barang . f  =  t_persediaan . f  AND ref_barang . g  =  t_persediaan . g AND  ref_barang . h  = t_persediaan . h and ref_barang.i = t_persediaan.i and ref_barang.j = t_persediaan.j WHERE t_persediaan.f='$data_f' and t_persediaan.g='$data_g' and t_persediaan.h='$data_h' and t_persediaan.i='$data_i' and t_persediaan.j='$data_j'");
 		
-		$pil5=mysql_fetch_array($pil4);
+		$pil5=sqlArray($pil4);
 		
-		$pil41=mysql_query("SELECT count(*) as cnt,ref_mapping_akun . f ,  ref_mapping_akun . g ,  ref_mapping_akun . h 
+		$pil41=sqlQuery("SELECT count(*) as cnt,ref_mapping_akun . f ,  ref_mapping_akun . g ,  ref_mapping_akun . h 
 FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_akun . f  AND ref_barang . g  =  ref_mapping_akun . g AND  ref_barang . h  = ref_mapping_akun . h WHERE ref_mapping_akun.f='$data_f' and ref_mapping_akun.g='$data_g' and ref_mapping_akun.h='$data_h'");
 		
-		$pil51=mysql_fetch_array($pil41);
+		$pil51=sqlArray($pil41);
 		
-		$lvl1=mysql_query("SELECT count(*) as cnt, f , g , h , i, j FROM ref_barang WHERE f='$data_f'");
-		$lvl2=mysql_query("SELECT count(*) as cnt, f , g , h , i, j FROM ref_barang WHERE f='$data_f' and g='$data_g'");
-		$lvl3=mysql_query("SELECT count(*) as cnt, f , g , h , i, j FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h'");
-		$lvl4=mysql_query("SELECT count(*) as cnt,f , g , h , i, j FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='$data_i' and j<>'0000'");
+		$lvl1=sqlQuery("SELECT count(*) as cnt, f , g , h , i, j FROM ref_barang WHERE f='$data_f'");
+		$lvl2=sqlQuery("SELECT count(*) as cnt, f , g , h , i, j FROM ref_barang WHERE f='$data_f' and g='$data_g'");
+		$lvl3=sqlQuery("SELECT count(*) as cnt, f , g , h , i, j FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h'");
+		$lvl4=sqlQuery("SELECT count(*) as cnt,f , g , h , i, j FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='$data_i' and j<>'0000'");
 		
-		$ceklvl1=mysql_fetch_array($lvl1);
-		$ceklvl2=mysql_fetch_array($lvl2);
-		$ceklvl3=mysql_fetch_array($lvl3);
-		$ceklvl4=mysql_fetch_array($lvl4);
+		$ceklvl1=sqlArray($lvl1);
+		$ceklvl2=sqlArray($lvl2);
+		$ceklvl3=sqlArray($lvl3);
+		$ceklvl4=sqlArray($lvl4);
 		
 		if($ceklvl1['cnt'] > 0 && $err=='' && $data_g=='00' && $data_h=='00' && $data_i=='000' && $data_j=='0000') {$err= "Data tidak bisa di hapus ";}
 		if($ceklvl2['cnt'] > 0 && $err=='' && $data_h=='00' && $data_i=='000' && $data_j=='0000') {$err= "Data tidak bisa di hapus ";}
@@ -974,7 +974,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 				
 		if($err=='' ){
 					$qy = "DELETE FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h'  and  i='$data_i' and j='$data_j' and  concat (f,' ',g,' ',h,' ',i,' ',j) ='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					
 			}else{
 				break;
@@ -1047,7 +1047,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 			if($err==''){
 				$aqry = "UPDATE ref_barang set nama='$nama',f='$f',g='$g',h='$h',i='$i',j='0000' WHERE f='".$f1."'and g='".$g1."'and h='".$h1."'and i='".$i1."'and j='".$j1."'";
 				
-				$qry = mysql_query($aqry) or die(mysql_error());	
+				$qry = sqlQuery($aqry) or die(mysql_error());	
 				}
 			return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
     }	
@@ -1072,13 +1072,13 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 			if($err==''){
 				$aqry = "INSERT into ref_barang (f,g,h,i,j,nama) values('$f','$g','$h','$i','0000','$nama')";	
 				$cek .= $aqry;	
-				$qry = mysql_query($aqry);
+				$qry = sqlQuery($aqry);
 				$content=$i;	
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_barang set nama='$nama',ref_idjenis='$ref_idjenis',ref_idsatuan='$ref_idsatuan',merk='$merk' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else
 				
@@ -1101,14 +1101,14 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama) values('$nama')";	
 					$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					if($qry== FALSE) $err='gagal simpan sudah ada !';
 					$content=$nama;	
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_barang set nama='$nama',ref_idjenis='$ref_idjenis',ref_idsatuan='$ref_idsatuan',merk='$merk' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else
 			return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -1130,14 +1130,14 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama) values('$nama')";	
 					$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					if($qry== FALSE) $err='gagal simpan sudah ada !';
 					$content=$nama;	
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_barang set nama='$nama',ref_idjenis='$ref_idjenis',ref_idsatuan='$ref_idsatuan',merk='$merk' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else
 				
@@ -1160,14 +1160,14 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama) values('$nama')";	
 					$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					if($qry== FALSE) $err='gagal simpan sudah ada !';
 					$content=$nama;	
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_barang set nama='$nama',ref_idjenis='$ref_idjenis',ref_idsatuan='$ref_idsatuan',merk='$merk' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else	
 			return	array ('cek'=>$cek, 'err'=>$err, 'content'=>$content);	
@@ -1189,14 +1189,14 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 				if($err==''){
 					$aqry = "INSERT into ref_satuan (nama) values('$nama')";	
 					$cek .= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 					if($qry== FALSE) $err='gagal simpan sudah ada !';
 					$content=$nama;	
 				}
 			}else{						
 				if($err==''){
 				$aqry = "UPDATE ref_barang set nama='$nama',ref_idjenis='$ref_idjenis',ref_idsatuan='$ref_idsatuan',merk='$merk' WHERE Id='".$idplh."'";	$cek .= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 				}
 			} //end else
 				
@@ -1244,8 +1244,8 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	if($fmST == 0){
 		if($err==''){
 				
-		$dat1=mysql_query("select count(*) as cnt,f,g,h,k1,k2,k3,k4,k5,k6 from ref_mapping_akun where  f  = '".$f."' AND  g  = '".$fmKelompok2."' AND  h  = '".$fmObjek2."'");
-			$dat2=mysql_fetch_array($dat1);
+		$dat1=sqlQuery("select count(*) as cnt,f,g,h,k1,k2,k3,k4,k5,k6 from ref_mapping_akun where  f  = '".$f."' AND  g  = '".$fmKelompok2."' AND  h  = '".$fmObjek2."'");
+			$dat2=sqlArray($dat1);
 			$k1=$dat2['k1'];
 			$k2=$dat2['k2'];
 			$k3=$dat2['k3'];
@@ -1254,7 +1254,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 			$k6=$dat2['k6'];
 			if($dat2['cnt'] > 0 ){	
 			$aqry = "INSERT into ref_barang (f,g,h,i,j,nama,satuan_terkecil,satuan_terbesar,jml_barang_konversi,barcode_terbesar,k1,k2,k3,k4,k5,k6) values('$f','$fmKelompok2','$fmObjek2','$fmJenis','$j','$nama','$StBsr','$StKcl','$jumlahKonversi','$kdbarbsr','".$dat2['k1']."','".$dat2['k2']."','".$dat2['k3']."','".$dat2['k4']."','".$dat2['k5']."','".$dat2['k6']."')";	$cek .= $aqry;
-			$qry = mysql_query($aqry);
+			$qry = sqlQuery($aqry);
 						
 					}else{
 						$err="Data tidak dapat disimpan, Kode Barang $f $fmKelompok2 $fmObjek2 belum di mapping dengan Kode Akun!";
@@ -1303,12 +1303,12 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		$k5= $_REQUEST['k5'];
 		$k6= $_REQUEST['k6'];
 	
-	$pil2=mysql_query("SELECT count(*) as cnt,ref_barang . f ,  ref_barang . g ,  ref_barang . h ,  ref_barang . i ,ref_barang . j FROM  ref_barang  INNER JOIN  t_persediaan  ON  t_persediaan . f  =  ref_barang . f  AND t_persediaan . g  =  ref_barang . g  AND  t_persediaan . h  =  ref_barang . h  AND  t_persediaan . i  =  ref_barang . i  AND  t_persediaan . j  =  ref_barang . j  where ref_barang.f='".$f."' and ref_barang.g='".$g."' and ref_barang.h='".$h."' and ref_barang.i='".$i."' and ref_barang.j='".$j."'");
+	$pil2=sqlQuery("SELECT count(*) as cnt,ref_barang . f ,  ref_barang . g ,  ref_barang . h ,  ref_barang . i ,ref_barang . j FROM  ref_barang  INNER JOIN  t_persediaan  ON  t_persediaan . f  =  ref_barang . f  AND t_persediaan . g  =  ref_barang . g  AND  t_persediaan . h  =  ref_barang . h  AND  t_persediaan . i  =  ref_barang . i  AND  t_persediaan . j  =  ref_barang . j  where ref_barang.f='".$f."' and ref_barang.g='".$g."' and ref_barang.h='".$h."' and ref_barang.i='".$i."' and ref_barang.j='".$j."'");
 	
-	$pil3=mysql_fetch_array($pil2);		
-	$pil21=mysql_query("ref_mapping_akun . f ,  ref_mapping_akun . g ,  ref_mapping_akun . h , ref_mapping_akun . k1 ,  ref_mapping_akun . k2 ,  ref_mapping_akun . k3 , ref_mapping_akun . k4 ,  ref_mapping_akun . k5 ,  ref_mapping_akun . k6 FROM ref_barang  LEFT JOIN ref_mapping_akun  ON  ref_mapping_akun . f  =  ref_barang . f  AND ref_barang . g  =  ref_mapping_akun . g  AND  ref_barang . h  = ref_mapping_akun . h  AND  ref_barang . k1  =  ref_mapping_akun . k1  AND ref_barang . k2  =  ref_mapping_akun . k2  AND  ref_barang . k3  = ref_mapping_akun . k3  AND  ref_barang . k4  =  ref_mapping_akun . k4  AND ref_barang . k5  =  ref_mapping_akun . k5  AND  ref_barang . k6  = ref_mapping_akun . k6 WHERE ref_mapping_akun . f  = '".$f."' AND ref_mapping_akun . g  = '".$g."' AND ref_mapping_akun . h  = '".$h."' AND ref_mapping_akun . k1  = '".$k1."' AND ref_mapping_akun . k2  = '".$k2."' AND ref_mapping_akun . k3  = '".$k3."' AND ref_mapping_akun . k4  = '".$k4."' AND ref_mapping_akun . k5  = '".$k5."' AND ref_mapping_akun . k6  = '".$k6."'");
+	$pil3=sqlArray($pil2);		
+	$pil21=sqlQuery("ref_mapping_akun . f ,  ref_mapping_akun . g ,  ref_mapping_akun . h , ref_mapping_akun . k1 ,  ref_mapping_akun . k2 ,  ref_mapping_akun . k3 , ref_mapping_akun . k4 ,  ref_mapping_akun . k5 ,  ref_mapping_akun . k6 FROM ref_barang  LEFT JOIN ref_mapping_akun  ON  ref_mapping_akun . f  =  ref_barang . f  AND ref_barang . g  =  ref_mapping_akun . g  AND  ref_barang . h  = ref_mapping_akun . h  AND  ref_barang . k1  =  ref_mapping_akun . k1  AND ref_barang . k2  =  ref_mapping_akun . k2  AND  ref_barang . k3  = ref_mapping_akun . k3  AND  ref_barang . k4  =  ref_mapping_akun . k4  AND ref_barang . k5  =  ref_mapping_akun . k5  AND  ref_barang . k6  = ref_mapping_akun . k6 WHERE ref_mapping_akun . f  = '".$f."' AND ref_mapping_akun . g  = '".$g."' AND ref_mapping_akun . h  = '".$h."' AND ref_mapping_akun . k1  = '".$k1."' AND ref_mapping_akun . k2  = '".$k2."' AND ref_mapping_akun . k3  = '".$k3."' AND ref_mapping_akun . k4  = '".$k4."' AND ref_mapping_akun . k5  = '".$k5."' AND ref_mapping_akun . k6  = '".$k6."'");
 	
-	$pil31=mysql_fetch_array($pil21);
+	$pil31=sqlArray($pil21);
 		if($pil3['cnt'] > 0 ){
 			$err ='data tidak bisa di edit karena sudah ada di data Transaksi !!';
 			
@@ -1326,8 +1326,8 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	 if( $err=='' && $jumlahKonversi == 0 ) $err= "Jumlah Konversi tidak boleh '0' !!"; 
 			{						
 				if($err==''){
-				$dat1=mysql_query("select count(*) as cnt,f,g,h,k1,k2,k3,k4,k5,k6 from ref_mapping_akun where  f  = '".$f1."' AND  g  = '".$g1."' AND  h  = '".$h1."'");$cek.="select count(*) as cnt,f,g,h,k1,k2,k3,k4,k5,k6 from ref_mapping_akun where  f  = '".$f1."' AND  g  = '".$g1."' AND  h  = '".$h1."'";
-			$dat2=mysql_fetch_array($dat1);
+				$dat1=sqlQuery("select count(*) as cnt,f,g,h,k1,k2,k3,k4,k5,k6 from ref_mapping_akun where  f  = '".$f1."' AND  g  = '".$g1."' AND  h  = '".$h1."'");$cek.="select count(*) as cnt,f,g,h,k1,k2,k3,k4,k5,k6 from ref_mapping_akun where  f  = '".$f1."' AND  g  = '".$g1."' AND  h  = '".$h1."'";
+			$dat2=sqlArray($dat1);
 			$k1=$dat2['k1'];
 			$k2=$dat2['k2'];
 			$k3=$dat2['k3'];
@@ -1337,8 +1337,8 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 			if($dat2['cnt'] > 0 ){
 				
 			$aqry = "UPDATE ref_barang set  nama='$nama' , satuan_terkecil='$StKcl', satuan_terbesar='$StBsr', jml_barang_konversi='$jumlahKonversi2' , barcode_terbesar='$kdbarbsr',k1='".$dat2['k1']."',k2='".$dat2['k2']."',k3='".$dat2['k3']."',k4='".$dat2['k4']."',k5='".$dat2['k5']."',k6='".$dat2['k6']."'  WHERE f='".$f1."'and g='".$g1."'and h='".$h1."'and i='".$i1."'and j='".$j1."'";	$cek .= $aqry;
-						//$qry = mysql_query($aqry) or die(mysql_error());
-						$qry = mysql_query($aqry);
+						//$qry = sqlQuery($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry);
 				}else{
 						$err="Data tidak dapat disimpan, Kode Barang $f1 $g1 $h1 belum di mapping dengan Kode Akun!";
 					}
@@ -1411,16 +1411,16 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		$pil=$this->form_idplh;
 		$kode = explode(' ',$this->form_idplh);
 		$this->form_fmST = 1;
-		//$dt = mysql_fetch_array(mysql_query($aqry));
+		//$dt = sqlArray(sqlQuery($aqry));
 		$data_f= $kode[0];
 		$data_g= $kode[1];
 		$data_h= $kode[2];
 		$data_i= $kode[3];
 		$data_j= $kode[4];
 	
-		$ceklvl4=mysql_query("SELECT * FROM  ref_barang WHERE f='".$kode[0]."' and g='".$kode[1]."' and h='".$kode[2]."'  and  i='".$kode[3]."' and j='".$kode[4]."'");
+		$ceklvl4=sqlQuery("SELECT * FROM  ref_barang WHERE f='".$kode[0]."' and g='".$kode[1]."' and h='".$kode[2]."'  and  i='".$kode[3]."' and j='".$kode[4]."'");
 		
-		$ceklevl4=mysql_fetch_array($ceklvl4);
+		$ceklevl4=sqlArray($ceklvl4);
 		
 		if ($ceklevl4['f'] <> '00' && $ceklevl4['g'] =='00'){
 		$fm['err']="data tidak bisa di Edit !!";	
@@ -1462,11 +1462,11 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		$StBsr = $_REQUEST['StBsr'];
 		$StKcl = $_REQUEST['StKcl'];
 	
-	$queryBidang=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
-	$queryKelompok=mysql_fetch_array(mysql_query("SELECT g,nama FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='00' and i='000' and j='0000'" ));
-	$queryObjek=mysql_fetch_array(mysql_query("SELECT h,nama FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='000' and j='0000'" ));
-	$queryJenis=mysql_fetch_array(mysql_query("SELECT i,nama FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='$data_i' " ));
-	$queryNamaBarang=mysql_fetch_array(mysql_query("SELECT j,nama,jml_barang_konversi,k1,k2,k3,k4,k5,k6 FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='$data_i' and j='$data_j'" ));
+	$queryBidang=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
+	$queryKelompok=sqlArray(sqlQuery("SELECT g,nama FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='00' and i='000' and j='0000'" ));
+	$queryObjek=sqlArray(sqlQuery("SELECT h,nama FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='000' and j='0000'" ));
+	$queryJenis=sqlArray(sqlQuery("SELECT i,nama FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='$data_i' " ));
+	$queryNamaBarang=sqlArray(sqlQuery("SELECT j,nama,jml_barang_konversi,k1,k2,k3,k4,k5,k6 FROM ref_barang WHERE f='$data_f' and g='$data_g' and h='$data_h' and i='$data_i' and j='$data_j'" ));
 		
 	$dataBidang=$queryBidang['f'].".".$queryBidang['nama'];
 	$datakelompok=$queryKelompok['g'].".".$queryKelompok['nama'];
@@ -1486,7 +1486,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	$jumlahKonversi=$dt['jml_barang_konversi'];
 	$kdbarbsr=$dt['barcode_terbesar'];
 		
-	$query1=mysql_fetch_array(mysql_query("SELECT `ref_barang`.`f`, `ref_barang`.`g`, `ref_barang`.`h`, `ref_barang`.`i`,
+	$query1=sqlArray(sqlQuery("SELECT `ref_barang`.`f`, `ref_barang`.`g`, `ref_barang`.`h`, `ref_barang`.`i`,
   `ref_barang`.`j`, `ref_barang`.`satuan_terbesar`,`ref_barang`.`satuan_terkecil`FROM `ref_barang` LEFT JOIN `ref_satuan` ON `ref_satuan`.`nama` = `ref_barang`.`satuan_terbesar` AND `ref_satuan`.`nama` = `ref_barang`.`satuan_terkecil` WHERE  ref_barang . f  = '$data_f' AND  ref_barang . g  = '$data_g' AND  ref_barang . h  = '$data_h' AND  ref_barang . i  = '$data_i' AND  ref_barang . j  = '$data_j'")) ; 
  
 	$StKcl=$query1['satuan_terkecil'];
@@ -1642,7 +1642,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		$StBsr = $_REQUEST['StBsr'];
 		$StKcl = $_REQUEST['StKcl'];
 	
-	$queryBidang2=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
+	$queryBidang2=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
 	$queryKelompok2="SELECT g, concat(g, '. ', nama) as vnama FROM ref_barang WHERE f='$Main->f' and g <> '00' and h='00' and i='000' and j='0000'" ;
 	$queryObjek2="SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h <> '00' and i='000' and j='0000'" ;
 	$queryJenis2="SELECT i,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i <>'000' and j='0000'" ;
@@ -1748,22 +1748,22 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	
 		$aqry2="SELECT MAX(i) AS maxno FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2'";
 		$cek.='ssssssss ='.$aqry2;
-		$get=mysql_fetch_array(mysql_query($aqry2));
+		$get=sqlArray(sqlQuery($aqry2));
 		$lastkode=$get['maxno'];
 		$kode = (int) substr($lastkode, 1, 3);
 		$kode++;
 		$no_ba = sprintf("%03s", $kode);
 		
-		$queryBidang=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
-		$queryKelompok=mysql_fetch_array(mysql_query("SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='00' and i='000' and j='0000'" ));
-		$queryObjek=mysql_fetch_array(mysql_query("SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='000' and j='0000'" ));
+		$queryBidang=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
+		$queryKelompok=sqlArray(sqlQuery("SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='00' and i='000' and j='0000'" ));
+		$queryObjek=sqlArray(sqlQuery("SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='000' and j='0000'" ));
 		$dataBidang=$queryBidang['f'].".".$queryBidang['nama'];
 		$datakelompok=$queryKelompok['g'].".".$queryKelompok['nama'];
 		$dataobjek=$queryObjek['h'].".".$queryObjek['nama'];
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 	 //items ----------------------
@@ -1833,9 +1833,9 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		$data_i= $kode[3];
 		$data_j= $kode[4];
 		
-		$queryBd=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
-		$queryBdg=mysql_fetch_array(mysql_query("SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g='".$kode[1]."' and h='00' and i='000' and j='0000'" ));
-		$queryObj=mysql_fetch_array(mysql_query("SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='".$kode[1]."' and h='".$kode[2]."' and i='000' and j='0000'" ));
+		$queryBd=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
+		$queryBdg=sqlArray(sqlQuery("SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g='".$kode[1]."' and h='00' and i='000' and j='0000'" ));
+		$queryObj=sqlArray(sqlQuery("SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='".$kode[1]."' and h='".$kode[2]."' and i='000' and j='0000'" ));
 		
 		$cek.="SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='$kode[1]' and h='00' and i='000' and j='0000'";
 		$datakelompok=$kode[1].".".$queryBdg['nama'];
@@ -1913,7 +1913,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		$data_i= $kode[3];
 		$data_j= $kode[4];
 		
-		$queryBdg=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='".$kode[1]."' and h='00' and i='000' and j='0000'" ));
+		$queryBdg=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='".$kode[1]."' and h='00' and i='000' and j='0000'" ));
 		$cek.="SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='$kode[1]' and h='00' and i='000' and j='0000'";
 		$datakelompok=$kode[1].".".$queryBdg['nama'];
 		
@@ -1925,22 +1925,22 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	
 		$aqry2="SELECT MAX(i) AS maxno FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2'";
 		//$cek.='ssssssss ='.$aqry2;
-		$get=mysql_fetch_array(mysql_query($aqry2));
+		$get=sqlArray(sqlQuery($aqry2));
 		$lastkode=$get['maxno'];
 		$kode = (int) substr($lastkode, 1, 3);
 		$kode++;
 		$no_ba = sprintf("%03s", $kode);
 		
-		$queryBidang=mysql_fetch_array(mysql_query("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
-		$queryKelompok=mysql_fetch_array(mysql_query("SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='00' and i='000' and j='0000'" ));
-		$queryObjek=mysql_fetch_array(mysql_query("SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='000' and j='0000'" ));
+		$queryBidang=sqlArray(sqlQuery("SELECT f,nama FROM ref_barang WHERE f='$Main->f' and g='00' and h='00' and i='000' and j='0000'" ));
+		$queryKelompok=sqlArray(sqlQuery("SELECT g,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='00' and i='000' and j='0000'" ));
+		$queryObjek=sqlArray(sqlQuery("SELECT h,nama FROM ref_barang WHERE f='$Main->f' and g='$fmKelompok2' and h='$fmObjek2' and i='000' and j='0000'" ));
 		$dataBidang=$queryBidang['f'].".".$queryBidang['nama'];
 		$datakelompok=$queryKelompok['g'].".".$queryKelompok['nama'];
 		$dataobjek=$queryObjek['h'].".".$queryObjek['nama'];
 	 }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 		
 	 //items ----------------------
@@ -2046,7 +2046,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -2127,7 +2127,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -2209,7 +2209,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 				
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -2291,7 +2291,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		
 	 //items ----------------------
 	  $this->form_fields = array(
@@ -2401,7 +2401,7 @@ FROM ref_mapping_akun  LEFT JOIN ref_barang  ON  ref_barang . f  =  ref_mapping_
 		global $Ref;
 		
 		$status_filter=$_REQUEST['status_filter'];
-		$kdbrg=mysql_fetch_array(mysql_query("select * from ref_barang where f='".$isi['f']."' and g='".$isi['g']."' and h='".$isi['h']."' and i='".$isi['i']."' and j='".$isi['j']."'"));
+		$kdbrg=sqlArray(sqlQuery("select * from ref_barang where f='".$isi['f']."' and g='".$isi['g']."' and h='".$isi['h']."' and i='".$isi['i']."' and j='".$isi['j']."'"));
 	
 		if ($status_filter==1){
 			$VFilter = "";

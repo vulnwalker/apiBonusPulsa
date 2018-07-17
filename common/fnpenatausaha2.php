@@ -791,8 +791,8 @@ class PenatausahaObj {
 				$sqryKIBA = "select sertifikat_no, luas, ket from kib_a  $KondisiKIB limit 0,1";
 				//$sqryKIBA = "select * from view_kib_a  $KondisiKIB limit 0,1";
 				//echo '<br> qrykibA = '.$sqryKIBA;
-				$QryKIB_A = mysql_query($sqryKIBA);
-				while($isiKIB_A = mysql_fetch_array($QryKIB_A))	{
+				$QryKIB_A = sqlQuery($sqryKIBA);
+				while($isiKIB_A = sqlArray($QryKIB_A))	{
 					//$ISI5 = $isiKIB_A['alamat'].'<br>'.$isiKIB_A['alamat_kel'].'<br>'.$isiKIB_A['alamat_kec'].'<br>'.$isiKIB_A['alamat_kota'] ;
 					$ISI6 = $isiKIB_A['sertifikat_no'];
 					
@@ -806,10 +806,10 @@ class PenatausahaObj {
 				$aqry="select ukuran, merk,no_pabrik,no_rangka,no_mesin,bahan,ket  from kib_b  $KondisiKIB limit 0,1";
 				//echo"<br>qrkbb=".$aqry;
 				
-				$QryKIB_B = mysql_query($aqry);
+				$QryKIB_B = sqlQuery($aqry);
 				
 				//echo "<br>qrkibb=".$aqry;
-				while($isiKIB_B = mysql_fetch_array($QryKIB_B))	{
+				while($isiKIB_B = sqlArray($QryKIB_B))	{
 					
 					$ISI5 = "{$isiKIB_B['merk']}";
 					$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
@@ -820,9 +820,9 @@ class PenatausahaObj {
 				break;
 				}	
 			case '03':{//KIB C;
-				$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket from kib_c  $KondisiKIB limit 0,1");
-				//$QryKIB_C = mysql_query("select dokumen_no, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1");
-				while($isiKIB_C = mysql_fetch_array($QryKIB_C))	{
+				$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket from kib_c  $KondisiKIB limit 0,1");
+				//$QryKIB_C = sqlQuery("select dokumen_no, kondisi_bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_c  $KondisiKIB limit 0,1");
+				while($isiKIB_C = sqlArray($QryKIB_C))	{
 					//$ISI5 = $isiKIB_C['alamat'].'<br>'.$isiKIB_C['alamat_kel'].'<br>'.$isiKIB_C['alamat_kec'].'<br>'.$isiKIB_C['alamat_kota'] ;
 					$ISI6 = "{$isiKIB_C['dokumen_no']}";
 					$ISI10 = $Main->Bangunan[$isiKIB_C['kondisi_bangunan']-1][1];
@@ -831,9 +831,9 @@ class PenatausahaObj {
 				break;
 			}
 			case '04':{//KIB D;
-				//$QryKIB_D = mysql_query("select dokumen_no, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
-				$QryKIB_D = mysql_query("select dokumen_no, ket  from kib_d  $KondisiKIB limit 0,1");
-				while($isiKIB_D = mysql_fetch_array($QryKIB_D))	{
+				//$QryKIB_D = sqlQuery("select dokumen_no, ket, alamat_kota, alamat_kec, alamat_kel, alamat from view_kib_d  $KondisiKIB limit 0,1");
+				$QryKIB_D = sqlQuery("select dokumen_no, ket  from kib_d  $KondisiKIB limit 0,1");
+				while($isiKIB_D = sqlArray($QryKIB_D))	{
 					//$ISI5 = $isiKIB_D['alamat'].'<br>'.$isiKIB_D['alamat_kel'].'<br>'.$isiKIB_D['alamat_kec'].'<br>'.$isiKIB_D['alamat_kota'] ;
 					$ISI6 = "{$isiKIB_D['dokumen_no']}";
 					$ISI15 = "{$isiKIB_D['ket']}";
@@ -841,8 +841,8 @@ class PenatausahaObj {
 				break;
 			}
 			case '05':{//KIB E;		
-				$QryKIB_E = mysql_query("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
-				while($isiKIB_E = mysql_fetch_array($QryKIB_E))	{
+				$QryKIB_E = sqlQuery("select seni_bahan, ket from kib_e  $KondisiKIB limit 0,1");
+				while($isiKIB_E = sqlArray($QryKIB_E))	{
 					$ISI7 = "{$isiKIB_E['seni_bahan']}";
 					$ISI15 = "{$isiKIB_E['ket']}";
 				}
@@ -852,9 +852,9 @@ class PenatausahaObj {
 				//$cek.='<br> F = '.$isi['f'];
 				//$sqrykibF = "select dokumen_no, bangunan, ket, alamat_kota, alamat_kec, alamat_kel, alamat  from view_kib_f  $KondisiKIB limit 0,1";
 				$sqrykibF = "select dokumen_no, bangunan, ket from kib_f  $KondisiKIB limit 0,1";
-				$QryKIB_F = mysql_query($sqrykibF);
+				$QryKIB_F = sqlQuery($sqrykibF);
 				$cek.='<br> qrykibF = '.$sqrykibF;
-				while($isiKIB_F = mysql_fetch_array($QryKIB_F))	{
+				while($isiKIB_F = sqlArray($QryKIB_F))	{
 					//$ISI5 = $isiKIB_F['alamat'].'<br>'.$isiKIB_F['alamat_kel'].'<br>'.$isiKIB_F['alamat_kec'].'<br>'.$isiKIB_F['alamat_kota'] ;
 					$ISI6 = "{$isiKIB_F['dokumen_no']}";
 					$ISI10 = $Main->Bangunan[$isiKIB_F['bangunan']-1][1];
@@ -1100,7 +1100,7 @@ class PenatausahaObj {
 				"where c='04' and d='01' ".
 				"and e='01' and sesi ='' ".
 				"and id>0 and tahun_sensus = '2013' ";*/
-			//$qry = mysql_query($aqry);			
+			//$qry = sqlQuery($aqry);			
 			/*
 			$Kondisi .= " and tahun_sensus<>'' and tahun_sensus is not NULL and id NOT IN (".
 				"select id_bukuinduk as id from v1_penghapusan_usul_det_bi ".
@@ -1425,9 +1425,9 @@ class PenatausahaObj {
 		
 			
 		$aqry = "select tahun_sensus from view_buku_induk where tahun_sensus<>'' group by tahun_sensus desc ";
-		$qry = mysql_query($aqry);
+		$qry = sqlQuery($aqry);
 		$Input = "<option value=''>Tahun Sensus</option><option value='belum_sensus'>Belum Sensus</option>"; 
-		while ($Hasil=mysql_fetch_array($qry)) { 
+		while ($Hasil=sqlArray($qry)) { 
 			//$Sel = $Hasil['tahun_sensus']==$value?"selected":""; 
 			$Input .= "<option $Sel value='{$Hasil['tahun_sensus']}'>{$Hasil['tahun_sensus']}</option>"; 
 		} 
@@ -1995,8 +1995,8 @@ class PenatausahaObj {
 				
 				$arruang = array();
 				$aqry = "select * from ref_ruang $KondisiRuang"; $cek .= $aqry;
-				$qry = mysql_query($aqry);
-				while($isi=mysql_fetch_array($qry)){
+				$qry = sqlQuery($aqry);
+				while($isi=sqlArray($qry)){
 					$arruang[] = $isi['id'];
 				}
 				$kondkir = join(',',$arruang);
@@ -2075,9 +2075,9 @@ class PenatausahaObj {
 					
 				}
 				$cek .= ' qry kir='.$aqry;
-				$pgw=mysql_query($aqry);
+				$pgw=sqlQuery($aqry);
 				$arrkondKIP = array();
-				while($isipgw = mysql_fetch_array($pgw) ){
+				while($isipgw = sqlArray($pgw) ){
 					$arrkondKIP[] = $isipgw['id'];
 				}
 				$kondKIP = join(',',$arrkondKIP);
@@ -2277,14 +2277,14 @@ class PenatausahaObj {
 
 		// echo $sqry;
 		
-		$Qry = mysql_query($sqry ." $LimitHal");
+		$Qry = sqlQuery($sqry ." $LimitHal");
 		$cek .= "<br>sqry= $sqry $LimitHal";
 		//echo "<br>sqry= $sqry $LimitHal";
 		
 		$cb=0; $jmlTotalHargaDisplay = 0; $totLuasTanahHal = 0;
 		$ListData = "";
 		
-		while($isi=mysql_fetch_array($Qry)){ //20 detik
+		while($isi=sqlArray($Qry)){ //20 detik
 			//tampil pilihan			
 			/*if($this->tampilCbxKeranjang && $tipebi==''){
 				$id = $SPg=='03'   ?  $isi['id'] : $isi['idbi'];
@@ -2299,22 +2299,22 @@ class PenatausahaObj {
 				$nmopdarr=array();	
 				$isi['vBidang']='';	
 				
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from v_bidang where c='".$isi['c']."' "
 				));		
 				if($get['nmbidang']<>'') $nmopdarr[] = $get['nmbidang'];
 				
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from v_opd where c='".$isi['c']."' and d='".$isi['d']."' "
 				));		
 				if($get['nmopd']<>'') $nmopdarr[] = $get['nmopd'];
 				
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from v_unit where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."'"
 				));		
 				if($get['nmunit']<>'') $nmopdarr[] = $get['nmunit'];
 				
-				$get = mysql_fetch_array(mysql_query(
+				$get = sqlArray(sqlQuery(
 					"select * from ref_skpd where c='".$isi['c']."' and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 				));		
 				if($get['nm_skpd']<>'') $nmopdarr[] = $get['nm_skpd'];
@@ -2324,25 +2324,25 @@ class PenatausahaObj {
 			}
 			
 			//get info dinas
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$isi['c']."'  and d='00' and e='00'"
 			));		
 			if($get['nm_barcode']<>'') $nm = $get['nm_barcode'];			
 			$infobrg = "  bidang='$nm' ";			
 			//get opd
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$isi['c']."'  and d='".$isi['d']."' and e='00'"
 			));		
 			if($get['nm_barcode']<>'') $nm = $get['nm_barcode'];
 			$infobrg .= "  opd='$nm' ";
 			//get biro
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$isi['c']."'  and d='".$isi['d']."' and e='".$isi['e']."'"
 			));		
 			if($get['nm_barcode']<>'') $nm = $get['nm_barcode'];
 			$infobrg .= "  biro='$nm' ";
 			//get biro
-			$get = mysql_fetch_array(mysql_query(
+			$get = sqlArray(sqlQuery(
 				"select * from ref_skpd where c='".$isi['c']."'  and d='".$isi['d']."' and e='".$isi['e']."' and e1='".$isi['e1']."'"
 			));		
 			if($get['nm_barcode']<>'') $nm = $get['nm_barcode'];
@@ -2375,7 +2375,7 @@ class PenatausahaObj {
 					if ($isi['nmseksi']<>'' && $isi['nmseksi']<>$ketskpd ) $ketskpd="$ketskpd/<br>".$isi['nmseksi'];
 					if ($ketskpd<>'')  $ketskpd="/<br>$ketskpd";
 */			
-			$gbr = mysql_fetch_array(mysql_query("select count(*) as cnt from gambar where idbi='".$isi['idawal']."' "));
+			$gbr = sqlArray(sqlQuery("select count(*) as cnt from gambar where idbi='".$isi['idawal']."' "));
 			$ketgbr = '<br>Gambar : '.$gbr['cnt'];
 								 				
 			switch($SPg){
@@ -2411,8 +2411,8 @@ class PenatausahaObj {
 					}
 					if ($isi['f'] == "01") {//KIB A
 						//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'
-						$QryKIB_A = mysql_query("select * from kib_a  $KondisiKIB  limit 0,1");
-						while ($isiKIB_A = mysql_fetch_array($QryKIB_A)) {
+						$QryKIB_A = sqlQuery("select * from kib_a  $KondisiKIB  limit 0,1");
+						while ($isiKIB_A = sqlArray($QryKIB_A)) {
 							if($SPg == 'belumsensus'){
 								$alm = '';
 								$alm .= ifempty($isiKIB_A['alamat'],'-');		
@@ -2430,8 +2430,8 @@ class PenatausahaObj {
 					}
 					if ($isi['f'] == "02") {//KIB B;
 						//"concat(a1,a,b,c,d,e,f,g,h,i,j,noreg,tahun)='{$isi['a1']}{$isi['a']}{$isi['b']}{$isi['c']}{$isi['d']}{$isi['e']}{$isi['f']}{$isi['g']}{$isi['h']}{$isi['i']}{$isi['j']}{$isi['noreg']}{$isi['tahun']}'";
-						$QryKIB_B = mysql_query("select * from kib_b  $KondisiKIB limit 0,1");
-						while ($isiKIB_B = mysql_fetch_array($QryKIB_B)) {
+						$QryKIB_B = sqlQuery("select * from kib_b  $KondisiKIB limit 0,1");
+						while ($isiKIB_B = sqlArray($QryKIB_B)) {
 							$ISI5 = "{$isiKIB_B['merk']}";
 							$ISI6 = "{$isiKIB_B['no_pabrik']} / {$isiKIB_B['no_rangka']} / {$isiKIB_B['no_mesin']}";
 							$ISI7 = "{$isiKIB_B['bahan']}";							
@@ -2439,8 +2439,8 @@ class PenatausahaObj {
 						}
 					}
 					if ($isi['f'] == "03") {//KIB C;
-						$QryKIB_C = mysql_query("select * from kib_c  $KondisiKIB limit 0,1");
-						while ($isiKIB_C = mysql_fetch_array($QryKIB_C)) {
+						$QryKIB_C = sqlQuery("select * from kib_c  $KondisiKIB limit 0,1");
+						while ($isiKIB_C = sqlArray($QryKIB_C)) {
 							if($SPg == 'belumsensus'){
 								$alm = '';
 								$alm .= ifempty($isiKIB_C['alamat'],'-');		
@@ -2457,8 +2457,8 @@ class PenatausahaObj {
 						}
 					}
 					if ($isi['f'] == "04") {//KIB D;
-						$QryKIB_D = mysql_query("select * from kib_d  $KondisiKIB limit 0,1");
-						while ($isiKIB_D = mysql_fetch_array($QryKIB_D)) {
+						$QryKIB_D = sqlQuery("select * from kib_d  $KondisiKIB limit 0,1");
+						while ($isiKIB_D = sqlArray($QryKIB_D)) {
 							if($SPg == 'belumsensus'){
 								$alm = '';
 								$alm .= ifempty($isiKIB_D['alamat'],'-');		
@@ -2474,17 +2474,17 @@ class PenatausahaObj {
 						}
 					}
 					if ($isi['f'] == "05") {//KIB E;
-						$QryKIB_E = mysql_query("select * from kib_e  $KondisiKIB limit 0,1");
-						while ($isiKIB_E = mysql_fetch_array($QryKIB_E)) {
+						$QryKIB_E = sqlQuery("select * from kib_e  $KondisiKIB limit 0,1");
+						while ($isiKIB_E = sqlArray($QryKIB_E)) {
 							$ISI7 = "{$isiKIB_E['seni_bahan']}";
 							$ISI15 = "{$isiKIB_E['ket']}";
 						}
 					}
 					if ($isi['f'] == "06") {//KIB F;
 						$sQryKIB_F = "select * from kib_f  $KondisiKIB limit 0,1";
-						$QryKIB_F = mysql_query($sQryKIB_F);
+						$QryKIB_F = sqlQuery($sQryKIB_F);
 						//echo "<br>qrykibf= $sQryKIB_F";
-						while ($isiKIB_F = mysql_fetch_array($QryKIB_F)) {
+						while ($isiKIB_F = sqlArray($QryKIB_F)) {
 							if($SPg == 'belumsensus'){
 								$alm = '';
 								$alm .= ifempty($isiKIB_F['alamat'],'-');		
@@ -2501,8 +2501,8 @@ class PenatausahaObj {
 						}
 					}
 					if ($isi['f'] == "07") {//KIB E;
-						$QryKIB_E = mysql_query("select * from kib_g  $KondisiKIB limit 0,1");
-						while ($isiKIB_E = mysql_fetch_array($QryKIB_E)) {
+						$QryKIB_E = sqlQuery("select * from kib_g  $KondisiKIB limit 0,1");
+						while ($isiKIB_E = sqlArray($QryKIB_E)) {
 							$ISI7 = "{$isiKIB_E['pencipta']}";
 //							$ISI7 = "{$isiKIB_E['jenis']}";
 							$ISI15 = "{$isiKIB_E['ket']}";
@@ -2571,10 +2571,10 @@ class PenatausahaObj {
 								$tahun_susut = $_REQUEST['tahun_susut'];
 								$aqrsusut = "select count(*) as jmlsusut, ifnull(sum(harga),0) as hrgsusut, ifnull(sum(hrg_rehab),0) as hrgrehab from penyusutan where idbi='".$isi['idawal']."' and tahun<$tahun_susut ";
 								//echo $aqrsusut;
-								$susut = mysql_fetch_array(mysql_query($aqrsusut));
+								$susut = sqlArray(sqlQuery($aqrsusut));
 								$penyusutanprev = $susut['hrgsusut'];
 								$aqrsusut = "select count(*) as jmlsusut, ifnull(sum(harga),0) as hrgsusut, ifnull(sum(hrg_rehab),0) as hrgrehab from penyusutan where idbi='".$isi['idawal']."' and tahun<=$tahun_susut ";
-								$susut = mysql_fetch_array(mysql_query($aqrsusut));
+								$susut = sqlArray(sqlQuery($aqrsusut));
 								$penyusutantot = $susut['hrgsusut'];
 								$penyusutanskr = $penyusutantot-$penyusutanprev  ;
 								$nilaibuku = $isi['jml_harga'] + $susut['hrgrehab'] - $penyusutantot ;
@@ -2582,7 +2582,7 @@ class PenatausahaObj {
 								$totalSusutSkrHal += $penyusutanskr;
 								$totalSusutTotHal += $penyusutantot;
 								$totalNilaiBukuHal += $nilaibuku;
-								$get = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$isi['id']."'"));
+								$get = sqlArray(sqlQuery("select * from buku_induk where id='".$isi['id']."'"));
 								$masa_manfaat = $get['masa_manfaat'];
 								$vmasa_manfaat = number_format($masa_manfaat,0,',','.').'thn';
 								$nilairesidu  = $get['nilai_sisa'];
@@ -2687,7 +2687,7 @@ class PenatausahaObj {
 					break;
 				}
 				case "05" : case "kib_b_cetak" :{		
-					//while ($isi = mysql_fetch_array($Qry)){
+					//while ($isi = sqlArray($Qry)){
 						$idBI = $isi['idbi'];//getIDByKodeBrg('buku_induk', $isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'].$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']);
 						//$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 						$ISI1 	= !empty($isi['merk'])?$isi['merk']:"-";
@@ -2850,14 +2850,14 @@ class PenatausahaObj {
 				}
 				case "07" : case "kib_d_cetak" :{									
 					
-					//$Qry = mysql_query($sqry);
-					//$jmlDataKIB_D = table_get_value("select count(*) as cnt from view_kib_d where $Kondisi ",'cnt');// mysql_num_rows($Qry);			
-					//$Qry = mysql_query($sqry." $LimitHalKIB_D"); 			
-					//$Qry = mysql_query($sqry);			
+					//$Qry = sqlQuery($sqry);
+					//$jmlDataKIB_D = table_get_value("select count(*) as cnt from view_kib_d where $Kondisi ",'cnt');// sqlNumRow($Qry);			
+					//$Qry = sqlQuery($sqry." $LimitHalKIB_D"); 			
+					//$Qry = sqlQuery($sqry);			
 					//$no=$Main->PagePerHal * (($HalKIB_D*1) - 1);	
 					//$cb=0;	$jmlTampilKIB_D = 0;	$jmlTotalHargaDisplay = 0;	$ListData = "";
 					//*
-					//while ($isi = mysql_fetch_array($Qry)){
+					//while ($isi = sqlArray($Qry)){
 					$idBI = $isi['idbi'];// getIDByKodeBrg('buku_induk', $isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'].$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']);// table_get_value( $sidBi, 'id' );
 					$kota = '<br>'.$isi['alamat_kota'];//getNmWlayah($isi['alamat_a'], $isi['alamat_b']);
 					// $Kec = $isi['alamat_kec'];
@@ -2964,12 +2964,12 @@ class PenatausahaObj {
 					break;
 				}
 				case "08" : case "kib_e_cetak" :{			
-					//$Qry = mysql_query($sqry);
-					//$jmlDataKIB_E = table_get_value("select count(*) as cnt from view_kib_e where $Kondisi ",'cnt');//mysql_num_rows($Qry);
-					//$Qry = mysql_query($sqry." $LimitHalKIB_E");
+					//$Qry = sqlQuery($sqry);
+					//$jmlDataKIB_E = table_get_value("select count(*) as cnt from view_kib_e where $Kondisi ",'cnt');//sqlNumRow($Qry);
+					//$Qry = sqlQuery($sqry." $LimitHalKIB_E");
 					//$no=$Main->PagePerHal * (($HalKIB_E*1) - 1);
 					//$cb=0;	$jmlTampilKIB_E = 0;	$jmlTotalHargaDisplay = 0;		$ListData = "";
-					//while ($isi = mysql_fetch_array($Qry)){
+					//while ($isi = sqlArray($Qry)){
 						$idBI = $isi['idbi'];//getIDByKodeBrg('buku_induk', $isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'].$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']);// table_get_value( $sidBi, 'id' );
 						$jmlTampilKIB_E++;
 						$jmlTotalHargaDisplay += $isi['jml_harga'];
@@ -3064,9 +3064,9 @@ class PenatausahaObj {
 					break;
 				}
 				case "09" : case "kib_f_cetak" :{
-					//$Qry = mysql_query($sqry);
-					//$jmlDataKIB_F = table_get_value("select count(*) as cnt from view_kib_f where $Kondisi ",'cnt');//mysql_num_rows($Qry);
-					//$Qry = mysql_query($sqry." $LimitHalKIB_F");
+					//$Qry = sqlQuery($sqry);
+					//$jmlDataKIB_F = table_get_value("select count(*) as cnt from view_kib_f where $Kondisi ",'cnt');//sqlNumRow($Qry);
+					//$Qry = sqlQuery($sqry." $LimitHalKIB_F");
 					//$ISI15 = ifempty($isi['ket'],'-');
 					//$ISI15 .= '<br>'.$isi['nmbidang'].' - '.$isi['nmopd'].' - '.$isi['nmunit'] ;
 					//$no=$Main->PagePerHal * (($HalKIB_F*1) - 1);
@@ -3074,7 +3074,7 @@ class PenatausahaObj {
 					//$jmlTampilKIB_F = 0;
 					//$jmlTotalHargaDisplay = 0;
 					//$ListData = "";
-					//while ($isi = mysql_fetch_array($Qry)){
+					//while ($isi = sqlArray($Qry)){
 						$idBI = $isi['idbi'];//getIDByKodeBrg('buku_induk', $isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'].$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']);
 //						$kota =  '<br>'.$isi['alamat_kota'];//'<br>'.getNmWlayah($isi['alamat_a'], $isi['alamat_b']);
 //						$Kec = $isi['alamat_kec'];//table_get_value('select alamat_kec from kib_f where concat(a1,a,b,c,d,e,f,g,h,i,j,tahun,noreg) = "'.$isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'].$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg'].'"','alamat_kec');
@@ -3141,12 +3141,12 @@ class PenatausahaObj {
 					break;
 				}
 				case "kibg" : case "kib_g_cetak" :{			
-					//$Qry = mysql_query($sqry);
-					//$jmlDataKIB_E = table_get_value("select count(*) as cnt from view_kib_e where $Kondisi ",'cnt');//mysql_num_rows($Qry);
-					//$Qry = mysql_query($sqry." $LimitHalKIB_E");
+					//$Qry = sqlQuery($sqry);
+					//$jmlDataKIB_E = table_get_value("select count(*) as cnt from view_kib_e where $Kondisi ",'cnt');//sqlNumRow($Qry);
+					//$Qry = sqlQuery($sqry." $LimitHalKIB_E");
 					//$no=$Main->PagePerHal * (($HalKIB_E*1) - 1);
 					//$cb=0;	$jmlTampilKIB_G = 0;	$jmlTotalHargaDisplay = 0;		$ListData = "";
-					//while ($isi = mysql_fetch_array($Qry)){
+					//while ($isi = sqlArray($Qry)){
 						$idBI = $isi['idbi'];//getIDByKodeBrg('buku_induk', $isi['a1'].$isi['a'].$isi['b'].$isi['c'].$isi['d'].$isi['e'].$isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'].$isi['tahun'].$isi['noreg']);// table_get_value( $sidBi, 'id' );
 						$jmlTampilKIB_G++;
 						$jmlTotalHargaDisplay += $isi['jml_harga'];
@@ -3334,12 +3334,12 @@ class PenatausahaObj {
 		$yesSum = $_REQUEST['yesSum'];
 		if ($yesSum=='1')
 		{
-		$Qrysum = mysql_query($sqrysum);
+		$Qrysum = sqlQuery($sqrysum);
 		$cb=0;  $totLuasTanahHal = 0;
 		$jmlTotalHargaDisplay = 0;
 		 // $ListData = "";
 		
-		while($isisum=mysql_fetch_array($Qrysum)){
+		while($isisum=sqlArray($Qrysum)){
 		
 			if ($no==$isisum['jml']){
 				$jmlTotalHarga=0;	
@@ -3442,7 +3442,7 @@ class PenatausahaObj {
 				
 		//penilaian ---------------------------------------------		
 		$aqry = "select sum(nilai_barang - nilai_barang_asal) as tot from penilaian where idbi_awal in(select idawal from buku_induk where $Kondisi  $kondf );"; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$penilaian = $get['tot'];
 		
 		//ganti rugi
@@ -3455,23 +3455,23 @@ class PenatausahaObj {
 			$aqry = "select sum(aa.bayar) as tot from gantirugi_bayar aa left join ".$tblNameList."_total bb on aa.id_bukuinduk = bb.$idbi_  Where $Kondisi ";
 			$cek .= $aqry;
 			//$aqry = "select sum(aa.bayar) as tot from gantirugi_bayar aa left join view_buku_induk2_total bb on aa.id_bukuinduk = bb.id  Where bb.a1='12' and bb.a='28' and bb.b='01' and bb.status_barang <> 3  and bb.staset<=9 ";
-			$get = mysql_fetch_array(mysql_query($aqry));
+			$get = sqlArray(sqlQuery($aqry));
 			$byrTGR = $get['tot'];
 		}
 		
 		//koreksi ----------------------------------------------
 		$aqry = "select sum(harga_baru - harga) as tot from t_koreksi where idbi_awal in(select idawal from buku_induk where $Kondisi $kondf );"; $cek .= $aqry;
-		$get = mysql_fetch_array(mysql_query($aqry));
+		$get = sqlArray(sqlQuery($aqry));
 		$koreksi = $get['tot'];
 		
 		
 		$aqry="select sum(( coalesce(jml_harga,0)+coalesce(tot_pelihara,0) + coalesce(tot_pengaman,0)- coalesce(tot_hapussebagian,0) )) as total, count(*) as cnt from ".$tblNameList."_total Where $Kondisi ";
 		$cek .= $aqry;
 		//$aqry="select sum(jml_harga) as total, count(*) as cnt from ".$tblNameList."_total Where $Kondisi ";
-		$Sum = mysql_query($aqry);				
+		$Sum = sqlQuery($aqry);				
 		$jmlTotalHarga=0;
 		$jmlData=0;
-		if($isi = mysql_fetch_array($Sum)){
+		if($isi = sqlArray($Sum)){
 			$jmlTotalHarga +=$isi['total'] - $byrTGR +$penilaian + $koreksi;
 			$jmlData = $isi['cnt'];
 		}
@@ -3498,7 +3498,7 @@ class PenatausahaObj {
 		if($SPg=='04'||$SPg=='06'||$SPg=='07'||$SPg=='09'){
 			
 			$aqry = "select sum(luas)as totluas from $tblNameList Where $Kondisi";
-			$get = mysql_fetch_array(mysql_query($aqry));
+			$get = sqlArray(sqlQuery($aqry));
 			$luas_tanah = $get['totluas'];
 		
 		}
@@ -3508,16 +3508,16 @@ class PenatausahaObj {
 		$jns = $_REQUEST['jns'];
 		if($jns=='penyusutan' && $Main->PENYUSUTAN){
 			//tot perolehan 
-			$get = mysql_fetch_array(mysql_query(" select sum(harga) as tot from ".$tblNameList."_total Where $Kondisi "));
+			$get = sqlArray(sqlQuery(" select sum(harga) as tot from ".$tblNameList."_total Where $Kondisi "));
 			//tot susut 
 			$tahun_susut = $_REQUEST['tahun_susut'];
 			$aqry=" select count(*) as jmlsusut, ifnull(sum(harga),0) as hrgsusut, ifnull(sum(hrg_rehab),0) as hrgrehab from penyusutan where  tahun<$tahun_susut ".
 				" and idbi in ( select id from ".$tblNameList."_total Where $Kondisi );"; $cek.= $aqry;
-			$susut = mysql_fetch_array(mysql_query($aqry));
+			$susut = sqlArray(sqlQuery($aqry));
 			$penyusutanprev = $susut['hrgsusut'];		
 			$aqry = "select count(*) as jmlsusut, ifnull(sum(harga),0) as hrgsusut, ifnull(sum(hrg_rehab),0) as hrgrehab from penyusutan where tahun<=$tahun_susut ".
 				" and idbi in ( select id from ".$tblNameList."_total Where $Kondisi );";
-			$susut = mysql_fetch_array(mysql_query($aqry));
+			$susut = sqlArray(sqlQuery($aqry));
 			$penyusutantot = $susut['hrgsusut'];
 			$penyusutanskr = $penyusutantot-$penyusutanprev ;
 			$nilaibuku = $get['tot'] - $penyusutantot ;

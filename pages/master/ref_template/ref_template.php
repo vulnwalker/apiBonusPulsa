@@ -61,8 +61,8 @@ class templateObj  extends DaftarObj2{
 		case 'formBaru':{
 			$username = $_COOKIE['coID'];
 			setcookie('TemplateUnit','');
-			mysql_query("delete from temp_template where username = '$username'");		
-		    mysql_query("delete from temp_detail_template where username = '$username'");						
+			sqlQuery("delete from temp_template where username = '$username'");		
+		    sqlQuery("delete from temp_detail_template where username = '$username'");						
 			$fm = $this->setFormBaru();				
 			$cek = $fm['cek'];
 			$err = $fm['err'];
@@ -144,9 +144,9 @@ class templateObj  extends DaftarObj2{
 	 			} 
 				$username = $_COOKIE['coID'];
 				$query ="update temp_detail_template set jumlah = '$VALUE' where id = '$ID'";
-				mysql_query($query);
+				sqlQuery($query);
 				
-				$get = mysql_fetch_array(mysql_query("select sum(jumlah) as total from temp_detail_template where username = '$username' "));
+				$get = sqlArray(sqlQuery("select sum(jumlah) as total from temp_detail_template where username = '$username' "));
 				$total = $get['total'];
 				$content = array('query' => $query , 'idnya' => $ID , 'valuenya' => $VALUE, 'total'=>number_format($total,0,",","."));
 				
@@ -161,15 +161,15 @@ class templateObj  extends DaftarObj2{
 			$jumlahTotal = 0;
 			$username = $_COOKIE['coID'];
 			$ambilQuerynya = "select sum(jumlah) as total from temp_detail_template where username = '$username'";
-			$getJumlahTotal = mysql_fetch_array(mysql_query($ambilQuerynya));
+			$getJumlahTotal = sqlArray(sqlQuery($ambilQuerynya));
 			
 			$jumlahTotal = $getJumlahTotal['total'];
 		 	$idTemplateAsli = $ID;
 			
-			mysql_query("delete from ref_rincian_template where refid_template = '$idTemplateAsli'");
+			sqlQuery("delete from ref_rincian_template where refid_template = '$idTemplateAsli'");
 			
-		    $ambil  = mysql_query("select * from temp_detail_template where username = '$username'"); 
-		    while ( $baris = mysql_fetch_array($ambil)) {
+		    $ambil  = sqlQuery("select * from temp_detail_template where username = '$username'"); 
+		    while ( $baris = sqlArray($ambil)) {
 				$insert_detail_template = array(
 						'refid_template' => $idTemplateAsli,
 		                'c1' => $c1,
@@ -180,16 +180,16 @@ class templateObj  extends DaftarObj2{
 						'jumlah' => $baris['jumlah'],
 						'nama_sub_unit' => $baris['nama_sub_unit']
 		            );
-		            if (mysql_query(VulnWalkerInsert('ref_rincian_template', $insert_detail_template))) {
+		            if (sqlQuery(VulnWalkerInsert('ref_rincian_template', $insert_detail_template))) {
 		                $insertDetailTemplate = 'SUKSES';
 		            } else {
 		                $insertDetailTemplate = 'GAGAL';
 		            }
 			}
 			$query = "update ref_template set nama = '$nama', tgl= '$tanggal', nomor='$nomor', jumlah = '$jumlahTotal' where id ='$idTemplateAsli'";
-			mysql_query($query);
-			mysql_query("delete from temp_template where username='$username'");
-			mysql_query("delete from temp_detail_template where username='$username'");
+			sqlQuery($query);
+			sqlQuery("delete from temp_template where username='$username'");
+			sqlQuery("delete from temp_detail_template where username='$username'");
 			break;
 		    }
 			
@@ -198,8 +198,8 @@ class templateObj  extends DaftarObj2{
 		  			$$key = $value; 
 	 			} 
 				$username = $_COOKIE['coID'];
-				mysql_query("delete from temp_template where username = '$username'");		
-				mysql_query("delete from temp_detail_template where username = '$username'");	
+				sqlQuery("delete from temp_template where username = '$username'");		
+				sqlQuery("delete from temp_detail_template where username = '$username'");	
 				
 				$c1 = "";
 				$c = "";
@@ -209,8 +209,8 @@ class templateObj  extends DaftarObj2{
 				$tanggal = "";
 				$nomor_distribusi = "";
 				
-					$moveParentTemplate  = mysql_query("select * from ref_template where id = '$id'"); 
-				    while ($baris = mysql_fetch_array($moveParentTemplate)) {
+					$moveParentTemplate  = sqlQuery("select * from ref_template where id = '$id'"); 
+				    while ($baris = sqlArray($moveParentTemplate)) {
 						$c1= $baris['c1'];
 						$c = $baris['c'];
 						$d = $baris['d'];
@@ -228,12 +228,12 @@ class templateObj  extends DaftarObj2{
 											  'c' => $c,
 											  'd' => $d
 											   );
-					mysql_query(VulnWalkerInsert('temp_template',$dataInsertTempTemplate));
+					sqlQuery(VulnWalkerInsert('temp_template',$dataInsertTempTemplate));
 					
 				
 				
-				    $ambil  = mysql_query("select * from ref_rincian_template where refid_template = '$id'"); 
-				    while( $baris = mysql_fetch_array($ambil)  ) {
+				    $ambil  = sqlQuery("select * from ref_rincian_template where refid_template = '$id'"); 
+				    while( $baris = sqlArray($ambil)  ) {
 						$insert_detail_temp_template = array(
 								'ref_id_template' => $id,
 				                'c1' => $baris['c1'],
@@ -245,7 +245,7 @@ class templateObj  extends DaftarObj2{
 								'nama_sub_unit' => $baris['nama_sub_unit'],
 								'username' => $username
 				            );
-				            if (mysql_query(VulnWalkerInsert('temp_detail_template', $insert_detail_temp_template))) {
+				            if (sqlQuery(VulnWalkerInsert('temp_detail_template', $insert_detail_temp_template))) {
 				                echo 'SUKSES';
 				            } else {
 				                echo 'GAGAL';
@@ -265,7 +265,7 @@ class templateObj  extends DaftarObj2{
 				$jumlahTotal = 0;
 				$username = $_COOKIE['coID'];
 				$ambilQuerynya = "select sum(jumlah) as total from temp_detail_template where username = '$username'";
-				$getJumlahTotal = mysql_fetch_array(mysql_query($ambilQuerynya));
+				$getJumlahTotal = sqlArray(sqlQuery($ambilQuerynya));
 				
 				$jumlahTotal = $getJumlahTotal['total'];
 			 	$idTemplateAsli = "";
@@ -278,18 +278,18 @@ class templateObj  extends DaftarObj2{
 			                'd' => $d,
 							'jumlah' => $jumlahTotal
 			            );
-			            if (mysql_query(VulnWalkerInsert('ref_template', $insert_template))) {
+			            if (sqlQuery(VulnWalkerInsert('ref_template', $insert_template))) {
 			                $insertTemplate = 'SUKSES';
 			            } else {
 			                $insertTemplate = 'GAGAL';
 			            }
 				
-				$huahah = mysql_fetch_array(mysql_query("select max(id) as hubla from ref_template "));
+				$huahah = sqlArray(sqlQuery("select max(id) as hubla from ref_template "));
 				$idTemplateAsli  = $huahah['hubla'];
 				
 			
-			    $ambil  =  mysql_query("select * from temp_detail_template where username = '$username'"); 
-			    while ($baris = mysql_fetch_array($ambil)) {
+			    $ambil  =  sqlQuery("select * from temp_detail_template where username = '$username'"); 
+			    while ($baris = sqlArray($ambil)) {
 					$insert_detail_template = array(
 							'refid_template' => $idTemplateAsli,
 			                'c1' => $c1,
@@ -300,15 +300,15 @@ class templateObj  extends DaftarObj2{
 							'jumlah' => $baris['jumlah'],
 							'nama_sub_unit' => $baris['nama_sub_unit']
 			            );
-			            if (mysql_query(VulnWalkerInsert('ref_rincian_template', $insert_detail_template))) {
+			            if (sqlQuery(VulnWalkerInsert('ref_rincian_template', $insert_detail_template))) {
 			                $insertDetailTemplate = 'SUKSES';
 			            } else {
 			                $insertDetailTemplate = 'GAGAL';
 			            }
 				}
 				
-				mysql_query("delete from temp_template where username='$username'");
-				mysql_query("delete from temp_detail_template where username='$username'");
+				sqlQuery("delete from temp_template where username='$username'");
+				sqlQuery("delete from temp_detail_template where username='$username'");
 				
 				
 			break;
@@ -396,7 +396,7 @@ class templateObj  extends DaftarObj2{
 		
 		if($err == ''){
 			$aqry = "SELECT * FROM  ref_template WHERE id='".$this->form_idplh."' "; $cek.=$aqry;
-			$dt = mysql_fetch_array(mysql_query($aqry));
+			$dt = sqlArray(sqlQuery($aqry));
 			$c1 = $dt['c1'];
 			$c = $dt['c'];
 			$d = $dt['d'];
@@ -459,7 +459,7 @@ class templateObj  extends DaftarObj2{
      $cek .= $codeAndNameskpd;
 
 	  	$query = "select * from ref_skpd " ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 
 $comboBoxUrusanForm = cmbQuery('cmbUrusanForm', $selectedUrusan, $codeAndNameUrusan,' '.$cmbRo.' onChange=\''.$this->Prefix.'.BidangAfterform()\'','-- Pilih Semua --');
 	
@@ -751,16 +751,16 @@ $TampilOpt =
 		for($i = 0; $i<count($ids); $i++)	{
 		
 			$a = "SELECT count(*) as cnt, aa.template_terbesar, aa.template_terkecil, bb.nama, aa.f, aa.g, aa.h, aa.i, aa.j FROM ref_barang aa INNER JOIN ref_template bb ON aa.template_terbesar = bb.nama OR aa.template_terkecil = bb.nama WHERE bb.nama='".$ids[$i]."' "; $cek .= $a;
-		$aq = mysql_query($a);
-		$cnt = mysql_fetch_array($aq);
+		$aq = sqlQuery($a);
+		$cnt = sqlArray($aq);
 		
 		if($cnt['cnt'] > 0) $err = "template ".$ids[$i]." Tidak Bisa DiHapus ! Sudah Digunakan Di Ref Barang.";
 		
 			if($err=='' ){
 					$qy = "DELETE FROM $this->TblName_Hapus WHERE id='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 					$qy = "DELETE FROM ref_rincian_template WHERE refid_template='".$ids[$i]."' ";$cek.=$qy;
-					$qry = mysql_query($qy);
+					$qry = sqlQuery($qy);
 						
 			}else{
 				break;

@@ -12,9 +12,9 @@ $objNM = cekGET("objNM","");
 $nm_rekening = cekPOST("nm_rekening","");
 
 
-$Qry = mysql_query("select * from ref_rekening where concat(k,'.',l,'.',m,'.',n,'.',o) = '$Cari'");
+$Qry = sqlQuery("select * from ref_rekening where concat(k,'.',l,'.',m,'.',n,'.',o) = '$Cari'");
 $nm_rekening = "";
-if(!mysql_num_rows($Qry))
+if(!sqlNumRow($Qry))
 {
 	if(!empty($Cari))
 	{
@@ -32,7 +32,7 @@ if(!mysql_num_rows($Qry))
 else
 {
 
-	$isi = mysql_fetch_array($Qry);
+	$isi = sqlArray($Qry);
 	$nm_rekening = $isi['nm_rekening'];
 	//echo "<script>alert('aa $Cari bb');</script>";
 }

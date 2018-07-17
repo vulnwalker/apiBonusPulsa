@@ -56,9 +56,9 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$fmSKPDBidang = cekPOST('fmSKPDBidang');
 	 $aqry="select * from ref_skpd where c!='00' and d='00'  GROUP by c";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDBidang='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['c'] ==  $value ? "selected" : "";
 				if ($nmSKPDBidang=='' ) $nmSKPDBidang =  $value == $Hasil['c'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[c]}'>{$Hasil[nm_skpd]}";
@@ -78,9 +78,9 @@ class Dpb_RencanaObj extends DaftarObj2{
 		setcookie('cofmUNIT',$fmSKPDskpd);
 	 $aqry="select * from ref_skpd where c='$fmSKPDBidang' and d!='00' and e='00' GROUP by d";
 	 $Input = "<option value='$vAtas'>$Atas</option>";
-	 $Query = mysql_query($aqry);
+	 $Query = sqlQuery($aqry);
 	 $nmSKPDskpd='';
-    	while ($Hasil = mysql_fetch_array($Query)) {
+    	while ($Hasil = sqlArray($Query)) {
         	$Sel = $Hasil['d'] ==  $value ? "selected" : "";
 				if ($nmSKPDskpd=='' ) $nmSKPDskpd =  $value == $Hasil['d'] ? $Hasil['nm_skpd'] : '';
 			$Input .= "<option $Sel value='{$Hasil[d]}'>{$Hasil[nm_skpd]}";
@@ -172,21 +172,21 @@ class Dpb_RencanaObj extends DaftarObj2{
 	}
 	function setKolomData($no, $isi, $Mode, $TampilCheckBox){
 		global $Ref,$HTTP_COOKIE_VARS;
-		 $kb=mysql_fetch_array(mysql_query("select * from ref_barang where f=".$isi['f']." and g=".$isi['g']." and h=".$isi['h']." and i=".$isi['i']." and j=".$isi['j'].""));	 
-		 $ka=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$isi['k']."' and kb='".$isi['l']."' and kc='".$isi['m']."' and kd='".$isi['n']."' and ke='".$isi['o']."' and kf='".$isi['kf']."'"));	 
+		 $kb=sqlArray(sqlQuery("select * from ref_barang where f=".$isi['f']." and g=".$isi['g']." and h=".$isi['h']." and i=".$isi['i']." and j=".$isi['j'].""));	 
+		 $ka=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$isi['k']."' and kb='".$isi['l']."' and kc='".$isi['m']."' and kd='".$isi['n']."' and ke='".$isi['o']."' and kf='".$isi['kf']."'"));	 
 	 	 $ka = array_map('utf8_encode', $ka);
 		 $kode = $isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'].'</br>'.$isi['k'].'.'.$isi['l'].'.'.$isi['m'].'.'.$isi['n'].'.'.$isi['o'].'.'.$isi['kf'];		
 		 $nama = $kb['nm_barang'].'</br>'.$ka['nm_account'];
 		 //query rkb
-		 //$qr=mysql_fetch_array(mysql_query("select * from rkb where ref_id='".$isi['idrkb']."'"));
+		 //$qr=sqlArray(sqlQuery("select * from rkb where ref_id='".$isi['idrkb']."'"));
 		 //query program
-		 $qp=mysql_fetch_array(mysql_query("SELECT p,nama FROM ref_program WHERE bk='".$isi['bk']."' AND ck='".$isi['ck']."' AND dk='".$isi['dk']."' AND p='".$isi['p']."' AND q='0'"));
+		 $qp=sqlArray(sqlQuery("SELECT p,nama FROM ref_program WHERE bk='".$isi['bk']."' AND ck='".$isi['ck']."' AND dk='".$isi['dk']."' AND p='".$isi['p']."' AND q='0'"));
 		 //query Kegiatan
-		 $qq=mysql_fetch_array(mysql_query("SELECT q,nama FROM ref_program WHERE bk='".$isi['bk']."' AND ck='".$isi['ck']."' AND dk='".$isi['dk']."' AND p='".$isi['p']."' AND q='".$isi['q']."'"));
+		 $qq=sqlArray(sqlQuery("SELECT q,nama FROM ref_program WHERE bk='".$isi['bk']."' AND ck='".$isi['ck']."' AND dk='".$isi['dk']."' AND p='".$isi['p']."' AND q='".$isi['q']."'"));
 		 $program=$qp['nama'].'</br>'.$qq['nama'];
 		 //query Pagu Harga
-		 $pg=mysql_fetch_array(mysql_query("SELECT pagu FROM ref_program where bk='".$isi['bk']."' AND ck='".$isi['ck']."' AND dk='".$isi['dk']."' AND p='".$isi['p']."' AND q='".$isi['q']."'"));
-		 $sub=mysql_fetch_array(mysql_query("SELECT nm_skpd from ref_skpd where c='".$isi['c']."' AND d='".$isi['d']."' AND e='".$isi['e']."' AND e1='".$isi['e1']."'"));
+		 $pg=sqlArray(sqlQuery("SELECT pagu FROM ref_program where bk='".$isi['bk']."' AND ck='".$isi['ck']."' AND dk='".$isi['dk']."' AND p='".$isi['p']."' AND q='".$isi['q']."'"));
+		 $sub=sqlArray(sqlQuery("SELECT nm_skpd from ref_skpd where c='".$isi['c']."' AND d='".$isi['d']."' AND e='".$isi['e']."' AND e1='".$isi['e1']."'"));
 		 $Koloms = array();
 		 $Koloms[] = array('align="center" width="20"', $no.'.' );
 		 if ($Mode == 1) $Koloms[] = array(" align='center'  ", $TampilCheckBox);
@@ -310,32 +310,32 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$this->form_fmST = 0;
 		//get data
 		$aqry = "select * from rkb where Id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		
 		//query mendapatkan ref_skpd_urusan
-		$su=mysql_fetch_array(mysql_query("select * from ref_skpd_urusan WHERE c='".$dt['c']."' AND d='".$dt['d']."'"));
+		$su=sqlArray(sqlQuery("select * from ref_skpd_urusan WHERE c='".$dt['c']."' AND d='".$dt['d']."'"));
 		//declare bk,ck,dk
 		$dt['bk']=$su['bk'];
 		$dt['ck']=$su['ck'];
 		$dt['dk']=$su['dk'];
 		
 		//query skpd
-		$c=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=00 and e=00 and e1=00"));
-		$d=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=00 and e1=00"));
-	 	$e=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e1=00"));
-	 	$e1=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e=".$dt['e1'].""));
+		$c=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=00 and e=00 and e1=00"));
+		$d=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=00 and e1=00"));
+	 	$e=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e1=00"));
+	 	$e1=sqlArray(sqlQuery("select * from ref_skpd where c=".$dt['c']." and d=".$dt['d']." and e=".$dt['e']." and e=".$dt['e1'].""));
 		$dt['bidang']=$c['nm_skpd'];
 		$dt['skpd']=$d['nm_skpd'];
 		$dt['unit']=$e['nm_skpd'];
 		$dt['subunit']=$e1['nm_skpd'];	 	
 
 		//query barang
-		$cb=mysql_fetch_array(mysql_query("select * from ref_barang where f='".$dt['f']."' and g='".$dt['g']."' and h='".$dt['h']."' and i='".$dt['i']."' and j='".$dt['j']."'"));
+		$cb=sqlArray(sqlQuery("select * from ref_barang where f='".$dt['f']."' and g='".$dt['g']."' and h='".$dt['h']."' and i='".$dt['i']."' and j='".$dt['j']."'"));
 		$dt['kode_barang']=$dt['f'].'.'.$dt['g'].'.'.$dt['h'].'.'.$dt['i'].'.'.$dt['j'];
 		$dt['nama_barang']=$cb['nm_barang'];		
 
 		//query akun
-		$qa=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$dt['k']."' and kb='".$dt['l']."' and kc='".$dt['m']."' and kd='".$dt['n']."' and ke='".$dt['o']."' and kf='".$dt['kf']."'"));
+		$qa=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$dt['k']."' and kb='".$dt['l']."' and kc='".$dt['m']."' and kd='".$dt['n']."' and ke='".$dt['o']."' and kf='".$dt['kf']."'"));
 	    $qa = array_map('utf8_encode', $qa);
 		$dt['kode_akun']=$dt['k'].'.'.$dt['l'].'.'.$dt['m'].'.'.$dt['n'].'.'.$dt['o'].'.'.$dt['kf'];
 		$dt['nama_akun']=$qa['nm_account'];		
@@ -347,12 +347,12 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$dt['ket_rkbmd']=$dt['ket'];	
 
 		//query rka
-		$qr=mysql_fetch_array(mysql_query("select * from rka where ref_id='".$this->form_idplh."' AND sttemp='0'"));
+		$qr=sqlArray(sqlQuery("select * from rka where ref_id='".$this->form_idplh."' AND sttemp='0'"));
 		$dt['ref_id']=$qr['id'];
 		//query program
-		$qp=mysql_fetch_array(mysql_query("SELECT p,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='0'"));
+		$qp=sqlArray(sqlQuery("SELECT p,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='0'"));
 		//query Kegiatan
-		$qq=mysql_fetch_array(mysql_query("SELECT q,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='".$qr['q']."'"));
+		$qq=sqlArray(sqlQuery("SELECT q,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='".$qr['q']."'"));
 		$dt['program_dkbmd']=$qr['p'];
 		$dt['program']=$qp['nama'];	
 		$dt['kegiatan_dkbmd']=$qr['q'];
@@ -363,7 +363,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$dt['merk_barang_dkbmd']=$dt['merk_barang'];
 		$dt['readonly']='readonly';
 		$dt['disabled']='disabled';		
-		$crkb=mysql_fetch_array(mysql_query("select * from rkb where id='".$this->form_idplh."'"));
+		$crkb=sqlArray(sqlQuery("select * from rkb where id='".$this->form_idplh."'"));
 		$cerr = "select * from rkb where stat='".$dt['stat']."'"; $cek.=$cerr;	
 		if($crkb['stat']!=2){
 			$fm['err']="Data yang dipilih harus RKA";
@@ -382,14 +382,14 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$this->form_fmST = 1;
 		//get data
 		$aqry = "select * from dkb where id='".$this->form_idplh."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		//query rkb
-		$rkb=mysql_fetch_array(mysql_query("select * from rkb WHERE id='".$dt['idrkb']."'"));		
+		$rkb=sqlArray(sqlQuery("select * from rkb WHERE id='".$dt['idrkb']."'"));		
 		//query skpd
-		$c=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$rkb['c']." and d=00 and e=00 and e1=00"));
-		$d=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$rkb['c']." and d=".$rkb['d']." and e=00 and e1=00"));
-	 	$e=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$rkb['c']." and d=".$rkb['d']." and e=".$rkb['e']." and e1=00"));
-	 	$e1=mysql_fetch_array(mysql_query("select * from ref_skpd where c=".$rkb['c']." and d=".$rkb['d']." and e=".$rkb['e']." and e=".$rkb['e1'].""));
+		$c=sqlArray(sqlQuery("select * from ref_skpd where c=".$rkb['c']." and d=00 and e=00 and e1=00"));
+		$d=sqlArray(sqlQuery("select * from ref_skpd where c=".$rkb['c']." and d=".$rkb['d']." and e=00 and e1=00"));
+	 	$e=sqlArray(sqlQuery("select * from ref_skpd where c=".$rkb['c']." and d=".$rkb['d']." and e=".$rkb['e']." and e1=00"));
+	 	$e1=sqlArray(sqlQuery("select * from ref_skpd where c=".$rkb['c']." and d=".$rkb['d']." and e=".$rkb['e']." and e=".$rkb['e1'].""));
 		$dt['bidang']=$c['nm_skpd'];
 		$dt['skpd']=$d['nm_skpd'];
 		$dt['unit']=$e['nm_skpd'];
@@ -399,12 +399,12 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$dt['tahun']= $rkb['tahun'];	
 		
 		//query barang
-		$cb=mysql_fetch_array(mysql_query("select * from ref_barang where f='".$rkb['f']."' and g='".$rkb['g']."' and h='".$rkb['h']."' and i='".$rkb['i']."' and j='".$rkb['j']."'"));
+		$cb=sqlArray(sqlQuery("select * from ref_barang where f='".$rkb['f']."' and g='".$rkb['g']."' and h='".$rkb['h']."' and i='".$rkb['i']."' and j='".$rkb['j']."'"));
 		$dt['kode_barang']=$rkb['f'].'.'.$rkb['g'].'.'.$rkb['h'].'.'.$rkb['i'].'.'.$rkb['j'];
 		$dt['nama_barang']=$cb['nm_barang'];		
 
 		//query akun
-		$qa=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$rkb['k']."' and kb='".$rkb['l']."' and kc='".$rkb['m']."' and kd='".$rkb['n']."' and ke='".$rkb['o']."'"));
+		$qa=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$rkb['k']."' and kb='".$rkb['l']."' and kc='".$rkb['m']."' and kd='".$rkb['n']."' and ke='".$rkb['o']."'"));
 	    $qa = array_map('utf8_encode', $qa);
 		$dt['kode_akun']=$rkb['k'].'.'.$rkb['l'].'.'.$rkb['m'].'.'.$rkb['n'].'.'.$rkb['o'];
 		$dt['nama_akun']=$qa['nm_account'];	
@@ -415,11 +415,11 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$dt['jml_harga_rkbmd']=$rkb['jml_harga'];			
 		$dt['ket_rkbmd']=$rkb['ket'];	
 		//query rka
-		$qr=mysql_fetch_array(mysql_query("select * from rka where id='".$dt['ref_id']."' AND sttemp='0'"));
+		$qr=sqlArray(sqlQuery("select * from rka where id='".$dt['ref_id']."' AND sttemp='0'"));
 		//query program
-		$qp=mysql_fetch_array(mysql_query("SELECT p,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='0'"));
+		$qp=sqlArray(sqlQuery("SELECT p,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='0'"));
 		//query Kegiatan
-		$qq=mysql_fetch_array(mysql_query("SELECT q,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='".$qr['q']."'"));
+		$qq=sqlArray(sqlQuery("SELECT q,nama FROM ref_program WHERE bk='".$qr['bk']."' AND ck='".$qr['ck']."' AND dk='".$qr['dk']."' AND p='".$qr['p']."' AND q='".$qr['q']."'"));
 		$dt['program']=$qp['nama'];	
 		$dt['kegiatan']=$qq['nama'];
 			
@@ -435,7 +435,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 		//$dt['c'] = $_REQUEST[$this->Prefix.'SkpdfmSKPD'];
 		//$dt['d'] = $_REQUEST[$this->Prefix.'SkpdfmUNIT'];
 		//$dt['e'] = $_REQUEST[$this->Prefix.'SkpdfmSUBUNIT'];
-		//$crkb=mysql_fetch_array(mysql_query("select * from rkb where id='".$this->form_idplh."'"));
+		//$crkb=sqlArray(sqlQuery("select * from rkb where id='".$this->form_idplh."'"));
 		//$cerr = "select * from rkb where stat='".$dt['stat']."'"; $cek.=$cerr;	
 		//if($crkb['stat']!=2){
 		//	$fm['err']="Data yang dipilih harus RKA";
@@ -503,7 +503,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 	  }
 	    //ambil data trefditeruskan
 	  	$query = "" ;$cek .=$query;
-	  	$res = mysql_query($query);
+	  	$res = sqlQuery($query);
 		//query program
 		$queryProgram = "SELECT p,nama FROM ref_program WHERE bk='".$dt['bk']."' AND ck='".$dt['ck']."' AND dk='".$dt['dk']."' AND p!='0' AND q='0'";
  		//query Kegiatan
@@ -746,7 +746,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 		$jml_barang = $_REQUEST['jml_barang'];
 		$harga = $_REQUEST['harga'];
 		
-		$old = mysql_fetch_array( mysql_query(
+		$old = sqlArray( sqlQuery(
 			"select * from $this->TblName where id='$id' "		
 		));
 				
@@ -757,7 +757,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 		
 		//-- cek sudah pengadaan
 		if($err=='' ){
-			$pengadaan = mysql_fetch_array(mysql_query(
+			$pengadaan = sqlArray(sqlQuery(
 				"select count(*) as cnt from pengadaan where tahun='".$old['tahun']."' ".
 				" and c='".$old['c']."' and d='".$old['d']."' and e='".$old['e']."' and e1='".$old['e1']."' ".
 				" and f='".$old['f']."' and g='".$old['g']."' and h='".$old['h']."' and i='".$old['i']."' and j='".$old['j']."' "
@@ -770,7 +770,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 				" and c='".$old['c']."' and d='".$old['d']."' and e='".$old['e']."' and e1='".$old['e1']."'".
 				" and f='".$old['f']."' and g='".$old['g']."' and h='".$old['h']."' and i='".$old['i']."' and j='".$old['j']."' "; 
 			$cek .= $aqry;		
-			$rkb = mysql_fetch_array(mysql_query($aqry));
+			$rkb = sqlArray(sqlQuery($aqry));
 			if( $jml_barang > $rkb['jml_barang']) $err = "Jumlah Barang Kebutuhan Tidak Lebih Besar Dari Rencana!";
 		}
 		//-- hit jmlbarang
@@ -778,7 +778,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 		
 		//-- simpan
 		if($err==''){
-			$qry = mysql_query(
+			$qry = sqlQuery(
 				"update $this->TblName_Edit set jml_barang='$jml_barang', harga='$harga', jml_harga='$jml_harga', uid='$UID', tgl_update=now() where id='$id' "		
 			);
 		}
@@ -852,8 +852,8 @@ class Dpb_RencanaObj extends DaftarObj2{
 								tgl_update = now(),
 								uid = '$uid'".
 								"WHERE Id='$idplh'";	$cek .= $aqry2;
-						$qry = mysql_query($aqry);
-						$qry = mysql_query($aqry2);	
+						$qry = sqlQuery($aqry);
+						$qry = sqlQuery($aqry2);	
 				}
 			}elseif($fmST == 1){						
 				if($err==''){					 
@@ -868,7 +868,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 							 tgl_update = 'now()',
 							 uid = '$uid'".
 						 	"WHERE id='".$idplh."'";	$cek .= $aqry2;
-							$qry = mysql_query($aqry2);
+							$qry = sqlQuery($aqry2);
 
 					}
 			}else{
@@ -889,18 +889,18 @@ class Dpb_RencanaObj extends DaftarObj2{
 	 $cbid = $_REQUEST[$this->Prefix.'_cb']; $cek .= $cbid;
 	 //$cb = explode(" ", $cbid[0]);
 	 for($i=0;$i<sizeof($cbid);$i++){
-		 $getIdRKB=mysql_fetch_array(mysql_query("select * from dkb where id='".$cbid[$i]."'"));
+		 $getIdRKB=sqlArray(sqlQuery("select * from dkb where id='".$cbid[$i]."'"));
 		
 			if($err==''){ 				
 						$aqry = "DELETE FROM dkb WHERE id='".$cbid[$i]."'";	$cek .= $aqry;	
-						$qry = mysql_query($aqry);
+						$qry = sqlQuery($aqry);
 						if($aqry==TRUE){
 							$aqry2 = "UPDATE rkb
 									set "." stat = '2',
 									tgl_update = now(),
 									uid = '$uid'".
 									"WHERE id='".$getIdRKB['idrkb']."'";	$cek .= $aqry2;
-							$qry2 = mysql_query($aqry2);						
+							$qry2 = sqlQuery($aqry2);						
 						}
 			}
 	 }					
@@ -935,9 +935,9 @@ class Dpb_RencanaObj extends DaftarObj2{
 				$dk=$_REQUEST['dk'];	
 	
 					$query = "SELECT q,nama FROM ref_program WHERE bk='$bk' AND ck='$ck' AND dk='$dk' AND p='".$program."' AND q!='0'"; $cek .= $query2;
-					$hasil = mysql_query($query);
+					$hasil = sqlQuery($query);
 					$kegiatan = "<option value=''>-- PILIH Kegiatan--</option>";
-					while ($dt = mysql_fetch_array($hasil))
+					while ($dt = sqlArray($hasil))
 					{
 						$kegiatan.="<option value='".$dt['q']."'>".$dt['nama']."</option>";
 					}
@@ -951,10 +951,10 @@ class Dpb_RencanaObj extends DaftarObj2{
 				$ref_pilihdkb = $_REQUEST['id'];
 				
 				//query ambil data ref_jurnal
-				$get = mysql_fetch_array( mysql_query("select * from dkb where id='$ref_pilihdkb'"));
+				$get = sqlArray( sqlQuery("select * from dkb where id='$ref_pilihdkb'"));
 				
 				//query ambil data barang
-				$brg = mysql_fetch_array(mysql_query("select * from ref_barang where 
+				$brg = sqlArray(sqlQuery("select * from ref_barang where 
 										f='".$get['ka']."' and g='".$get['kb']."' and 
 										h='".$get['kc']."' and i='".$get['kd']."' and 
 										j='".$get['ke']."'"));
@@ -962,7 +962,7 @@ class Dpb_RencanaObj extends DaftarObj2{
 				$nm_barang=$brg['nm_barang'];
 				
 				//query ambil data akun
-				$akn = mysql_fetch_array(mysql_query("select * from ref_jurnal where 
+				$akn = sqlArray(sqlQuery("select * from ref_jurnal where 
 										ka='".$get['k']."' and kb='".$get['l']."' and 
 										kc='".$get['m']."' and kd='".$get['n']."' and 
 										ke='".$get['o']."' and kf='".$get['kf']."'"));

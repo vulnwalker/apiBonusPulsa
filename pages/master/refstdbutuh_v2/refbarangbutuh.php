@@ -94,7 +94,7 @@ class RefBarangButuhObj  extends DaftarObj2{
 						 $ke=$kode_jurnal[4];			 	 	  
 						$aqry1 = "INSERT into ref_barang (f,g,h,i,j,nm_barang,ka,kb,kc,kd,ke,masa_manfaat,residu)
 						"."values('$f','$g','$h','$i','$j','$nama_barang','$ka','$kb','$kc','$kd','$ke','$masa_manfaat','$residu')";	$cek .= $aqry1;	
-						$qry = mysql_query($aqry1);						
+						$qry = sqlQuery($aqry1);						
 						if($qry==FALSE)
 						{ 
 							$err="Gagal menyimpan barang";
@@ -108,7 +108,7 @@ class RefBarangButuhObj  extends DaftarObj2{
 									  ke='$ke',
 									  residu='$residu'".
 						 			 "WHERE $kondisi";	$cek .= $aqry2;						
-							$qry2 = mysql_query($aqry2);
+							$qry2 = sqlQuery($aqry2);
 						}
 														
 				}/*else{else{
@@ -140,7 +140,7 @@ class RefBarangButuhObj  extends DaftarObj2{
 								  ke='$ke',
 								  residu='$residu'".
 					 			 "WHERE concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'";	$cek .= $aqry2;
-						$qry = mysql_query($aqry2);
+						$qry = sqlQuery($aqry2);
 						if($qry==FALSE)
 						{ 
 							$err="Gagal menyimpan barang";
@@ -154,7 +154,7 @@ class RefBarangButuhObj  extends DaftarObj2{
 									  ke='$ke',
 									  residu='$residu'".
 						 			 "WHERE $kondisi";	$cek .= $aqry2;						
-							$qry2 = mysql_query($aqry2);
+							$qry2 = sqlQuery($aqry2);
 						}
 					}
 			}else{
@@ -213,7 +213,7 @@ class RefBarangButuhObj  extends DaftarObj2{
 		$i=$kode_barang[3];
 		$j=$kode_barang[4];
 		//query ambil data ref_jurnal
-		$get = mysql_fetch_array( mysql_query("select * from ref_barang where f=$f and g=$g and h=$h and i=$i and j=$j"));
+		$get = sqlArray( sqlQuery("select * from ref_barang where f=$f and g=$g and h=$h and i=$i and j=$j"));
 		$kode_barang=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j;
 		
 		$content = array('kode_barang'=>$kode_barang, 'nama_barang'=>$get['nm_barang']);	
@@ -314,8 +314,8 @@ class RefBarangButuhObj  extends DaftarObj2{
 		$bulan=date('Y-m-')."1";
 		//query ambil data ref_barang
 		$aqry = "select * from ref_barang where concat(f,g,h,i,j)='".$f.$g.$h.$i.$j."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
-		$na=mysql_fetch_array(mysql_query("select * from ref_jurnal where ka='".$dt['ka']."' and kb='".$dt['kb']."' and kc='".$dt['kc']."' and kd='".$dt['kd']."' and ke='".$dt['ke']."'"));
+		$dt = sqlArray(sqlQuery($aqry));
+		$na=sqlArray(sqlQuery("select * from ref_jurnal where ka='".$dt['ka']."' and kb='".$dt['kb']."' and kc='".$dt['kc']."' and kd='".$dt['kd']."' and ke='".$dt['ke']."'"));
 		$dt['kode_barang']=$f.'.'.$g.'.'.$h.'.'.$i.'.'.$j;
 		$dt['kode_account']=$dt['ka'].'.'.$dt['kb'].'.'.$dt['kc'].'.'.$dt['kd'].'.'.$dt['ke']; 
 		$dt['nama_account']=$na['nm_account'];
@@ -504,7 +504,7 @@ class RefBarangButuhObj  extends DaftarObj2{
 	 global $Ref;
 	 global $Main;
 	 $aqry = "select * from ref_jurnal where ka='".$isi['ka']."' and kb='".$isi['kb']."' and kc='".$isi['kc']."' and kd='".$isi['kd']."' and ke='".$isi['ke']."'";
-	 $na=mysql_fetch_array(mysql_query($aqry));
+	 $na=sqlArray(sqlQuery($aqry));
 	 $na = array_map('utf8_encode', $na);
 	 $kode_account=$isi['ka'].'.'.$isi['kb'].'.'.$isi['kc'].'.'.$isi['kd'].'.'.$isi['ke'];
 	 $kode_barang=$isi['f'].'.'.$isi['g'].'.'.$isi['h'].'.'.$isi['i'].'.'.$isi['j'];

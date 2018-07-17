@@ -63,9 +63,9 @@ if(!empty($fmTahunPerolehan))
 	$Kondisi .= " and buku_induk.thn_perolehan = '$fmTahunPerolehan' ";
 }
 */
-$jmlTotalHarga = mysql_query("select sum(buku_induk.jml_harga) as total  from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j)  inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.e1,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.e1,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun)  where $KondisiTotal ");
+$jmlTotalHarga = sqlQuery("select sum(buku_induk.jml_harga) as total  from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j)  inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.e1,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.e1,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun)  where $KondisiTotal ");
 
-if($jmlTotalHarga = mysql_fetch_array($jmlTotalHarga))
+if($jmlTotalHarga = sqlArray($jmlTotalHarga))
 {
 	$jmlTotalHarga = $jmlTotalHarga[0];
 }
@@ -73,11 +73,11 @@ else
 {$jmlTotalHarga=0;}
 
 
-$Qry = mysql_query("select buku_induk.*,ref_barang.nm_barang,kir.p,kir.q,kir.ket as ketkir,kir.tgl_update as kir_tgl_update,kir.id as id_kir from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.e1,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.e1,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun) where $Kondisi order by a,b,c,d,e,e1,f,g,h,i,j,noreg");
+$Qry = sqlQuery("select buku_induk.*,ref_barang.nm_barang,kir.p,kir.q,kir.ket as ketkir,kir.tgl_update as kir_tgl_update,kir.id as id_kir from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.e1,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.e1,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun) where $Kondisi order by a,b,c,d,e,e1,f,g,h,i,j,noreg");
 //echo "select buku_induk.*,ref_barang.nm_barang,kir.p,kir.q,kir.ket as ketkir,kir.tgl_update as kir_tgl_update,kir.id as id_kir from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun) where $Kondisi order by a,b,c,d,e,f,g,h,i,j";
 
-$jmlDataKIR = mysql_num_rows($Qry);
-$Qry = mysql_query("select buku_induk.*,ref_barang.nm_barang,kir.p,kir.q,kir.ket as ketkir,kir.tgl_update as kir_tgl_update,kir.id as id_kir from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.e1,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.e1,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun) where $Kondisi order by a,b,c,d,e,e1,f,g,h,i,j,noreg $LimitHalKIR");
+$jmlDataKIR = sqlNumRow($Qry);
+$Qry = sqlQuery("select buku_induk.*,ref_barang.nm_barang,kir.p,kir.q,kir.ket as ketkir,kir.tgl_update as kir_tgl_update,kir.id as id_kir from buku_induk inner join ref_barang on concat(buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j)=concat(ref_barang.f,ref_barang.g,ref_barang.h,ref_barang.i,ref_barang.j) inner join kir on concat(buku_induk.a,buku_induk.b,buku_induk.c,buku_induk.d,buku_induk.e,buku_induk.e1,buku_induk.f,buku_induk.g,buku_induk.h,buku_induk.i,buku_induk.j,buku_induk.noreg,buku_induk.tahun)=concat(kir.a,kir.b,kir.c,kir.d,kir.e,kir.e1,kir.f,kir.g,kir.h,kir.i,kir.j,kir.noreg,kir.tahun) where $Kondisi order by a,b,c,d,e,e1,f,g,h,i,j,noreg $LimitHalKIR");
 
 
 $ListBarangKIR = "";
@@ -85,7 +85,7 @@ $JmlTotalHargaListKIR = 0;
 $no=$Main->PagePerHal * (($HalKIR*1) - 1);
 $cb=0;
 $jmlTampilKIR = 0;
-while ($isi = mysql_fetch_array($Qry))
+while ($isi = sqlArray($Qry))
 {
 	$jmlTampilKIR++;
 	$JmlTotalHargaListKIR += $isi['jml_harga'];
@@ -93,8 +93,8 @@ while ($isi = mysql_fetch_array($Qry))
 	$no++;
 	$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 	$kdKelBarang = $isi['f'].$isi['g']."00";
-	$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-	$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+	$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+	$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 	$clRow = $no % 2 == 0 ?"row1":"row0";
 	$ListBarangKIR .= "
 	

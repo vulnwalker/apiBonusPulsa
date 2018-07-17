@@ -11,16 +11,16 @@ $f='02';
 $tblkib='kib_b';
 
 $sql= 'select * from buku_induk where f="'.$f.'"';
-$qry=mysql_query($sql);
+$qry=sqlQuery($sql);
 
 $i=1;
-while($row = mysql_fetch_array($qry) ){
+while($row = sqlArray($qry) ){
 	$skib= 'select * from '.$tblkib.' where concat(a1,a,b,c,d,e,f,g,h,i,j,tahun,noreg) = "'.
 				$row['a1'].$row['a'].$row['b'].$row['c'].$row['d'].$row['e'].
 				$row['f'].$row['g'].$row['h'].$row['i'].$row['j'].$row['tahun'].$row['noreg'].'"';
 	//echo $skib.'<br>';
-	$kib=mysql_query($skib);
-	if(!$det=mysql_fetch_array($kib)){
+	$kib=sqlQuery($skib);
+	if(!$det=sqlArray($kib)){
 		echo $i.' '.$row['id'].' '.$row['a1'].$row['a'].$row['b'].$row['c'].$row['d'].$row['e'].
 				$row['f'].$row['g'].$row['h'].$row['i'].$row['j'].$row['tahun'].$row['noreg'].'<br>';
 		$i++;
@@ -34,10 +34,10 @@ function getMaxNoReg($tblname, $kondisi){
        concat(a1,a,b,c,d,e,f,g,h,i,j,tahun) = '".$kondisi."'"; 
 	 //echo $sql.'<br>';
 	   
-	$qry = mysql_query($sql); 
+	$qry = sqlQuery($sql); 
 	
 	$maxno=0;
-	while ($row= mysql_fetch_array($qry)){
+	while ($row= sqlArray($qry)){
 		$maxno = $row['maxno'];
 	};
 	
@@ -49,7 +49,7 @@ function updatenoregbi( $newnoreg, $idbi ){
 	$sql = "update buku_induk
 				set noreg=$newnoreg
 			where  id='$idbi'";//echo $sql.'<br>';
-	 mysql_query($sql);
+	 sqlQuery($sql);
 }
 
 function updatenoregkib( $newnoreg, $idbi, $f ){
@@ -66,7 +66,7 @@ function updatenoregkib( $newnoreg, $idbi, $f ){
 		$sql = "update $tblname
 				set noreg=$newnoreg
 			where  idbi='$idbi'"; //echo $sql.'<br>';
-	 	mysql_query($sql);	
+	 	sqlQuery($sql);	
 	}
 	
 }
@@ -78,11 +78,11 @@ function dataygdouble($tblname, $fix=0, $batas=20, $viewdet=1){ /*cek double*/
 			group by a1,a,b,c,d,e,f,g,h,i,j,tahun,noreg 
 			order by a1,a,b,c,d,e,f,g,h,i,j,tahun,noreg';*/
 	$sql = "select * from v_cek_bicnt where cnt>1";
-	$jmlerr = mysql_num_rows(mysql_query($sql));
+	$jmlerr = sqlNumRow(sqlQuery($sql));
 	echo "jmlerr=$jmlerr batas=$batas fix=$fix<br>";
 	$cnt=0; $str='';
-	$qry = mysql_query($sql);
-	while($row= mysql_fetch_array($qry)){
+	$qry = sqlQuery($sql);
+	while($row= sqlArray($qry)){
 		if($row['cnt'] > 1 && $cnt <=$batas  ){
 			//ambil data count > 0 -------------------
 			$cnt +=1;					
@@ -118,9 +118,9 @@ function dataygdouble($tblname, $fix=0, $batas=20, $viewdet=1){ /*cek double*/
        						"'.$row['a1'].$row['a'].$row['b'].$row['c'].$row['d'].$row['e'].
 							$row['f'].$row['g'].$row['h'].$row['i'].$row['j'].$row['tahun'].$row['noreg'].'"
 							order by tgl_update desc ';
-				$qry2 = mysql_query($sql2);
+				$qry2 = sqlQuery($sql2);
 				$j=0;
-				while($row2= mysql_fetch_array($qry2)){
+				while($row2= sqlArray($qry2)){
 					$str = '&nbsp;&nbsp;&nbsp;- '.$row2['id'].' '.$row2['tgl_update'].' '.$row2['uid'];
 					
 					
@@ -143,14 +143,14 @@ function dataygdouble($tblname, $fix=0, $batas=20, $viewdet=1){ /*cek double*/
 					
 					//fix : simpan noreg dgn tglupdate terbaru dan hapus noreg lainnya berikut kibnya
 					if($j>0 && $fix==1 && $tblname=='buku_induk' && $FAIL==0){ 						
-						mysql_query("delete from buku_induk where  id=".$row2['id']);
+						sqlQuery("delete from buku_induk where  id=".$row2['id']);
 						switch($row2['f']){
-							case '01': mysql_query("delete from kib_a where  idbi=".$row2['id']);break;
-							case '02': mysql_query("delete from kib_b where  idbi=".$row2['id']);break;
-							case '03': mysql_query("delete from kib_c where  idbi=".$row2['id']);break;
-							case '04': mysql_query("delete from kib_d where  idbi=".$row2['id']);break;
-							case '05': mysql_query("delete from kib_e where  idbi=".$row2['id']);break;
-							case '06': mysql_query("delete from kib_f where  idbi=".$row2['id']);break;
+							case '01': sqlQuery("delete from kib_a where  idbi=".$row2['id']);break;
+							case '02': sqlQuery("delete from kib_b where  idbi=".$row2['id']);break;
+							case '03': sqlQuery("delete from kib_c where  idbi=".$row2['id']);break;
+							case '04': sqlQuery("delete from kib_d where  idbi=".$row2['id']);break;
+							case '05': sqlQuery("delete from kib_e where  idbi=".$row2['id']);break;
+							case '06': sqlQuery("delete from kib_f where  idbi=".$row2['id']);break;
 						}
 						$str .= ' deleted';
 					}
@@ -174,11 +174,11 @@ function cek_noreg($fix=0, $batas=1){
 	
 	//$batas= 1;
 	$sqry = 'select * from v_cek_noreg ';
-	$jmlerr = mysql_num_rows(mysql_query($sqry));
+	$jmlerr = sqlNumRow(sqlQuery($sqry));
 	echo "jmlerr=$jmlerr batas=$batas fix=$fix <br>";
-	$qry = mysql_query($sqry." limit 0,$batas");
+	$qry = sqlQuery($sqry." limit 0,$batas");
 	$no=0;
-	while ($isi=mysql_fetch_array($qry) ){
+	while ($isi=sqlArray($qry) ){
 		 
 		$no++;
 		//tampil
@@ -215,12 +215,12 @@ function cek_noreg($fix=0, $batas=1){
 			$canfix = 0;
 		}
 		if ($fix==1 && $canfix==1){
-			mysql_query("update buku_induk set noreg ='$newnoreg' 
+			sqlQuery("update buku_induk set noreg ='$newnoreg' 
 				where concat(a1,a,b,c,d,e,f,g,h,i,j,tahun,noreg)='$selainnoreg$noreg'");
 			$str = "update $tblkib set noreg ='$newnoreg' 
 				where concat(a1,a,b,c,d,e,f,g,h,i,j,tahun,noreg)='$selainnoreg$noreg'";
 			//echo "<br>$str<br>";
-			mysql_query( $str);
+			sqlQuery( $str);
 			
 			echo " fixed ";
 		}else{
@@ -240,9 +240,9 @@ function tampilbarangyggaada(){
 			on
   				aa.f = bb.f and aa.g=bb.g and aa.h=bb.h and aa.i=bb.i and aa.j =bb.j
 			where  bb.nm_barang is null';
-	$qry = mysql_query($sql);
+	$qry = sqlQuery($sql);
 	$hsl='';
-	while($row= mysql_fetch_array($qry)){
+	while($row= sqlArray($qry)){
 	
 		$hsl .= ' '.$row['f'].' '.$row['g'].' '.$row['h'].' '.$row['i'].' '.$row['j'].'<br>';
 		
@@ -256,10 +256,10 @@ function tampilOPDyggaada(){
 			on
   				aa.c = bb.c and aa.d=bb.d and aa.e=bb.e 
 			where  bb.nm_skpd is null';
-	$qry = mysql_query($sql);
+	$qry = sqlQuery($sql);
 	$hsl='';
 	$no=0;
-	while($row= mysql_fetch_array($qry)){
+	while($row= sqlArray($qry)){
 		$no++;
 		$hsl .= $no.'. '.$row['c'].' '.$row['d'].' '.$row['e'].'<br>';
 		
@@ -281,10 +281,10 @@ function tampildetailyggaada($idF,$tbldet, $fix=0){
 
 			where aa.f='.$idF.' and bb.id is null
  			order by aa.id, aa.a1, aa.a, aa.b, aa.c, aa.d, aa.e, aa.f, aa.g, aa.h, aa.i, aa.j';
-	$qry = mysql_query($sql);
+	$qry = sqlQuery($sql);
 	$cnt=0;
 	$hsl='';
-	while($row= mysql_fetch_array($qry)){
+	while($row= sqlArray($qry)){
 		$cnt +=1;
 		
 		$sfix='';
@@ -308,7 +308,7 @@ function tampildetailyggaada($idF,$tbldet, $fix=0){
 				".$row['id']."
 				  ) ";
 			//echo $sql2.'<br>';
-			mysql_query($sql2);
+			sqlQuery($sql2);
 			$sfix = ' fix ';
 		}
 		
@@ -335,10 +335,10 @@ function tampilBIyggaada($idF,$tbldet){
 
 			where bb.f='.$idF.' and aa.id is null
  			order by aa.id, aa.a1, aa.a, aa.b, aa.c, aa.d, aa.e, aa.f, aa.g, aa.h, aa.i, aa.j';
-	$qry = mysql_query($sql);
+	$qry = sqlQuery($sql);
 	$cnt=0;
 	$hsl='';
-	while($row= mysql_fetch_array($qry)){
+	while($row= sqlArray($qry)){
 		$cnt +=1;
 		$hsl .= $cnt.'. '.$row['id'].' '.$row['a1'].$row['a'].$row['b'].' '.
 					$row['c'].$row['d'].$row['e'].' '.

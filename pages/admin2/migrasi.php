@@ -52,7 +52,7 @@ class migrasiObj  extends DaftarObj2{
 			default:$aqry = "select * from v_bi_kib_a_tmp $Kondisi $Order $Limit ";break;
 		}
 		return $aqry;
-		//return mysql_query($aqry);
+		//return sqlQuery($aqry);
 	}
 	/*
 	function simpan(){
@@ -73,15 +73,15 @@ class migrasiObj  extends DaftarObj2{
 	 $kode_barang = $_REQUEST['kode_barang'];
 	 //mendapatkan kode barang
 	 $query = "SELECT max(g) AS g FROM ref_barang_persediaan WHERE f = '$kode_barang'"; $cek .= $query;
-	 $hasil = mysql_query($query);
-	 $data  = mysql_fetch_array($hasil);
+	 $hasil = sqlQuery($query);
+	 $data  = sqlArray($hasil);
 	 $g = $data['g']+1;
 	 
 			if($fmST == 0){ //input ref_barang_persediaan
 				if($err==''){ 
 					$aqry1 = "INSERT into ref_barang_persediaan (f,g,nama_barang)
 					"."values('$kode_barang','$g','$nama_barang')";	$cek .= $aqry1;	
-					$qry = mysql_query($aqry1);
+					$qry = sqlQuery($aqry1);
 					if($qry==FALSE) $err="Gagal simpan barang";							
 				}else{
 					$err="Gagal menyimpan barang";
@@ -97,7 +97,7 @@ class migrasiObj  extends DaftarObj2{
 					$aqry2 = "UPDATE ref_barang_persediaan
 		        	 set "." nama_barang = '$nama_barang'".
 				 	"WHERE concat(f,g)='".$f.$g."'";	$cek .= $aqry2;
-					$qry = mysql_query($aqry2);
+					$qry = sqlQuery($aqry2);
 					if($qry==FALSE) $err="Gagal Edit barang";							
 				}else{
 					$err="Gagal menyimpan barang";					
@@ -187,7 +187,7 @@ class migrasiObj  extends DaftarObj2{
 		$bulan=date('Y-m-')."1";
 		//query ambil data barang	
 		$aqry = "select * from ref_barang_persediaan where concat(f,g)='".$f.$g."'"; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 		$dt['kode_barang']=$f.'.'.$g;//.'.'.$h.'.'.$i.'.'.$j; 
 		$dt['readonly']='readonly';
 		$fm = $this->setForm($dt);

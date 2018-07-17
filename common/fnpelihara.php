@@ -39,7 +39,7 @@ function Pelihara_ProsesSimpan(){
 			{
 				
 			
-					$isix =  mysql_fetch_array( mysql_query (				
+					$isix =  sqlArray( sqlQuery (				
 				" select idbi_awal  from pemeliharaan where id ='$idplh'"
 			));
 			$idbi=$isix['idbi_awal'];
@@ -73,15 +73,15 @@ function Pelihara_ProsesSimpan(){
 		if ($errmsg =='' && compareTanggal($fmTANGGALPerolehan,$fmTANGGALPEMELIHARAAN )==2) $errmsg = 'Tanggal Perolehan tidak lebih besar dari Tanggal Pemeliharaan !';				
 		
 		$thn_Perolehan = substr($fmTANGGALPerolehan,0,4);
-		$get_cd = mysql_fetch_array(mysql_query("select c,d,e,e1,tgl_buku,thn_perolehan from buku_induk where id='$idbi'"));
+		$get_cd = sqlArray(sqlQuery("select c,d,e,e1,tgl_buku,thn_perolehan from buku_induk where id='$idbi'"));
 		$tgl_closing=getTglClosing($get_cd['c'],$get_cd['d'],$get_cd['e'],$get_cd['e1']); 
 		
 		//get tglakhir susut,koreksi,penilaian,penghapusan_sebagian dgn idbi_awal yg sama
-		$tgl_susutAkhir = mysql_fetch_array(mysql_query("select tgl from penyusutan where idbi_awal='$idbi' order by tgl desc limit 1"));
-		$tgl_korAkhir = mysql_fetch_array(mysql_query("select tgl,tgl_create from t_koreksi where idbi_awal='$idbi' order by tgl desc limit 1"));
-		$tgl_nilaiAkhir = mysql_fetch_array(mysql_query("select tgl_penilaian,tgl_create from penilaian where idbi_awal='$idbi' order by tgl_penilaian desc limit 1"));
-		$tgl_hpsAkhir = mysql_fetch_array(mysql_query("select tgl_penghapusan,tgl_create from penghapusan_sebagian where idbi_awal='$idbi' order by tgl_penghapusan desc limit 1"));
-		$tgl_asetAkhir = mysql_fetch_array(mysql_query("select tgl,tgl_create from t_history_aset where idbi_awal='$idbi' order by tgl desc limit 1"));
+		$tgl_susutAkhir = sqlArray(sqlQuery("select tgl from penyusutan where idbi_awal='$idbi' order by tgl desc limit 1"));
+		$tgl_korAkhir = sqlArray(sqlQuery("select tgl,tgl_create from t_koreksi where idbi_awal='$idbi' order by tgl desc limit 1"));
+		$tgl_nilaiAkhir = sqlArray(sqlQuery("select tgl_penilaian,tgl_create from penilaian where idbi_awal='$idbi' order by tgl_penilaian desc limit 1"));
+		$tgl_hpsAkhir = sqlArray(sqlQuery("select tgl_penghapusan,tgl_create from penghapusan_sebagian where idbi_awal='$idbi' order by tgl_penghapusan desc limit 1"));
+		$tgl_asetAkhir = sqlArray(sqlQuery("select tgl,tgl_create from t_history_aset where idbi_awal='$idbi' order by tgl desc limit 1"));
 		//$errmsg="select tgl,tgl_create from t_history_aset where idbi_awal='$idbi' order by tgl desc limit 1";
 		//-------------------------------------
 		
@@ -101,7 +101,7 @@ function Pelihara_ProsesSimpan(){
 		//if($errmsg=='' && $old_pemelihara['tgl_pemeliharaan']<$tgl_susutAkhir['tgl']){			
 		}else{
 		
-			$old_pemelihara = mysql_fetch_array(mysql_query("select * from pemeliharaan where id='$idplh'"));
+			$old_pemelihara = sqlArray(sqlQuery("select * from pemeliharaan where id='$idplh'"));
 			//$errmsg='tgl_='.$old_pemelihara['tgl_pemeliharaan'];
 			//cek tgl buku lama <= tgl closing
 			if($errmsg=='' && $old_pemelihara['tgl_pemeliharaan']<=$tgl_closing){
@@ -152,7 +152,7 @@ function Pelihara_ProsesSimpan(){
 		}
 				
 		if ($errmsg ==''){
-			$bi =  mysql_fetch_array( mysql_query (				
+			$bi =  sqlArray( sqlQuery (				
 				" select tgl_buku,status_barang from buku_induk where id ='$idbi'"
 			));
 			if ($errmsg =='' && compareTanggal($fmTANGGALPEMELIHARAAN, $bi['tgl_buku'])==0  ) $errmsg = 'Tanggal Pemeliharaan tidak lebih kecil dari Tanggal Buku Barang !';
@@ -180,7 +180,7 @@ function Pelihara_ProsesSimpan(){
 						'$fmSURATNOMOR', '$fmSURATTANGGAL', '$fmBIAYA',  '$fmKET',
 						'$idbi_awal', now(), '$UID', '$fmTAMBAHASET' , '$fmTAMBAHMasaManfaat' , '$cara_perolehan' ,'$fmTANGGALPerolehan','$fmNOMORba'			
 					) ";//echo "errmsg=$aqry<r>";
-				$sukses = mysql_query($aqry);				
+				$sukses = sqlQuery($aqry);				
 				if($sukses && $fmTAMBAHASET==1 ){
 					$id = mysql_insert_id();
 					if($Main->MODUL_JURNAL)jurnalPemeliharaan($id,$UID,1);
@@ -190,11 +190,11 @@ function Pelihara_ProsesSimpan(){
 				
 				if($errmsg ==''){
 					//ambil id buku induk
-					$old = mysql_fetch_array(mysql_query(
+					$old = sqlArray(sqlQuery(
 						"select idbi_awal, id_bukuinduk from pemeliharaan where id='$idplh'"
 					));		
 					//cek status barangnya
-					$penatausaha = mysql_fetch_array(mysql_query(
+					$penatausaha = sqlArray(sqlQuery(
 						"select status_barang from buku_induk where id='{$old['id_bukuinduk']}'"
 					));
 					if ($errmsg =='' && $penatausaha['status_barang']==3 ) $errmsg = "Gagal Edit. Barang untuk Pemeliharaan ini sudah dihapuskan!";
@@ -203,7 +203,7 @@ function Pelihara_ProsesSimpan(){
 				}															
 				
 				if($errmsg ==''){
-					$old= mysql_fetch_array(mysql_query("select * from pemeliharaan where id='$idplh'"));
+					$old= sqlArray(sqlQuery("select * from pemeliharaan where id='$idplh'"));
 					$aqry = "update pemeliharaan set
 						tgl_pemeliharaan = '$fmTANGGALPEMELIHARAAN', 
 						jenis_pemeliharaan = '$fmJENISPEMELIHARAAN', 
@@ -221,7 +221,7 @@ function Pelihara_ProsesSimpan(){
 						tgl_perolehan = '$fmTANGGALPerolehan',				
 						no_bast = '$fmNOMORba'					
 						where id = '$idplh'";//echo "aqry=$aqry<r>";
-					$sukses = mysql_query($aqry);	
+					$sukses = sqlQuery($aqry);	
 				//$errmsg='qry='.$aqry;
 					//if($fmTAMBAHASET==1 ){						
 					if($sukses) {
@@ -232,11 +232,11 @@ function Pelihara_ProsesSimpan(){
 						}
 					}
 					//	$qrupdt = "update jurnal set stbatal=0 where refid='$idplh' and jns_trans2=3 "; 
-					//	mysql_query($qrupdt);
+					//	sqlQuery($qrupdt);
 					//}else{
-						//mysql_query("delete from jurnal where refid='$idplh' and $jns_trans2=3 ");
+						//sqlQuery("delete from jurnal where refid='$idplh' and $jns_trans2=3 ");
 					//	$qrupdt = "update jurnal set stbatal=1 where refid='$idplh' and jns_trans2=3 "; 
-					//	mysql_query($qrupdt);
+					//	sqlQuery($qrupdt);
 					//}
 				}																		
 			}			
@@ -265,8 +265,8 @@ function Pelihara_GetData($id){
 			
 	
 	$aqry = "select * from pemeliharaan where id = '$id'";
-	$qry = mysql_query($aqry);
-	if ($isi = mysql_fetch_array($qry)){
+	$qry = sqlQuery($aqry);
+	if ($isi = sqlArray($qry)){
 		$fmTANGGALPEMELIHARAAN = $isi['tgl_pemeliharaan']=='0000-00-00'? '': $isi['tgl_pemeliharaan'];
 		$fmJENISPEMELIHARAAN = $isi['jenis_pemeliharaan'];//'fmJENISPEMELIHARAAN';
 		$fmPEMELIHARAINSTANSI = $isi['pemelihara_instansi'];//'fmPEMELIHARAINSTANSI';
@@ -416,17 +416,17 @@ function Pelihara_List($Tbl, $Fields='*', $Kondisi='', $Limit='', $Order='', $St
 	$jmlTampilPLH= 0;
 	$cb = 0;		
 	$aqry="select $Fields from $Tbl $Kondisi $Order $Limit "; //echo " $aqry<br>";
-	$Qry = mysql_query($aqry);	
-	while ($isi = mysql_fetch_array($Qry)){
+	$Qry = sqlQuery($aqry);	
+	while ($isi = sqlArray($Qry)){
 	
 		$jmlTampilPLH++;
 		$no++;
 		$jmlTotalHargaDisplay += $isi['biaya_pemeliharaan'];
 		$kdBarang = $isi['f'].$isi['g'].$isi['h'].$isi['i'].$isi['j'];
 		$kdKelBarang = $isi['f'].$isi['g']."00";
-		$nmBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
-		$get_bi = mysql_fetch_array(mysql_query("select * from buku_induk where id='".$isi['id_bukuinduk']."'"));
-		$nmKelBarang = mysql_fetch_array(mysql_query("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
+		$nmBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h,i,j)='$kdBarang'"));
+		$get_bi = sqlArray(sqlQuery("select * from buku_induk where id='".$isi['id_bukuinduk']."'"));
+		$nmKelBarang = sqlArray(sqlQuery("select * from ref_barang where concat(f,g,h)='$kdKelBarang'"));
 		$clRow = $no % 2 == 0 ?"row1":"row0";
 						
 		global $ISI5, $ISI6;										
@@ -662,11 +662,11 @@ function Pelihara_Hapus(){
 		//$id= $cidPLH[$i]; //$str.=$id.'-';
 		if($errmsg ==''){
 			//ambil id buku induk
-			$pelihara = mysql_fetch_array(mysql_query(
+			$pelihara = sqlArray(sqlQuery(
 				"select idbi_awal, tgl_pemeliharaan, id_bukuinduk from pemeliharaan where id='{$cidPLH[$i]}'"
 			));		
 			//cek status barangnya
-			$penatausaha = mysql_fetch_array(mysql_query(
+			$penatausaha = sqlArray(sqlQuery(
 				"select status_barang,c,d,e,e1 from buku_induk where id='{$pelihara['id_bukuinduk']}'"
 			));
 			//cek sudah ada penyusutan / tdk
@@ -675,7 +675,7 @@ function Pelihara_Hapus(){
 			$idbi = $pelihara['id_bukuinduk'];
 			$thn_pelihara = substr($fmTANGGALPEMELIHARAAN,0,4);
 			$query_susut = "select count(*)as jml_susut from penyusutan where idbi='$idbi' and tahun>='$thn_pelihara'";
-			$get_susut = mysql_fetch_array(mysql_query($query_susut));
+			$get_susut = sqlArray(sqlQuery($query_susut));
 			if($get_susut['jml_susut']>0){
 				//$errmsg="Id ".$cidPLH[$i].", Sudah ada penyusutan !";
 				$errmsg="Data tidak bisa di hapus,Sudah ada penyusutan !";
@@ -685,7 +685,7 @@ function Pelihara_Hapus(){
 				$errmsg = "Data tidak bisa di hapus,Tanggal Sudah Closing !";
 			}			
 			//cek ada tgl_koreksi dan tgl_koreksi > tgl_pemeliharaan
-			$get_koreksi = mysql_fetch_array(mysql_query("select count(*) as cnt from t_koreksi where idbi_awal='$idbi_awal' and tgl>'$fmTANGGALPEMELIHARAAN'"));
+			$get_koreksi = sqlArray(sqlQuery("select count(*) as cnt from t_koreksi where idbi_awal='$idbi_awal' and tgl>'$fmTANGGALPEMELIHARAAN'"));
 			//$errmsg='old='.$old_pemelihara['biaya_pemeliharaan'];
 			if($errmsg =='' && $get_koreksi['cnt']>0)$errmsg = 'Data tidak bisa di hapus,karena sudah ada koreksi harga setelah nya ! !';
 			//--------------------------------------
@@ -697,7 +697,7 @@ function Pelihara_Hapus(){
 		$xid=$cidPLH[$i];
 		if ($errmsg=='') $errmsg=Pelihara_CekdataCutoff('hapus',$xid,'');			
 		if($errmsg==''){			
-			$Del = mysql_query("delete from pemeliharaan where id='{$cidPLH[$i]}' limit 1");
+			$Del = sqlQuery("delete from pemeliharaan where id='{$cidPLH[$i]}' limit 1");
 			
 			if (!$Del){
 				$errmsg = "Gagal Hapus ID {$cidPLH[$i]} ";
@@ -792,7 +792,7 @@ case 'edit':{
 //	if ($tgl<$tglcutoff) $errmsg="Data dengan tgl. penghapusan lebih kecil dari tgl. ".$tglcutoff; 
 			//cek tanggal buku
 	if ($errmsg==''){
-			$datax = mysql_fetch_array(mysql_query(
+			$datax = sqlArray(sqlQuery(
 				"select * from pemeliharaan where id='$id'"));
 				$tgl=$datax['tgl_pemeliharaan'];	
 			if ($tgl<=$tglcutoff)
@@ -803,7 +803,7 @@ case 'edit':{
 }
 case 'hapus':{
 	if ($errmsg==''){
-			$datax = mysql_fetch_array(mysql_query(
+			$datax = sqlArray(sqlQuery(
 				"select * from pemeliharaan where id='$id'"));	
 				$tgl=$datax['tgl_pemeliharaan'];	
 			if ($tgl<=$tglcutoff)

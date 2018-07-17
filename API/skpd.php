@@ -30,11 +30,11 @@
 		$aqryc = "select * FROM ref_skpd ".$kondisiBidang1;	
 		}
 	
-	$qryc = mysql_query($aqryc);	
+	$qryc = sqlQuery($aqryc);	
 	
-	if(mysql_num_rows($qryc)>0){
+	if(sqlNumRow($qryc)>0){
 		$response["bidang"] = array();
-		while ($data = mysql_fetch_assoc($qryc)){
+		while ($data = sqlArray($qryc)){
 			$c['c']	=$data['c'];		
 			$c['nm_skpd'] = $data['nm_skpd'];
 			 array_push($response["bidang"], $c);
@@ -53,11 +53,11 @@
 		$aqryd = "select * FROM ref_skpd ".$kondisiSKPD1;
 		}
 			 
-		$qryd = mysql_query($aqryd);
+		$qryd = sqlQuery($aqryd);
 		
-		if(mysql_num_rows($qryd)>0){
+		if(sqlNumRow($qryd)>0){
 			$response["skpd"] = array();
-			while ($data = mysql_fetch_assoc($qryd)){
+			while ($data = sqlArray($qryd)){
 				$d['d']	=$data['d'];		
 				$d['nm_skpd'] = $data['nm_skpd'];
 				 array_push($response["skpd"], $d);
@@ -77,11 +77,11 @@
 		}else{
 		$aqrye = "select * FROM ref_skpd ".$kondisiUnit1;	 		
 		}
-		$qrye = mysql_query($aqrye);
+		$qrye = sqlQuery($aqrye);
 		
-		if(mysql_num_rows($qrye)>0){
+		if(sqlNumRow($qrye)>0){
 			$response["unit"] = array();
-			while ($data = mysql_fetch_assoc($qrye)){
+			while ($data = sqlArray($qrye)){
 				$e['e']	=$data['e'];		
 				$e['nm_skpd'] = $data['nm_skpd'];
 				 array_push($response["unit"], $e);
@@ -100,11 +100,11 @@
 		}else{
 		$aqrye1 = "select * FROM ref_skpd ".$kondisiSubUnit1;	
 		}
-	$qrye1 = mysql_query($aqrye1);
+	$qrye1 = sqlQuery($aqrye1);
 	
-	if(mysql_num_rows($qrye1)>0){
+	if(sqlNumRow($qrye1)>0){
 		$response["subunit"] = array();
-		while ($data = mysql_fetch_assoc($qrye1)){
+		while ($data = sqlArray($qrye1)){
 			$e1['e1']	=$data['e1'];		
 			$e1['nm_skpd'] = $data['nm_skpd'];
 			 array_push($response["subunit"], $e1);

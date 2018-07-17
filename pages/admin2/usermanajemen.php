@@ -123,13 +123,13 @@ class UserManajemenObj  extends DaftarObj2{
 	// if( $err=='' && $nama =='' ) $err= 'Nama Pegawai Belum Di Isi !!';
 	// if( $err=='' && $group =='' ) $err= 'Group Belum Di Isi !!';
 	 if( $err=='' && $level =='' ) $err= 'Level Belum Di Pilih !!';
-	 $old = mysql_fetch_array(mysql_query("SELECT uid FROM admin WHERE uid='$uid'"));
+	 $old = sqlArray(sqlQuery("SELECT uid FROM admin WHERE uid='$uid'"));
 				
 			if($fmST == 0){
 				if($err==''){ 
 				if($uid == $old['uid']){
 				//if($uid==$old['uid']){
-				       $get = mysql_fetch_array(mysql_query("SELECT count(*) as cnt FROM admin WHERE uid='$uid' "));
+				       $get = sqlArray(sqlQuery("SELECT count(*) as cnt FROM admin WHERE uid='$uid' "));
 					   if($get['cnt']>0 ) $err='User Name '.$uid.' Sudah Ada !';
 					}
 					$aqry = "INSERT into admin(
@@ -177,7 +177,7 @@ class UserManajemenObj  extends DaftarObj2{
 							 		'$fmMODULadm',
 							 		'$fmStatus'
 								    )";	$cek.= $aqry;	
-					$qry = mysql_query($aqry);
+					$qry = sqlQuery($aqry);
 				}
 			}else{			
 				if($err==''){
@@ -204,7 +204,7 @@ class UserManajemenObj  extends DaftarObj2{
 							 moduladm='$fmMODULadm',
 							 status='$fmStatus'
 						 WHERE uid='".$idplh."'";$cek.= $aqry;
-						$qry = mysql_query($aqry) or die(mysql_error());
+						$qry = sqlQuery($aqry) or die(mysql_error());
 					}
 			} //end else
 					
@@ -259,7 +259,7 @@ class UserManajemenObj  extends DaftarObj2{
 			$Id = $_REQUEST['id_pegawai'];
 			$cek = $Id;
 			$aqry = "SELECT nip, toRoman(gol) as gol, ruang, pangkat, jabatan FROM ref_pegawai WHERE Id=$Id "; $cek .= $aqry;
-			$dt=mysql_fetch_array(mysql_query($aqry));
+			$dt=sqlArray(sqlQuery($aqry));
 				
 			if($dt==FALSE) {
 				$err="Pegawai Tidak Ada !";
@@ -338,8 +338,8 @@ class UserManajemenObj  extends DaftarObj2{
 		//echo $name_startsWith
 		$sql = "select *  from v1_pegawai where $kondisi nama like '%".$name_startsWith."%' limit 0,$maxRows ";$cek.=$sql;
 		
-		$rs = mysql_query($sql);
-		while($row = mysql_fetch_assoc($rs)) {
+		$rs = sqlQuery($sql);
+		while($row = sqlArray($rs)) {
 			//$label =;			
 				$a_json_row["id"] = $row['Id'];
 				$a_json_row["value"] = $row['nama'];
@@ -410,7 +410,7 @@ class UserManajemenObj  extends DaftarObj2{
 		$this->form_fmST = 1;				
 		//get data 
 		$aqry = "SELECT * FROM  admin WHERE uid='".$this->form_idplh."' "; $cek.=$aqry;
-		$dt = mysql_fetch_array(mysql_query($aqry));
+		$dt = sqlArray(sqlQuery($aqry));
 
 		$fm = $this->setForm($dt);
 		
@@ -1035,7 +1035,7 @@ class UserManajemenObj  extends DaftarObj2{
 	 }
 	 
 	 //$aqry = "select *, toRoman(gol) as golongan from ref_pegawai where Id = '".$isi['ref_idpegawai']."'";
-	// $row = mysql_fetch_array(mysql_query($aqry));
+	// $row = sqlArray(sqlQuery($aqry));
 	  
 	 $Koloms = array();
 	 $Koloms[] = array('align="center"', $no.'.' );
@@ -1183,7 +1183,7 @@ class UserManajemenObj  extends DaftarObj2{
 		$fmSUBUNIT = isset($HTTP_COOKIE_VARS['cofmSUBUNIT'])? $HTTP_COOKIE_VARS['cofmSUBUNIT']: cekPOST($this->Prefix.'SkpdfmSUBUNIT');		
 		
 		$query="select*from admin where uid='$UID'";
-		$result=mysql_fetch_array(mysql_query($query));
+		$result=sqlArray(sqlQuery($query));
 		$level=$result['level'];
 		$mygroup=$result['group'];
 				

@@ -40,7 +40,7 @@ if($Act == "Simpan")
 			
 			
 			$CekKon = $ArIDSKPD[0].$ArIDSKPD[1].$ArIDSKPD[2].$ArIDSKPD[3];//.$ArIDSKPD[4];
-			$Cek = mysql_num_rows(mysql_query("select * from ref_skpd where concat(c,d,e,e1)='$CekKon' "));
+			$Cek = sqlNumRow(sqlQuery("select * from ref_skpd where concat(c,d,e,e1)='$CekKon' "));
 			if($Cek && $BARU=="1"){
 				$Info = "<script>alert('Kode $fmKODESKPD sudah ada, data tidak disimpan');</script>";
 			}
@@ -48,7 +48,7 @@ if($Act == "Simpan")
 				//SIMPAN DATA
 				$err='';
 				if($BARU=="1"){
-					$Simpan = mysql_query(
+					$Simpan = sqlQuery(
 						"insert into ref_skpd (c,d,e,e1,nm_skpd,nm_barcode)values".
 						"('{$ArIDSKPD[0]}','{$ArIDSKPD[1]}','{$ArIDSKPD[2]}','{$ArIDSKPD[3]}','$fmNAMASKPD','".cekPOST('nm_barcode',"")."')"
 					);
@@ -56,7 +56,7 @@ if($Act == "Simpan")
 				}
 				if($BARU=="0"){
 					
-					/*$old = mysql_fetch_array(mysql_query(
+					/*$old = sqlArray(sqlQuery(
 						"select * from ref_skpd where $Kondisi limit 1"
 					));
 					
@@ -72,7 +72,7 @@ if($Act == "Simpan")
 							" nm_barcode ='".cekPOST('nm_barcode',"")."' ".
 							" where concat(c,d,e,e1)='$CekKon' limit 1";
 						//echo $aqry;
-						$Simpan = mysql_query(
+						$Simpan = sqlQuery(
 							$aqry
 						);
 					}
@@ -105,7 +105,7 @@ if($Act == "Hapus")
 {
 	$fmID = $cidSKPD[0];
 	$Kondisi = "concat(c,'.',d,'.',e,'.',e1)='$fmID'";
-	$Hapus = mysql_query("delete from ref_skpd where $Kondisi");
+	$Hapus = sqlQuery("delete from ref_skpd where $Kondisi");
 	if($Hapus)
 	{
 		$Info = "<script>alert('Data sudah dihapus');</script>";
@@ -127,8 +127,8 @@ if($Act == "Edit") {
 		//if($err==''){
 			
 		
-			$Qry = mysql_query("select * from ref_skpd where $Kondisi limit 1");
-			while($isi=mysql_fetch_array($Qry))
+			$Qry = sqlQuery("select * from ref_skpd where $Kondisi limit 1");
+			while($isi=sqlArray($Qry))
 			{
 				$fmKODESKPD = $isi['c'].".".$isi['d'].".".$isi['e'].'.'.$isi['e1'];
 				$fmNAMASKPD = $isi['nm_skpd'];
@@ -202,15 +202,15 @@ $ListSUBUNIT = cmbQuery1("fmSUBUNIT",$fmSUBUNIT,"select e,nm_skpd from ref_skpd 
 
 
 $aqry = "select * from ref_skpd where  $Kondisi order by c,d,e,e1"; //echo $aqry;
-$Qry = mysql_query($aqry);
-$jmlDataSKPD = mysql_num_rows($Qry);
-$Qry = mysql_query("select * from ref_skpd where  $Kondisi order by c,d,e,e1 $LimitHalSKPD ");
+$Qry = sqlQuery($aqry);
+$jmlDataSKPD = sqlNumRow($Qry);
+$Qry = sqlQuery("select * from ref_skpd where  $Kondisi order by c,d,e,e1 $LimitHalSKPD ");
 $ListDATA = "";
 $no=$Main->PagePerHal * (($HalSKPD*1) - 1);
 $cb=0;
 $jmlTampilSKPD = 0;
 
-while ($isi=mysql_fetch_array($Qry))
+while ($isi=sqlArray($Qry))
 {
 	$no++;
 	$jmlTampilSKPD++;
